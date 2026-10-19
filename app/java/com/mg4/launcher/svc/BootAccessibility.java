@@ -49,8 +49,45 @@ public final class BootAccessibility extends AccessibilityService {
         public void onReceive(Context c, Intent i) {
             HomeMode.checkExpiry(c);
             StartGuard.openWindow(c, "risveglio schermo");
+            scheduleAutoHome("risveglio");
         }
     };
+
+    // ---- "Premi Home da solo dopo l'accensione" (opzione) ---------------------------------------
+
+    private final Runnable autoHome = this::autoHomeNow;
+    private String autoHomeWhy = "";
+
+    /** Una sola volta dopo l'accensione o il risveglio, dopo i secondi scelti nelle impostazioni. */
+    private void scheduleAutoHome(String why) {
+        h.removeCallbacks(autoHome);
+        int sec = com.mg4.launcher.ui.Prefs.autoHomeSeconds(getSharedPreferences("mg4launcher", MODE_PRIVATE));
+        if (sec <= 0) {
+            Diag.put("avvio.premiHome", "spento");
+            return;
+        }
+        autoHomeWhy = why;
+        Diag.put("avvio.premiHome", "tra " + sec + " s (" + why + ")");
+        h.postDelayed(autoHome, sec * 1000L);
+    }
+
+    /**
+     * Preme Home solo se in primo piano c'è la home MG: non interviene se il launcher è già davanti o se c'è un'altra app
+     * (retrocamera, 360°, CarPlay/Android Auto, chiamata...).
+     */
+    private void autoHomeNow() {
+        String top = StartGuard.topPackage(this);
+        String result;
+        if (getPackageName().equals(top)) {
+            result = "non serviva (launcher già davanti)";
+        } else if (BootWatcher.MG_HOME.equals(top)) {
+            boolean ok = performGlobalAction(GLOBAL_ACTION_HOME);
+            result = ok ? "premuto Home (c'era la home MG)" : "Home non riuscito";
+        } else {
+            result = "no: in primo piano " + (top == null ? "sconosciuto" : top);
+        }
+        Diag.put("avvio.premiHome", result + " · " + autoHomeWhy);
+    }
 
     private final Runnable expiry = new Runnable() {
         @Override
@@ -62,6 +99,10 @@ public final class BootAccessibility extends AccessibilityService {
 
     @Override
     protected void onServiceConnected() {
+        if (Firmware.wrong(this)) {
+            Diag.put("avvio.accessibilita", "inattivo (firmware non SWI68)");
+            return;
+        }
         StartGuard.a11yConnected = true;
         StartGuard.markA11y();
         Diag.put("avvio.accessibilita", "attivo");
@@ -69,6 +110,7 @@ public final class BootAccessibility extends AccessibilityService {
         StartGuard.openWindow(this, "accensione");
         // la home MG potrebbe essere già in primo piano
         StartGuard.onForeground(this, StartGuard.topPackage(this));
+        scheduleAutoHome("accensione");
         try {
             registerReceiver(screenOn, new IntentFilter(Intent.ACTION_SCREEN_ON));
         } catch (Throwable ignored) {
@@ -79,6 +121,7 @@ public final class BootAccessibility extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent e) {
         if (e == null || e.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || e.getPackageName() == null) return;
+        if (!StartGuard.a11yConnected) return;   // firmware sbagliato: il servizio non fa nulla
         String pkg = e.getPackageName().toString();
         StartGuard.onForeground(this, pkg);
         // il nostro launcher deve restare in primo piano 5 s: si ricontrolla senza aspettare un altro evento

@@ -3,12 +3,8 @@
 <resources>
     <string name="connecting_vehicle" formatted="false">Verbindung zum Fahrzeug…</string>
     <string name="vehicle_unavailable" formatted="false">Fahrzeugdienst nicht verfügbar</string>
-    <string name="chip_consumption" formatted="false">Ø Verbrauch</string>
-    <string name="chip_limit" formatted="false">Laden bis</string>
-    <string name="v2l_desc" formatted="false">V2L, Entladeverwaltung öffnen</string>
     <string name="on" formatted="false">Aktiv</string>
     <string name="off" formatted="false">Aus</string>
-    <string name="full_at">voll um %s</string>
     <string name="charge_charging" formatted="false">Lädt</string>
     <string name="charge_fast" formatted="false">Schnellladen</string>
     <string name="charge_wireless" formatted="false">Kabelloses Laden</string>
@@ -24,7 +20,6 @@
     <string name="v2l_active" formatted="false">V2L aktiv · externe Versorgung</string>
     <string name="v2l_stopped" formatted="false">V2L unterbrochen</string>
     <string name="v2l_done" formatted="false">V2L beendet</string>
-    <string name="ready" formatted="false">Bereit</string>
     <string name="outside_temp">%s° außen</string>
     <string name="ac_desc" formatted="false">Klimaanlage</string>
     <string name="auto_desc" formatted="false">Klimaautomatik</string>
@@ -85,7 +80,7 @@
     <string name="set_soc_decimals" formatted="false">Akkustand mit Nachkommastelle</string>
     <string name="set_soc_decimals_sub" formatted="false">Z. B. 88,1 % statt 88 %</string>
     <string name="set_theme" formatted="false">DESIGN</string>
-    <string name="set_tpms_sub" formatted="false">Unter den Rädern des gezeichneten Autos, in der Einheit des Kombiinstruments</string>
+    <string name="set_tpms_sub" formatted="false">Unter den Rädern des gezeichneten Autos</string>
     <string name="set_tpms_title" formatted="false">Reifendruck (TPMS)</string>
     <string name="set_updates" formatted="false">UPDATES</string>
     <string name="theme_auto" formatted="false">Automatisch</string>
@@ -245,4 +240,61 @@
     <string name="upd_now" formatted="false">Aktualisieren</string>
     <string name="upd_popup_setting" formatted="false">Benachrichtigen, wenn ein neues Update verfügbar ist</string>
     <string name="upd_error_code">Fehler %d</string>
+    <string name="btn_ok" formatted="false">OK</string>
+    <string name="time_h_min">%1$d Std. %2$d Min.</string>
+    <string name="time_min">%1$d Min.</string>
+    <string name="recirc_desc" formatted="false">Umluft</string>
+    <string name="map_shortcut_hint" formatted="false">Verknüpfung · tippen, um das Navi zu öffnen</string>
+    <string name="phone_shortcut_hint" formatted="false">Verknüpfung · CarPlay und Android Auto öffnen im Vollbild</string>
+    <string name="cb_limit" formatted="false">Ladelimit</string>
+    <string name="cb_current" formatted="false">AC-Ladestrom</string>
+    <string name="cb_charge" formatted="false">Laden</string>
+    <string name="cb_v2l" formatted="false">V2L (externe Steckdose)</string>
+    <string name="cb_start" formatted="false">Starten</string>
+    <string name="cb_stop" formatted="false">Stoppen</string>
+    <string name="cb_preparing" formatted="false">Wird vorbereitet…</string>
+    <string name="cb_unplugged" formatted="false">Nicht angeschlossen</string>
+    <string name="cb_limit_title" formatted="false">Ladelimit</string>
+    <string name="cb_limit_msg" formatted="false">Das Laden stoppt bei diesem Prozentsatz. 100 % nur für lange Fahrten.</string>
+    <string name="cb_current_title" formatted="false">AC-Ladestrom</string>
+    <string name="cb_current_msg" formatted="false">Begrenzt den Strom aus Ladesäule oder Haushaltssteckdose. Max = was das Auto zulässt.</string>
+    <string name="cb_charge_start_title" formatted="false">Laden starten?</string>
+    <string name="cb_charge_start_msg" formatted="false">Der Befehl geht an das Auto wie über die Seite Ladeverwaltung.</string>
+    <string name="cb_charge_stop_title" formatted="false">Laden stoppen?</string>
+    <string name="cb_charge_stop_msg" formatted="false">Das Laden wird beendet. Du kannst es hier oder in der MG-App neu starten.</string>
+    <string name="cb_v2l_start_title" formatted="false">V2L starten?</string>
+    <string name="cb_v2l_start_msg" formatted="false">Die Batterie versorgt die externe Steckdose bis zum eingestellten Entladelimit.</string>
+    <string name="cb_v2l_stop_title" formatted="false">V2L stoppen?</string>
+    <string name="cb_v2l_stop_msg" formatted="false">Die externe Steckdose liefert keinen Strom mehr.</string>
+    <string name="cb_v2l_title" formatted="false">V2L nicht verfügbar</string>
+    <string name="cb_v2l_low">Das Entladelimit (%1$s) liegt über dem aktuellen Ladestand: V2L würde nicht starten. Ändere es in der Energieverwaltung.</string>
+    <string name="cb_open_energy" formatted="false">Energieverwaltung öffnen</string>
+    <string name="set_show_date" formatted="false">Datum neben der Uhrzeit</string>
+    <string name="set_show_date_sub" formatted="false">Z. B. „Fr 16 Okt“, zwischen Reichweite und Uhrzeit</string>
+    <string name="set_tyre_unit" formatted="false">Druckeinheit</string>
+    <string name="set_tyre_unit_sub" formatted="false">Automatisch: psi bei Meilen im Kombiinstrument, sonst bar</string>
+    <string name="unit_auto" formatted="false">Automatisch</string>
+    <string name="set_charge_buttons" formatted="false">Lade-Tasten</string>
+    <string name="set_charge_buttons_sub" formatted="false">Limit, AC-Strom und Start/Stopp unter dem Auto · aus: größeres Auto</string>
+    <string name="set_bar_card" formatted="false">UNTERE LEISTE</string>
+    <string name="set_big_bar" formatted="false">Große Leiste</string>
+    <string name="set_big_bar_sub" formatted="false">Größere Klimatasten; die Musik bleibt im Media-Bereich</string>
+    <string name="set_rear_fog" formatted="false">Taste Nebelschlussleuchte</string>
+    <string name="set_rear_fog_sub" formatted="false">Ausschalten, wenn das Auto schon eine Taste hat oder die Systemleiste sie zeigt</string>
+    <string name="set_auto_home" formatted="false">Nach dem Einschalten automatisch Home drücken</string>
+    <string name="set_auto_home_sub" formatted="false">Einmal, nach diesen Sekunden, nur wenn die MG-Startseite angezeigt wird (nie über Kamera, 360°, CarPlay oder Anrufen)</string>
+    <string name="fw_swi69_title" formatted="false">Diese Version ist für die Firmware SWI68</string>
+    <string name="fw_swi69_msg" formatted="false">Dein Auto hat die Firmware SWI69: die Fahrzeugdienste sind anders und diese Version kann sich nicht verbinden. Installiere MG4 Launcher für SWI69 von:</string>
+    <string name="fw_other_title" formatted="false">Auto nicht erkannt</string>
+    <string name="fw_other_msg" formatted="false">Die MG-Apps der Firmware SWI68 wurden nicht gefunden: MG4 Launcher funktioniert nur im MG4-Infotainment. Für die Firmware SWI69 gibt es eine eigene Version:</string>
+    <string name="fw_open_original" formatted="false">Originale Startseite öffnen</string>
+    <string name="news_title">Neu in MG4 Launcher %1$s</string>
+    <string name="news_sub" formatted="false">Die neuen Optionen findest du in den Einstellungen (Auto-Feld lange drücken).</string>
+    <string name="news_1" formatted="false">Lade-Tasten: Limit, AC-Strom und Laden oder V2L starten/stoppen</string>
+    <string name="news_2" formatted="false">Umluft-Taste in der Klimaleiste und optional große Leiste</string>
+    <string name="news_3" formatted="false">Radiologos auch offline und Ordner MG4Launcher/loghi für eigene Logos</string>
+    <string name="news_4" formatted="false">CarPlay und Android Auto: Weiter und Play/Pause steuern das Telefon</string>
+    <string name="news_5" formatted="false">Datum neben der Uhrzeit, Druckeinheit und optionale Nebelschlusstaste</string>
+    <string name="news_6" formatted="false">Option „Nach dem Einschalten automatisch Home drücken“ und Polnisch</string>
+    <string name="news_7" formatted="false">Stabile Startseite beim Start und viele Korrekturen aus den Logs</string>
 </resources>

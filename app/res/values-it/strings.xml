@@ -3,12 +3,8 @@
 <resources>
     <string name="connecting_vehicle" formatted="false">Collegamento al veicolo…</string>
     <string name="vehicle_unavailable" formatted="false">Servizio veicolo non disponibile</string>
-    <string name="chip_consumption" formatted="false">Consumo medio</string>
-    <string name="chip_limit" formatted="false">Ricarica fino a</string>
-    <string name="v2l_desc" formatted="false">V2L, apri la gestione della scarica</string>
     <string name="on" formatted="false">Attivo</string>
     <string name="off" formatted="false">Spento</string>
-    <string name="full_at">piena alle %s</string>
     <string name="charge_charging" formatted="false">In carica</string>
     <string name="charge_fast" formatted="false">Ricarica rapida</string>
     <string name="charge_wireless" formatted="false">Ricarica wireless</string>
@@ -24,7 +20,6 @@
     <string name="v2l_active" formatted="false">V2L attivo · alimentazione esterna</string>
     <string name="v2l_stopped" formatted="false">V2L interrotto</string>
     <string name="v2l_done" formatted="false">V2L terminato</string>
-    <string name="ready" formatted="false">Pronta</string>
     <string name="outside_temp">%s° esterni</string>
     <string name="ac_desc" formatted="false">Aria condizionata</string>
     <string name="auto_desc" formatted="false">Clima automatico</string>
@@ -85,7 +80,7 @@
     <string name="set_soc_decimals" formatted="false">Percentuale batteria con decimali</string>
     <string name="set_soc_decimals_sub" formatted="false">Es. 88,1% invece di 88%</string>
     <string name="set_theme" formatted="false">TEMA</string>
-    <string name="set_tpms_sub" formatted="false">Sotto le ruote dell\'auto disegnata, nell\'unità del quadro</string>
+    <string name="set_tpms_sub" formatted="false">Sotto le ruote dell\'auto disegnata</string>
     <string name="set_tpms_title" formatted="false">Pressione pneumatici (TPMS)</string>
     <string name="set_updates" formatted="false">AGGIORNAMENTI</string>
     <string name="theme_auto" formatted="false">Automatico</string>
@@ -245,4 +240,61 @@
     <string name="upd_now" formatted="false">Aggiorna</string>
     <string name="upd_popup_setting" formatted="false">Avvisa quando c\'è un nuovo aggiornamento</string>
     <string name="upd_error_code">errore %d</string>
+    <string name="btn_ok" formatted="false">OK</string>
+    <string name="time_h_min">%1$d h %2$d min</string>
+    <string name="time_min">%1$d min</string>
+    <string name="recirc_desc" formatted="false">Ricircolo aria</string>
+    <string name="map_shortcut_hint" formatted="false">Scorciatoia · tocca per aprire il navigatore</string>
+    <string name="phone_shortcut_hint" formatted="false">Scorciatoia · CarPlay e Android Auto si aprono a schermo intero</string>
+    <string name="cb_limit" formatted="false">Limite di ricarica</string>
+    <string name="cb_current" formatted="false">Corrente AC</string>
+    <string name="cb_charge" formatted="false">Ricarica</string>
+    <string name="cb_v2l" formatted="false">V2L (presa esterna)</string>
+    <string name="cb_start" formatted="false">Avvia</string>
+    <string name="cb_stop" formatted="false">Ferma</string>
+    <string name="cb_preparing" formatted="false">In preparazione…</string>
+    <string name="cb_unplugged" formatted="false">Non collegata</string>
+    <string name="cb_limit_title" formatted="false">Limite di ricarica</string>
+    <string name="cb_limit_msg" formatted="false">La ricarica si ferma a questa percentuale. 100% solo per i viaggi lunghi.</string>
+    <string name="cb_current_title" formatted="false">Corrente di ricarica AC</string>
+    <string name="cb_current_msg" formatted="false">Limita la corrente presa dalla colonnina o dalla presa di casa. Max = quanto ammesso dall\'auto.</string>
+    <string name="cb_charge_start_title" formatted="false">Avviare la ricarica?</string>
+    <string name="cb_charge_start_msg" formatted="false">Il comando va all\'auto come dalla pagina Gestione ricarica.</string>
+    <string name="cb_charge_stop_title" formatted="false">Fermare la ricarica?</string>
+    <string name="cb_charge_stop_msg" formatted="false">La ricarica si interrompe. Puoi riavviarla da qui o dall\'app MG.</string>
+    <string name="cb_v2l_start_title" formatted="false">Avviare il V2L?</string>
+    <string name="cb_v2l_start_msg" formatted="false">La batteria alimenta la presa esterna fino al limite di scarica impostato.</string>
+    <string name="cb_v2l_stop_title" formatted="false">Fermare il V2L?</string>
+    <string name="cb_v2l_stop_msg" formatted="false">La presa esterna smette di dare corrente.</string>
+    <string name="cb_v2l_title" formatted="false">V2L non disponibile</string>
+    <string name="cb_v2l_low">Il limite di scarica (%1$s) è sopra la carica attuale: il V2L non partirebbe. Cambialo dalla gestione energia.</string>
+    <string name="cb_open_energy" formatted="false">Apri gestione energia</string>
+    <string name="set_show_date" formatted="false">Data accanto all\'ora</string>
+    <string name="set_show_date_sub" formatted="false">Es. «Ven 16 ott», tra l\'autonomia e l\'ora</string>
+    <string name="set_tyre_unit" formatted="false">Unità della pressione</string>
+    <string name="set_tyre_unit_sub" formatted="false">Automatica: psi se il quadro è in miglia, altrimenti bar</string>
+    <string name="unit_auto" formatted="false">Automatica</string>
+    <string name="set_charge_buttons" formatted="false">Pulsanti di ricarica</string>
+    <string name="set_charge_buttons_sub" formatted="false">Limite, corrente AC e avvia/ferma sotto l\'auto · spenti: l\'auto è più grande</string>
+    <string name="set_bar_card" formatted="false">BARRA IN BASSO</string>
+    <string name="set_big_bar" formatted="false">Barra grande</string>
+    <string name="set_big_bar_sub" formatted="false">Pulsanti del clima più grandi; la musica resta nel pannello Media</string>
+    <string name="set_rear_fog" formatted="false">Pulsante retronebbia</string>
+    <string name="set_rear_fog_sub" formatted="false">Spegnilo se l\'auto ha già il tasto fisico o la barra di sistema lo mostra</string>
+    <string name="set_auto_home" formatted="false">Premi Home da solo dopo l\'accensione</string>
+    <string name="set_auto_home_sub" formatted="false">Una volta, dopo questi secondi, solo se c\'è la home MG (mai su retrocamera, 360°, CarPlay o chiamate)</string>
+    <string name="fw_swi69_title" formatted="false">Questa versione è per il firmware SWI68</string>
+    <string name="fw_swi69_msg" formatted="false">La tua auto ha il firmware SWI69: i servizi dell\'auto sono diversi e questa versione non può collegarsi. Installa MG4 Launcher per SWI69 da:</string>
+    <string name="fw_other_title" formatted="false">Auto non riconosciuta</string>
+    <string name="fw_other_msg" formatted="false">Non trovo le app MG del firmware SWI68: MG4 Launcher funziona solo sull\'infotainment della MG4. Per il firmware SWI69 c\'è la versione dedicata:</string>
+    <string name="fw_open_original" formatted="false">Apri la home originale</string>
+    <string name="news_title">Novità di MG4 Launcher %1$s</string>
+    <string name="news_sub" formatted="false">Le nuove opzioni sono nelle impostazioni (tieni premuto il riquadro dell\'auto).</string>
+    <string name="news_1" formatted="false">Pulsanti di ricarica: limite, corrente AC e avvia/ferma ricarica o V2L</string>
+    <string name="news_2" formatted="false">Pulsante ricircolo nella barra del clima e barra grande come opzione</string>
+    <string name="news_3" formatted="false">Loghi radio anche senza internet e cartella MG4Launcher/loghi per i tuoi</string>
+    <string name="news_4" formatted="false">CarPlay e Android Auto: avanti e play/pausa comandano il telefono</string>
+    <string name="news_5" formatted="false">Data accanto all\'ora, unità della pressione e pulsante retronebbia a scelta</string>
+    <string name="news_6" formatted="false">Opzione «Premi Home da solo dopo l\'accensione» e lingua polacca</string>
+    <string name="news_7" formatted="false">Home stabile all\'avvio e tante correzioni dai log</string>
 </resources>

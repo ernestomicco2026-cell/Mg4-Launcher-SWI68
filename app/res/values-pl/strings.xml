@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generato da tools/i18n.py: non modificare a mano -->
+<resources>
+    <string name="connecting_vehicle" formatted="false">Łączenie z samochodem…</string>
+    <string name="vehicle_unavailable" formatted="false">Usługa pojazdu niedostępna</string>
+    <string name="on" formatted="false">Wł.</string>
+    <string name="off" formatted="false">Wył.</string>
+    <string name="charge_charging" formatted="false">Ładowanie</string>
+    <string name="charge_fast" formatted="false">Szybkie ładowanie</string>
+    <string name="charge_wireless" formatted="false">Ładowanie bezprzewodowe</string>
+    <string name="charge_done" formatted="false">Ładowanie zakończone</string>
+    <string name="charge_balancing" formatted="false">Wyrównywanie ogniw</string>
+    <string name="charge_error" formatted="false">Błąd ładowania</string>
+    <string name="charge_connecting" formatted="false">Łączenie…</string>
+    <string name="charge_not_recognized" formatted="false">Podłączono · nie rozpoznano</string>
+    <string name="charge_not_charging" formatted="false">Podłączono · nie ładuje</string>
+    <string name="charge_stopped" formatted="false">Ładowanie przerwane</string>
+    <string name="charge_scheduled" formatted="false">Ładowanie zaplanowane</string>
+    <string name="charge_multiple" formatted="false">Ładowanie wielokrotne</string>
+    <string name="v2l_active" formatted="false">V2L wł. · zasilanie urządzeń</string>
+    <string name="v2l_stopped" formatted="false">V2L przerwane</string>
+    <string name="v2l_done" formatted="false">V2L zakończone</string>
+    <string name="outside_temp">%s° na zewnątrz</string>
+    <string name="ac_desc" formatted="false">Klimatyzacja</string>
+    <string name="auto_desc" formatted="false">Klimatyzacja automatyczna</string>
+    <string name="defrost_desc" formatted="false">Odmrażanie szyby przedniej</string>
+    <string name="fog_front" formatted="false">Przednie światła przeciwmgłowe</string>
+    <string name="fog_rear" formatted="false">Tylne światło przeciwmgłowe</string>
+    <string name="inside_temp">%s° w środku</string>
+    <string name="tpms_front" formatted="false">Przód</string>
+    <string name="tpms_rear" formatted="false">Tył</string>
+    <string name="seat_left" formatted="false">Podgrzewanie lewego fotela</string>
+    <string name="seat_right" formatted="false">Podgrzewanie prawego fotela</string>
+    <string name="wheel_heat" formatted="false">Podgrzewanie kierownicy</string>
+    <string name="display" formatted="false">WYŚWIETLANIE</string>
+    <string name="soc_decimals" formatted="false">Procent baterii z miejscem po przecinku</string>
+    <string name="show_tpms" formatted="false">Ciśnienie w oponach pod samochodem</string>
+    <string name="log_upload_label" formatted="false">WYSYŁANIE LOGÓW</string>
+    <string name="log_upload_on" formatted="false">Wysyłaj logi automatycznie</string>
+    <string name="log_upload_last">Ostatnio wysłano o %1$s</string>
+    <string name="log_upload_never" formatted="false">Nie wysłano jeszcze żadnego logu (pierwszy 90 s po starcie)</string>
+    <string name="log_upload_error">Wysyłanie nie powiodło się (%1$s): ponowię później</string>
+    <string name="log_upload_off" formatted="false">Wysyłanie logów wyłączone</string>
+    <string name="log_upload_nokey" formatted="false">Wysyłanie logów niedostępne w tej wersji</string>
+    <string name="show_inside_temp" formatted="false">Temperatura wewnątrz</string>
+    <string name="sec_car" formatted="false">SAMOCHÓD</string>
+    <string name="sec_car_sub" formatted="false">Kolor, dach</string>
+    <string name="sec_home" formatted="false">Ekran główny</string>
+    <string name="sec_home_sub" formatted="false">Bateria, opony, temperatury</string>
+    <string name="sec_look" formatted="false">Wygląd</string>
+    <string name="sec_look_sub" formatted="false">Motyw, rozmiar, język</string>
+    <string name="sec_drive" formatted="false">Jazda</string>
+    <string name="sec_drive_sub" formatted="false">Strona kierownicy, ekran MG</string>
+    <string name="sec_system" formatted="false">System</string>
+    <string name="sec_system_sub" formatted="false">Aktualizacje, logi, diagnostyka</string>
+    <string name="btn_back" formatted="false">Wstecz</string>
+    <string name="btn_check" formatted="false">Sprawdź</string>
+    <string name="btn_install" formatted="false">Zainstaluj</string>
+    <string name="btn_open" formatted="false">Otwórz</string>
+    <string name="btn_save" formatted="false">Zapisz</string>
+    <string name="diag_waiting" formatted="false">Czekam na usługi samochodu…</string>
+    <string name="drive_hint" formatted="false">Przy kierownicy po prawej ekran jest odwrócony: samochód i klimatyzacja po stronie kierowcy.</string>
+    <string name="log_saving" formatted="false">Zapisywanie logu…</string>
+    <string name="save_log_sub" formatted="false">Zapisuje pełny log w pamięci (i na pendrive)</string>
+    <string name="set_black_roof" formatted="false">Czarny dach</string>
+    <string name="set_black_roof_sub" formatted="false">Jak w wersjach z dachem w innym kolorze</string>
+    <string name="set_bodywork" formatted="false">NADWOZIE</string>
+    <string name="set_car_color" formatted="false">KOLOR SAMOCHODU</string>
+    <string name="set_diag_section" formatted="false">DIAGNOSTYKA</string>
+    <string name="set_diag_sub" formatted="false">Wartości odczytane z samochodu i ostatnie błędy</string>
+    <string name="set_diag_title" formatted="false">Diagnostyka usług samochodu</string>
+    <string name="set_home_card" formatted="false">PANEL SAMOCHODU</string>
+    <string name="set_inside_sub" formatted="false">Pod zewnętrzną · «— °», jeśli samochód jej nie podaje</string>
+    <string name="set_language" formatted="false">JĘZYK</string>
+    <string name="set_menu_title" formatted="false">Ustawienia</string>
+    <string name="set_open_original" formatted="false">Otwórz oryginalny ekran MG</string>
+    <string name="set_original_label" formatted="false">ORYGINALNY EKRAN</string>
+    <string name="set_original_sub" formatted="false">Aby korzystać z funkcji fabrycznego ekranu</string>
+    <string name="set_show_inside_temp" formatted="false">Temperatura wewnątrz</string>
+    <string name="set_soc_decimals" formatted="false">Procent baterii z miejscem po przecinku</string>
+    <string name="set_soc_decimals_sub" formatted="false">Np. 88,1% zamiast 88%</string>
+    <string name="set_theme" formatted="false">MOTYW</string>
+    <string name="set_tpms_sub" formatted="false">Pod kołami narysowanego samochodu</string>
+    <string name="set_tpms_title" formatted="false">Ciśnienie w oponach (TPMS)</string>
+    <string name="set_updates" formatted="false">AKTUALIZACJE</string>
+    <string name="theme_auto" formatted="false">Automatyczny</string>
+    <string name="theme_day" formatted="false">Dzień</string>
+    <string name="theme_night" formatted="false">Noc</string>
+    <string name="upd_current" formatted="false">Aktualna wersja</string>
+    <string name="upd_installed_ver">Zainstalowano %1$s</string>
+    <string name="upd_new">Dostępna nowa wersja: %1$s</string>
+    <string name="upd_new_short">Nowa wersja %1$s</string>
+    <string name="upd_unknown" formatted="false">Aktualizacje jeszcze niesprawdzone</string>
+    <string name="a11y_desc" formatted="false">Służy tylko do sprawdzenia, która aplikacja jest na pierwszym planie po włączeniu, aby uruchomić MG4 Launcher zamiast ekranu MG. Nie czyta zawartości ekranu.</string>
+    <string name="set_start_section" formatted="false">Ekran główny i tryb serwisowy</string>
+    <string name="home_default_title" formatted="false">Użyj jako domyślnego ekranu</string>
+    <string name="home_default_sub" formatted="false">MG4 Launcher otwiera się po włączeniu i przyciskiem Home</string>
+    <string name="home_default_off_sub" formatted="false">Wył.: używany jest oryginalny ekran MG</string>
+    <string name="officina_until_sub">Tryb serwisowy do %1$s</string>
+    <string name="officina_title" formatted="false">Tryb serwisowy</string>
+    <string name="officina_sub" formatted="false">Przez kilka dni samochód używa oryginalnego ekranu MG, potem launcher wraca sam</string>
+    <string name="days_1" formatted="false">1 dzień</string>
+    <string name="days_3" formatted="false">3 dni</string>
+    <string name="days_7" formatted="false">7 dni</string>
+    <string name="btn_activate" formatted="false">Włącz</string>
+    <string name="btn_deactivate" formatted="false">Wyłącz</string>
+    <string name="btn_cancel" formatted="false">Anuluj</string>
+    <string name="btn_turn_off" formatted="false">Wyłącz</string>
+    <string name="btn_keep" formatted="false">Zostaw włączony</string>
+    <string name="confirm_home_off_title" formatted="false">Użyć oryginalnego ekranu MG?</string>
+    <string name="confirm_home_off_msg" formatted="false">Ekran MG stanie się domyślny, także po włączeniu. Ekran MG nie pokazuje MG4 Launchera wśród aplikacji: aby wrócić, potrzebny będzie komputer (adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity). Jeśli to tylko na kilka dni, użyj trybu serwisowego: launcher wróci sam.</string>
+    <string name="confirm_officina_title" formatted="false">Włączyć tryb serwisowy?</string>
+    <string name="confirm_officina_msg">Do %1$s samochód będzie używał oryginalnego ekranu MG, a aktualizacje zostaną wstrzymane. Po tym czasie MG4 Launcher wróci sam, jak wcześniej.</string>
+    <string name="officina_active_title" formatted="false">Tryb serwisowy jest włączony</string>
+    <string name="officina_active_msg">Tryb serwisowy jest włączony do %1$s. Wyłączyć go?</string>
+    <string name="set_ui_size" formatted="false">ROZMIAR PRZYCISKÓW</string>
+    <string name="ui_size_normal" formatted="false">Normalny</string>
+    <string name="ui_size_large" formatted="false">Duży</string>
+    <string name="ui_size_xlarge" formatted="false">Bardzo duży</string>
+    <string name="set_drive_side" formatted="false">STRONA KIEROWNICY</string>
+    <string name="drive_auto" formatted="false">Jak w samochodzie</string>
+    <string name="drive_left" formatted="false">Kierownica po lewej</string>
+    <string name="drive_right" formatted="false">Kierownica po prawej</string>
+    <string name="left" formatted="false">Lewa</string>
+    <string name="right" formatted="false">Prawa</string>
+    <string name="climate" formatted="false">Klimatyzacja</string>
+    <string name="tab_map" formatted="false">Mapa</string>
+    <string name="tab_media" formatted="false">Media</string>
+    <string name="where_to" formatted="false">Dokąd jedziemy?</string>
+    <string name="search_destination" formatted="false">Szukaj celu</string>
+    <string name="nav_default">Nawigacja: %s</string>
+    <string name="home_place" formatted="false">Dom</string>
+    <string name="work_place" formatted="false">Praca</string>
+    <string name="go_there" formatted="false">Wyznacz trasę</string>
+    <string name="open_with" formatted="false">Otwórz w</string>
+    <string name="open_with_hint" formatted="false">przytrzymaj, aby ustawić jako domyślną</string>
+    <string name="nav_phone" formatted="false">Nawigacja z telefonu</string>
+    <string name="next_maneuver" formatted="false">Następny manewr</string>
+    <string name="navigating" formatted="false">Prowadzenie do celu</string>
+    <string name="remaining">Pozostało %s</string>
+    <string name="tap_open_nav" formatted="false">Dotknij, aby otworzyć nawigację</string>
+    <string name="arrival">przyjazd %s</string>
+    <string name="open_source_app" formatted="false">Otwórz aplikację źródła</string>
+    <string name="src_radio" formatted="false">Radio</string>
+    <string name="src_online" formatted="false">Online</string>
+    <string name="media_generic" formatted="false">Media</string>
+    <string name="phone_connected" formatted="false">Telefon połączony</string>
+    <string name="projection_ready">%s gotowy. Dotknij, aby otworzyć na pełnym ekranie.</string>
+    <string name="open" formatted="false">Otwórz</string>
+    <string name="stations_title">Stacje %s</string>
+    <string name="stations_empty" formatted="false">Nie znaleziono stacji. Rozpocznij wyszukiwanie w aplikacji Radio.</string>
+    <string name="open_radio_app" formatted="false">Otwórz Radio</string>
+    <string name="previous" formatted="false">Poprzedni</string>
+    <string name="next" formatted="false">Następny</string>
+    <string name="play_pause" formatted="false">Odtwórz lub wstrzymaj</string>
+    <string name="temp_down" formatted="false">Obniż temperaturę</string>
+    <string name="temp_up" formatted="false">Podnieś temperaturę</string>
+    <string name="fan_down" formatted="false">Słabszy nawiew</string>
+    <string name="fan_up" formatted="false">Mocniejszy nawiew</string>
+    <string name="no_track" formatted="false">Brak utworu</string>
+    <string name="plug_usb" formatted="false">Podłącz pendrive USB</string>
+    <string name="bt_music" formatted="false">Muzyka Bluetooth</string>
+    <string name="bt_start" formatted="false">Rozpocznij odtwarzanie w telefonie</string>
+    <string name="online_music" formatted="false">Muzyka online</string>
+    <string name="from_phone" formatted="false">z telefonu</string>
+    <string name="apps_title" formatted="false">Aplikacje</string>
+    <string name="edit" formatted="false">Edytuj</string>
+    <string name="done" formatted="false">Gotowe</string>
+    <string name="edit_desc" formatted="false">Wybierz, które zainstalowane aplikacje pokazać</string>
+    <string name="section_car" formatted="false">SAMOCHÓD</string>
+    <string name="section_mine" formatted="false">ZAINSTALOWANE PRZEZ CIEBIE</string>
+    <string name="edit_note" formatted="false">dotknij, aby pokazać lub ukryć</string>
+    <string name="app_vehicle" formatted="false">Pojazd</string>
+    <string name="app_energy" formatted="false">Energia</string>
+    <string name="app_consumption" formatted="false">Zużycie</string>
+    <string name="app_phone" formatted="false">Telefon</string>
+    <string name="app_music" formatted="false">Muzyka</string>
+    <string name="app_usb_video" formatted="false">Wideo USB</string>
+    <string name="app_camera" formatted="false">Kamera 360°</string>
+    <string name="app_settings" formatted="false">Ustawienia</string>
+    <string name="app_navigator" formatted="false">Nawigacja</string>
+    <string name="app_weather" formatted="false">Pogoda</string>
+    <string name="app_manual" formatted="false">Instrukcja</string>
+    <string name="app_account" formatted="false">Konto</string>
+    <string name="app_sos" formatted="false">Połączenie SOS</string>
+    <string name="app_android_settings" formatted="false">Ustawienia Androida</string>
+    <string name="app_android_files" formatted="false">Pliki Androida</string>
+    <string name="settings_title" formatted="false">Ustawienia launchera</string>
+    <string name="settings_desc" formatted="false">Ustawienia launchera</string>
+    <string name="car_color" formatted="false">KOLOR SAMOCHODU</string>
+    <string name="black_roof" formatted="false">Czarny dach</string>
+    <string name="theme" formatted="false">MOTYW</string>
+    <string name="language" formatted="false">JĘZYK</string>
+    <string name="lang_auto" formatted="false">Jak w samochodzie</string>
+    <string name="lang_auto_hint" formatted="false">Automatyczny używa języka systemu samochodu.</string>
+    <string name="default_nav" formatted="false">DOMYŚLNA NAWIGACJA</string>
+    <string name="nav_auto_hint" formatted="false">Automatycznie: z telefonu, gdy połączony jest CarPlay lub Android Auto, w innym razie MG.</string>
+    <string name="auto" formatted="false">Automatycznie</string>
+    <string name="night" formatted="false">Noc</string>
+    <string name="day" formatted="false">Dzień</string>
+    <string name="open_original_home" formatted="false">Otwórz oryginalny ekran MG</string>
+    <string name="diag_title" formatted="false">DIAGNOSTYKA USŁUG SAMOCHODU</string>
+    <string name="save_log" formatted="false">Zapisz log</string>
+    <string name="save_log_hint" formatted="false">Zapisz log: z podłączonym pendrive plik zapisze się także na nim.</string>
+    <string name="close" formatted="false">Zamknij</string>
+    <string name="updates" formatted="false">AKTUALIZACJE</string>
+    <string name="check_updates" formatted="false">Sprawdź aktualizacje</string>
+    <string name="download_install" formatted="false">Pobierz i zainstaluj</string>
+    <string name="download_install_v">Pobierz i zainstaluj %s</string>
+    <string name="busy" formatted="false">Trwa…</string>
+    <string name="press_check" formatted="false">Dotknij Sprawdź, aby poszukać nowej wersji</string>
+    <string name="saving_log" formatted="false">Zapisywanie logu…</string>
+    <string name="log_failed" formatted="false">Nie udało się zapisać logu w żadnym folderze.</string>
+    <string name="log_saved_usb" formatted="false">Log zapisany, także na pendrive:</string>
+    <string name="log_saved" formatted="false">Log zapisany:</string>
+    <string name="log_usb_hint" formatted="false">Aby mieć go na pendrive: podłącz go i dotknij ponownie Zapisz log.</string>
+    <string name="waiting_services" formatted="false">Czekam na usługi samochodu…</string>
+    <string name="upd_checking" formatted="false">Sprawdzanie GitHub…</string>
+    <string name="upd_no_apk">Najnowsze wydanie (%s) nie zawiera APK</string>
+    <string name="upd_available">Dostępna nowa wersja: %s</string>
+    <string name="upd_latest">Masz aktualną wersję (%1$s, najnowsze wydanie %2$s)</string>
+    <string name="upd_no_connection">Brak połączenia z GitHub (%s)</string>
+    <string name="upd_downloading">Pobieranie %s…</string>
+    <string name="upd_download_pct">Pobieranie %d%%…</string>
+    <string name="upd_download_failed">Pobieranie nie powiodło się: %s</string>
+    <string name="upd_invalid_apk">Pobrany plik nie jest poprawnym APK (%d bajtów)</string>
+    <string name="upd_wrong_package" formatted="false">Pobrany plik nie jest aktualizacją launchera</string>
+    <string name="upd_installing">Instalowanie %s… launcher uruchomi się ponownie sam</string>
+    <string name="upd_install_failed">Instalacja nie powiodła się: %s</string>
+    <string name="upd_new_version" formatted="false">nowa wersja</string>
+    <string name="upd_not_found">Nie znaleziono wersji na %s</string>
+    <string name="upd_token_invalid" formatted="false">Token GitHub nieprawidłowy lub wygasł</string>
+    <string name="upd_refused" formatted="false">GitHub odrzucił żądanie (limit zapytań lub uprawnienia)</string>
+    <string name="upd_unexpected">Nieoczekiwana odpowiedź GitHub: %d</string>
+    <string name="upd_confirm" formatted="false">Potwierdź instalację na ekranie</string>
+    <string name="upd_installed" formatted="false">Aktualizacja zainstalowana</string>
+    <string name="upd_popup_title" formatted="false">Dostępna aktualizacja</string>
+    <string name="upd_popup_text">MG4 Launcher %s jest gotowy do instalacji</string>
+    <string name="upd_later" formatted="false">Później</string>
+    <string name="upd_now" formatted="false">Aktualizuj</string>
+    <string name="upd_popup_setting" formatted="false">Powiadamiaj o nowej aktualizacji</string>
+    <string name="upd_error_code">błąd %d</string>
+    <string name="btn_ok" formatted="false">OK</string>
+    <string name="time_h_min">%1$d godz. %2$d min</string>
+    <string name="time_min">%1$d min</string>
+    <string name="recirc_desc" formatted="false">Obieg wewnętrzny</string>
+    <string name="map_shortcut_hint" formatted="false">Skrót · dotknij, aby otworzyć nawigację</string>
+    <string name="phone_shortcut_hint" formatted="false">Skrót · CarPlay i Android Auto otwierają się na pełnym ekranie</string>
+    <string name="cb_limit" formatted="false">Limit ładowania</string>
+    <string name="cb_current" formatted="false">Prąd AC</string>
+    <string name="cb_charge" formatted="false">Ładowanie</string>
+    <string name="cb_v2l" formatted="false">V2L (gniazdo zewnętrzne)</string>
+    <string name="cb_start" formatted="false">Start</string>
+    <string name="cb_stop" formatted="false">Stop</string>
+    <string name="cb_preparing" formatted="false">Przygotowanie…</string>
+    <string name="cb_unplugged" formatted="false">Niepodłączony</string>
+    <string name="cb_limit_title" formatted="false">Limit ładowania</string>
+    <string name="cb_limit_msg" formatted="false">Ładowanie zatrzyma się na tym poziomie. 100% tylko na długie trasy.</string>
+    <string name="cb_current_title" formatted="false">Prąd ładowania AC</string>
+    <string name="cb_current_msg" formatted="false">Ogranicza prąd pobierany ze stacji lub z gniazdka w domu. Max = tyle, ile pozwala samochód.</string>
+    <string name="cb_charge_start_title" formatted="false">Rozpocząć ładowanie?</string>
+    <string name="cb_charge_start_msg" formatted="false">Polecenie trafi do samochodu tak jak ze strony Zarządzanie ładowaniem.</string>
+    <string name="cb_charge_stop_title" formatted="false">Zatrzymać ładowanie?</string>
+    <string name="cb_charge_stop_msg" formatted="false">Ładowanie zostanie przerwane. Możesz je wznowić tutaj lub w aplikacji MG.</string>
+    <string name="cb_v2l_start_title" formatted="false">Uruchomić V2L?</string>
+    <string name="cb_v2l_start_msg" formatted="false">Bateria zasila gniazdo zewnętrzne aż do ustawionego limitu rozładowania.</string>
+    <string name="cb_v2l_stop_title" formatted="false">Zatrzymać V2L?</string>
+    <string name="cb_v2l_stop_msg" formatted="false">Gniazdo zewnętrzne przestanie dawać prąd.</string>
+    <string name="cb_v2l_title" formatted="false">V2L niedostępne</string>
+    <string name="cb_v2l_low">Limit rozładowania (%1$s) jest powyżej obecnego naładowania: V2L by nie ruszyło. Zmień go w zarządzaniu energią.</string>
+    <string name="cb_open_energy" formatted="false">Otwórz zarządzanie energią</string>
+    <string name="set_show_date" formatted="false">Data obok godziny</string>
+    <string name="set_show_date_sub" formatted="false">Np. «Pt 16 paź», między zasięgiem a godziną</string>
+    <string name="set_tyre_unit" formatted="false">Jednostka ciśnienia</string>
+    <string name="set_tyre_unit_sub" formatted="false">Automatyczna: psi, gdy zegary są w milach, w innym razie bar</string>
+    <string name="unit_auto" formatted="false">Automatyczna</string>
+    <string name="set_charge_buttons" formatted="false">Przyciski ładowania</string>
+    <string name="set_charge_buttons_sub" formatted="false">Limit, prąd AC i start/stop pod samochodem · wył.: większy samochód</string>
+    <string name="set_bar_card" formatted="false">DOLNY PASEK</string>
+    <string name="set_big_bar" formatted="false">Duży pasek</string>
+    <string name="set_big_bar_sub" formatted="false">Większe przyciski klimatyzacji; muzyka zostaje w panelu Media</string>
+    <string name="set_rear_fog" formatted="false">Przycisk tylnego światła przeciwmgłowego</string>
+    <string name="set_rear_fog_sub" formatted="false">Wyłącz, jeśli samochód ma już fizyczny przycisk lub pokazuje go pasek systemowy</string>
+    <string name="set_auto_home" formatted="false">Naciśnij Home sam po włączeniu</string>
+    <string name="set_auto_home_sub" formatted="false">Raz, po tylu sekundach, tylko gdy widać ekran MG (nigdy na kamerze, 360°, CarPlay ani podczas rozmowy)</string>
+    <string name="fw_swi69_title" formatted="false">Ta wersja jest dla oprogramowania SWI68</string>
+    <string name="fw_swi69_msg" formatted="false">Twój samochód ma oprogramowanie SWI69: usługi samochodu są inne i ta wersja nie może się połączyć. Zainstaluj MG4 Launcher dla SWI69 ze strony:</string>
+    <string name="fw_other_title" formatted="false">Nie rozpoznano samochodu</string>
+    <string name="fw_other_msg" formatted="false">Nie znaleziono aplikacji MG z oprogramowania SWI68: MG4 Launcher działa tylko w systemie multimedialnym MG4. Dla oprogramowania SWI69 jest osobna wersja:</string>
+    <string name="fw_open_original" formatted="false">Otwórz oryginalny ekran</string>
+    <string name="news_title">Nowości w MG4 Launcher %1$s</string>
+    <string name="news_sub" formatted="false">Nowe opcje są w ustawieniach (przytrzymaj panel samochodu).</string>
+    <string name="news_1" formatted="false">Przyciski ładowania: limit, prąd AC oraz start/stop ładowania lub V2L</string>
+    <string name="news_2" formatted="false">Przycisk obiegu wewnętrznego na pasku klimatyzacji i opcjonalny duży pasek</string>
+    <string name="news_3" formatted="false">Logo stacji radiowych także bez internetu i folder MG4Launcher/loghi na własne</string>
+    <string name="news_4" formatted="false">CarPlay i Android Auto: następny i odtwórz/wstrzymaj sterują telefonem</string>
+    <string name="news_5" formatted="false">Data obok godziny, jednostka ciśnienia i przycisk tylnego światła przeciwmgłowego do wyboru</string>
+    <string name="news_6" formatted="false">Opcja «Naciśnij Home sam po włączeniu» i język polski</string>
+    <string name="news_7" formatted="false">Stabilny ekran przy starcie i wiele poprawek z logów</string>
+</resources>

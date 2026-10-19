@@ -1,0 +1,34 @@
+# Loghi radio integrati: un file PNG per stazione in questa cartella, con il nome normalizzato
+# (minuscole, solo lettere e cifre: "RTL 102.5" -> rtl1025.png, "Radio Deejay" -> radiodeejay.png).
+# Qui sotto i nomi alternativi con cui le stazioni si presentano (RDS/DAB) -> file da usare.
+# formato: nome trasmesso = nome del file (senza .png)
+deejay = radiodeejay
+rtl 102.5 = rtl1025
+rtl102.5 = rtl1025
+radio 105 = radio105
+r101 = radio101
+rds = rds
+radio italia = radioitalia
+virgin = virginradio
+virgin radio = virginradio
+rai radio 1 = rairadio1
+rai radio1 = rairadio1
+radio1 = rairadio1
+rai radio 2 = rairadio2
+radio2 = rairadio2
+rai radio 3 = rairadio3
+radio3 = rairadio3
+m2o = m2o
+capital = radiocapital
+radio capital = radiocapital
+kiss kiss = radiokisskiss
+radio kiss kiss = radiokisskiss
+monte carlo = radiomontecarlo
+radio monte carlo = radiomontecarlo
+rmc = radiomontecarlo
+radio 24 = radio24
+r24 = radio24
+zeta = radiozeta
+radio zeta = radiozeta
+radio maria = radiomaria
+r.maria = radiomaria

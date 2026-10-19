@@ -132,6 +132,7 @@ public final class MediaClient {
     private MediaBrowser browser;
     private MediaController controller;
     private volatile Bundle tbt;
+    private boolean remoteWasPlaying;
     private final StationLogos logos;
     private volatile List<Station> favorites = new ArrayList<>();
     private long favoritesAt;
@@ -317,8 +318,26 @@ public final class MediaClient {
             }
         }
         if (active == 0 && radioPlaying) active = SRC_RADIO;
-        // di default si vede sempre la radio; le altre sorgenti si scelgono con le frecce
-        int shown = chosen != 0 ? chosen : SRC_RADIO;
+        // CarPlay / Android Auto: il servizio media continua a dire "radio" (sorgente 3, player 4) anche quando suona il
+        // telefono. Se la sessione di RemoteUIMediaBrowserService è in riproduzione, quella è la sorgente attiva (come SWI69).
+        boolean remotePlaying = false;
+        MediaController rc = controller;
+        if (s.deviceType != 0 && rc != null) {
+            try {
+                PlaybackState ps = rc.getPlaybackState();
+                remotePlaying = ps != null && ps.getState() == PlaybackState.STATE_PLAYING;
+            } catch (Exception ignored) {
+            }
+        }
+        if (remotePlaying) {
+            int remoteSrc = s.deviceType == DEV_AAUTO ? SRC_AAUTO : SRC_CARPLAY;
+            if (!remoteWasPlaying && chosen != remoteSrc) chosen = 0;   // il telefono ha appena iniziato a suonare: si mostra lui
+            active = remoteSrc;
+        }
+        remoteWasPlaying = remotePlaying;
+        Diag.put("media.attiva", sourceName(active) + (remotePlaying ? " (sessione CarPlay/AA in riproduzione)" : ""));
+        // di default si vede la sorgente in riproduzione, altrimenti la radio; con i pulsanti se ne sceglie un'altra
+        int shown = chosen != 0 ? chosen : (active != 0 ? active : SRC_RADIO);
         if (!s.sources.contains(shown)) shown = active != 0 && s.sources.contains(active) ? active : SRC_RADIO;
         s.source = shown;
 
@@ -529,14 +548,51 @@ public final class MediaClient {
 
     public void selectSource(int src) {
         chosen = src;
-        post(() -> {
-            try {
-                startSource(src);
-            } catch (Exception e) {
-                Diag.error("media.avvio " + sourceName(src), e.toString());
+        command("avvio " + sourceName(src), () -> startSource(src));
+    }
+
+    // ---- comandi con nuovo tentativo -------------------------------------------------------
+
+    private interface Cmd {
+        void run() throws Exception;
+    }
+
+    private static final int RETRIES = 6;
+    private static final long RETRY_MS = 1500;
+
+    /**
+     * Esegue un comando media. Subito dopo l'accensione il servizio può non essere ancora pronto
+     * ("binder non disponibile", "Result::NOT_INITIALIZED"): in quel caso si riprova finché non lo è, senza errori.
+     * L'esito di play e salto finisce nella diagnostica (media.comando).
+     */
+    private void command(String what, Cmd cmd) {
+        post(() -> attempt(what, cmd, 0));
+    }
+
+    private void attempt(String what, Cmd cmd, int n) {
+        State before = last;
+        try {
+            cmd.run();
+            if (n > 0) Diag.put("media.attesa", what + ": eseguito al tentativo " + (n + 1));
+            String src = sourceName(before.source);
+            boolean wasPlaying = before.playing;
+            String b = before.title;
+            if (bg != null) bg.postDelayed(() -> {
+                State a = last;
+                Diag.put("media.comando", what + " · " + src + " · prima " + (wasPlaying ? "in riproduzione" : "in pausa")
+                        + " \"" + b + "\" · dopo " + (a.playing ? "in riproduzione" : "in pausa") + " \"" + a.title + "\"");
+            }, 1500);
+        } catch (Exception e) {
+            String msg = String.valueOf(e.getMessage()) + " " + e;
+            boolean notReady = msg.contains("NOT_INITIALIZED") || msg.contains("binder non disponibile");
+            if (notReady && n < RETRIES && bg != null) {
+                Diag.put("media.attesa", what + ": servizio non ancora pronto, nuovo tentativo " + (n + 2));
+                bg.postDelayed(() -> attempt(what, cmd, n + 1), RETRY_MS);
+                return;
             }
-            poll();
-        });
+            Diag.error("media." + what, e.toString());
+        }
+        poll();
     }
 
     private void startSource(int src) throws RemoteException {
@@ -816,9 +872,9 @@ public final class MediaClient {
     }
 
     public void playPause() {
-        post(() -> {
+        command("play", () -> {
             State s = last;
-            try {
+            {
                 switch (s.source) {
                     case SRC_USB:
                         Rpc.call(usb.binder(), USB, USB_PLAY_OR_PAUSE, Rpc.NONE);
@@ -840,17 +896,14 @@ public final class MediaClient {
                     default:
                         break;
                 }
-            } catch (Exception e) {
-                Diag.error("media.play", e.toString());
             }
-            poll();
         });
     }
 
     public void skip(boolean forward) {
-        post(() -> {
+        command(forward ? "salto avanti" : "salto indietro", () -> {
             State s = last;
-            try {
+            {
                 switch (s.source) {
                     case SRC_USB:
                         Rpc.call(usb.binder(), USB, forward ? USB_NEXT : USB_PREV, Rpc.NONE);
@@ -880,10 +933,7 @@ public final class MediaClient {
                     default:
                         break;
                 }
-            } catch (Exception e) {
-                Diag.error("media.salto", e.toString());
             }
-            poll();
         });
     }
 

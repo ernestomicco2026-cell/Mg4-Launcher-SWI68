@@ -296,24 +296,45 @@ public final class AppCatalog {
         }
     }
 
-    public boolean launchComponent(String pkg, String cls) {
+    private final java.util.Set<String> missingLogged = new java.util.HashSet<>();
+
+    /**
+     * Intent per aprire un'app originale: l'attività esatta se esiste, altrimenti l'attività principale del pacchetto
+     * (su alcuni firmware SWI68 HvacActivity e ChargeManagementActivity non ci sono). Null se manca anche quella:
+     * scritto una sola volta nella diagnostica.
+     */
+    public Intent resolveLaunch(String pkg, String cls) {
+        Intent exact = new Intent(Intent.ACTION_MAIN).setComponent(new ComponentName(pkg, cls));
         try {
-            ctx.startActivity(new Intent(Intent.ACTION_MAIN).setComponent(new ComponentName(pkg, cls))
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            if (cls != null && pm.resolveActivity(exact, 0) != null) return exact;
+        } catch (Exception ignored) {
+        }
+        Intent li = null;
+        try {
+            li = pm.getLaunchIntentForPackage(pkg);
+        } catch (Exception ignored) {
+        }
+        String key = pkg + "/" + cls;
+        if (missingLogged.add(key)) {
+            Diag.put("app.mancante." + pkg.substring(pkg.lastIndexOf('.') + 1),
+                    (cls == null ? "" : cls.substring(cls.lastIndexOf('.') + 1) + " assente · ") + (li != null ? "si apre l'app principale" : "app non presente: pulsante disattivato"));
+        }
+        return li;
+    }
+
+    public boolean canLaunch(String pkg, String cls) {
+        return resolveLaunch(pkg, cls) != null;
+    }
+
+    public boolean launchComponent(String pkg, String cls) {
+        Intent i = resolveLaunch(pkg, cls);
+        if (i == null) return false;
+        try {
+            ctx.startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             return true;
         } catch (Exception e) {
-            Intent li = pm.getLaunchIntentForPackage(pkg);
-            if (li == null) {
-                Diag.error("avvio " + pkg, e.toString());
-                return false;
-            }
-            try {
-                ctx.startActivity(li.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                return true;
-            } catch (Exception e2) {
-                Diag.error("avvio " + pkg, e2.toString());
-                return false;
-            }
+            Diag.error("avvio " + pkg, e.toString());
+            return false;
         }
     }
 }

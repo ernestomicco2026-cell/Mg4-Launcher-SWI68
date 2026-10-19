@@ -335,6 +335,11 @@ public final class SettingsView extends FrameLayout {
     private void buildHome(Context c, LinearLayout col) {
         col.addView(label(c, L.s(R.string.set_home_card)));
         LinearLayout card = card(c);
+        card.addView(row(c, L.s(R.string.set_show_date), L.s(R.string.set_show_date_sub),
+                toggle(c, prefs.showDate(), on -> {
+                    prefs.setShowDate(on);
+                    host.settingsChanged(true);
+                }), false));
         card.addView(row(c, L.s(R.string.set_soc_decimals), L.s(R.string.set_soc_decimals_sub),
                 toggle(c, prefs.socDecimals(), on -> {
                     prefs.setSocDecimals(on);
@@ -343,14 +348,67 @@ public final class SettingsView extends FrameLayout {
         card.addView(row(c, L.s(R.string.set_tpms_title), L.s(R.string.set_tpms_sub),
                 toggle(c, prefs.showTpms(), on -> {
                     prefs.setShowTpms(on);
-                    host.settingsChanged(false);
+                    host.settingsChanged(true);
+                    showSection(SEC_HOME);
                 }), false));
-        card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_sub),
-                toggle(c, prefs.showInsideTemp(), on -> {
-                    prefs.setShowInsideTemp(on);
-                    host.settingsChanged(false);
+        if (prefs.showTpms()) {
+            String[] units = {Prefs.TYRE_AUTO, Prefs.TYRE_BAR, Prefs.TYRE_KPA, Prefs.TYRE_PSI};
+            String[] names = {L.s(R.string.unit_auto), "bar", "kPa", "psi"};
+            int sel = java.util.Arrays.asList(units).indexOf(prefs.tyreUnit());
+            card.addView(row(c, L.s(R.string.set_tyre_unit), L.s(R.string.set_tyre_unit_sub),
+                    choices(c, names, sel, i -> {
+                        prefs.setTyreUnit(units[i]);
+                        host.settingsChanged(false);
+                        showSection(SEC_HOME);
+                    }), false));
+        }
+        // temperatura interna: l'opzione si nasconde se l'auto non la fornisce
+        if (!prefs.insideTempMissing()) {
+            card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_sub),
+                    toggle(c, prefs.showInsideTemp(), on -> {
+                        prefs.setShowInsideTemp(on);
+                        host.settingsChanged(true);
+                    }), false));
+        }
+        card.addView(row(c, L.s(R.string.set_charge_buttons), L.s(R.string.set_charge_buttons_sub),
+                toggle(c, prefs.chargeButtons(), on -> {
+                    prefs.setChargeButtons(on);
+                    host.settingsChanged(true);
                 }), true));
         col.addView(card, topFull(14));
+
+        col.addView(label(c, L.s(R.string.set_bar_card)), top(30));
+        card = card(c);
+        card.addView(row(c, L.s(R.string.set_big_bar), L.s(R.string.set_big_bar_sub),
+                toggle(c, prefs.bigBar(), on -> {
+                    prefs.setBigBar(on);
+                    host.settingsChanged(true);
+                }), false));
+        card.addView(row(c, L.s(R.string.set_rear_fog), L.s(R.string.set_rear_fog_sub),
+                toggle(c, prefs.showRearFog(), on -> {
+                    prefs.setShowRearFog(on);
+                    host.settingsChanged(true);
+                }), true));
+        col.addView(card, topFull(14));
+    }
+
+    private interface OnChoice {
+        void chosen(int index);
+    }
+
+    /** Piccole scelte in una riga della scheda (selezionata = colori invertiti, le altre su sfondo pannello). */
+    private LinearLayout choices(Context c, String[] names, int sel, OnChoice l) {
+        LinearLayout r = Ui.row(c);
+        for (int i = 0; i < names.length; i++) {
+            final int idx = i;
+            TextView ch = choice(c, names[i], i == sel, v -> {
+                if (idx != sel) l.chosen(idx);
+            });
+            ch.setPadding(tp(20), 0, tp(20), 0);
+            if (i != sel) ch.setBackground(Ui.pressable(c, t.panel, 16 * Ui.K, t));
+            r.addView(ch, Ui.margins(new LinearLayout.LayoutParams(-2, tp(60)), i == 0 ? 0 : dp(8), 0, 0, 0));
+        }
+        return r;
     }
 
     private void buildLook(Context c, LinearLayout col) {
@@ -473,7 +531,24 @@ public final class SettingsView extends FrameLayout {
             oc.addView(act, Ui.margins(new LinearLayout.LayoutParams(-2, tp(60)), dp(6), 0, 0, 0));
         }
         hc.addView(row(c, L.s(R.string.officina_title), officina
-                ? L.f(R.string.officina_until_sub, com.mg4.launcher.svc.HomeMode.officinaDate(app)) : L.s(R.string.officina_sub), oc, true));
+                ? L.f(R.string.officina_until_sub, com.mg4.launcher.svc.HomeMode.officinaDate(app)) : L.s(R.string.officina_sub), oc, false));
+        // premi Home da solo dopo l'accensione (servizio di accessibilità)
+        int[] secs = Prefs.AUTO_HOME_SECONDS;
+        String[] secNames = new String[secs.length];
+        int secSel = 0;
+        for (int i = 0; i < secs.length; i++) {
+            secNames[i] = secs[i] == 0 ? L.s(R.string.off) : secs[i] + " s";
+            if (secs[i] == prefs.autoHomeSeconds()) secSel = i;
+        }
+        LinearLayout ah = Ui.column(c);
+        ah.setPadding(dp(28), dp(18), dp(28), dp(20));
+        ah.addView(Ui.text(c, L.s(R.string.set_auto_home), 24, t.text, Ui.REGULAR));
+        ah.addView(Ui.text(c, L.s(R.string.set_auto_home_sub), 17, t.sub, Ui.REGULAR), Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(6), 0, 0));
+        ah.addView(choices(c, secNames, secSel, i -> {
+            prefs.setAutoHomeSeconds(secs[i]);
+            showSection(SEC_SYSTEM);
+        }), Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(14), 0, 0));
+        hc.addView(ah);
         col.addView(hc, topFull(14));
 
         col.addView(label(c, L.s(R.string.set_updates)), top(30));

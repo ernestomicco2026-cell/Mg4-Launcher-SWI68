@@ -1,10 +1,15 @@
 package com.mg4.launcher.svc;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.SystemClock;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,36 +21,58 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * Loghi delle stazioni radio.
- * - DAB: il logo trasmesso dalla stazione (letto dal servizio radio) viene salvato e riusato.
- * - FM (e DAB senza logo): ricerca per nome nel database pubblico radio-browser.info, una volta sola per stazione.
- * Tutto resta in cache su disco (files/loghi), quindi funziona anche senza rete dopo il primo download.
+ * Loghi delle stazioni radio. Si cerca, in quest'ordine:
+ * <ol>
+ *   <li>cartella dell'utente {@code MG4Launcher/loghi/NOME.png} (memoria interna o chiavetta USB): ha la priorità;</li>
+ *   <li>pacchetto integrato nell'app (assets/loghi), per le stazioni più comuni: funziona senza internet;</li>
+ *   <li>loghi già salvati nella memoria dell'app (trasmessi dalla stazione DAB o scaricati in passato);</li>
+ *   <li>solo con la rete: ricerca per nome su radio-browser.info, poi salvato in modo permanente.</li>
+ * </ol>
+ * NOME è il nome della stazione normalizzato: minuscole, solo lettere e cifre (es. "RTL 102.5" → rtl1025.png).
+ * Senza rete i tentativi si fermano (pausa crescente fino a 30 minuti) e i loghi non trovati si ricordano per 3 giorni.
  */
 public final class StationLogos {
     private static final long RETRY_MS = 3L * 24 * 3600 * 1000;   // nuovo tentativo dopo 3 giorni se non trovato
+    private static final long USER_SCAN_MS = 60_000;               // la cartella dell'utente si rilegge ogni minuto
+    private static final long OFFLINE_MIN_MS = 2 * 60_000L, OFFLINE_MAX_MS = 30 * 60_000L;
     private static final String API = "https://de1.api.radio-browser.info/json/stations/search";
+    public static final String USER_FOLDER = "MG4Launcher/loghi";
 
+    private final Context ctx;
     private final File dir;
     private final Map<String, Bitmap> mem = new HashMap<>();
+    private final Map<String, Long> missUntil = new HashMap<>();   // chiavi senza logo: non si ricontrolla il disco per 30 s
     private final Set<String> pending = new HashSet<>();
     private final Set<String> savedThisSession = new HashSet<>();
     private final HandlerThread thread = new HandlerThread("mg4-logos");
     private final Handler bg;
     private volatile Runnable onUpdate;
 
+    private final Set<String> builtin = new HashSet<>();
+    private final Map<String, String> aliases = new HashMap<>();
+    private volatile Map<String, File> user = new HashMap<>();
+    private long userScanAt;
+    private long offlineUntil, offlineStep = OFFLINE_MIN_MS;
+
     public StationLogos(Context c) {
-        dir = new File(c.getFilesDir(), "loghi");
+        ctx = c.getApplicationContext();
+        dir = new File(ctx.getFilesDir(), "loghi");
         //noinspection ResultOfMethodCallIgnored
         dir.mkdirs();
         thread.start();
         bg = new Handler(thread.getLooper());
+        bg.post(this::loadBuiltin);
+        bg.post(this::grantStorage);
+        bg.post(this::scanUser);
     }
 
     public void setOnUpdate(Runnable r) {
@@ -54,36 +81,175 @@ public final class StationLogos {
 
     public static String key(int band, long sid, int khz, String name) {
         if (band == MediaClient.BAND_DAB && sid > 0) return "dab_" + Long.toHexString(sid);
-        String n = clean(name).toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]", "");
+        String n = norm(name);
         return n.isEmpty() ? "fm_" + khz : "fm_" + n;
+    }
+
+    /** Nome normalizzato per i file dei loghi: minuscole, solo lettere e cifre. */
+    public static String norm(String s) {
+        if (s == null) return "";
+        String n = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+        return n.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]", "");
     }
 
     private static String clean(String s) {
         return s == null ? "" : s.replaceAll("\\s+", " ").trim();
     }
 
-    /** Logo in cache (memoria o disco); se manca e c'è un nome, avvia la ricerca online in background. */
-    public synchronized Bitmap get(String key, String name) {
-        if (mem.containsKey(key)) return mem.get(key);
-        File f = new File(dir, key + ".png");
-        if (f.exists()) {
+    // ---- pacchetto integrato ---------------------------------------------------------------
+
+    private void loadBuiltin() {
+        try {
+            AssetManager am = ctx.getAssets();
+            String[] files = am.list("loghi");
+            if (files != null) for (String f : files) if (f.endsWith(".png")) builtin.add(f.substring(0, f.length() - 4));
+            try (InputStream in = am.open("loghi/alias.txt")) {
+                for (String line : new String(readAll(in), "UTF-8").split("\n")) {
+                    line = line.trim();
+                    int eq = line.indexOf('=');
+                    if (line.isEmpty() || line.startsWith("#") || eq <= 0) continue;
+                    aliases.put(norm(line.substring(0, eq)), norm(line.substring(eq + 1)));
+                }
+            } catch (Exception ignored) {
+            }
+        } catch (Exception e) {
+            Diag.error("loghi.integrati", e.toString());
+        }
+        Diag.put("loghi.integrati", builtin.size() + " loghi, " + aliases.size() + " nomi alternativi");
+    }
+
+    private Bitmap builtinLogo(String n) {
+        String name = builtin.contains(n) ? n : aliases.get(n);
+        if (name == null || !builtin.contains(name)) return null;
+        try (InputStream in = ctx.getAssets().open("loghi/" + name + ".png")) {
+            return BitmapFactory.decodeStream(in);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    // ---- cartella dell'utente --------------------------------------------------------------
+
+    /**
+     * Lettura della memoria e delle chiavette (cartella MG4Launcher/loghi): il permesso si concede da solo grazie alla
+     * firma platform (GRANT_RUNTIME_PERMISSIONS). Se non riesce resta la cartella dell'app, che non lo richiede.
+     */
+    private void grantStorage() {
+        String perm = android.Manifest.permission.READ_EXTERNAL_STORAGE;
+        if (ctx.checkSelfPermission(perm) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            Diag.put("loghi.permessoMemoria", "concesso");
+            return;
+        }
+        try {
+            android.content.pm.PackageManager pm = ctx.getPackageManager();
+            pm.getClass().getMethod("grantRuntimePermission", String.class, String.class, android.os.UserHandle.class)
+                    .invoke(pm, ctx.getPackageName(), perm, android.os.Process.myUserHandle());
+            Diag.put("loghi.permessoMemoria", "concesso ora");
+        } catch (Throwable e) {
+            Throwable c = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
+            Diag.put("loghi.permessoMemoria", "non concesso (" + c.getClass().getSimpleName() + "): solo la cartella dell'app");
+        }
+    }
+
+    /** Cartelle MG4Launcher/loghi: memoria interna, chiavette USB e cartella dell'app (questa senza permessi). */
+    private List<File> userDirs() {
+        List<File> out = new ArrayList<>();
+        out.add(new File(Environment.getExternalStorageDirectory(), USER_FOLDER));
+        File[] vols = new File("/storage").listFiles();
+        if (vols != null) for (File v : vols) {
+            if (v.getName().equals("emulated") || v.getName().equals("self")) continue;
+            out.add(new File(v, USER_FOLDER));
+        }
+        File[] app = ctx.getExternalFilesDirs(null);
+        if (app != null) for (File a : app) if (a != null) out.add(new File(a, "loghi"));
+        return out;
+    }
+
+    private void scanUser() {
+        userScanAt = SystemClock.uptimeMillis();
+        Map<String, File> found = new HashMap<>();
+        StringBuilder where = new StringBuilder();
+        for (File d : userDirs()) {
+            File[] files = d.listFiles();
+            if (files == null) continue;
+            int n = 0;
+            for (File f : files) {
+                String name = f.getName();
+                String low = name.toLowerCase(Locale.ROOT);
+                if (!(low.endsWith(".png") || low.endsWith(".jpg") || low.endsWith(".jpeg") || low.endsWith(".webp"))) continue;
+                String k = norm(name.substring(0, name.lastIndexOf('.')));
+                if (!k.isEmpty() && !found.containsKey(k)) {
+                    found.put(k, f);
+                    n++;
+                }
+            }
+            if (n > 0) where.append(where.length() == 0 ? "" : ", ").append(d.getPath()).append(" (").append(n).append(')');
+        }
+        boolean changed = !found.keySet().equals(user.keySet());
+        user = found;
+        Diag.put("loghi.utente", found.isEmpty() ? "nessuno (cartella " + USER_FOLDER + ")" : found.size() + " in " + where);
+        if (changed) {
+            synchronized (this) {
+                mem.clear();
+                missUntil.clear();
+            }
+            Runnable r = onUpdate;
+            if (r != null) r.run();
+        }
+    }
+
+    private static Bitmap decode(File f) {
+        try {
             Bitmap b = BitmapFactory.decodeFile(f.getPath());
+            return b == null ? null : scale(b);
+        } catch (Throwable e) {
+            return null;
+        }
+    }
+
+    // ---- ricerca ---------------------------------------------------------------------------
+
+    /** Logo della stazione (cartella utente, pacchetto integrato, memoria); se manca avvia il download quando c'è rete. */
+    public synchronized Bitmap get(String key, String name) {
+        long now = SystemClock.uptimeMillis();
+        if (now - userScanAt > USER_SCAN_MS) {
+            userScanAt = now;
+            bg.post(this::scanUser);
+        }
+        if (mem.containsKey(key)) return mem.get(key);
+        Long miss = missUntil.get(key);
+        if (miss != null && now < miss) return null;
+        String n = norm(clean(name));
+        String k = key.startsWith("fm_") ? key.substring(3) : n;
+        Bitmap b = null;
+        File uf = user.get(k);
+        if (uf == null && !n.isEmpty()) uf = user.get(n);
+        if (uf != null) b = decode(uf);
+        if (b == null) b = builtinLogo(k);
+        if (b == null && !n.isEmpty() && !n.equals(k)) b = builtinLogo(n);
+        if (b == null) {
+            File f = new File(dir, key + ".png");
+            if (f.exists()) b = BitmapFactory.decodeFile(f.getPath());
+        }
+        if (b != null) {
             mem.put(key, b);
             return b;
         }
+        missUntil.put(key, now + 30_000);
         File none = new File(dir, key + ".none");
         boolean recentMiss = none.exists() && System.currentTimeMillis() - none.lastModified() < RETRY_MS;
-        String n = clean(name);
-        if (!recentMiss && n.length() >= 2 && !n.matches("[0-9.,\\s]+") && pending.add(key)) {
-            bg.post(() -> lookup(key, n));
+        String nm = clean(name);
+        if (!recentMiss && nm.length() >= 2 && !nm.matches("[0-9.,\\s]+") && now >= offlineUntil && online() && pending.add(key)) {
+            bg.post(() -> lookup(key, nm));
         }
         return null;
     }
 
-    /** Logo ricevuto dalla stazione DAB: salvato per i preferiti. */
+    /** Logo ricevuto dalla stazione DAB: salvato in modo permanente (se l'utente non ne ha messo uno suo). */
     public synchronized void put(String key, Bitmap b) {
         if (b == null || b.getWidth() < 8) return;
-        mem.put(key, b);
+        if (!mem.containsKey(key)) mem.put(key, b);
+        missUntil.remove(key);
         if (!savedThisSession.add(key)) return;   // salvato su disco una volta per avvio
         Bitmap copy = b;
         bg.post(() -> save(key, copy));
@@ -99,11 +265,25 @@ public final class StationLogos {
         }
     }
 
+    private boolean online() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+            @SuppressWarnings("deprecation")
+            NetworkInfo ni = cm == null ? null : cm.getActiveNetworkInfo();
+            return ni != null && ni.isConnected();
+        } catch (Throwable e) {
+            return true;
+        }
+    }
+
     private void lookup(String key, String name) {
         Bitmap found = null;
         try {
+            // stazioni del paese dell'auto (lingua di sistema), le più ascoltate per prime
+            String country = L_country();
             String url = API + "?name=" + URLEncoder.encode(name, "UTF-8")
-                    + "&countrycode=IT&hidebroken=true&order=clickcount&reverse=true&limit=8";
+                    + (country.isEmpty() ? "" : "&countrycode=" + country)
+                    + "&hidebroken=true&order=clickcount&reverse=true&limit=8";
             JSONArray arr = new JSONArray(new String(fetch(url, 200_000), "UTF-8"));
             for (int i = 0; i < arr.length() && found == null; i++) {
                 JSONObject o = arr.getJSONObject(i);
@@ -117,16 +297,21 @@ public final class StationLogos {
                 }
             }
         } catch (Exception e) {
-            Diag.put("loghi.ultimoErrore", name + ": " + e.getClass().getSimpleName());
+            // senza rete (o server irraggiungibile): pausa crescente prima di riprovare qualunque logo
             synchronized (this) {
-                pending.remove(key);   // probabilmente senza rete: si riprova più tardi
+                pending.remove(key);
+                offlineUntil = SystemClock.uptimeMillis() + offlineStep;
+                Diag.put("loghi.rete", "non raggiungibile (" + e.getClass().getSimpleName() + "): pausa " + offlineStep / 60_000 + " min");
+                offlineStep = Math.min(OFFLINE_MAX_MS, offlineStep * 2);
             }
             return;
         }
         synchronized (this) {
+            offlineStep = OFFLINE_MIN_MS;
             pending.remove(key);
             if (found != null) {
                 mem.put(key, found);
+                missUntil.remove(key);
                 save(key, found);
             } else {
                 try {
@@ -138,9 +323,18 @@ public final class StationLogos {
                 }
             }
         }
-        Diag.put("loghi." + key, found != null ? "trovato" : "non trovato");
+        Diag.put("loghi.scaricati." + key, found != null ? "trovato e salvato" : "non trovato (riprovo tra 3 giorni)");
         Runnable r = onUpdate;
         if (found != null && r != null) r.run();
+    }
+
+    private static String L_country() {
+        try {
+            String c = android.content.res.Resources.getSystem().getConfiguration().getLocales().get(0).getCountry();
+            return c == null ? "" : c.toUpperCase(Locale.ROOT);
+        } catch (Throwable e) {
+            return "";
+        }
     }
 
     private static Bitmap scale(Bitmap b) {
@@ -148,6 +342,14 @@ public final class StationLogos {
         if (b.getWidth() <= max && b.getHeight() <= max) return b;
         float k = max / (float) Math.max(b.getWidth(), b.getHeight());
         return Bitmap.createScaledBitmap(b, Math.round(b.getWidth() * k), Math.round(b.getHeight() * k), true);
+    }
+
+    private static byte[] readAll(InputStream in) throws Exception {
+        ByteArrayOutputStream bo = new ByteArrayOutputStream();
+        byte[] buf = new byte[16384];
+        int n;
+        while ((n = in.read(buf)) > 0) bo.write(buf, 0, n);
+        return bo.toByteArray();
     }
 
     private static byte[] fetch(String url, int maxBytes) throws Exception {
@@ -167,7 +369,7 @@ public final class StationLogos {
             }
             if (code != 200) {
                 c.disconnect();
-                throw new Exception("HTTP " + code);
+                throw new java.io.IOException("HTTP " + code);
             }
             try (InputStream in = c.getInputStream()) {
                 ByteArrayOutputStream bo = new ByteArrayOutputStream();
@@ -175,7 +377,7 @@ public final class StationLogos {
                 int n, total = 0;
                 while ((n = in.read(buf)) > 0) {
                     total += n;
-                    if (total > maxBytes) throw new Exception("troppo grande");
+                    if (total > maxBytes) throw new IllegalStateException("troppo grande");
                     bo.write(buf, 0, n);
                 }
                 return bo.toByteArray();
@@ -183,6 +385,6 @@ public final class StationLogos {
                 c.disconnect();
             }
         }
-        throw new Exception("troppi redirect");
+        throw new java.io.IOException("troppi redirect");
     }
 }

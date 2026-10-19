@@ -3,12 +3,8 @@
 <resources>
     <string name="connecting_vehicle" formatted="false">Araca bağlanılıyor…</string>
     <string name="vehicle_unavailable" formatted="false">Araç hizmeti kullanılamıyor</string>
-    <string name="chip_consumption" formatted="false">Ort. tüketim</string>
-    <string name="chip_limit" formatted="false">Şarj sınırı</string>
-    <string name="v2l_desc" formatted="false">V2L, deşarj yönetimini aç</string>
     <string name="on" formatted="false">Açık</string>
     <string name="off" formatted="false">Kapalı</string>
-    <string name="full_at">%s itibarıyla dolu</string>
     <string name="charge_charging" formatted="false">Şarj oluyor</string>
     <string name="charge_fast" formatted="false">Hızlı şarj</string>
     <string name="charge_wireless" formatted="false">Kablosuz şarj</string>
@@ -24,7 +20,6 @@
     <string name="v2l_active" formatted="false">V2L açık · harici güç</string>
     <string name="v2l_stopped" formatted="false">V2L durduruldu</string>
     <string name="v2l_done" formatted="false">V2L bitti</string>
-    <string name="ready" formatted="false">Hazır</string>
     <string name="outside_temp">Dış %s°</string>
     <string name="ac_desc" formatted="false">Klima</string>
     <string name="auto_desc" formatted="false">Otomatik klima</string>
@@ -85,7 +80,7 @@
     <string name="set_soc_decimals" formatted="false">Ondalıklı batarya yüzdesi</string>
     <string name="set_soc_decimals_sub" formatted="false">Örn. %88 yerine %88,1</string>
     <string name="set_theme" formatted="false">TEMA</string>
-    <string name="set_tpms_sub" formatted="false">Çizili aracın tekerleklerinin altında, gösterge birimiyle</string>
+    <string name="set_tpms_sub" formatted="false">Çizili aracın tekerleklerinin altında</string>
     <string name="set_tpms_title" formatted="false">Lastik basıncı (TPMS)</string>
     <string name="set_updates" formatted="false">GÜNCELLEMELER</string>
     <string name="theme_auto" formatted="false">Otomatik</string>
@@ -245,4 +240,61 @@
     <string name="upd_now" formatted="false">Güncelle</string>
     <string name="upd_popup_setting" formatted="false">Yeni güncelleme olduğunda bildir</string>
     <string name="upd_error_code">hata %d</string>
+    <string name="btn_ok" formatted="false">Tamam</string>
+    <string name="time_h_min">%1$d sa %2$d dk</string>
+    <string name="time_min">%1$d dk</string>
+    <string name="recirc_desc" formatted="false">Hava sirkülasyonu</string>
+    <string name="map_shortcut_hint" formatted="false">Kısayol · navigasyonu açmak için dokunun</string>
+    <string name="phone_shortcut_hint" formatted="false">Kısayol · CarPlay ve Android Auto tam ekran açılır</string>
+    <string name="cb_limit" formatted="false">Şarj sınırı</string>
+    <string name="cb_current" formatted="false">AC akımı</string>
+    <string name="cb_charge" formatted="false">Şarj</string>
+    <string name="cb_v2l" formatted="false">V2L (harici priz)</string>
+    <string name="cb_start" formatted="false">Başlat</string>
+    <string name="cb_stop" formatted="false">Durdur</string>
+    <string name="cb_preparing" formatted="false">Hazırlanıyor…</string>
+    <string name="cb_unplugged" formatted="false">Takılı değil</string>
+    <string name="cb_limit_title" formatted="false">Şarj sınırı</string>
+    <string name="cb_limit_msg" formatted="false">Şarj bu yüzdede durur. %100 yalnızca uzun yolculuklar için.</string>
+    <string name="cb_current_title" formatted="false">AC şarj akımı</string>
+    <string name="cb_current_msg" formatted="false">Şarj istasyonundan veya ev prizinden çekilen akımı sınırlar. Max = aracın izin verdiği değer.</string>
+    <string name="cb_charge_start_title" formatted="false">Şarj başlatılsın mı?</string>
+    <string name="cb_charge_start_msg" formatted="false">Komut, Şarj yönetimi sayfasındaki gibi araca gönderilir.</string>
+    <string name="cb_charge_stop_title" formatted="false">Şarj durdurulsun mu?</string>
+    <string name="cb_charge_stop_msg" formatted="false">Şarj durur. Buradan veya MG uygulamasından yeniden başlatabilirsiniz.</string>
+    <string name="cb_v2l_start_title" formatted="false">V2L başlatılsın mı?</string>
+    <string name="cb_v2l_start_msg" formatted="false">Batarya, ayarlanan deşarj sınırına kadar harici prizi besler.</string>
+    <string name="cb_v2l_stop_title" formatted="false">V2L durdurulsun mu?</string>
+    <string name="cb_v2l_stop_msg" formatted="false">Harici priz güç vermeyi durdurur.</string>
+    <string name="cb_v2l_title" formatted="false">V2L kullanılamıyor</string>
+    <string name="cb_v2l_low">Deşarj sınırı (%1$s) mevcut şarjın üzerinde: V2L başlamaz. Enerji yönetiminden değiştirin.</string>
+    <string name="cb_open_energy" formatted="false">Enerji yönetimini aç</string>
+    <string name="set_show_date" formatted="false">Saatin yanında tarih</string>
+    <string name="set_show_date_sub" formatted="false">Örn. «Cum 16 Eki», menzil ile saat arasında</string>
+    <string name="set_tyre_unit" formatted="false">Basınç birimi</string>
+    <string name="set_tyre_unit_sub" formatted="false">Otomatik: gösterge mil ise psi, değilse bar</string>
+    <string name="unit_auto" formatted="false">Otomatik</string>
+    <string name="set_charge_buttons" formatted="false">Şarj düğmeleri</string>
+    <string name="set_charge_buttons_sub" formatted="false">Aracın altında sınır, AC akımı ve başlat/durdur · kapalı: daha büyük araç</string>
+    <string name="set_bar_card" formatted="false">ALT ÇUBUK</string>
+    <string name="set_big_bar" formatted="false">Büyük çubuk</string>
+    <string name="set_big_bar_sub" formatted="false">Daha büyük klima düğmeleri; müzik Medya panelinde kalır</string>
+    <string name="set_rear_fog" formatted="false">Arka sis düğmesi</string>
+    <string name="set_rear_fog_sub" formatted="false">Araçta zaten fiziksel düğme varsa veya sistem çubuğu gösteriyorsa kapatın</string>
+    <string name="set_auto_home" formatted="false">Açılıştan sonra Ana ekrana otomatik bas</string>
+    <string name="set_auto_home_sub" formatted="false">Bir kez, bu saniyelerden sonra, yalnızca MG ana ekranı açıksa (kamera, 360°, CarPlay veya arama sırasında asla)</string>
+    <string name="fw_swi69_title" formatted="false">Bu sürüm SWI68 yazılımı içindir</string>
+    <string name="fw_swi69_msg" formatted="false">Aracınızda SWI69 yazılımı var: araç hizmetleri farklı ve bu sürüm bağlanamaz. SWI69 için MG4 Launcher\'ı buradan yükleyin:</string>
+    <string name="fw_other_title" formatted="false">Araç tanınmadı</string>
+    <string name="fw_other_msg" formatted="false">SWI68 yazılımının MG uygulamaları bulunamadı: MG4 Launcher yalnızca MG4 bilgi-eğlence sisteminde çalışır. SWI69 yazılımı için ayrı bir sürüm var:</string>
+    <string name="fw_open_original" formatted="false">Orijinal ana ekranı aç</string>
+    <string name="news_title">MG4 Launcher %1$s yenilikleri</string>
+    <string name="news_sub" formatted="false">Yeni seçenekler ayarlarda (araç paneline uzun basın).</string>
+    <string name="news_1" formatted="false">Şarj düğmeleri: sınır, AC akımı ve şarjı veya V2L\'yi başlat/durdur</string>
+    <string name="news_2" formatted="false">Klima çubuğunda sirkülasyon düğmesi ve isteğe bağlı büyük çubuk</string>
+    <string name="news_3" formatted="false">İnternetsiz de radyo logoları ve kendi logolarınız için MG4Launcher/loghi klasörü</string>
+    <string name="news_4" formatted="false">CarPlay ve Android Auto: ileri ve oynat/duraklat telefonu kontrol eder</string>
+    <string name="news_5" formatted="false">Saatin yanında tarih, basınç birimi ve isteğe bağlı arka sis düğmesi</string>
+    <string name="news_6" formatted="false">«Açılıştan sonra Ana ekrana otomatik bas» seçeneği ve Lehçe dili</string>
+    <string name="news_7" formatted="false">Açılışta sabit ana ekran ve günlüklerden birçok düzeltme</string>
 </resources>

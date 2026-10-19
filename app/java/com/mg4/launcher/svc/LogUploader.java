@@ -193,6 +193,11 @@ public final class LogUploader {
         }
         int code = c.getResponseCode();
         c.disconnect();
+        // 422: il file esiste già (reinvio dalla coda di un log già arrivato) → considerato inviato
+        if (code == 422) {
+            Diag.put("log.giàPresente", path);
+            return;
+        }
         if (code != 200 && code != 201) throw new Exception("HTTP " + code);
     }
 

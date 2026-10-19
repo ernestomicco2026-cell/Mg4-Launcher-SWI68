@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Genera app/res/values*/strings.xml con i testi del launcher in 7 lingue.
+"""Genera app/res/values*/strings.xml con i testi del launcher in 8 lingue (polacco in tools/i18n_pl.py).
 
 Ogni voce: chiave -> (it, en, es, de, pt, fr, tr). L'inglese è la lingua di riserva (cartella values/).
 Uso: python3 tools/i18n.py   (poi ./build.sh per compilare)
@@ -8,18 +8,15 @@ import os
 import re
 import sys
 
-LANGS = ["it", "en", "es", "de", "pt", "fr", "tr"]
+LANGS = ["it", "en", "es", "de", "pt", "fr", "tr", "pl"]
+BASE = 7   # lingue nelle tuple di S; il polacco sta in tools/i18n_pl.py (riserva: inglese)
 
 S = {
     # --- home: auto e batteria ---
     "connecting_vehicle": ("Collegamento al veicolo…", "Connecting to the car…", "Conectando con el vehículo…", "Verbindung zum Fahrzeug…", "A ligar ao veículo…", "Connexion au véhicule…", "Araca bağlanılıyor…"),
     "vehicle_unavailable": ("Servizio veicolo non disponibile", "Vehicle service unavailable", "Servicio del vehículo no disponible", "Fahrzeugdienst nicht verfügbar", "Serviço do veículo indisponível", "Service du véhicule indisponible", "Araç hizmeti kullanılamıyor"),
-    "chip_consumption": ("Consumo medio", "Avg. consumption", "Consumo medio", "Ø Verbrauch", "Consumo médio", "Conso. moyenne", "Ort. tüketim"),
-    "chip_limit": ("Ricarica fino a", "Charge limit", "Cargar hasta", "Laden bis", "Carregar até", "Charger jusqu'à", "Şarj sınırı"),
-    "v2l_desc": ("V2L, apri la gestione della scarica", "V2L, open discharge management", "V2L, abrir la gestión de descarga", "V2L, Entladeverwaltung öffnen", "V2L, abrir a gestão de descarga", "V2L, ouvrir la gestion de la décharge", "V2L, deşarj yönetimini aç"),
     "on": ("Attivo", "On", "Activo", "Aktiv", "Ativo", "Activé", "Açık"),
     "off": ("Spento", "Off", "Apagado", "Aus", "Desligado", "Désactivé", "Kapalı"),
-    "full_at": ("piena alle %s", "full at %s", "llena a las %s", "voll um %s", "cheia às %s", "pleine à %s", "%s itibarıyla dolu"),
     "charge_charging": ("In carica", "Charging", "Cargando", "Lädt", "A carregar", "En charge", "Şarj oluyor"),
     "charge_fast": ("Ricarica rapida", "Fast charging", "Carga rápida", "Schnellladen", "Carregamento rápido", "Charge rapide", "Hızlı şarj"),
     "charge_wireless": ("Ricarica wireless", "Wireless charging", "Carga inalámbrica", "Kabelloses Laden", "Carregamento sem fios", "Charge sans fil", "Kablosuz şarj"),
@@ -35,7 +32,6 @@ S = {
     "v2l_active": ("V2L attivo · alimentazione esterna", "V2L on · powering external devices", "V2L activo · alimentación externa", "V2L aktiv · externe Versorgung", "V2L ativo · alimentação externa", "V2L actif · alimentation externe", "V2L açık · harici güç"),
     "v2l_stopped": ("V2L interrotto", "V2L stopped", "V2L interrumpido", "V2L unterbrochen", "V2L interrompido", "V2L interrompu", "V2L durduruldu"),
     "v2l_done": ("V2L terminato", "V2L finished", "V2L finalizado", "V2L beendet", "V2L terminado", "V2L terminé", "V2L bitti"),
-    "ready": ("Pronta", "Ready", "Lista", "Bereit", "Pronta", "Prête", "Hazır"),
     "outside_temp": ("%s° esterni", "%s° outside", "%s° exterior", "%s° außen", "%s° exterior", "%s° extérieur", "Dış %s°"),
     "ac_desc": ("Aria condizionata", "Air conditioning", "Aire acondicionado", "Klimaanlage", "Ar condicionado", "Climatisation", "Klima"),
     "auto_desc": ("Clima automatico", "Automatic climate", "Climatización automática", "Klimaautomatik", "Climatização automática", "Climatisation automatique", "Otomatik klima"),
@@ -96,7 +92,7 @@ S = {
     "set_soc_decimals": ("Percentuale batteria con decimali", "Battery percentage with decimals", "Porcentaje de batería con decimales", "Akkustand mit Nachkommastelle", "Percentagem da bateria com decimais", "Pourcentage de batterie avec décimales", "Ondalıklı batarya yüzdesi"),
     "set_soc_decimals_sub": ("Es. 88,1% invece di 88%", "E.g. 88.1% instead of 88%", "P. ej. 88,1 % en lugar de 88 %", "Z. B. 88,1 % statt 88 %", "Ex. 88,1% em vez de 88%", "Ex. 88,1 % au lieu de 88 %", "Örn. %88 yerine %88,1"),
     "set_theme": ("TEMA", "THEME", "TEMA", "DESIGN", "TEMA", "THÈME", "TEMA"),
-    "set_tpms_sub": ("Sotto le ruote dell'auto disegnata, nell'unità del quadro", "Under the wheels of the drawn car, in the cluster unit", "Bajo las ruedas del coche dibujado, en la unidad del cuadro", "Unter den Rädern des gezeichneten Autos, in der Einheit des Kombiinstruments", "Sob as rodas do carro desenhado, na unidade do quadrante", "Sous les roues de la voiture dessinée, dans l'unité du combiné", "Çizili aracın tekerleklerinin altında, gösterge birimiyle"),
+    "set_tpms_sub": ("Sotto le ruote dell'auto disegnata", "Under the wheels of the drawn car", "Bajo las ruedas del coche dibujado", "Unter den Rädern des gezeichneten Autos", "Sob as rodas do carro desenhado", "Sous les roues de la voiture dessinée", "Çizili aracın tekerleklerinin altında"),
     "set_tpms_title": ("Pressione pneumatici (TPMS)", "Tyre pressure (TPMS)", "Presión de neumáticos (TPMS)", "Reifendruck (TPMS)", "Pressão dos pneus (TPMS)", "Pression des pneus (TPMS)", "Lastik basıncı (TPMS)"),
     "set_updates": ("AGGIORNAMENTI", "UPDATES", "ACTUALIZACIONES", "UPDATES", "ATUALIZAÇÕES", "MISES À JOUR", "GÜNCELLEMELER"),
     "theme_auto": ("Automatico", "Automatic", "Automático", "Automatisch", "Automático", "Automatique", "Otomatik"),
@@ -266,6 +262,68 @@ S = {
     "upd_now": ("Aggiorna", "Update", "Actualizar", "Aktualisieren", "Atualizar", "Mettre à jour", "Güncelle"),
     "upd_popup_setting": ("Avvisa quando c'è un nuovo aggiornamento", "Notify me when a new update is available", "Avisar cuando haya una nueva actualización", "Benachrichtigen, wenn ein neues Update verfügbar ist", "Avisar quando houver uma nova atualização", "Prévenir quand une nouvelle mise à jour est disponible", "Yeni güncelleme olduğunda bildir"),
     "upd_error_code": ("errore %d", "error %d", "error %d", "Fehler %d", "erro %d", "erreur %d", "hata %d"),
+    # --- 0.8.0 ---
+    "btn_ok": ("OK", "OK", "OK", "OK", "OK", "OK", "Tamam"),
+    "time_h_min": ("%1$d h %2$d min", "%1$d h %2$d min", "%1$d h %2$d min", "%1$d Std. %2$d Min.", "%1$d h %2$d min", "%1$d h %2$d min", "%1$d sa %2$d dk"),
+    "time_min": ("%1$d min", "%1$d min", "%1$d min", "%1$d Min.", "%1$d min", "%1$d min", "%1$d dk"),
+    "recirc_desc": ("Ricircolo aria", "Air recirculation", "Recirculación de aire", "Umluft", "Recirculação do ar", "Recyclage de l'air", "Hava sirkülasyonu"),
+    "map_shortcut_hint": ("Scorciatoia · tocca per aprire il navigatore", "Shortcut · tap to open the navigator", "Acceso directo · toca para abrir el navegador", "Verknüpfung · tippen, um das Navi zu öffnen", "Atalho · toque para abrir o navegador", "Raccourci · touchez pour ouvrir le GPS", "Kısayol · navigasyonu açmak için dokunun"),
+    "phone_shortcut_hint": ("Scorciatoia · CarPlay e Android Auto si aprono a schermo intero", "Shortcut · CarPlay and Android Auto open full screen", "Acceso directo · CarPlay y Android Auto se abren a pantalla completa", "Verknüpfung · CarPlay und Android Auto öffnen im Vollbild", "Atalho · CarPlay e Android Auto abrem em ecrã inteiro", "Raccourci · CarPlay et Android Auto s'ouvrent en plein écran", "Kısayol · CarPlay ve Android Auto tam ekran açılır"),
+    # pulsanti di ricarica
+    "cb_limit": ("Limite di ricarica", "Charge limit", "Límite de carga", "Ladelimit", "Limite de carga", "Limite de charge", "Şarj sınırı"),
+    "cb_current": ("Corrente AC", "AC current", "Corriente AC", "AC-Ladestrom", "Corrente AC", "Courant AC", "AC akımı"),
+    "cb_charge": ("Ricarica", "Charging", "Carga", "Laden", "Carregamento", "Recharge", "Şarj"),
+    "cb_v2l": ("V2L (presa esterna)", "V2L (external socket)", "V2L (toma externa)", "V2L (externe Steckdose)", "V2L (tomada externa)", "V2L (prise externe)", "V2L (harici priz)"),
+    "cb_start": ("Avvia", "Start", "Iniciar", "Starten", "Iniciar", "Démarrer", "Başlat"),
+    "cb_stop": ("Ferma", "Stop", "Detener", "Stoppen", "Parar", "Arrêter", "Durdur"),
+    "cb_preparing": ("In preparazione…", "Preparing…", "Preparando…", "Wird vorbereitet…", "A preparar…", "En préparation…", "Hazırlanıyor…"),
+    "cb_unplugged": ("Non collegata", "Not plugged in", "No conectado", "Nicht angeschlossen", "Não ligado", "Non branchée", "Takılı değil"),
+    "cb_limit_title": ("Limite di ricarica", "Charge limit", "Límite de carga", "Ladelimit", "Limite de carga", "Limite de charge", "Şarj sınırı"),
+    "cb_limit_msg": ("La ricarica si ferma a questa percentuale. 100% solo per i viaggi lunghi.", "Charging stops at this percentage. 100% only for long trips.", "La carga se detiene en este porcentaje. 100% solo para viajes largos.", "Das Laden stoppt bei diesem Prozentsatz. 100 % nur für lange Fahrten.", "O carregamento para nesta percentagem. 100% só para viagens longas.", "La charge s'arrête à ce pourcentage. 100 % seulement pour les longs trajets.", "Şarj bu yüzdede durur. %100 yalnızca uzun yolculuklar için."),
+    "cb_current_title": ("Corrente di ricarica AC", "AC charging current", "Corriente de carga AC", "AC-Ladestrom", "Corrente de carregamento AC", "Courant de charge AC", "AC şarj akımı"),
+    "cb_current_msg": ("Limita la corrente presa dalla colonnina o dalla presa di casa. Max = quanto ammesso dall'auto.", "Limits the current drawn from the charger or home socket. Max = what the car allows.", "Limita la corriente tomada del cargador o del enchufe de casa. Max = lo que admite el coche.", "Begrenzt den Strom aus Ladesäule oder Haushaltssteckdose. Max = was das Auto zulässt.", "Limita a corrente retirada do posto ou da tomada de casa. Max = o permitido pelo carro.", "Limite le courant pris à la borne ou à la prise domestique. Max = ce que la voiture autorise.", "Şarj istasyonundan veya ev prizinden çekilen akımı sınırlar. Max = aracın izin verdiği değer."),
+    "cb_charge_start_title": ("Avviare la ricarica?", "Start charging?", "¿Iniciar la carga?", "Laden starten?", "Iniciar o carregamento?", "Démarrer la recharge ?", "Şarj başlatılsın mı?"),
+    "cb_charge_start_msg": ("Il comando va all'auto come dalla pagina Gestione ricarica.", "The command goes to the car as from the Charge management page.", "El comando se envía al coche como desde la página Gestión de carga.", "Der Befehl geht an das Auto wie über die Seite Ladeverwaltung.", "O comando vai para o carro como na página Gestão de carregamento.", "La commande est envoyée à la voiture comme depuis la page Gestion de la recharge.", "Komut, Şarj yönetimi sayfasındaki gibi araca gönderilir."),
+    "cb_charge_stop_title": ("Fermare la ricarica?", "Stop charging?", "¿Detener la carga?", "Laden stoppen?", "Parar o carregamento?", "Arrêter la recharge ?", "Şarj durdurulsun mu?"),
+    "cb_charge_stop_msg": ("La ricarica si interrompe. Puoi riavviarla da qui o dall'app MG.", "Charging will stop. You can restart it from here or from the MG app.", "La carga se detendrá. Puedes reiniciarla desde aquí o desde la app MG.", "Das Laden wird beendet. Du kannst es hier oder in der MG-App neu starten.", "O carregamento para. Pode reiniciá-lo aqui ou na app MG.", "La recharge s'arrête. Vous pouvez la relancer d'ici ou depuis l'app MG.", "Şarj durur. Buradan veya MG uygulamasından yeniden başlatabilirsiniz."),
+    "cb_v2l_start_title": ("Avviare il V2L?", "Start V2L?", "¿Iniciar V2L?", "V2L starten?", "Iniciar V2L?", "Démarrer le V2L ?", "V2L başlatılsın mı?"),
+    "cb_v2l_start_msg": ("La batteria alimenta la presa esterna fino al limite di scarica impostato.", "The battery powers the external socket down to the set discharge limit.", "La batería alimenta la toma externa hasta el límite de descarga fijado.", "Die Batterie versorgt die externe Steckdose bis zum eingestellten Entladelimit.", "A bateria alimenta a tomada externa até ao limite de descarga definido.", "La batterie alimente la prise externe jusqu'à la limite de décharge réglée.", "Batarya, ayarlanan deşarj sınırına kadar harici prizi besler."),
+    "cb_v2l_stop_title": ("Fermare il V2L?", "Stop V2L?", "¿Detener V2L?", "V2L stoppen?", "Parar V2L?", "Arrêter le V2L ?", "V2L durdurulsun mu?"),
+    "cb_v2l_stop_msg": ("La presa esterna smette di dare corrente.", "The external socket stops supplying power.", "La toma externa deja de dar corriente.", "Die externe Steckdose liefert keinen Strom mehr.", "A tomada externa deixa de fornecer corrente.", "La prise externe cesse de fournir du courant.", "Harici priz güç vermeyi durdurur."),
+    "cb_v2l_title": ("V2L non disponibile", "V2L not available", "V2L no disponible", "V2L nicht verfügbar", "V2L indisponível", "V2L indisponible", "V2L kullanılamıyor"),
+    "cb_v2l_low": ("Il limite di scarica (%1$s) è sopra la carica attuale: il V2L non partirebbe. Cambialo dalla gestione energia.", "The discharge limit (%1$s) is above the current charge: V2L would not start. Change it in energy management.", "El límite de descarga (%1$s) está por encima de la carga actual: el V2L no arrancaría. Cámbialo en la gestión de energía.", "Das Entladelimit (%1$s) liegt über dem aktuellen Ladestand: V2L würde nicht starten. Ändere es in der Energieverwaltung.", "O limite de descarga (%1$s) está acima da carga atual: o V2L não arrancaria. Altere-o na gestão de energia.", "La limite de décharge (%1$s) est au-dessus de la charge actuelle : le V2L ne démarrerait pas. Modifiez-la dans la gestion de l'énergie.", "Deşarj sınırı (%1$s) mevcut şarjın üzerinde: V2L başlamaz. Enerji yönetiminden değiştirin."),
+    "cb_open_energy": ("Apri gestione energia", "Open energy management", "Abrir gestión de energía", "Energieverwaltung öffnen", "Abrir gestão de energia", "Ouvrir la gestion de l'énergie", "Enerji yönetimini aç"),
+    # impostazioni nuove
+    "set_show_date": ("Data accanto all'ora", "Date next to the time", "Fecha junto a la hora", "Datum neben der Uhrzeit", "Data junto à hora", "Date à côté de l'heure", "Saatin yanında tarih"),
+    "set_show_date_sub": ("Es. «Ven 16 ott», tra l'autonomia e l'ora", "E.g. «Fri 16 Oct», between range and time", "P. ej. «vie 16 oct», entre la autonomía y la hora", "Z. B. „Fr 16 Okt“, zwischen Reichweite und Uhrzeit", "Ex. «sex 16 out», entre a autonomia e a hora", "Ex. « ven 16 oct », entre l'autonomie et l'heure", "Örn. «Cum 16 Eki», menzil ile saat arasında"),
+    "set_tyre_unit": ("Unità della pressione", "Pressure unit", "Unidad de presión", "Druckeinheit", "Unidade de pressão", "Unité de pression", "Basınç birimi"),
+    "set_tyre_unit_sub": ("Automatica: psi se il quadro è in miglia, altrimenti bar", "Automatic: psi if the cluster is in miles, otherwise bar", "Automática: psi si el cuadro está en millas, si no bar", "Automatisch: psi bei Meilen im Kombiinstrument, sonst bar", "Automática: psi se o quadrante estiver em milhas, senão bar", "Automatique : psi si le combiné est en miles, sinon bar", "Otomatik: gösterge mil ise psi, değilse bar"),
+    "unit_auto": ("Automatica", "Automatic", "Automática", "Automatisch", "Automática", "Automatique", "Otomatik"),
+    "set_charge_buttons": ("Pulsanti di ricarica", "Charging buttons", "Botones de carga", "Lade-Tasten", "Botões de carregamento", "Boutons de recharge", "Şarj düğmeleri"),
+    "set_charge_buttons_sub": ("Limite, corrente AC e avvia/ferma sotto l'auto · spenti: l'auto è più grande", "Limit, AC current and start/stop under the car · off: bigger car", "Límite, corriente AC e iniciar/detener bajo el coche · apagados: coche más grande", "Limit, AC-Strom und Start/Stopp unter dem Auto · aus: größeres Auto", "Limite, corrente AC e iniciar/parar por baixo do carro · desligados: carro maior", "Limite, courant AC et marche/arrêt sous la voiture · désactivés : voiture plus grande", "Aracın altında sınır, AC akımı ve başlat/durdur · kapalı: daha büyük araç"),
+    "set_bar_card": ("BARRA IN BASSO", "BOTTOM BAR", "BARRA INFERIOR", "UNTERE LEISTE", "BARRA INFERIOR", "BARRE DU BAS", "ALT ÇUBUK"),
+    "set_big_bar": ("Barra grande", "Large bar", "Barra grande", "Große Leiste", "Barra grande", "Grande barre", "Büyük çubuk"),
+    "set_big_bar_sub": ("Pulsanti del clima più grandi; la musica resta nel pannello Media", "Bigger climate buttons; music stays in the Media panel", "Botones de clima más grandes; la música queda en el panel Media", "Größere Klimatasten; die Musik bleibt im Media-Bereich", "Botões do clima maiores; a música fica no painel Media", "Boutons de climatisation plus grands ; la musique reste dans le panneau Média", "Daha büyük klima düğmeleri; müzik Medya panelinde kalır"),
+    "set_rear_fog": ("Pulsante retronebbia", "Rear fog button", "Botón antiniebla trasero", "Taste Nebelschlussleuchte", "Botão do farol de nevoeiro traseiro", "Bouton antibrouillard arrière", "Arka sis düğmesi"),
+    "set_rear_fog_sub": ("Spegnilo se l'auto ha già il tasto fisico o la barra di sistema lo mostra", "Turn it off if the car already has a physical button or the system bar shows it", "Desactívalo si el coche ya tiene el botón físico o la barra del sistema lo muestra", "Ausschalten, wenn das Auto schon eine Taste hat oder die Systemleiste sie zeigt", "Desligue-o se o carro já tiver o botão físico ou a barra do sistema o mostrar", "Désactivez-le si la voiture a déjà un bouton physique ou si la barre système l'affiche", "Araçta zaten fiziksel düğme varsa veya sistem çubuğu gösteriyorsa kapatın"),
+    "set_auto_home": ("Premi Home da solo dopo l'accensione", "Press Home automatically after power-on", "Pulsar Inicio automáticamente tras el encendido", "Nach dem Einschalten automatisch Home drücken", "Premir Início sozinho após ligar", "Appuyer sur Accueil tout seul après l'allumage", "Açılıştan sonra Ana ekrana otomatik bas"),
+    "set_auto_home_sub": ("Una volta, dopo questi secondi, solo se c'è la home MG (mai su retrocamera, 360°, CarPlay o chiamate)", "Once, after these seconds, only if the MG home is showing (never over camera, 360°, CarPlay or calls)", "Una vez, tras estos segundos, solo si aparece la pantalla MG (nunca sobre cámara, 360°, CarPlay o llamadas)", "Einmal, nach diesen Sekunden, nur wenn die MG-Startseite angezeigt wird (nie über Kamera, 360°, CarPlay oder Anrufen)", "Uma vez, após estes segundos, só se estiver o ecrã MG (nunca sobre câmara, 360°, CarPlay ou chamadas)", "Une fois, après ces secondes, seulement si l'accueil MG est affiché (jamais sur caméra, 360°, CarPlay ou appel)", "Bir kez, bu saniyelerden sonra, yalnızca MG ana ekranı açıksa (kamera, 360°, CarPlay veya arama sırasında asla)"),
+    # firmware sbagliato
+    "fw_swi69_title": ("Questa versione è per il firmware SWI68", "This version is for SWI68 firmware", "Esta versión es para el firmware SWI68", "Diese Version ist für die Firmware SWI68", "Esta versão é para o firmware SWI68", "Cette version est pour le firmware SWI68", "Bu sürüm SWI68 yazılımı içindir"),
+    "fw_swi69_msg": ("La tua auto ha il firmware SWI69: i servizi dell'auto sono diversi e questa versione non può collegarsi. Installa MG4 Launcher per SWI69 da:", "Your car has SWI69 firmware: the car services are different and this version cannot connect. Install MG4 Launcher for SWI69 from:", "Tu coche tiene el firmware SWI69: los servicios del coche son distintos y esta versión no puede conectarse. Instala MG4 Launcher para SWI69 desde:", "Dein Auto hat die Firmware SWI69: die Fahrzeugdienste sind anders und diese Version kann sich nicht verbinden. Installiere MG4 Launcher für SWI69 von:", "O seu carro tem o firmware SWI69: os serviços do carro são diferentes e esta versão não se consegue ligar. Instale o MG4 Launcher para SWI69 a partir de:", "Votre voiture a le firmware SWI69 : les services du véhicule sont différents et cette version ne peut pas s'y connecter. Installez MG4 Launcher pour SWI69 depuis :", "Aracınızda SWI69 yazılımı var: araç hizmetleri farklı ve bu sürüm bağlanamaz. SWI69 için MG4 Launcher'ı buradan yükleyin:"),
+    "fw_other_title": ("Auto non riconosciuta", "Car not recognised", "Coche no reconocido", "Auto nicht erkannt", "Carro não reconhecido", "Voiture non reconnue", "Araç tanınmadı"),
+    "fw_other_msg": ("Non trovo le app MG del firmware SWI68: MG4 Launcher funziona solo sull'infotainment della MG4. Per il firmware SWI69 c'è la versione dedicata:", "The MG apps of SWI68 firmware were not found: MG4 Launcher only works on the MG4 infotainment. For SWI69 firmware there is a dedicated version:", "No se encuentran las apps MG del firmware SWI68: MG4 Launcher solo funciona en el sistema multimedia del MG4. Para el firmware SWI69 hay una versión específica:", "Die MG-Apps der Firmware SWI68 wurden nicht gefunden: MG4 Launcher funktioniert nur im MG4-Infotainment. Für die Firmware SWI69 gibt es eine eigene Version:", "Não encontro as apps MG do firmware SWI68: o MG4 Launcher só funciona no sistema multimédia do MG4. Para o firmware SWI69 há uma versão própria:", "Les apps MG du firmware SWI68 sont introuvables : MG4 Launcher ne fonctionne que sur l'infodivertissement de la MG4. Pour le firmware SWI69, il existe une version dédiée :", "SWI68 yazılımının MG uygulamaları bulunamadı: MG4 Launcher yalnızca MG4 bilgi-eğlence sisteminde çalışır. SWI69 yazılımı için ayrı bir sürüm var:"),
+    "fw_open_original": ("Apri la home originale", "Open the original home", "Abrir la pantalla original", "Originale Startseite öffnen", "Abrir o ecrã original", "Ouvrir l'accueil d'origine", "Orijinal ana ekranı aç"),
+    # popup Novità
+    "news_title": ("Novità di MG4 Launcher %1$s", "What's new in MG4 Launcher %1$s", "Novedades de MG4 Launcher %1$s", "Neu in MG4 Launcher %1$s", "Novidades do MG4 Launcher %1$s", "Nouveautés de MG4 Launcher %1$s", "MG4 Launcher %1$s yenilikleri"),
+    "news_sub": ("Le nuove opzioni sono nelle impostazioni (tieni premuto il riquadro dell'auto).", "New options are in the settings (long-press the car panel).", "Las nuevas opciones están en los ajustes (mantén pulsado el panel del coche).", "Die neuen Optionen findest du in den Einstellungen (Auto-Feld lange drücken).", "As novas opções estão nas definições (mantenha premido o painel do carro).", "Les nouvelles options sont dans les réglages (appui long sur le panneau de la voiture).", "Yeni seçenekler ayarlarda (araç paneline uzun basın)."),
+    "news_1": ("Pulsanti di ricarica: limite, corrente AC e avvia/ferma ricarica o V2L", "Charging buttons: limit, AC current and start/stop charging or V2L", "Botones de carga: límite, corriente AC e iniciar/detener carga o V2L", "Lade-Tasten: Limit, AC-Strom und Laden oder V2L starten/stoppen", "Botões de carregamento: limite, corrente AC e iniciar/parar carregamento ou V2L", "Boutons de recharge : limite, courant AC et marche/arrêt de la recharge ou du V2L", "Şarj düğmeleri: sınır, AC akımı ve şarjı veya V2L'yi başlat/durdur"),
+    "news_2": ("Pulsante ricircolo nella barra del clima e barra grande come opzione", "Recirculation button in the climate bar and an optional large bar", "Botón de recirculación en la barra del clima y barra grande opcional", "Umluft-Taste in der Klimaleiste und optional große Leiste", "Botão de recirculação na barra do clima e barra grande opcional", "Bouton de recyclage dans la barre de climatisation et grande barre en option", "Klima çubuğunda sirkülasyon düğmesi ve isteğe bağlı büyük çubuk"),
+    "news_3": ("Loghi radio anche senza internet e cartella MG4Launcher/loghi per i tuoi", "Radio logos even offline, plus an MG4Launcher/loghi folder for your own", "Logos de radio también sin internet y carpeta MG4Launcher/loghi para los tuyos", "Radiologos auch offline und Ordner MG4Launcher/loghi für eigene Logos", "Logótipos de rádio também sem internet e pasta MG4Launcher/loghi para os seus", "Logos radio même hors ligne et dossier MG4Launcher/loghi pour les vôtres", "İnternetsiz de radyo logoları ve kendi logolarınız için MG4Launcher/loghi klasörü"),
+    "news_4": ("CarPlay e Android Auto: avanti e play/pausa comandano il telefono", "CarPlay and Android Auto: next and play/pause control the phone", "CarPlay y Android Auto: siguiente y play/pausa controlan el teléfono", "CarPlay und Android Auto: Weiter und Play/Pause steuern das Telefon", "CarPlay e Android Auto: seguinte e play/pausa controlam o telemóvel", "CarPlay et Android Auto : suivant et lecture/pause commandent le téléphone", "CarPlay ve Android Auto: ileri ve oynat/duraklat telefonu kontrol eder"),
+    "news_5": ("Data accanto all'ora, unità della pressione e pulsante retronebbia a scelta", "Date next to the time, pressure unit and optional rear fog button", "Fecha junto a la hora, unidad de presión y botón antiniebla trasero opcional", "Datum neben der Uhrzeit, Druckeinheit und optionale Nebelschlusstaste", "Data junto à hora, unidade de pressão e botão de nevoeiro traseiro opcional", "Date à côté de l'heure, unité de pression et bouton antibrouillard arrière au choix", "Saatin yanında tarih, basınç birimi ve isteğe bağlı arka sis düğmesi"),
+    "news_6": ("Opzione «Premi Home da solo dopo l'accensione» e lingua polacca", "«Press Home automatically after power-on» option and Polish language", "Opción «Pulsar Inicio automáticamente tras el encendido» e idioma polaco", "Option „Nach dem Einschalten automatisch Home drücken“ und Polnisch", "Opção «Premir Início sozinho após ligar» e língua polaca", "Option « Appuyer sur Accueil tout seul après l'allumage » et langue polonaise", "«Açılıştan sonra Ana ekrana otomatik bas» seçeneği ve Lehçe dili"),
+    "news_7": ("Home stabile all'avvio e tante correzioni dai log", "Steady home at start-up and many fixes from the logs", "Pantalla estable al arrancar y muchas correcciones a partir de los registros", "Stabile Startseite beim Start und viele Korrekturen aus den Logs", "Ecrã estável no arranque e muitas correções a partir dos registos", "Accueil stable au démarrage et de nombreuses corrections issues des journaux", "Açılışta sabit ana ekran ve günlüklerden birçok düzeltme"),
 }
 
 
@@ -279,16 +337,21 @@ def esc(t):
 
 def main():
     root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "app", "res")
-    bad = [k for k, v in S.items() if len(v) != len(LANGS)]
+    bad = [k for k, v in S.items() if len(v) != BASE]
     if bad:
         sys.exit("voci senza 7 traduzioni: %s" % bad)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from i18n_pl import PL
+    missing = [k for k in S if k not in PL]
+    if missing:
+        print("polacco: %d voci in inglese (%s)" % (len(missing), ", ".join(missing[:8])))
     for i, lang in enumerate(LANGS):
         folder = "values" if lang == "en" else "values-" + lang
         os.makedirs(os.path.join(root, folder), exist_ok=True)
         lines = ['<?xml version="1.0" encoding="utf-8"?>',
                  '<!-- generato da tools/i18n.py: non modificare a mano -->', '<resources>']
         for k, v in S.items():
-            t = v[i]
+            t = PL.get(k, v[1]) if lang == "pl" else v[i]
             fmt = re.search(r"%(\d+\$)?[sd]", t)
             attr = "" if fmt else ' formatted="false"'
             lines.append('    <string name="%s"%s>%s</string>' % (k, attr, esc(t)))

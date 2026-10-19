@@ -32,10 +32,17 @@ public final class VehicleClient {
     private static final int CHG_RANGE_VALID = 30;     // bool  getCurrentEnduranceMileageV
     private static final int CHG_DISCHARGE_STATUS = 48;// int   getDischrgControlStatus
     private static final int CHG_BATTERY_VOLT = 64;    // float getPowerBatteryVol
-    private static final int CHG_CONSUMPTION = 66;     // float getElecCsumpPerKm (ultimo km, kWh/100km)
-    private static final int CHG_CONSUMPTION_LIST = 68;// String getElecCsumpPerKmList (JSON, ultimi 50 km)
-    private static final int CHG_ACC_AFTER_CHARGE = 73, CHG_ACC_AFTER_START = 74,
-            CHG_TOT_AFTER_CHARGE = 75, CHG_TOT_AFTER_START = 76;   // solo diagnostica
+    // comandi di ricarica, come la pagina Gestione ricarica originale (vehiclesettings_eh32_eu_P):
+    private static final int CHG_GET_CURRENT_LIMIT = 11, CHG_SET_CURRENT_LIMIT = 12;   // 1..4 = 6 A, 8 A, 16 A, Max (0 = non disponibile)
+    private static final int CHG_SET_LIMIT_SOC = 14;                                    // 1..7 = 40..100 %
+    private static final int CHG_GET_CONTROL = 17, CHG_SET_CONTROL = 18;                // 1 avvia, 2 ferma, 3 in preparazione
+    private static final int CHG_PREDICT_DISCHARGE_TIME = 41;                           // minuti di scarica rimasti (V2L)
+    private static final int CHG_DISCHARGE_LIMIT = 43;                                  // limite di scarica: (codice + 1) × 10 %
+    private static final int CHG_GET_DISCHARGE_CONTROL = 46, CHG_SET_DISCHARGE_CONTROL = 47;   // 1 avvia, 2 ferma, 3 in preparazione
+    private static final int CHG_DIST_UNIT = 82;                                         // unità del quadro: 0 km, 1 miglia
+    public static final int CTRL_START = 1, CTRL_STOP = 2, CTRL_PREPARING = 3;
+    /** Correnti di ricarica AC ammesse dall'auto (codici 1..4). */
+    public static final String[] CURRENT_LABELS = {"6 A", "8 A", "16 A", "Max"};
 
     private static final String AC = "com.saicmotor.sdk.vehiclesettings.IAirConditionService";
     private static final int AC_OPEN_POWER = 5;
@@ -54,12 +61,15 @@ public final class VehicleClient {
     private static final int AC_SET_DRV_SEAT_HEAT = 33, AC_SET_PSG_SEAT_HEAT = 37, AC_SET_WHEEL_HEAT = 52;
     private static final int AC_GET_DRV_SEAT_HEAT = 77, AC_GET_PSG_SEAT_HEAT = 79, AC_GET_WHEEL_HEAT = 94;
     private static final int AC_OPEN_FRONT_DEFROST = 48, AC_CLOSE_FRONT_DEFROST = 49, AC_GET_FRONT_DEFROST = 92;
+    // ricircolo, come l'app Clima originale: 0 = ricircolo interno, 1 = aria esterna, 2 = automatico, -1 = non supportato
+    private static final int AC_LOOP_INNER = 10, AC_LOOP_OUTSIDE = 11, AC_GET_LOOP = 56;
 
     // fendinebbia, come la barra di stato originale (SystemUI): set(1) = premuto, get 1 = acceso
     private static final String SET = "com.saicmotor.sdk.vehiclesettings.IVehicleSettingService";
     private static final int SET_GET_REAR_FOG = 178, SET_SET_REAR_FOG = 179, SET_GET_FRONT_FOG = 187, SET_SET_FRONT_FOG = 188;
     private static final String COND = "com.saicmotor.sdk.vehiclesettings.IVehicleConditionService";
     private static final int COND_FRONT_FOG_CONFIG = 45;   // 0 = fendinebbia anteriori presenti
+    private static final int COND_BMS_AVAILABLE = 56;      // 1 = batteria (BMS) pronta a ricevere comandi
 
     /** Livelli ventola come nell'originale (AcCardView): 1..11, 0 = spenta, 15 = automatico. */
     public static final int FAN_OFF = 0, FAN_AUTO = 15;
@@ -78,8 +88,16 @@ public final class VehicleClient {
         public int predictMinutes = -1;
         public float chargeKw = 0;
         public int chargeLimit = -1;      // % (convertito dal codice SAIC)
-        public float consumption = -1;    // kWh/100km, media degli ultimi 50 km come la pagina Energia
+        public int chargeLimitCode = -1;  // 1..7
+        public int currentLimit = -1;     // 1..4 (6 A, 8 A, 16 A, Max), 0 = non disponibile
+        public int chargeControl = -1;    // 1 in carica, 2 fermo, 3 in preparazione
+        public int dischargeControl = -1; // idem per il V2L
+        public int dischargeLimit = -1;   // % sotto cui il V2L si ferma
+        public int dischargeMinutes = -1;
+        public boolean bmsAvailable;
+        public int distUnit = -1;         // 0 km, 1 miglia (dal quadro)
         public int dischargeStatus = -1;
+        public int loopMode = -1;         // ricircolo: 0 interno, 1 esterno, 2 auto, -1 non supportato
         public int acTemp = -1;           // °C, 17 = LO, 33 = HI
         public int hvacPower = -1;
         public int acOn = -1, autoOn = -1, defrostOn = -1;   // 1 acceso, 0 spento, -1 sconosciuto
@@ -193,29 +211,6 @@ public final class VehicleClient {
         return -1;
     }
 
-    /** Media dell'elenco JSON dei consumi per km (es. "[15.2,16.0,…]"), ignorando i valori non validi. */
-    static float average(String json) {
-        if (json == null) return -1;
-        float sum = 0;
-        int n = 0;
-        for (String part : json.replace("[", "").replace("]", "").split(",")) {
-            try {
-                float v = Float.parseFloat(part.trim());
-                if (v > 0 && v < 100) {
-                    sum += v;
-                    n++;
-                }
-            } catch (NumberFormatException ignored) {
-            }
-        }
-        return n == 0 ? -1 : sum / n;
-    }
-
-    private static int count(String json) {
-        if (json == null || json.length() < 3) return 0;
-        return json.split(",").length;
-    }
-
     private void poll() {
         State s = new State();
         s.connected = hub.isConnected();
@@ -229,29 +224,31 @@ public final class VehicleClient {
                     s.predictMinutes = Rpc.callInt(c, CHG, CHG_PREDICT_TIME);
                     int limitCode = Rpc.callInt(c, CHG, CHG_LIMIT_SOC);
                     s.chargeLimit = limitPercent(limitCode);
+                    s.chargeLimitCode = limitCode >= 1 && limitCode <= 7 ? limitCode : -1;
                     s.dischargeStatus = Rpc.callInt(c, CHG, CHG_DISCHARGE_STATUS);
                     float amps = Rpc.callFloat(c, CHG, CHG_CURRENT);
                     float volts = Rpc.callFloat(c, CHG, CHG_BATTERY_VOLT);
                     s.chargeKw = Math.abs(amps * volts) / 1000f;
-                    float lastKm = Rpc.callFloat(c, CHG, CHG_CONSUMPTION);
-                    String list = null;
+                    long now = android.os.SystemClock.uptimeMillis();
                     try {
-                        list = Rpc.callString(c, CHG, CHG_CONSUMPTION_LIST);
+                        int cur = Rpc.callInt(c, CHG, CHG_GET_CURRENT_LIMIT);
+                        s.currentLimit = held(CHG_GET_CURRENT_LIMIT, cur >= 0 && cur <= 4 ? cur : -1, now);
+                        int lim = held(CHG_LIMIT_SOC, s.chargeLimitCode, now);
+                        if (lim != s.chargeLimitCode && lim >= 1) {
+                            s.chargeLimitCode = lim;
+                            s.chargeLimit = limitPercent(lim);
+                        }
+                        s.chargeControl = held(CHG_GET_CONTROL, Rpc.callInt(c, CHG, CHG_GET_CONTROL), now);
+                        s.dischargeControl = held(CHG_GET_DISCHARGE_CONTROL, Rpc.callInt(c, CHG, CHG_GET_DISCHARGE_CONTROL), now);
+                        int dl = Rpc.callInt(c, CHG, CHG_DISCHARGE_LIMIT);
+                        s.dischargeLimit = dl >= 0 && dl <= 7 ? (dl + 1) * 10 : -1;
+                        if (isDischarging(s.chargingStatus)) s.dischargeMinutes = Rpc.callInt(c, CHG, CHG_PREDICT_DISCHARGE_TIME);
+                        if (distUnit < 0) distUnit = Rpc.callInt(c, CHG, CHG_DIST_UNIT);
+                        s.distUnit = distUnit;
+                        Diag.put("ricarica.comandi", "corrente " + cur + " · avvia/ferma " + s.chargeControl + " · V2L " + s.dischargeControl
+                                + " · limite V2L " + dl + " · unità quadro " + distUnit);
                     } catch (Exception e) {
-                        Diag.error("consumo.elenco", e.toString());
-                    }
-                    float avg = average(list);
-                    s.consumption = avg > 0 ? avg : lastKm;
-                    Diag.putQuiet("veicolo.consumo.ultimoKm", lastKm);
-                    Diag.put("veicolo.consumo.media50km", avg > 0 ? String.format(java.util.Locale.ITALY, "%.1f", avg)
-                            + " (" + count(list) + " km)" : "nessun dato");
-                    try {
-                        Diag.put("veicolo.consumo.altri", "accDaAvvio " + Rpc.callFloat(c, CHG, CHG_ACC_AFTER_START)
-                                + " · totDaAvvio " + Rpc.callFloat(c, CHG, CHG_TOT_AFTER_START)
-                                + " · accDaRicarica " + Rpc.callFloat(c, CHG, CHG_ACC_AFTER_CHARGE)
-                                + " · totDaRicarica " + Rpc.callFloat(c, CHG, CHG_TOT_AFTER_CHARGE));
-                    } catch (Exception e) {
-                        Diag.error("consumo.altri", e.toString());
+                        Diag.error("ricarica.comandi", e.toString());
                     }
                     Diag.put("veicolo.soc", s.soc + " (valido " + Rpc.callBool(c, CHG, CHG_SOC_VALID) + ")");
                     Diag.put("veicolo.autonomia", s.rangeKm + " (valido " + Rpc.callBool(c, CHG, CHG_RANGE_VALID) + ")");
@@ -307,6 +304,14 @@ public final class VehicleClient {
                     s.acOn = held(AC_GET_AC, Rpc.callInt(a, AC, AC_GET_AC), now);
                     s.autoOn = held(AC_GET_AUTO, Rpc.callInt(a, AC, AC_GET_AUTO), now);
                     s.defrostOn = held(AC_GET_FRONT_DEFROST, Rpc.callInt(a, AC, AC_GET_FRONT_DEFROST), now);
+                    try {
+                        int loop = Rpc.callInt(a, AC, AC_GET_LOOP);
+                        s.loopMode = held(AC_GET_LOOP, loop >= 0 && loop <= 2 ? loop : -1, now);
+                        Diag.put("clima.ricircolo", loop + " (0 interno, 1 esterno, 2 auto, -1 non supportato)");
+                    } catch (Exception e) {
+                        s.loopMode = -1;
+                        Diag.error("clima.ricircolo", e.toString());
+                    }
                     Diag.put("clima.ac/auto/sbrinamento", s.acOn + " / " + s.autoOn + " / " + s.defrostOn);
                     int ls = Rpc.callInt(a, AC, AC_GET_DRV_SEAT_HEAT), rs = Rpc.callInt(a, AC, AC_GET_PSG_SEAT_HEAT);
                     int wh = Rpc.callInt(a, AC, AC_GET_WHEEL_HEAT);
@@ -334,6 +339,12 @@ public final class VehicleClient {
                         frontFogConfig = Rpc.callInt(cnd, COND, COND_FRONT_FOG_CONFIG);
                         Diag.put("luci.fendinebbiaAnterioriConfig", frontFogConfig);
                     }
+                }
+                IBinder cnd2 = sub("vehiclecondition");
+                if (cnd2 != null) {
+                    int bms = Rpc.callInt(cnd2, COND, COND_BMS_AVAILABLE);
+                    s.bmsAvailable = bms == 1;
+                    Diag.put("ricarica.bmsDisponibile", bms);
                 }
                 IBinder st = sub("vehiclesetting");
                 if (st != null) {
@@ -434,7 +445,13 @@ public final class VehicleClient {
             Diag.put("pneumatici (grezzo AS/AD/PS/PD)", raw);
             // temperatura interna: si legge solo se l'opzione è accesa nelle impostazioni (spesso l'auto non la fornisce)
             boolean wantInside = ctx.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE).getBoolean("showInsideTemp", false);
-            if (wantInside) {
+            Boolean avail = insideAvailable();
+            if (avail != null) ctx.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE).edit()
+                    .putBoolean("tempInternaAssente", !avail).apply();
+            if (wantInside && Boolean.FALSE.equals(avail)) {
+                Diag.put("clima.tempInterna (corrente / ambient)", "non disponibile su questa auto");
+                insideCache = Float.NaN;
+            } else if (wantInside) {
                 float in = props.getFloat(CarProps.HVAC_TEMPERATURE_CURRENT);
                 float amb = props.getFloat(CarProps.HVAC_AMBIENT_TEMPERATURE);
                 Diag.put("clima.tempInterna (corrente / ambient)", in + " / " + amb);
@@ -448,6 +465,16 @@ public final class VehicleClient {
         s.insideTemp = insideCache;
     }
 
+    /** Temperatura interna leggibile? true / false, null finché non si sa (CarService non ancora pronto). */
+    public static Boolean insideAvailable() {
+        CarProps p = shared;
+        if (p == null) return null;
+        Boolean a = p.available(CarProps.HVAC_TEMPERATURE_CURRENT), b = p.available(CarProps.HVAC_AMBIENT_TEMPERATURE);
+        if (Boolean.TRUE.equals(a) || Boolean.TRUE.equals(b)) return true;
+        if (Boolean.FALSE.equals(a) && Boolean.FALSE.equals(b)) return false;
+        return null;
+    }
+
     private static boolean valid(float t) {
         return !Float.isNaN(t) && t > -40 && t < 80 && t != 0f;
     }
@@ -455,6 +482,30 @@ public final class VehicleClient {
     // ---- pulsanti a commutazione (A/C, AUTO, sbrinamento, fendinebbia) ------------------------
 
     private int frontFogConfig = Integer.MIN_VALUE;
+    private int distUnit = -1;
+
+    /** Stati di ricarica (servizio SAIC): in carica / bilanciamento / rapida / wireless. */
+    public static boolean isCharging(int st) {
+        return st == 1 || st == 3 || st == 10 || st == 16 || st == 11;
+    }
+
+    /** V2L: in scarica (13). */
+    public static boolean isDischarging(int st) {
+        return st == 13;
+    }
+
+    /**
+     * Modalità del pulsante avvia/ferma, come le due schede della Gestione ricarica originale:
+     * 2 = presa V2L collegata (11 collegato, 13 in scarica, 14 sospeso, 15 finito), 1 = cavo di ricarica collegato
+     * (stati 1-4, 6-10: gli stessi che abilitano il pulsante originale), 0 = niente di collegato.
+     */
+    public static int plugMode(State s) {
+        int st = s.chargingStatus;
+        if (st == 13 || st == 14 || st == 15) return 2;
+        if (st == 11) return s.chargeKw > 0.3f ? 1 : 2;
+        if (st == 1 || st == 2 || st == 3 || st == 4 || (st >= 6 && st <= 10)) return 1;
+        return 0;
+    }
     private final Map<Integer, long[]> holds = new HashMap<>();   // codice lettura -> {valore, scadenza}
 
     /** Dopo un tocco mostra subito il nuovo stato per qualche secondo, finché l'auto non lo conferma. */
@@ -571,6 +622,69 @@ public final class VehicleClient {
                 if (a != null) Rpc.call(a, AC, on ? AC_CLOSE_FRONT_DEFROST : AC_OPEN_FRONT_DEFROST, Rpc.NONE);
             } catch (Exception e) {
                 Diag.error("clima.sbrinamento", e.toString());
+            }
+            poll();
+        });
+    }
+
+    // ---- ricircolo ---------------------------------------------------------------------------
+
+    /** Ricircolo: da interno passa ad aria esterna, altrimenti (esterna o auto) a ricircolo interno. */
+    public void toggleRecirc() {
+        if (bg == null) return;
+        int cur = predicted(AC_GET_LOOP, last.loopMode);
+        if (cur < 0) return;
+        boolean toInner = cur != 0;
+        hold(AC_GET_LOOP, toInner ? 0 : 1);
+        bg.post(() -> {
+            try {
+                IBinder a = sub("aircondition");
+                if (a != null) Rpc.call(a, AC, toInner ? AC_LOOP_INNER : AC_LOOP_OUTSIDE, Rpc.NONE);
+                Diag.put("clima.ricircoloComando", (toInner ? "interno" : "esterno") + " (era " + cur + ")");
+            } catch (Exception e) {
+                Diag.error("clima.ricircolo", e.toString());
+            }
+            poll();
+        });
+    }
+
+    // ---- ricarica ----------------------------------------------------------------------------
+
+    /** Limite di ricarica: codice 1..7 (40..100 %), come il cursore della Gestione ricarica. */
+    public void setChargeLimitCode(int code) {
+        if (code < 1 || code > 7) return;
+        chargeCommand(CHG_LIMIT_SOC, code, CHG_SET_LIMIT_SOC, code, "ricarica.limite → " + limitPercent(code) + "%");
+    }
+
+    /** Corrente di ricarica AC: codice 1..4 (6 A, 8 A, 16 A, Max). */
+    public void setCurrentLimit(int code) {
+        if (code < 1 || code > 4) return;
+        chargeCommand(CHG_GET_CURRENT_LIMIT, code, CHG_SET_CURRENT_LIMIT, code, "ricarica.corrente → " + CURRENT_LABELS[code - 1]);
+    }
+
+    /** Avvia o ferma la ricarica (cavo collegato). */
+    public void setCharging(boolean start) {
+        chargeCommand(CHG_GET_CONTROL, CTRL_PREPARING, CHG_SET_CONTROL, start ? CTRL_START : CTRL_STOP,
+                "ricarica." + (start ? "avvia" : "ferma"));
+    }
+
+    /** Avvia o ferma la scarica V2L. */
+    public void setDischarging(boolean start) {
+        chargeCommand(CHG_GET_DISCHARGE_CONTROL, CTRL_PREPARING, CHG_SET_DISCHARGE_CONTROL, start ? CTRL_START : CTRL_STOP,
+                "v2l." + (start ? "avvia" : "ferma"));
+    }
+
+    private void chargeCommand(int getCode, int shown, int setCode, int value, String what) {
+        if (bg == null) return;
+        hold(getCode, shown);
+        bg.post(() -> {
+            try {
+                IBinder c = sub("vehiclecharging");
+                if (c == null) throw new RemoteException("servizio ricarica non collegato");
+                Rpc.call(c, CHG, setCode, p -> p.writeInt(value));
+                Diag.put("ricarica.ultimoComando", what + " · inviato");
+            } catch (Exception e) {
+                Diag.error(what, e.toString());
             }
             poll();
         });

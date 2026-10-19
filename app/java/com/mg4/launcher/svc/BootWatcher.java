@@ -33,6 +33,7 @@ public final class BootWatcher extends BroadcastReceiver {
         boolean locked = Intent.ACTION_LOCKED_BOOT_COMPLETED.equals(action);
         if (!locked && !Intent.ACTION_BOOT_COMPLETED.equals(action)) return;
         Context c = context.getApplicationContext();
+        if (Firmware.wrong(c)) return;   // versione per SWI68 installata su un altro firmware: non si tocca nulla
         String time = new SimpleDateFormat("HH:mm:ss", Locale.ITALY).format(new Date());
         Diag.put("avvio.boot", "ricevuto alle " + time + " (" + (locked ? "locked" : "normale") + ")"
                 + " · " + (SystemClock.elapsedRealtime() / 1000) + " s dall'accensione");

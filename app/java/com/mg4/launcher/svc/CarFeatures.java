@@ -85,9 +85,29 @@ public final class CarFeatures {
         return on;
     }
 
+    private static Boolean providerExists;
+
+    /**
+     * Il fornitore di configurazione SAIC esiste? Sulla SWI68 no: si verifica una volta sola con
+     * resolveContentProvider e poi non lo si interroga più (evita errori a ogni avvio).
+     */
+    public static synchronized boolean hasFeatureProvider(Context c) {
+        if (providerExists == null) {
+            boolean ok = false;
+            try {
+                ok = c.getPackageManager().resolveContentProvider("com.saicmotor.caradapter.featureprovider", 0) != null;
+            } catch (Throwable ignored) {
+            }
+            providerExists = ok;
+            Diag.put("auto.config.fornitore", ok ? "presente" : "assente (non interrogato)");
+        }
+        return providerExists;
+    }
+
     /** Valore di una chiave del fornitore di configurazione, "-" se non esiste. */
     private static String feature(Context c, String key) {
         if (cache.containsKey(key)) return cache.get(key);
+        if (!hasFeatureProvider(c)) return "-";
         String v = "-";
         Cursor cur = null;
         try {

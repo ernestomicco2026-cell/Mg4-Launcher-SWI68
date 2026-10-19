@@ -21,12 +21,15 @@ mkdir -p "$OUT/res" "$OUT/gen" "$OUT/classes" "$OUT/dex" "$OUT/tools"
 SRC="$APP/java"
 MANIFEST="$APP/AndroidManifest.xml"
 RENAME=()
+# pacchetto di loghi radio integrato (app/assets/loghi)
+ASSETS=()
+if [ -d "$APP/assets" ]; then ASSETS=(-A "$APP/assets"); fi
 
 echo "==> risorse (aapt2)"
 "$T/aapt2" compile --dir "$APP/res" -o "$OUT/res/compiled.zip"
 "$T/aapt2" link \
   -I "$ANDROID_JAR" \
-  --manifest "$MANIFEST" "${RENAME[@]}" \
+  --manifest "$MANIFEST" "${RENAME[@]}" "${ASSETS[@]}" \
   --min-sdk-version 26 --target-sdk-version 28 \
   --version-code "$VERSION_CODE" --version-name "$VERSION_NAME" \
   --java "$OUT/gen" \

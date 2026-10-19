@@ -3,12 +3,8 @@
 <resources>
     <string name="connecting_vehicle" formatted="false">Connecting to the car…</string>
     <string name="vehicle_unavailable" formatted="false">Vehicle service unavailable</string>
-    <string name="chip_consumption" formatted="false">Avg. consumption</string>
-    <string name="chip_limit" formatted="false">Charge limit</string>
-    <string name="v2l_desc" formatted="false">V2L, open discharge management</string>
     <string name="on" formatted="false">On</string>
     <string name="off" formatted="false">Off</string>
-    <string name="full_at">full at %s</string>
     <string name="charge_charging" formatted="false">Charging</string>
     <string name="charge_fast" formatted="false">Fast charging</string>
     <string name="charge_wireless" formatted="false">Wireless charging</string>
@@ -24,7 +20,6 @@
     <string name="v2l_active" formatted="false">V2L on · powering external devices</string>
     <string name="v2l_stopped" formatted="false">V2L stopped</string>
     <string name="v2l_done" formatted="false">V2L finished</string>
-    <string name="ready" formatted="false">Ready</string>
     <string name="outside_temp">%s° outside</string>
     <string name="ac_desc" formatted="false">Air conditioning</string>
     <string name="auto_desc" formatted="false">Automatic climate</string>
@@ -85,7 +80,7 @@
     <string name="set_soc_decimals" formatted="false">Battery percentage with decimals</string>
     <string name="set_soc_decimals_sub" formatted="false">E.g. 88.1% instead of 88%</string>
     <string name="set_theme" formatted="false">THEME</string>
-    <string name="set_tpms_sub" formatted="false">Under the wheels of the drawn car, in the cluster unit</string>
+    <string name="set_tpms_sub" formatted="false">Under the wheels of the drawn car</string>
     <string name="set_tpms_title" formatted="false">Tyre pressure (TPMS)</string>
     <string name="set_updates" formatted="false">UPDATES</string>
     <string name="theme_auto" formatted="false">Automatic</string>
@@ -245,4 +240,61 @@
     <string name="upd_now" formatted="false">Update</string>
     <string name="upd_popup_setting" formatted="false">Notify me when a new update is available</string>
     <string name="upd_error_code">error %d</string>
+    <string name="btn_ok" formatted="false">OK</string>
+    <string name="time_h_min">%1$d h %2$d min</string>
+    <string name="time_min">%1$d min</string>
+    <string name="recirc_desc" formatted="false">Air recirculation</string>
+    <string name="map_shortcut_hint" formatted="false">Shortcut · tap to open the navigator</string>
+    <string name="phone_shortcut_hint" formatted="false">Shortcut · CarPlay and Android Auto open full screen</string>
+    <string name="cb_limit" formatted="false">Charge limit</string>
+    <string name="cb_current" formatted="false">AC current</string>
+    <string name="cb_charge" formatted="false">Charging</string>
+    <string name="cb_v2l" formatted="false">V2L (external socket)</string>
+    <string name="cb_start" formatted="false">Start</string>
+    <string name="cb_stop" formatted="false">Stop</string>
+    <string name="cb_preparing" formatted="false">Preparing…</string>
+    <string name="cb_unplugged" formatted="false">Not plugged in</string>
+    <string name="cb_limit_title" formatted="false">Charge limit</string>
+    <string name="cb_limit_msg" formatted="false">Charging stops at this percentage. 100% only for long trips.</string>
+    <string name="cb_current_title" formatted="false">AC charging current</string>
+    <string name="cb_current_msg" formatted="false">Limits the current drawn from the charger or home socket. Max = what the car allows.</string>
+    <string name="cb_charge_start_title" formatted="false">Start charging?</string>
+    <string name="cb_charge_start_msg" formatted="false">The command goes to the car as from the Charge management page.</string>
+    <string name="cb_charge_stop_title" formatted="false">Stop charging?</string>
+    <string name="cb_charge_stop_msg" formatted="false">Charging will stop. You can restart it from here or from the MG app.</string>
+    <string name="cb_v2l_start_title" formatted="false">Start V2L?</string>
+    <string name="cb_v2l_start_msg" formatted="false">The battery powers the external socket down to the set discharge limit.</string>
+    <string name="cb_v2l_stop_title" formatted="false">Stop V2L?</string>
+    <string name="cb_v2l_stop_msg" formatted="false">The external socket stops supplying power.</string>
+    <string name="cb_v2l_title" formatted="false">V2L not available</string>
+    <string name="cb_v2l_low">The discharge limit (%1$s) is above the current charge: V2L would not start. Change it in energy management.</string>
+    <string name="cb_open_energy" formatted="false">Open energy management</string>
+    <string name="set_show_date" formatted="false">Date next to the time</string>
+    <string name="set_show_date_sub" formatted="false">E.g. «Fri 16 Oct», between range and time</string>
+    <string name="set_tyre_unit" formatted="false">Pressure unit</string>
+    <string name="set_tyre_unit_sub" formatted="false">Automatic: psi if the cluster is in miles, otherwise bar</string>
+    <string name="unit_auto" formatted="false">Automatic</string>
+    <string name="set_charge_buttons" formatted="false">Charging buttons</string>
+    <string name="set_charge_buttons_sub" formatted="false">Limit, AC current and start/stop under the car · off: bigger car</string>
+    <string name="set_bar_card" formatted="false">BOTTOM BAR</string>
+    <string name="set_big_bar" formatted="false">Large bar</string>
+    <string name="set_big_bar_sub" formatted="false">Bigger climate buttons; music stays in the Media panel</string>
+    <string name="set_rear_fog" formatted="false">Rear fog button</string>
+    <string name="set_rear_fog_sub" formatted="false">Turn it off if the car already has a physical button or the system bar shows it</string>
+    <string name="set_auto_home" formatted="false">Press Home automatically after power-on</string>
+    <string name="set_auto_home_sub" formatted="false">Once, after these seconds, only if the MG home is showing (never over camera, 360°, CarPlay or calls)</string>
+    <string name="fw_swi69_title" formatted="false">This version is for SWI68 firmware</string>
+    <string name="fw_swi69_msg" formatted="false">Your car has SWI69 firmware: the car services are different and this version cannot connect. Install MG4 Launcher for SWI69 from:</string>
+    <string name="fw_other_title" formatted="false">Car not recognised</string>
+    <string name="fw_other_msg" formatted="false">The MG apps of SWI68 firmware were not found: MG4 Launcher only works on the MG4 infotainment. For SWI69 firmware there is a dedicated version:</string>
+    <string name="fw_open_original" formatted="false">Open the original home</string>
+    <string name="news_title">What\'s new in MG4 Launcher %1$s</string>
+    <string name="news_sub" formatted="false">New options are in the settings (long-press the car panel).</string>
+    <string name="news_1" formatted="false">Charging buttons: limit, AC current and start/stop charging or V2L</string>
+    <string name="news_2" formatted="false">Recirculation button in the climate bar and an optional large bar</string>
+    <string name="news_3" formatted="false">Radio logos even offline, plus an MG4Launcher/loghi folder for your own</string>
+    <string name="news_4" formatted="false">CarPlay and Android Auto: next and play/pause control the phone</string>
+    <string name="news_5" formatted="false">Date next to the time, pressure unit and optional rear fog button</string>
+    <string name="news_6" formatted="false">«Press Home automatically after power-on» option and Polish language</string>
+    <string name="news_7" formatted="false">Steady home at start-up and many fixes from the logs</string>
 </resources>

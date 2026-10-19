@@ -57,11 +57,26 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     private SettingsView settings;
     private int lastUiMode;
 
+    /** Versione per SWI68 su un altro firmware: solo la schermata di avviso, nessun collegamento ai servizi. */
+    private boolean wrongFirmware;
+
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         prefs = new Prefs(this);
         L.init(this, prefs.language());
+        // schermo intero dal primo disegno: niente ridimensionamento della finestra all'avvio
+        getWindow().getDecorView().setSystemUiVisibility(IMMERSIVE);
+        if (com.mg4.launcher.svc.Firmware.wrong(this)) {
+            wrongFirmware = true;
+            logs = new com.mg4.launcher.svc.LogUploader(this);
+            root = new FrameLayout(this);
+            setContentView(root);
+            showWrongFirmware();
+            logs.start();
+            root.postDelayed(saveDiag, 15000);
+            return;
+        }
         catalog = new AppCatalog(this);
         vehicle = new VehicleClient(this);
         conn = new com.mg4.launcher.svc.ConnClient(this);
@@ -86,6 +101,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         });
         goFullscreen();
         build();
+        // primo avvio dopo un aggiornamento: popup "Novità" (una sola volta per versione)
+        root.postDelayed(this::showNewsIfUpdated, 1500);
 
         vehicle.setListener(s -> {
             if (home != null) home.onVehicle(s);
@@ -105,11 +122,14 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         nav.setListener(s -> {
             if (home != null) home.onNav(s);
         });
-        vehicle.start();
-        conn.start();
-        media.start();
-        nav.start();
-        logs.start();
+        // collegamento ai servizi dopo il primo disegno: la home compare subito, già nelle dimensioni finali
+        root.post(() -> {
+            vehicle.start();
+            conn.start();
+            media.start();
+            nav.start();
+            logs.start();
+        });
         // avvio all'accensione: servizio di accessibilità, scadenza officina, riconferma della home predefinita
         com.mg4.launcher.svc.StartGuard.markProcess();
         com.mg4.launcher.svc.HomeMode.checkExpiry(getApplicationContext());
@@ -240,6 +260,81 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         return Ui.dp(this, v);
     }
 
+    // ---- firmware sbagliato ------------------------------------------------------------------
+
+    private void showWrongFirmware() {
+        theme = Theme.resolve(this, prefs);
+        Theme t = theme;
+        root.removeAllViews();
+        root.setBackgroundColor(t.bg);
+        boolean swi69 = com.mg4.launcher.svc.Firmware.kind(this) == com.mg4.launcher.svc.Firmware.SWI69;
+        LinearLayout card = Ui.column(this);
+        card.setGravity(Gravity.CENTER_HORIZONTAL);
+        card.setBackground(Ui.round(t.panel, dp(28)));
+        card.setPadding(dp(56), dp(44), dp(56), dp(40));
+        card.addView(Ui.icon(this, R.drawable.ic_info, t.text, 56));
+        TextView title = Ui.text(this, L.s(swi69 ? R.string.fw_swi69_title : R.string.fw_other_title), 36, t.text, Ui.MEDIUM);
+        title.setGravity(Gravity.CENTER);
+        card.addView(title, Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(20), 0, 0));
+        TextView msg = Ui.text(this, L.s(swi69 ? R.string.fw_swi69_msg : R.string.fw_other_msg), 21, t.sub, Ui.REGULAR);
+        msg.setGravity(Gravity.CENTER);
+        msg.setLineSpacing(0, 1.2f);
+        card.addView(msg, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, dp(16), 0, 0));
+        TextView link = Ui.text(this, com.mg4.launcher.svc.Firmware.SWI69_URL.replace("https://", ""), 22, t.text, Ui.MEDIUM);
+        link.setGravity(Gravity.CENTER);
+        link.setPadding(dp(24), dp(14), dp(24), dp(14));
+        link.setBackground(Ui.round(t.chip, dp(16)));
+        link.setTextIsSelectable(true);
+        card.addView(link, Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(26), 0, 0));
+        TextView open = Ui.text(this, L.s(R.string.fw_open_original), 20, t.panel, Ui.MEDIUM);
+        open.setGravity(Gravity.CENTER);
+        open.setPadding(dp(30), 0, dp(30), 0);
+        open.setBackground(Ui.pressable(this, t.text, 16, t));
+        open.setClickable(true);
+        open.setOnClickListener(v -> openAnyOtherHome());
+        card.addView(open, Ui.margins(new LinearLayout.LayoutParams(-2, dp(64)), 0, dp(30), 0, 0));
+        root.addView(card, new FrameLayout.LayoutParams(dp(1100), -2, Gravity.CENTER));
+    }
+
+    /** Apre la home originale dell'auto (qualunque firmware): la prima home che non è questo launcher. */
+    private void openAnyOtherHome() {
+        try {
+            Intent home = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME);
+            for (android.content.pm.ResolveInfo ri : getPackageManager().queryIntentActivities(home, 0)) {
+                if (ri.activityInfo == null || getPackageName().equals(ri.activityInfo.packageName)) continue;
+                startActivity(new Intent(home).setComponent(new ComponentName(ri.activityInfo.packageName, ri.activityInfo.name))
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                return;
+            }
+        } catch (Exception e) {
+            Diag.error("home originale", e.toString());
+        }
+    }
+
+    // ---- popup "Novità" dopo un aggiornamento -------------------------------------------------
+
+    /** Una sola volta per versione, nella lingua scelta; non dopo la prima installazione. */
+    private void showNewsIfUpdated() {
+        String ver = updater.currentVersion();
+        if (ver.equals(prefs.newsShownFor())) return;
+        boolean updated = false;
+        try {
+            android.content.pm.PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+            updated = pi.lastUpdateTime > pi.firstInstallTime + 1000;
+        } catch (Exception ignored) {
+        }
+        prefs.setNewsShownFor(ver);
+        if (!updated) return;
+        showNews(ver);
+    }
+
+    private void showNews(String ver) {
+        String[] items = {L.s(R.string.news_1), L.s(R.string.news_2), L.s(R.string.news_3), L.s(R.string.news_4),
+                L.s(R.string.news_5), L.s(R.string.news_6), L.s(R.string.news_7)};
+        com.mg4.launcher.ui.Confirm.notice(root, theme, L.f(R.string.news_title, ver), L.s(R.string.news_sub), items,
+                L.s(R.string.btn_ok), null);
+    }
+
     /** Ogni 15 s salva la diagnostica su file: adb pull /sdcard/Android/data/com.mg4.launcher/files/diagnostica.txt */
     private final Runnable saveDiag = new Runnable() {
         @Override
@@ -268,6 +363,10 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     protected void onResume() {
         super.onResume();
+        if (wrongFirmware) {
+            goFullscreen();
+            return;
+        }
         askOfficina();
         goFullscreen();
     }
@@ -308,6 +407,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     protected void onStart() {
         super.onStart();
+        if (wrongFirmware) return;
         // il collegamento ai servizi resta attivo; qui si riprendono solo le letture periodiche
         vehicle.resume();
         conn.resume();
@@ -319,6 +419,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     protected void onStop() {
         super.onStop();
+        if (wrongFirmware) return;
         vehicle.pause();
         conn.pause();
         media.pause();
@@ -330,6 +431,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         super.onDestroy();
         root.removeCallbacks(saveDiag);
         logs.stop();
+        if (wrongFirmware) return;
         root.removeCallbacks(autoCheck);
         root.removeCallbacks(hidePopup);
         vehicle.stop();
@@ -349,6 +451,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        if (wrongFirmware) return;
         // tasto Home: torna sempre alla schermata principale
         closeSettings();
         closeApps();
@@ -356,6 +459,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
 
     @Override
     public void onBackPressed() {
+        if (wrongFirmware) return;
         if (settings != null) closeSettings();
         else if (pager != null && pager.page() != 0) closeApps();
         // altrimenti il launcher resta dov'è
@@ -364,6 +468,10 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public void onConfigurationChanged(Configuration cfg) {
         super.onConfigurationChanged(cfg);
+        if (wrongFirmware) {
+            if (L.init(this, prefs.language())) showWrongFirmware();
+            return;
+        }
         // lingua di sistema cambiata: con "Automatica" il launcher la segue subito
         if (L.init(this, prefs.language())) {
             catalog.refreshLabels();
@@ -418,16 +526,25 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     /** Come la home originale (EnergyView): ChargeManagementActivity con l'extra "module" = scheda da aprire. */
     @Override
     public void openEnergy(String module) {
+        // se ChargeManagementActivity non esiste su questo firmware si apre l'app Impostazioni veicolo
+        Intent i = catalog.resolveLaunch("com.saicmotor.hmi.vehiclesettings",
+                "com.saicmotor.hmi.vehiclesettings.chargemanagement.ui.ChargeManagementActivity");
+        if (i == null) return;
         try {
-            startActivity(new Intent(Intent.ACTION_MAIN)
-                    .addCategory(Intent.CATEGORY_HOME)
-                    .setComponent(new android.content.ComponentName("com.saicmotor.hmi.vehiclesettings",
-                            "com.saicmotor.hmi.vehiclesettings.chargemanagement.ui.ChargeManagementActivity"))
-                    .putExtra("module", module)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            startActivity(i.putExtra("module", module).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         } catch (Exception e) {
             com.mg4.launcher.svc.Diag.error("energia " + module, e.toString());
         }
+    }
+
+    @Override
+    public boolean canLaunch(String pkg, String cls) {
+        return catalog.canLaunch(pkg, cls);
+    }
+
+    @Override
+    public FrameLayout overlay() {
+        return root;
     }
 
     @Override

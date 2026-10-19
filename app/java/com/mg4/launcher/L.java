@@ -14,8 +14,8 @@ import java.util.Locale;
 public final class L {
     public static final String AUTO = "auto";
     /** Lingue tradotte, con il loro nome nella lingua stessa. */
-    public static final String[] CODES = {"it", "en", "es", "de", "pt", "fr", "tr"};
-    public static final String[] NAMES = {"Italiano", "English", "Español", "Deutsch", "Português", "Français", "Türkçe"};
+    public static final String[] CODES = {"it", "en", "es", "de", "pt", "fr", "tr", "pl"};
+    public static final String[] NAMES = {"Italiano", "English", "Español", "Deutsch", "Português", "Français", "Türkçe", "Polski"};
 
     private static volatile Resources res;
     private static volatile Locale locale = Locale.ITALY;
@@ -65,6 +65,7 @@ public final class L {
             case "pt": return new Locale("pt", "PT");
             case "fr": return Locale.FRANCE;
             case "tr": return new Locale("tr", "TR");
+            case "pl": return new Locale("pl", "PL");
             default: return new Locale(code);
         }
     }

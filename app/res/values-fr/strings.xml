@@ -3,12 +3,8 @@
 <resources>
     <string name="connecting_vehicle" formatted="false">Connexion au véhicule…</string>
     <string name="vehicle_unavailable" formatted="false">Service du véhicule indisponible</string>
-    <string name="chip_consumption" formatted="false">Conso. moyenne</string>
-    <string name="chip_limit" formatted="false">Charger jusqu\'à</string>
-    <string name="v2l_desc" formatted="false">V2L, ouvrir la gestion de la décharge</string>
     <string name="on" formatted="false">Activé</string>
     <string name="off" formatted="false">Désactivé</string>
-    <string name="full_at">pleine à %s</string>
     <string name="charge_charging" formatted="false">En charge</string>
     <string name="charge_fast" formatted="false">Charge rapide</string>
     <string name="charge_wireless" formatted="false">Charge sans fil</string>
@@ -24,7 +20,6 @@
     <string name="v2l_active" formatted="false">V2L actif · alimentation externe</string>
     <string name="v2l_stopped" formatted="false">V2L interrompu</string>
     <string name="v2l_done" formatted="false">V2L terminé</string>
-    <string name="ready" formatted="false">Prête</string>
     <string name="outside_temp">%s° extérieur</string>
     <string name="ac_desc" formatted="false">Climatisation</string>
     <string name="auto_desc" formatted="false">Climatisation automatique</string>
@@ -85,7 +80,7 @@
     <string name="set_soc_decimals" formatted="false">Pourcentage de batterie avec décimales</string>
     <string name="set_soc_decimals_sub" formatted="false">Ex. 88,1 % au lieu de 88 %</string>
     <string name="set_theme" formatted="false">THÈME</string>
-    <string name="set_tpms_sub" formatted="false">Sous les roues de la voiture dessinée, dans l\'unité du combiné</string>
+    <string name="set_tpms_sub" formatted="false">Sous les roues de la voiture dessinée</string>
     <string name="set_tpms_title" formatted="false">Pression des pneus (TPMS)</string>
     <string name="set_updates" formatted="false">MISES À JOUR</string>
     <string name="theme_auto" formatted="false">Automatique</string>
@@ -245,4 +240,61 @@
     <string name="upd_now" formatted="false">Mettre à jour</string>
     <string name="upd_popup_setting" formatted="false">Prévenir quand une nouvelle mise à jour est disponible</string>
     <string name="upd_error_code">erreur %d</string>
+    <string name="btn_ok" formatted="false">OK</string>
+    <string name="time_h_min">%1$d h %2$d min</string>
+    <string name="time_min">%1$d min</string>
+    <string name="recirc_desc" formatted="false">Recyclage de l\'air</string>
+    <string name="map_shortcut_hint" formatted="false">Raccourci · touchez pour ouvrir le GPS</string>
+    <string name="phone_shortcut_hint" formatted="false">Raccourci · CarPlay et Android Auto s\'ouvrent en plein écran</string>
+    <string name="cb_limit" formatted="false">Limite de charge</string>
+    <string name="cb_current" formatted="false">Courant AC</string>
+    <string name="cb_charge" formatted="false">Recharge</string>
+    <string name="cb_v2l" formatted="false">V2L (prise externe)</string>
+    <string name="cb_start" formatted="false">Démarrer</string>
+    <string name="cb_stop" formatted="false">Arrêter</string>
+    <string name="cb_preparing" formatted="false">En préparation…</string>
+    <string name="cb_unplugged" formatted="false">Non branchée</string>
+    <string name="cb_limit_title" formatted="false">Limite de charge</string>
+    <string name="cb_limit_msg" formatted="false">La charge s\'arrête à ce pourcentage. 100 % seulement pour les longs trajets.</string>
+    <string name="cb_current_title" formatted="false">Courant de charge AC</string>
+    <string name="cb_current_msg" formatted="false">Limite le courant pris à la borne ou à la prise domestique. Max = ce que la voiture autorise.</string>
+    <string name="cb_charge_start_title" formatted="false">Démarrer la recharge ?</string>
+    <string name="cb_charge_start_msg" formatted="false">La commande est envoyée à la voiture comme depuis la page Gestion de la recharge.</string>
+    <string name="cb_charge_stop_title" formatted="false">Arrêter la recharge ?</string>
+    <string name="cb_charge_stop_msg" formatted="false">La recharge s\'arrête. Vous pouvez la relancer d\'ici ou depuis l\'app MG.</string>
+    <string name="cb_v2l_start_title" formatted="false">Démarrer le V2L ?</string>
+    <string name="cb_v2l_start_msg" formatted="false">La batterie alimente la prise externe jusqu\'à la limite de décharge réglée.</string>
+    <string name="cb_v2l_stop_title" formatted="false">Arrêter le V2L ?</string>
+    <string name="cb_v2l_stop_msg" formatted="false">La prise externe cesse de fournir du courant.</string>
+    <string name="cb_v2l_title" formatted="false">V2L indisponible</string>
+    <string name="cb_v2l_low">La limite de décharge (%1$s) est au-dessus de la charge actuelle : le V2L ne démarrerait pas. Modifiez-la dans la gestion de l\'énergie.</string>
+    <string name="cb_open_energy" formatted="false">Ouvrir la gestion de l\'énergie</string>
+    <string name="set_show_date" formatted="false">Date à côté de l\'heure</string>
+    <string name="set_show_date_sub" formatted="false">Ex. « ven 16 oct », entre l\'autonomie et l\'heure</string>
+    <string name="set_tyre_unit" formatted="false">Unité de pression</string>
+    <string name="set_tyre_unit_sub" formatted="false">Automatique : psi si le combiné est en miles, sinon bar</string>
+    <string name="unit_auto" formatted="false">Automatique</string>
+    <string name="set_charge_buttons" formatted="false">Boutons de recharge</string>
+    <string name="set_charge_buttons_sub" formatted="false">Limite, courant AC et marche/arrêt sous la voiture · désactivés : voiture plus grande</string>
+    <string name="set_bar_card" formatted="false">BARRE DU BAS</string>
+    <string name="set_big_bar" formatted="false">Grande barre</string>
+    <string name="set_big_bar_sub" formatted="false">Boutons de climatisation plus grands ; la musique reste dans le panneau Média</string>
+    <string name="set_rear_fog" formatted="false">Bouton antibrouillard arrière</string>
+    <string name="set_rear_fog_sub" formatted="false">Désactivez-le si la voiture a déjà un bouton physique ou si la barre système l\'affiche</string>
+    <string name="set_auto_home" formatted="false">Appuyer sur Accueil tout seul après l\'allumage</string>
+    <string name="set_auto_home_sub" formatted="false">Une fois, après ces secondes, seulement si l\'accueil MG est affiché (jamais sur caméra, 360°, CarPlay ou appel)</string>
+    <string name="fw_swi69_title" formatted="false">Cette version est pour le firmware SWI68</string>
+    <string name="fw_swi69_msg" formatted="false">Votre voiture a le firmware SWI69 : les services du véhicule sont différents et cette version ne peut pas s\'y connecter. Installez MG4 Launcher pour SWI69 depuis :</string>
+    <string name="fw_other_title" formatted="false">Voiture non reconnue</string>
+    <string name="fw_other_msg" formatted="false">Les apps MG du firmware SWI68 sont introuvables : MG4 Launcher ne fonctionne que sur l\'infodivertissement de la MG4. Pour le firmware SWI69, il existe une version dédiée :</string>
+    <string name="fw_open_original" formatted="false">Ouvrir l\'accueil d\'origine</string>
+    <string name="news_title">Nouveautés de MG4 Launcher %1$s</string>
+    <string name="news_sub" formatted="false">Les nouvelles options sont dans les réglages (appui long sur le panneau de la voiture).</string>
+    <string name="news_1" formatted="false">Boutons de recharge : limite, courant AC et marche/arrêt de la recharge ou du V2L</string>
+    <string name="news_2" formatted="false">Bouton de recyclage dans la barre de climatisation et grande barre en option</string>
+    <string name="news_3" formatted="false">Logos radio même hors ligne et dossier MG4Launcher/loghi pour les vôtres</string>
+    <string name="news_4" formatted="false">CarPlay et Android Auto : suivant et lecture/pause commandent le téléphone</string>
+    <string name="news_5" formatted="false">Date à côté de l\'heure, unité de pression et bouton antibrouillard arrière au choix</string>
+    <string name="news_6" formatted="false">Option « Appuyer sur Accueil tout seul après l\'allumage » et langue polonaise</string>
+    <string name="news_7" formatted="false">Accueil stable au démarrage et de nombreuses corrections issues des journaux</string>
 </resources>

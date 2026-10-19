@@ -25,6 +25,9 @@
     <!-- aggiornamento da GitHub senza conferma (permesso di sistema, concesso dalla firma platform) -->
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- loghi radio dell'utente (cartella MG4Launcher/loghi su memoria o chiavetta): il permesso si concede da solo -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GRANT_RUNTIME_PERMISSIONS" />
 
     <application
         android:label="@string/app_name"

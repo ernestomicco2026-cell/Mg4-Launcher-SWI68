@@ -187,4 +187,85 @@ public final class Prefs {
     public void setShowInsideTemp(boolean b) {
         sp.edit().putBoolean("showInsideTemp", b).apply();
     }
+
+    /** True se l'auto non fornisce la temperatura interna (l'opzione allora si nasconde). */
+    public boolean insideTempMissing() {
+        return sp.getBoolean("tempInternaAssente", false);
+    }
+
+    // --- novità 0.8.0 ---
+
+    /** Data tra l'autonomia e l'ora (spenta di default). */
+    public boolean showDate() {
+        return sp.getBoolean("mostraData", false);
+    }
+
+    public void setShowDate(boolean b) {
+        sp.edit().putBoolean("mostraData", b).apply();
+    }
+
+    /** Unità della pressione pneumatici: "auto" (come il quadro), "bar", "kpa", "psi". */
+    public static final String TYRE_AUTO = "auto", TYRE_BAR = "bar", TYRE_KPA = "kpa", TYRE_PSI = "psi";
+
+    public String tyreUnit() {
+        String v = sp.getString("unitaPressione", TYRE_AUTO);
+        return TYRE_BAR.equals(v) || TYRE_KPA.equals(v) || TYRE_PSI.equals(v) ? v : TYRE_AUTO;
+    }
+
+    public void setTyreUnit(String v) {
+        sp.edit().putString("unitaPressione", v).apply();
+    }
+
+    /** Pulsanti di ricarica sotto l'auto (spenti di default: lo spazio va all'auto). */
+    public boolean chargeButtons() {
+        return sp.getBoolean("pulsantiRicarica", false);
+    }
+
+    public void setChargeButtons(boolean b) {
+        sp.edit().putBoolean("pulsantiRicarica", b).apply();
+    }
+
+    /** Pulsante retronebbia nella barra (acceso di default; si spegne se l'auto ha già il tasto fisico). */
+    public boolean showRearFog() {
+        return sp.getBoolean("mostraRetronebbia", true);
+    }
+
+    public void setShowRearFog(boolean b) {
+        sp.edit().putBoolean("mostraRetronebbia", b).apply();
+    }
+
+    /** Barra in basso grande (150 px, pulsanti 120 px); senza mini player. */
+    public boolean bigBar() {
+        return sp.getBoolean("barraGrande", false);
+    }
+
+    public void setBigBar(boolean b) {
+        sp.edit().putBoolean("barraGrande", b).apply();
+    }
+
+    /** Secondi dopo l'accensione per premere Home da soli: 0 = spento, 5/10/15/20/30. */
+    public static final int[] AUTO_HOME_SECONDS = {0, 5, 10, 15, 20, 30};
+
+    public int autoHomeSeconds() {
+        return autoHomeSeconds(sp);
+    }
+
+    public static int autoHomeSeconds(SharedPreferences sp) {
+        int v = sp.getInt("premiHomeSecondi", 0);
+        for (int s : AUTO_HOME_SECONDS) if (s == v) return v;
+        return 0;
+    }
+
+    public void setAutoHomeSeconds(int s) {
+        sp.edit().putInt("premiHomeSecondi", s).apply();
+    }
+
+    /** Ultima versione per cui è stato mostrato il popup "Novità". */
+    public String newsShownFor() {
+        return sp.getString("novitaVersione", "");
+    }
+
+    public void setNewsShownFor(String v) {
+        sp.edit().putString("novitaVersione", v).apply();
+    }
 }

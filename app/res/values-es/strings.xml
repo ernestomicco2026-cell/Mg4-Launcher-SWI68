@@ -3,12 +3,8 @@
 <resources>
     <string name="connecting_vehicle" formatted="false">Conectando con el vehículo…</string>
     <string name="vehicle_unavailable" formatted="false">Servicio del vehículo no disponible</string>
-    <string name="chip_consumption" formatted="false">Consumo medio</string>
-    <string name="chip_limit" formatted="false">Cargar hasta</string>
-    <string name="v2l_desc" formatted="false">V2L, abrir la gestión de descarga</string>
     <string name="on" formatted="false">Activo</string>
     <string name="off" formatted="false">Apagado</string>
-    <string name="full_at">llena a las %s</string>
     <string name="charge_charging" formatted="false">Cargando</string>
     <string name="charge_fast" formatted="false">Carga rápida</string>
     <string name="charge_wireless" formatted="false">Carga inalámbrica</string>
@@ -24,7 +20,6 @@
     <string name="v2l_active" formatted="false">V2L activo · alimentación externa</string>
     <string name="v2l_stopped" formatted="false">V2L interrumpido</string>
     <string name="v2l_done" formatted="false">V2L finalizado</string>
-    <string name="ready" formatted="false">Lista</string>
     <string name="outside_temp">%s° exterior</string>
     <string name="ac_desc" formatted="false">Aire acondicionado</string>
     <string name="auto_desc" formatted="false">Climatización automática</string>
@@ -85,7 +80,7 @@
     <string name="set_soc_decimals" formatted="false">Porcentaje de batería con decimales</string>
     <string name="set_soc_decimals_sub" formatted="false">P. ej. 88,1 % en lugar de 88 %</string>
     <string name="set_theme" formatted="false">TEMA</string>
-    <string name="set_tpms_sub" formatted="false">Bajo las ruedas del coche dibujado, en la unidad del cuadro</string>
+    <string name="set_tpms_sub" formatted="false">Bajo las ruedas del coche dibujado</string>
     <string name="set_tpms_title" formatted="false">Presión de neumáticos (TPMS)</string>
     <string name="set_updates" formatted="false">ACTUALIZACIONES</string>
     <string name="theme_auto" formatted="false">Automático</string>
@@ -245,4 +240,61 @@
     <string name="upd_now" formatted="false">Actualizar</string>
     <string name="upd_popup_setting" formatted="false">Avisar cuando haya una nueva actualización</string>
     <string name="upd_error_code">error %d</string>
+    <string name="btn_ok" formatted="false">OK</string>
+    <string name="time_h_min">%1$d h %2$d min</string>
+    <string name="time_min">%1$d min</string>
+    <string name="recirc_desc" formatted="false">Recirculación de aire</string>
+    <string name="map_shortcut_hint" formatted="false">Acceso directo · toca para abrir el navegador</string>
+    <string name="phone_shortcut_hint" formatted="false">Acceso directo · CarPlay y Android Auto se abren a pantalla completa</string>
+    <string name="cb_limit" formatted="false">Límite de carga</string>
+    <string name="cb_current" formatted="false">Corriente AC</string>
+    <string name="cb_charge" formatted="false">Carga</string>
+    <string name="cb_v2l" formatted="false">V2L (toma externa)</string>
+    <string name="cb_start" formatted="false">Iniciar</string>
+    <string name="cb_stop" formatted="false">Detener</string>
+    <string name="cb_preparing" formatted="false">Preparando…</string>
+    <string name="cb_unplugged" formatted="false">No conectado</string>
+    <string name="cb_limit_title" formatted="false">Límite de carga</string>
+    <string name="cb_limit_msg" formatted="false">La carga se detiene en este porcentaje. 100% solo para viajes largos.</string>
+    <string name="cb_current_title" formatted="false">Corriente de carga AC</string>
+    <string name="cb_current_msg" formatted="false">Limita la corriente tomada del cargador o del enchufe de casa. Max = lo que admite el coche.</string>
+    <string name="cb_charge_start_title" formatted="false">¿Iniciar la carga?</string>
+    <string name="cb_charge_start_msg" formatted="false">El comando se envía al coche como desde la página Gestión de carga.</string>
+    <string name="cb_charge_stop_title" formatted="false">¿Detener la carga?</string>
+    <string name="cb_charge_stop_msg" formatted="false">La carga se detendrá. Puedes reiniciarla desde aquí o desde la app MG.</string>
+    <string name="cb_v2l_start_title" formatted="false">¿Iniciar V2L?</string>
+    <string name="cb_v2l_start_msg" formatted="false">La batería alimenta la toma externa hasta el límite de descarga fijado.</string>
+    <string name="cb_v2l_stop_title" formatted="false">¿Detener V2L?</string>
+    <string name="cb_v2l_stop_msg" formatted="false">La toma externa deja de dar corriente.</string>
+    <string name="cb_v2l_title" formatted="false">V2L no disponible</string>
+    <string name="cb_v2l_low">El límite de descarga (%1$s) está por encima de la carga actual: el V2L no arrancaría. Cámbialo en la gestión de energía.</string>
+    <string name="cb_open_energy" formatted="false">Abrir gestión de energía</string>
+    <string name="set_show_date" formatted="false">Fecha junto a la hora</string>
+    <string name="set_show_date_sub" formatted="false">P. ej. «vie 16 oct», entre la autonomía y la hora</string>
+    <string name="set_tyre_unit" formatted="false">Unidad de presión</string>
+    <string name="set_tyre_unit_sub" formatted="false">Automática: psi si el cuadro está en millas, si no bar</string>
+    <string name="unit_auto" formatted="false">Automática</string>
+    <string name="set_charge_buttons" formatted="false">Botones de carga</string>
+    <string name="set_charge_buttons_sub" formatted="false">Límite, corriente AC e iniciar/detener bajo el coche · apagados: coche más grande</string>
+    <string name="set_bar_card" formatted="false">BARRA INFERIOR</string>
+    <string name="set_big_bar" formatted="false">Barra grande</string>
+    <string name="set_big_bar_sub" formatted="false">Botones de clima más grandes; la música queda en el panel Media</string>
+    <string name="set_rear_fog" formatted="false">Botón antiniebla trasero</string>
+    <string name="set_rear_fog_sub" formatted="false">Desactívalo si el coche ya tiene el botón físico o la barra del sistema lo muestra</string>
+    <string name="set_auto_home" formatted="false">Pulsar Inicio automáticamente tras el encendido</string>
+    <string name="set_auto_home_sub" formatted="false">Una vez, tras estos segundos, solo si aparece la pantalla MG (nunca sobre cámara, 360°, CarPlay o llamadas)</string>
+    <string name="fw_swi69_title" formatted="false">Esta versión es para el firmware SWI68</string>
+    <string name="fw_swi69_msg" formatted="false">Tu coche tiene el firmware SWI69: los servicios del coche son distintos y esta versión no puede conectarse. Instala MG4 Launcher para SWI69 desde:</string>
+    <string name="fw_other_title" formatted="false">Coche no reconocido</string>
+    <string name="fw_other_msg" formatted="false">No se encuentran las apps MG del firmware SWI68: MG4 Launcher solo funciona en el sistema multimedia del MG4. Para el firmware SWI69 hay una versión específica:</string>
+    <string name="fw_open_original" formatted="false">Abrir la pantalla original</string>
+    <string name="news_title">Novedades de MG4 Launcher %1$s</string>
+    <string name="news_sub" formatted="false">Las nuevas opciones están en los ajustes (mantén pulsado el panel del coche).</string>
+    <string name="news_1" formatted="false">Botones de carga: límite, corriente AC e iniciar/detener carga o V2L</string>
+    <string name="news_2" formatted="false">Botón de recirculación en la barra del clima y barra grande opcional</string>
+    <string name="news_3" formatted="false">Logos de radio también sin internet y carpeta MG4Launcher/loghi para los tuyos</string>
+    <string name="news_4" formatted="false">CarPlay y Android Auto: siguiente y play/pausa controlan el teléfono</string>
+    <string name="news_5" formatted="false">Fecha junto a la hora, unidad de presión y botón antiniebla trasero opcional</string>
+    <string name="news_6" formatted="false">Opción «Pulsar Inicio automáticamente tras el encendido» e idioma polaco</string>
+    <string name="news_7" formatted="false">Pantalla estable al arrancar y muchas correcciones a partir de los registros</string>
 </resources>

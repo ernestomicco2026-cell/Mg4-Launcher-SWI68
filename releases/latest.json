@@ -1,6 +1,6 @@
 {
-  "version": "0.7.4",
-  "apk": "releases/MG4Launcher-0.7.4.apk",
-  "size": 479858,
-  "notes": "Avvio all'accensione più rapido, interruttore home predefinita, modalità officina."
+  "version": "0.8.0",
+  "apk": "releases/MG4Launcher-0.8.0.apk",
+  "size": 541508,
+  "notes": "Pulsanti di ricarica, ricircolo, barra grande, data, loghi radio offline, CarPlay come sorgente attiva, lingua polacca."
 }

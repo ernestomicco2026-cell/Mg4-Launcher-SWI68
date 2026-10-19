@@ -27,6 +27,8 @@ public final class CarProps {
     private final Map<Integer, Integer> areas = new HashMap<>();
     private boolean areasRead;
     private String lastError = "";
+    /** Proprietà che l'auto rifiuta (IllegalArgumentException): non si rileggono più. */
+    private final java.util.Set<Integer> unsupported = java.util.Collections.synchronizedSet(new java.util.HashSet<>());
 
     public CarProps(Context c) {
         ctx = c.getApplicationContext();
@@ -121,17 +123,33 @@ public final class CarProps {
         }
     }
 
-    /** Decimale o NaN se non leggibile. */
+    /** Decimale o NaN se non leggibile. Dopo il primo rifiuto dell'auto la proprietà non si rilegge più. */
     public float getFloat(int prop) {
+        if (unsupported.contains(prop)) return Float.NaN;
         try {
             Object p = pm();
             if (p == null) return Float.NaN;
             Method m = p.getClass().getMethod("getFloatProperty", int.class, int.class);
             return (Float) m.invoke(p, prop, area(prop));
         } catch (Throwable e) {
+            Throwable c = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
+            if (c instanceof IllegalArgumentException) {
+                unsupported.add(prop);
+                Diag.put("auto.proprietàNonSupportata." + Integer.toHexString(prop), "non disponibile su questa auto (" + c.getClass().getSimpleName() + ")");
+                return Float.NaN;
+            }
             error("lettura " + prop, e);
             return Float.NaN;
         }
+    }
+
+    /** False se la proprietà non è nell'elenco dell'auto o è stata rifiutata; null se non si sa ancora. */
+    public Boolean available(int prop) {
+        if (unsupported.contains(prop)) return false;
+        if (!connected) return null;
+        area(prop);
+        if (!areasRead) return null;
+        return areas.containsKey(prop);
     }
 
     private void error(String what, Throwable e) {
