@@ -11,8 +11,6 @@
 > tested on **MG4 Luxury MY22 R69**; it should work on every version with the SAIC 1.0+ radio.
 > Per **SWI69 Color Radio** usa [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69) · for **SWI69 Color Radio** use [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69).
 
-🎬 **Videorecensione / Video review:** [MG4 Launcher su YouTube](https://youtu.be/JKZ0N3Lr7FI?si=W3YmYDGfnCfhuFZX)
-
 > Progetto amatoriale e **non ufficiale**: non è affiliato né approvato da MG Motor o SAIC Motor.
 > I nomi MG / MG4 servono solo a indicare l'auto compatibile (infotainment SWI68). Installalo e usalo a tuo rischio.
 >
@@ -46,6 +44,14 @@
 
 ![MG4 Launcher 0.7.4 — pagina App (simulazione / mock-up)](docs/app-0.7.4.png)
 *Pagina App 0.7.4, con Impostazioni Android e File Android · 0.7.4 Apps page, with Android settings and Android files (mock-up).*
+
+---
+
+## Video recensione / Video review
+
+<a href="https://youtu.be/JKZ0N3Lr7FI"><img width="640" alt="Video recensione di MG4 Launcher su YouTube · MG4 Launcher video review on YouTube" src="https://img.youtube.com/vi/JKZ0N3Lr7FI/hqdefault.jpg" /></a>
+
+Guarda la [video recensione su YouTube](https://youtu.be/JKZ0N3Lr7FI) · Watch the [video review on YouTube](https://youtu.be/JKZ0N3Lr7FI).
 
 ---
 
