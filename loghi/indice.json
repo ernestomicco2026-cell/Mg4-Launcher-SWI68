@@ -16,7 +16,7 @@
    "file": "AD.zip",
    "versione": 1,
    "dimensione": 42063,
-   "sha256": "aff4396d7aad72cc63ec1a94ae5cc64fa2f60726fafb28d11bbb689c91513439",
+   "sha256": "61a0ad171ae116a226155b9b472d57384bca1e7feffb29c8542dab543f0b0220",
    "loghi": 7,
    "alias": 0
   },
@@ -35,7 +35,7 @@
    "file": "AL.zip",
    "versione": 1,
    "dimensione": 112768,
-   "sha256": "6ed256d0e98016d82d631a079e0029a2f3aeabd6db008a0fe5e49e825edbee7a",
+   "sha256": "9ea212afaa46a1cfd922aa95ac8cffad01f1aaea3ea21a12307b45cb96c7ef2a",
    "loghi": 18,
    "alias": 0
   },
@@ -54,7 +54,7 @@
    "file": "AT.zip",
    "versione": 1,
    "dimensione": 454309,
-   "sha256": "161607143b560d9539ffcdbb521707ecce385bee754cd95ec101022fd3c30886",
+   "sha256": "0f1db15fadc5e33a4f3f71d2a1d68512b94046c80c934ec6e56599aa5b234071",
    "loghi": 71,
    "alias": 27
   },
@@ -73,7 +73,7 @@
    "file": "AX.zip",
    "versione": 1,
    "dimensione": 5911,
-   "sha256": "10127a7d3d67cdbf78a3c7967e1ad29493e46435c8f956e9c6d94f53e2e22669",
+   "sha256": "fc228b3f659dbfa6828fc3bf282b3f8dbabd0fe1deb3d308224c813d4335ac27",
    "loghi": 1,
    "alias": 0
   },
@@ -92,7 +92,7 @@
    "file": "BA.zip",
    "versione": 1,
    "dimensione": 248547,
-   "sha256": "145c043b3daf047bf056d0b39f2f5f6cbd7322d57043abf0c1e5d816e584cb06",
+   "sha256": "7e092d348f6ad11675d099f5d301a31c2ef094311d075e8fb0147dff425de1b1",
    "loghi": 41,
    "alias": 5
   },
@@ -110,9 +110,9 @@
    },
    "file": "BE.zip",
    "versione": 1,
-   "dimensione": 587806,
-   "sha256": "ba25f1efc503cd3714aef0f8fbdbe7a3332e6f45f3e5ef20d95cbfb013e03af3",
-   "loghi": 112,
+   "dimensione": 590740,
+   "sha256": "adad07fb59a16e09b3e879cd3203dd995f667cc979731b6770035f778ccd5f96",
+   "loghi": 113,
    "alias": 34
   },
   {
@@ -130,7 +130,7 @@
    "file": "BG.zip",
    "versione": 1,
    "dimensione": 442844,
-   "sha256": "e54c58c7c06949cbbb784a723f226142be8c46c74922b712c04b4a8b64df8f7d",
+   "sha256": "db9d446bb09a2c79ec70a9f795f5b8d2d09ecbc5386662b50a7f0b8d55db5deb",
    "loghi": 85,
    "alias": 8
   },
@@ -149,7 +149,7 @@
    "file": "BY.zip",
    "versione": 1,
    "dimensione": 55312,
-   "sha256": "587aed285043a2d9aee7e67d8d45e8e08379a46a264440cf21b51633ece8c322",
+   "sha256": "47a5b5102f2de54107c9e40a1e671f93c8d27d0fdba2d36470c4f0cec7460d36",
    "loghi": 12,
    "alias": 0
   },
@@ -167,9 +167,9 @@
    },
    "file": "CH.zip",
    "versione": 1,
-   "dimensione": 454642,
-   "sha256": "289e0ae3b5bd4ce38dacd4f3390acc8db447c4b4d64b96a9b5b4b0203fb24159",
-   "loghi": 95,
+   "dimensione": 465576,
+   "sha256": "4bdb57bb90f4cdac0596d880da3fb65832c9504461a08d4900ef598e64845391",
+   "loghi": 98,
    "alias": 29
   },
   {
@@ -187,7 +187,7 @@
    "file": "CY.zip",
    "versione": 1,
    "dimensione": 93453,
-   "sha256": "d9a8b666f9535b48a7c5774e446bf7e9e7e96fc35d9fa2850ed9779177d460e5",
+   "sha256": "6b643cbda1d362629a46ab4e361f1371d37c441885c011fcc5cf65c95cf54bb6",
    "loghi": 18,
    "alias": 3
   },
@@ -206,7 +206,7 @@
    "file": "CZ.zip",
    "versione": 1,
    "dimensione": 333540,
-   "sha256": "184ab9ea568dd3d3e0d1ff047af20a06c8b57cd32e175703b7a12232130f180c",
+   "sha256": "762536100be52444041f750122ffb3b422dc19de2b4c4f86aa796dd341ce62e2",
    "loghi": 72,
    "alias": 12
   },
@@ -224,10 +224,10 @@
    },
    "file": "DE.zip",
    "versione": 1,
-   "dimensione": 4384458,
-   "sha256": "0d78cc6e03906812d1f98bb250a3455cca5bd83b6e0067ae2d1fd7927a8101a7",
-   "loghi": 860,
-   "alias": 292
+   "dimensione": 4393470,
+   "sha256": "3a7553f6833d1560ed4cf9275d6b0443b94a4381a5ed39295ce4c624211481be",
+   "loghi": 864,
+   "alias": 293
   },
   {
    "codice": "DK",
@@ -244,7 +244,7 @@
    "file": "DK.zip",
    "versione": 1,
    "dimensione": 194536,
-   "sha256": "3b95e7c6168d6a4570f074bf6120d92762ef3a1a441f391ae7554f2e98fd7af7",
+   "sha256": "3fafc52ef094b0e30ea3994ba22c996fa8093f291cb073dd6a86770bab4264d1",
    "loghi": 37,
    "alias": 23
   },
@@ -263,7 +263,7 @@
    "file": "EE.zip",
    "versione": 1,
    "dimensione": 130651,
-   "sha256": "5a2a2aa589f6f12e0e444994fc901333bc4205e626ff49078321490c686e851e",
+   "sha256": "5719f0351d9a662fa4aa89c2d713da900da679be81961120f3791687a9e104e1",
    "loghi": 30,
    "alias": 5
   },
@@ -281,9 +281,9 @@
    },
    "file": "ES.zip",
    "versione": 1,
-   "dimensione": 1946536,
-   "sha256": "0727bc07d528893ccff6a5deff45b87d02f320f528f1174d8dedfa9c2cb876cb",
-   "loghi": 378,
+   "dimensione": 1954864,
+   "sha256": "87095805180a1da3b0432e5717fd0c51bd5faad6f8f580762530b5c900180a75",
+   "loghi": 380,
    "alias": 57
   },
   {
@@ -301,7 +301,7 @@
    "file": "FI.zip",
    "versione": 1,
    "dimensione": 245649,
-   "sha256": "fdae83d8b290394ece4d84d3b4a3bff6ad57eb63d3c596a402e1a85d04f71bfe",
+   "sha256": "e5d8b04eeba8664c98f97aaf0299f7bc71e20291195bfe119c5b8132747826e0",
    "loghi": 62,
    "alias": 5
   },
@@ -320,7 +320,7 @@
    "file": "FO.zip",
    "versione": 1,
    "dimensione": 23033,
-   "sha256": "9691da0a52cced7a1e9c2786e91825d330921f522cb84742c752f2acdadb6e44",
+   "sha256": "8ed7b81294810184c39fd0e43a6cf39e529526add7c28388064210f3746e733e",
    "loghi": 7,
    "alias": 0
   },
@@ -338,10 +338,10 @@
    },
    "file": "FR.zip",
    "versione": 1,
-   "dimensione": 3191513,
-   "sha256": "971c2fb9d261b9282cd0584137ffcb6c930b76c2f2c309fe1ccf9555a34ea029",
-   "loghi": 555,
-   "alias": 112
+   "dimensione": 3216650,
+   "sha256": "40afbe5bcdffac30f41d0700a98d452f69fbb68bff1a0168ca2c97d23965c509",
+   "loghi": 562,
+   "alias": 115
   },
   {
    "codice": "GB",
@@ -357,9 +357,9 @@
    },
    "file": "GB.zip",
    "versione": 1,
-   "dimensione": 3651876,
-   "sha256": "879d8c847fa44d77efdc9f0e2dd0fffeedeb4363dcfa8bcb8f0094a5835e3ea0",
-   "loghi": 634,
+   "dimensione": 3655008,
+   "sha256": "66d77fb677ffe146d0c1e80b6c72cc590cd2facb339d13c759395c9216da10fb",
+   "loghi": 635,
    "alias": 103
   },
   {
@@ -377,7 +377,7 @@
    "file": "GI.zip",
    "versione": 1,
    "dimensione": 9548,
-   "sha256": "77ee1661e4c67cb942f5f120092c69b4d42f0829b66dec5a6d0f4084e92419c2",
+   "sha256": "d3198a3709b655ccfaaa5ae205d33fbcd1fee2c96ec3781431ff6f32c7f38ed0",
    "loghi": 2,
    "alias": 0
   },
@@ -395,9 +395,9 @@
    },
    "file": "GR.zip",
    "versione": 1,
-   "dimensione": 3855194,
-   "sha256": "4041d621764ab09409a161e30bf3828fa82e8ffcce11ea1d0a56a241434292f5",
-   "loghi": 706,
+   "dimensione": 3859932,
+   "sha256": "8b49af45ce21379dc86a2c5c4e903eb1fb00e3ba140eb01716d9d7803c042000",
+   "loghi": 708,
    "alias": 154
   },
   {
@@ -415,7 +415,7 @@
    "file": "HR.zip",
    "versione": 1,
    "dimensione": 279599,
-   "sha256": "6e9a3f89ee871f89e24cde14d67f5882ca6fb5db6972e3029d9889ed0d7b868f",
+   "sha256": "c9463461dcf6d9aa607fc77a04329a60efa15d3005f6b4b668e64ff9046f1fb3",
    "loghi": 55,
    "alias": 15
   },
@@ -434,7 +434,7 @@
    "file": "HU.zip",
    "versione": 1,
    "dimensione": 371602,
-   "sha256": "3b8f325877638239927d7e35a010e01efff73d18969562178ca50fb2bf93384a",
+   "sha256": "442be3e354f76ad470ed5acde1ba403cedb2bddb0ec9c653938d34b2f69547a1",
    "loghi": 71,
    "alias": 21
   },
@@ -452,9 +452,9 @@
    },
    "file": "IE.zip",
    "versione": 1,
-   "dimensione": 414588,
-   "sha256": "198441928af11b9bd145c2348b1833d5c1901a0a18773369564d421b08cfedb0",
-   "loghi": 74,
+   "dimensione": 424484,
+   "sha256": "be6f0809ef83b83014411559cc298aed892ef0de863d6be2738bedd59af8c29f",
+   "loghi": 75,
    "alias": 7
   },
   {
@@ -472,7 +472,7 @@
    "file": "IM.zip",
    "versione": 1,
    "dimensione": 18819,
-   "sha256": "dd8e5ed5938635a33b8fc84290c6fa9c0ccdcf35dc81bae612d0d1c1168d8a8b",
+   "sha256": "7c725d3d02c80be75808bd8d8f47b8d3b6afc51e5bbf074aa834e9a8b730e7d0",
    "loghi": 2,
    "alias": 0
   },
@@ -491,7 +491,7 @@
    "file": "IS.zip",
    "versione": 1,
    "dimensione": 38747,
-   "sha256": "c625ec6b32934dc16e17b4eb19aa0e6d20b7c1521634eed8c9c44e710edc9b0f",
+   "sha256": "f7109724ecf9a9586207bb14c043f9bcbf913309fa8fb726e881f346b661a6d3",
    "loghi": 9,
    "alias": 4
   },
@@ -509,10 +509,10 @@
    },
    "file": "IT.zip",
    "versione": 1,
-   "dimensione": 2610981,
-   "sha256": "206ae991d6fc422afb3b95e9877c773625a252e43a931c3fc2b0cb041bc250ee",
-   "loghi": 423,
-   "alias": 96
+   "dimensione": 2639013,
+   "sha256": "0e6447c869e595fff959cccd9e38383887fc8dfa7c09a2095010f139fc5cd42e",
+   "loghi": 426,
+   "alias": 98
   },
   {
    "codice": "LI",
@@ -529,7 +529,7 @@
    "file": "LI.zip",
    "versione": 1,
    "dimensione": 3490,
-   "sha256": "ced64c4b3996594aaa295d625d2e5d000e4123700abfb5620b7767ccf8401b73",
+   "sha256": "9e4125129bf6011f0c889e4d48bc88b449b82b8dd22604a9f02dae3e81773d98",
    "loghi": 1,
    "alias": 0
   },
@@ -548,7 +548,7 @@
    "file": "LT.zip",
    "versione": 1,
    "dimensione": 82921,
-   "sha256": "8a5bfbb5087466fc3a426989c11292da5fad28cd1dab3d05c98c34d987859f64",
+   "sha256": "1aa46c94d5ac93e6b697cbfbea6a2e924d26667b3314a0604deab922546299e6",
    "loghi": 15,
    "alias": 0
   },
@@ -567,7 +567,7 @@
    "file": "LU.zip",
    "versione": 1,
    "dimensione": 28354,
-   "sha256": "7fecdcee36156bd51f9ff4c699b18c7491fcf61a28c1608b35e602c8318ba1f8",
+   "sha256": "b32bb7048f0eceec8492fece4b56576dc1460b22cfd4fa99eb22af79dc5ff2c4",
    "loghi": 5,
    "alias": 1
   },
@@ -586,7 +586,7 @@
    "file": "LV.zip",
    "versione": 1,
    "dimensione": 94207,
-   "sha256": "0310580e2a7ecd5afa7fb0f43cac2934835fb0414f74a57ad3514d9d59bead4e",
+   "sha256": "f5fc83c914c8ad0ef403fd7881e6044e17bec2378bca0f0df24676b136168e3b",
    "loghi": 21,
    "alias": 3
   },
@@ -605,7 +605,7 @@
    "file": "MC.zip",
    "versione": 1,
    "dimensione": 5938,
-   "sha256": "60df48c8a1769000597e4892f04ad2989311cd4d3afc955eb7a3375926782db1",
+   "sha256": "2337279ea6ace9339e82445871dd50b7f84f75f4c1a87b46783fca32ad87ff2c",
    "loghi": 2,
    "alias": 0
   },
@@ -624,7 +624,7 @@
    "file": "MD.zip",
    "versione": 1,
    "dimensione": 146878,
-   "sha256": "a583a457a9b0353ca1a6758fcd94f478e54d36c2d49e6c4f0266430e759220d4",
+   "sha256": "56aaa487bd1693d9fbc89b308c7017a4e82e0f343798ce816b3666a1a8189db6",
    "loghi": 29,
    "alias": 12
   },
@@ -643,7 +643,7 @@
    "file": "ME.zip",
    "versione": 1,
    "dimensione": 41452,
-   "sha256": "f0890a1ba92aff2b445d5d3ada7c6fd461627a49135205c397290c8412b627a8",
+   "sha256": "e3a2909f900253563ab505b1dd010ea6e3d5c5e87e3d01e0a8da58b2a45be64d",
    "loghi": 6,
    "alias": 3
   },
@@ -662,7 +662,7 @@
    "file": "MK.zip",
    "versione": 1,
    "dimensione": 43836,
-   "sha256": "13a355efd263f842672bb15a78df292e92a9c95742c1d21316c1c1130a1aff76",
+   "sha256": "5f33cecb682f7b44843b5920f291e9c558d04df66294a12f8b657fd61bdb53a8",
    "loghi": 6,
    "alias": 4
   },
@@ -681,7 +681,7 @@
    "file": "MT.zip",
    "versione": 1,
    "dimensione": 24946,
-   "sha256": "2934f29155490af38285196b01a794bb8eb1c413faad263cda5b359ebfbfbc6f",
+   "sha256": "7afc253462a84653ac52bc37c277d92ade9cfd498fb2e45aeab3a7fb9b972ec1",
    "loghi": 6,
    "alias": 1
   },
@@ -699,9 +699,9 @@
    },
    "file": "NL.zip",
    "versione": 1,
-   "dimensione": 1649899,
-   "sha256": "efed040272eed4e14715016991981223a9d923d61ebb975d1834f506ba858eb9",
-   "loghi": 287,
+   "dimensione": 1655453,
+   "sha256": "c8fba26d865fcddee60b77412696c840ae4f7610a99e850bfe3fb80407eda0c0",
+   "loghi": 288,
    "alias": 56
   },
   {
@@ -718,9 +718,9 @@
    },
    "file": "NO.zip",
    "versione": 1,
-   "dimensione": 161207,
-   "sha256": "05577806de30b6fefb6fe05d3dfffc3ca5d8b6a97af370f46f35b7a181ac7690",
-   "loghi": 39,
+   "dimensione": 169101,
+   "sha256": "909947958ed6d72e22bf4c54640b15e5d49a3962cf94a9653f64ead689a09360",
+   "loghi": 42,
    "alias": 3
   },
   {
@@ -737,10 +737,10 @@
    },
    "file": "PL.zip",
    "versione": 1,
-   "dimensione": 982768,
-   "sha256": "da56454a16421ec62cf3fef09c2f35d1dc8d73b23bc9de67d48e35cb5669588c",
-   "loghi": 177,
-   "alias": 96
+   "dimensione": 987173,
+   "sha256": "5b53614e117f4950ee6b15bb7fbe42ad713e61b50f66b05638edd6449d341d8c",
+   "loghi": 178,
+   "alias": 97
   },
   {
    "codice": "PT",
@@ -757,7 +757,7 @@
    "file": "PT.zip",
    "versione": 1,
    "dimensione": 618888,
-   "sha256": "167dcb080359c048af8b372d7250ffc2a05df5c52d157683f743dca33da9288b",
+   "sha256": "e6fe7f596fc3af42a0994ac9b7dcfaa7142a46472ff6273bfcc61224726ff3c1",
    "loghi": 128,
    "alias": 20
   },
@@ -776,7 +776,7 @@
    "file": "RO.zip",
    "versione": 1,
    "dimensione": 2168856,
-   "sha256": "c0f173efe628787aea8452a5f7ef241eaca8b4b6f0bf7f732fb82057f7e27d15",
+   "sha256": "b1e633da7b73a81e3c5bf22f1b2decf52d0b1b1b87aa3a45e9df0738005267f7",
    "loghi": 355,
    "alias": 106
   },
@@ -795,7 +795,7 @@
    "file": "RS.zip",
    "versione": 1,
    "dimensione": 512791,
-   "sha256": "a4cd76a0e5f64f097a5b3b654e56657a5249beb0f39c36f6aca6c9f14632cc9e",
+   "sha256": "cab998cf5e850bf75600659cbb12cc9755689de0f2043629e54d712f24f74d7c",
    "loghi": 91,
    "alias": 12
   },
@@ -814,7 +814,7 @@
    "file": "RU.zip",
    "versione": 1,
    "dimensione": 1329368,
-   "sha256": "fab6a1f19aef66fbff128db57310850049106331c40ab718d82528835fc477fd",
+   "sha256": "1188e33642c116b9c5fa933be41a07ed8249fa68b2aaff8499b5974c48f35c63",
    "loghi": 262,
    "alias": 88
   },
@@ -832,9 +832,9 @@
    },
    "file": "SE.zip",
    "versione": 1,
-   "dimensione": 294296,
-   "sha256": "10693b3cc272b84f1815bc44b8ad8772cbf1d0dc07685aade4d108b4d727c95c",
-   "loghi": 58,
+   "dimensione": 298454,
+   "sha256": "42306924fce104515d77251d169e25f991533a21b312ebf2cd007b3ab03d4c8e",
+   "loghi": 60,
    "alias": 48
   },
   {
@@ -852,7 +852,7 @@
    "file": "SI.zip",
    "versione": 1,
    "dimensione": 131562,
-   "sha256": "0d3dc47c6fc3fc6122402f99c54bb3f64f7b79d75beef8cbcf84fc94d1921c29",
+   "sha256": "ffd6b8f98a593e394cd8ebe8bcbdabe689bd7d6708ad8cff5001256727e4838e",
    "loghi": 31,
    "alias": 4
   },
@@ -871,7 +871,7 @@
    "file": "SK.zip",
    "versione": 1,
    "dimensione": 143600,
-   "sha256": "b0f2a544435b4d8f38af633332abe70946586b97a963a7e038f68e62e9f93ebf",
+   "sha256": "db52875bfc92672a3d5f49d8b1a4d1dd04fdd5fb8039b50d7bb5e915556ae2cb",
    "loghi": 33,
    "alias": 2
   },
@@ -890,7 +890,7 @@
    "file": "SM.zip",
    "versione": 1,
    "dimensione": 13261,
-   "sha256": "e907ced1c8585e0975b0e55fbf01c4a3ebae44e516fa9ae91c62807ddc1db932",
+   "sha256": "fb938b50e17f88e1b6781935ab15e4881f69c840108a1358b256f83085846c5a",
    "loghi": 2,
    "alias": 0
   },
@@ -909,7 +909,7 @@
    "file": "TR.zip",
    "versione": 1,
    "dimensione": 786791,
-   "sha256": "c93966e662e678506519a5f9187ae9a6d1b1399d26d8c5bd9222e6765cfb15f4",
+   "sha256": "071c68c2e2f9a87f8f5ea910e28a7aef6ad9fa6ff5c925b2974baebf5dd77c79",
    "loghi": 136,
    "alias": 15
   },
@@ -928,7 +928,7 @@
    "file": "UA.zip",
    "versione": 1,
    "dimensione": 296222,
-   "sha256": "75eaaa6f89f3d8cb61d9b5710ed7999a91de328283ee99aeedd5cce7f52de3b8",
+   "sha256": "0987a979a583eb0e854661a08ea24384b7c3cd9acd31ddcadca0376bb71fb7d3",
    "loghi": 55,
    "alias": 1
   },
@@ -947,7 +947,7 @@
    "file": "VA.zip",
    "versione": 1,
    "dimensione": 17211,
-   "sha256": "fa6a51d7ad80217a037480a7eae440c4e09c21d38f670f6a263b68db81dc292d",
+   "sha256": "5c6a3740c0f31f969d9eb5474790b33f9007221f29d98c444a967a15e0689ede",
    "loghi": 4,
    "alias": 8
   },
@@ -966,7 +966,7 @@
    "file": "XK.zip",
    "versione": 1,
    "dimensione": 30994,
-   "sha256": "b4aca6b4b0dd342201107eca9824edd53c2f2c463907ff7f92de5f8175bac8a4",
+   "sha256": "c42c13b8e3dee050d0af9fb1dca7e274f2407604ec05b09cf0d504b8484e4b27",
    "loghi": 5,
    "alias": 3
   }

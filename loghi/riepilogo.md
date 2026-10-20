@@ -2,84 +2,81 @@
 
 | Paese | Loghi prima | MB prima | Loghi dopo | MB dopo | Tolti |
 |---|---:|---:|---:|---:|---|
-| AD Andorra  | 7 | 0.2 | 7 | 0.04 |  |
-| AL Albania  | 22 | 0.7 | 18 | 0.11 | rotti 2, sottocanali 1, doppioni 1 |
-| AT Austria  | 127 | 2.8 | 71 | 0.45 | varianti 1, sottocanali 20, doppioni 34 |
-| AX Isole Åland  | 1 | 0.0 | 1 | 0.01 |  |
-| BA Bosnia ed Erzegovina  | 47 | 1.4 | 41 | 0.25 | doppioni 6 |
-| BE Belgio  | 177 | 4.0 | 112 | 0.59 | rotti 1, varianti 2, sottocanali 20, doppioni 42 |
-| BG Bulgaria  | 114 | 2.7 | 85 | 0.44 | rotti 6, varianti 7, sottocanali 5, doppioni 11 |
-| BY Bielorussia  | 13 | 0.3 | 12 | 0.06 | rotti 1 |
-| CH Svizzera  | 178 | 3.5 | 95 | 0.45 | rotti 2, varianti 4, sottocanali 41, doppioni 36 |
-| CY Cipro  | 26 | 0.5 | 18 | 0.09 | rotti 3, sottocanali 1, doppioni 4 |
-| CZ Repubblica Ceca  | 102 | 1.9 | 72 | 0.33 | rotti 3, varianti 1, sottocanali 4, doppioni 22 |
-| DE Germania  | 1983 | 51.9 | 860 | 4.38 | rotti 71, varianti 43, sottocanali 550, doppioni 455 |
-| DK Danimarca  | 100 | 1.4 | 37 | 0.19 | varianti 4, sottocanali 18, doppioni 41 |
-| EE Estonia  | 39 | 0.7 | 30 | 0.13 | varianti 2, sottocanali 1, doppioni 6 |
-| ES Spagna  | 507 | 11.8 | 378 | 1.95 | rotti 3, varianti 5, sottocanali 41, doppioni 79 |
-| FI Finlandia  | 77 | 1.4 | 62 | 0.25 | sottocanali 2, doppioni 13 |
-| FO Isole Faroe  | 7 | 0.1 | 7 | 0.02 |  |
-| FR Francia  | 942 | 27.4 | 555 | 3.19 | rotti 2, varianti 8, sottocanali 182, doppioni 189 |
-| GB Regno Unito  | 892 | 23.0 | 634 | 3.65 | rotti 7, varianti 13, sottocanali 90, doppioni 136 |
+| AD Andorra    | 7 | 0.2 | 7 | 0.04 |  |
+| AL Albania    | 22 | 0.7 | 18 | 0.11 | rotti 2, sottocanali 1, doppioni 1 |
+| AT Austria    | 127 | 2.8 | 71 | 0.45 | varianti 1, sottocanali 20, doppioni 34 |
+| AX Isole Åland    | 1 | 0.0 | 1 | 0.01 |  |
+| BA Bosnia ed Erzegovina    | 47 | 1.4 | 41 | 0.25 | doppioni 6 |
+| BE Belgio    | 177 | 4.0 | 113 | 0.59 | rotti 1, varianti 2, sottocanali 20, doppioni 42 |
+| BG Bulgaria    | 114 | 2.7 | 85 | 0.44 | rotti 6, varianti 7, sottocanali 5, doppioni 11 |
+| BY Bielorussia    | 13 | 0.3 | 12 | 0.06 | rotti 1 |
+| CH Svizzera    | 178 | 3.5 | 98 | 0.47 | rotti 2, varianti 4, sottocanali 41, doppioni 36 |
+| CY Cipro    | 26 | 0.5 | 18 | 0.09 | rotti 3, sottocanali 1, doppioni 4 |
+| CZ Repubblica Ceca    | 102 | 1.9 | 72 | 0.33 | rotti 3, varianti 1, sottocanali 4, doppioni 22 |
+| DE Germania    | 1983 | 51.9 | 864 | 4.39 | rotti 71, varianti 43, sottocanali 550, doppioni 455 |
+| DK Danimarca    | 100 | 1.4 | 37 | 0.19 | varianti 4, sottocanali 18, doppioni 41 |
+| EE Estonia    | 39 | 0.7 | 30 | 0.13 | varianti 2, sottocanali 1, doppioni 6 |
+| ES Spagna    | 507 | 11.8 | 380 | 1.95 | rotti 3, varianti 5, sottocanali 41, doppioni 79 |
+| FI Finlandia    | 77 | 1.4 | 62 | 0.25 | sottocanali 2, doppioni 13 |
+| FO Isole Faroe    | 7 | 0.1 | 7 | 0.02 |  |
+| FR Francia    | 942 | 27.4 | 562 | 3.22 | rotti 2, varianti 8, sottocanali 182, doppioni 189 |
+| GB Regno Unito    | 892 | 23.0 | 635 | 3.66 | rotti 7, varianti 13, sottocanali 90, doppioni 136 |
 | GG Guernsey | 0 | 0.0 | 0 | 0.00 |  |
-| GI Gibilterra  | 2 | 0.1 | 2 | 0.01 |  |
-| GR Grecia  | 1083 | 32.3 | 706 | 3.86 | rotti 66, varianti 1, sottocanali 71, doppioni 239 |
-| HR Croazia  | 91 | 1.7 | 55 | 0.28 | rotti 1, sottocanali 13, doppioni 22 |
-| HU Ungheria  | 138 | 3.2 | 71 | 0.37 | varianti 1, sottocanali 39, doppioni 27 |
-| IE Irlanda  | 115 | 2.8 | 74 | 0.41 | varianti 5, sottocanali 18, doppioni 18 |
-| IM Isola di Man  | 3 | 0.1 | 2 | 0.02 | doppioni 1 |
-| IS Islanda  | 13 | 0.2 | 9 | 0.04 | doppioni 4 |
-| IT Italia  | 578 | 16.7 | 423 | 2.61 | varianti 5, sottocanali 58, doppioni 83 |
+| GI Gibilterra    | 2 | 0.1 | 2 | 0.01 |  |
+| GR Grecia    | 1083 | 32.3 | 708 | 3.86 | rotti 66, varianti 1, sottocanali 71, doppioni 239 |
+| HR Croazia    | 91 | 1.7 | 55 | 0.28 | rotti 1, sottocanali 13, doppioni 22 |
+| HU Ungheria    | 138 | 3.2 | 71 | 0.37 | varianti 1, sottocanali 39, doppioni 27 |
+| IE Irlanda    | 115 | 2.8 | 75 | 0.42 | varianti 5, sottocanali 18, doppioni 18 |
+| IM Isola di Man    | 3 | 0.1 | 2 | 0.02 | doppioni 1 |
+| IS Islanda    | 13 | 0.2 | 9 | 0.04 | doppioni 4 |
+| IT Italia    | 578 | 16.7 | 426 | 2.64 | varianti 5, sottocanali 58, doppioni 83 |
 | JE Jersey | 0 | 0.0 | 0 | 0.00 |  |
-| LI Liechtenstein  | 1 | 0.0 | 1 | 0.00 |  |
-| LT Lituania  | 16 | 0.4 | 15 | 0.08 | varianti 1 |
-| LU Lussemburgo  | 5 | 0.1 | 5 | 0.03 |  |
-| LV Lettonia  | 31 | 1.0 | 21 | 0.09 | rotti 1, sottocanali 4, doppioni 5 |
-| MC Monaco  | 2 | 0.0 | 2 | 0.01 |  |
-| MD Moldavia  | 47 | 1.1 | 29 | 0.15 | sottocanali 6, doppioni 12 |
-| ME Montenegro  | 9 | 0.2 | 6 | 0.04 | doppioni 3 |
-| MK Macedonia del Nord  | 10 | 0.3 | 6 | 0.04 | doppioni 4 |
-| MT Malta  | 7 | 0.2 | 6 | 0.02 | doppioni 1 |
-| NL Paesi Bassi  | 413 | 10.9 | 287 | 1.65 | rotti 2, varianti 10, sottocanali 35, doppioni 79 |
-| NO Norvegia  | 48 | 1.0 | 39 | 0.16 | sottocanali 2, doppioni 7 |
-| PL Polonia  | 378 | 8.2 | 177 | 0.98 | rotti 1, varianti 8, sottocanali 79, doppioni 113 |
-| PT Portogallo  | 162 | 3.7 | 128 | 0.62 | sottocanali 11, doppioni 21 |
-| RO Romania  | 577 | 17.4 | 355 | 2.17 | rotti 9, sottocanali 106, doppioni 103 |
-| RS Serbia  | 127 | 2.9 | 91 | 0.51 | rotti 4, sottocanali 16, doppioni 16 |
-| RU Russia  | 640 | 16.0 | 262 | 1.33 | rotti 153, varianti 10, sottocanali 91, doppioni 124 |
-| SE Svezia  | 111 | 3.0 | 58 | 0.29 | sottocanali 5, doppioni 48 |
-| SI Slovenia  | 38 | 0.7 | 31 | 0.13 | sottocanali 2, doppioni 5 |
-| SK Slovacchia  | 56 | 1.1 | 33 | 0.14 | sottocanali 7, doppioni 16 |
-| SM San Marino  | 2 | 0.0 | 2 | 0.01 |  |
-| TR Turchia  | 171 | 4.9 | 136 | 0.79 | sottocanali 18, doppioni 17 |
-| UA Ucraina  | 92 | 2.2 | 55 | 0.30 | rotti 24, sottocanali 2, doppioni 11 |
-| VA Città del Vaticano  | 12 | 0.2 | 4 | 0.02 | doppioni 8 |
-| XK Kosovo  | 9 | 0.1 | 5 | 0.03 | doppioni 4 |
+| LI Liechtenstein    | 1 | 0.0 | 1 | 0.00 |  |
+| LT Lituania    | 16 | 0.4 | 15 | 0.08 | varianti 1 |
+| LU Lussemburgo    | 5 | 0.1 | 5 | 0.03 |  |
+| LV Lettonia    | 31 | 1.0 | 21 | 0.09 | rotti 1, sottocanali 4, doppioni 5 |
+| MC Monaco    | 2 | 0.0 | 2 | 0.01 |  |
+| MD Moldavia    | 47 | 1.1 | 29 | 0.15 | sottocanali 6, doppioni 12 |
+| ME Montenegro    | 9 | 0.2 | 6 | 0.04 | doppioni 3 |
+| MK Macedonia del Nord    | 10 | 0.3 | 6 | 0.04 | doppioni 4 |
+| MT Malta    | 7 | 0.2 | 6 | 0.02 | doppioni 1 |
+| NL Paesi Bassi    | 413 | 10.9 | 288 | 1.66 | rotti 2, varianti 10, sottocanali 35, doppioni 79 |
+| NO Norvegia    | 48 | 1.0 | 42 | 0.17 | sottocanali 2, doppioni 7 |
+| PL Polonia    | 378 | 8.2 | 178 | 0.99 | rotti 1, varianti 8, sottocanali 79, doppioni 113 |
+| PT Portogallo    | 162 | 3.7 | 128 | 0.62 | sottocanali 11, doppioni 21 |
+| RO Romania    | 577 | 17.4 | 355 | 2.17 | rotti 9, sottocanali 106, doppioni 103 |
+| RS Serbia    | 127 | 2.9 | 91 | 0.51 | rotti 4, sottocanali 16, doppioni 16 |
+| RU Russia    | 640 | 16.0 | 262 | 1.33 | rotti 153, varianti 10, sottocanali 91, doppioni 124 |
+| SE Svezia    | 111 | 3.0 | 60 | 0.30 | sottocanali 5, doppioni 48 |
+| SI Slovenia    | 38 | 0.7 | 31 | 0.13 | sottocanali 2, doppioni 5 |
+| SK Slovacchia    | 56 | 1.1 | 33 | 0.14 | sottocanali 7, doppioni 16 |
+| SM San Marino    | 2 | 0.0 | 2 | 0.01 |  |
+| TR Turchia    | 171 | 4.9 | 136 | 0.79 | sottocanali 18, doppioni 17 |
+| UA Ucraina    | 92 | 2.2 | 55 | 0.30 | rotti 24, sottocanali 2, doppioni 11 |
+| VA Città del Vaticano    | 12 | 0.2 | 4 | 0.02 | doppioni 8 |
+| XK Kosovo    | 9 | 0.1 | 5 | 0.03 | doppioni 4 |
 
 ## Stazioni FM nazionali che mancano
 
 - **AT Austria**: Ö3
-- **BE Belgio**: Studio Brussel, MNM, VivaCite, Pure, NRJ
-- **CH Svizzera**: SRF 1, SRF 3, Couleur 3, RSI Rete Uno, Radio 24
+- **BE Belgio**: Studio Brussel, MNM, Pure, NRJ
+- **CH Svizzera**: Couleur 3, Radio 24
 - **CZ Cechia**: Radiožurnál, Rádio Impuls
-- **DE Germania**: NDR 2, WDR 2, hr3, Deutschlandfunk Kultur
 - **DK Danimarca**: DR P4, Radio 100, Pop FM
-- **ES Spagna**: COPE, RNE, Radio 3, Europa FM
+- **ES Spagna**: RNE, Radio 3
 - **FI Finlandia**: YleX
-- **FR Francia**: France Inter, France Info, France Culture, France Musique, FIP, RTL2, NRJ, Fun Radio, Virgin Radio
-- **GB Regno Unito**: LBC
-- **GR Grecia**: ERT, Skai, Real FM
+- **FR Francia**: RTL2, Virgin Radio
+- **GR Grecia**: ERT
 - **HR Croazia**: HR 1, Narodni radio
 - **HU Ungheria**: Kossuth Rádió
-- **IE Irlanda**: RTÉ Radio 1, RTÉ 2FM, 98FM
-- **IT Italia**: Radio 105, RDS, R101
+- **IE Irlanda**: RTÉ Radio 1, RTÉ 2FM
+- **IT Italia**: R101
 - **LU Lussemburgo**: RTL Radio Lëtzebuerg
-- **NL Paesi Bassi**: Radio 538, 100% NL
-- **NO Norvegia**: NRK P1, NRK P3, Radio Norge, P5
-- **PL Polonia**: Polskie Radio Jedynka
+- **NL Paesi Bassi**: Radio 538
+- **NO Norvegia**: Radio Norge
 - **PT Portogallo**: M80, TSF
 - **RO Romania**: Radio România Actualități
-- **SE Svezia**: P1, P3, P4, NRJ
+- **SE Svezia**: P3, NRJ
 - **TR Turchia**: Metro FM, Joy FM, Virgin Radio
 
 ## Dettaglio di cosa è stato tolto
