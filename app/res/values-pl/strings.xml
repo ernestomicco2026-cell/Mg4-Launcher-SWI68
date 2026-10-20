@@ -296,5 +296,6 @@
     <string name="news_4" formatted="false">CarPlay i Android Auto: następny i odtwórz/wstrzymaj sterują telefonem</string>
     <string name="news_5" formatted="false">Data obok godziny, jednostka ciśnienia i przycisk tylnego światła przeciwmgłowego do wyboru</string>
     <string name="news_6" formatted="false">Opcja «Naciśnij Home sam po włączeniu» i język polski</string>
+    <string name="radio_protected" formatted="false">Usługa radia w tym oprogramowaniu nie odpowiada launcherowi: użyj aplikacji Radio</string>
     <string name="news_7" formatted="false">Stabilny ekran przy starcie i wiele poprawek z logów</string>
 </resources>

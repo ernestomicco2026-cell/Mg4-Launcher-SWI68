@@ -296,5 +296,6 @@
     <string name="news_4" formatted="false">CarPlay et Android Auto : suivant et lecture/pause commandent le téléphone</string>
     <string name="news_5" formatted="false">Date à côté de l\'heure, unité de pression et bouton antibrouillard arrière au choix</string>
     <string name="news_6" formatted="false">Option « Appuyer sur Accueil tout seul après l\'allumage » et langue polonaise</string>
+    <string name="radio_protected" formatted="false">Le service radio de ce firmware ne répond pas au launcher : utilisez l\'app Radio</string>
     <string name="news_7" formatted="false">Accueil stable au démarrage et de nombreuses corrections issues des journaux</string>
 </resources>

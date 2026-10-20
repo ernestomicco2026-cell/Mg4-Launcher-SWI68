@@ -121,6 +121,22 @@ public final class Diag {
         return sb.toString();
     }
 
+    /** Crash recenti di tutte le app (buffer crash di logcat, serve READ_LOGS concesso dalla firma platform). */
+    private static String crashes() {
+        StringBuilder sb = new StringBuilder();
+        try {
+            Process p = Runtime.getRuntime().exec(new String[]{"logcat", "-d", "-b", "crash", "-v", "time", "-t", "300"});
+            try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"))) {
+                String l;
+                while ((l = r.readLine()) != null) sb.append(l).append('\n');
+            }
+            p.waitFor();
+        } catch (Exception e) {
+            sb.append("non disponibile: ").append(e).append('\n');
+        }
+        return sb.length() == 0 ? "nessuno\n" : sb.toString();
+    }
+
     /** Testo completo del log: versione, valori attuali, eventi recenti, logcat del launcher (stesso formato della SWI69). */
     public static String buildLog(Context c) {
         StringBuilder sb = new StringBuilder();
@@ -136,6 +152,7 @@ public final class Diag {
                 .append(Build.MANUFACTURER).append(' ').append(Build.MODEL).append(" · ").append(Build.DISPLAY).append("\n\n");
         sb.append("===== VALORI ATTUALI =====\n").append(dump()).append('\n');
         sb.append("===== EVENTI RECENTI =====\n").append(events()).append('\n');
+        sb.append("===== CRASH RECENTI (tutte le app) =====\n").append(crashes()).append('\n');
         sb.append("===== LOGCAT DEL LAUNCHER =====\n").append(logcat());
         return sb.toString();
     }

@@ -296,5 +296,6 @@
     <string name="news_4" formatted="false">CarPlay and Android Auto: next and play/pause control the phone</string>
     <string name="news_5" formatted="false">Date next to the time, pressure unit and optional rear fog button</string>
     <string name="news_6" formatted="false">«Press Home automatically after power-on» option and Polish language</string>
+    <string name="radio_protected" formatted="false">This firmware\'s radio service does not answer the launcher: use the Radio app</string>
     <string name="news_7" formatted="false">Steady home at start-up and many fixes from the logs</string>
 </resources>

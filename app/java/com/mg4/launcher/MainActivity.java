@@ -316,7 +316,13 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     /** Una sola volta per versione, nella lingua scelta; non dopo la prima installazione. */
     private void showNewsIfUpdated() {
         String ver = updater.currentVersion();
-        if (ver.equals(prefs.newsShownFor())) return;
+        // le novità sono della versione principale (0.8): le correzioni 0.8.x non le rimostrano
+        String major = ver.indexOf('.', ver.indexOf('.') + 1) > 0 ? ver.substring(0, ver.indexOf('.', ver.indexOf('.') + 1)) : ver;
+        String seen = prefs.newsShownFor();
+        if (ver.equals(seen) || seen.startsWith(major + ".") || seen.equals(major)) {
+            prefs.setNewsShownFor(ver);
+            return;
+        }
         boolean updated = false;
         try {
             android.content.pm.PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -325,7 +331,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         }
         prefs.setNewsShownFor(ver);
         if (!updated) return;
-        showNews(ver);
+        showNews(major + ".0");
     }
 
     private void showNews(String ver) {

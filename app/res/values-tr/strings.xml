@@ -296,5 +296,6 @@
     <string name="news_4" formatted="false">CarPlay ve Android Auto: ileri ve oynat/duraklat telefonu kontrol eder</string>
     <string name="news_5" formatted="false">Saatin yanında tarih, basınç birimi ve isteğe bağlı arka sis düğmesi</string>
     <string name="news_6" formatted="false">«Açılıştan sonra Ana ekrana otomatik bas» seçeneği ve Lehçe dili</string>
+    <string name="radio_protected" formatted="false">Bu yazılımın radyo hizmeti launcher\'a yanıt vermiyor: Radyo uygulamasını kullanın</string>
     <string name="news_7" formatted="false">Açılışta sabit ana ekran ve günlüklerden birçok düzeltme</string>
 </resources>

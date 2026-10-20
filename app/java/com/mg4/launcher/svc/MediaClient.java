@@ -151,6 +151,17 @@ public final class MediaClient {
         online = new ServiceLink(ctx, "media.online", ServiceLink.byComponent(MEDIA_PKG, MEDIA_CLS,
                 "com.saicmotor.service.media.ONLINE_MUSIC_ACTION"));
         radio = new ServiceLink(ctx, "radio", ServiceLink.byAction(RADIO_PKG, RADIO_ACTION));
+        // firmware SWI68 più vecchi (R46/R59, RadioService_eh32_P): il servizio radio cade se è il launcher a farlo
+        // ripartire; lì ci si collega solo quando l'auto l'ha già avviato
+        String radioApk = "";
+        try {
+            radioApk = ctx.getPackageManager().getApplicationInfo(RADIO_PKG, 0).sourceDir;
+        } catch (Exception ignored) {
+        }
+        boolean oldRadio = radioApk.contains("RadioService_eh32_P");
+        radio.setAutoCreate(!oldRadio);
+        Diag.put("radio.servizio", (radioApk.isEmpty() ? "?" : radioApk.substring(radioApk.lastIndexOf('/') + 1))
+                + (oldRadio ? " · firmware vecchio: collegamento senza avvio" : ""));
         logos = new StationLogos(ctx);
         logos.setOnUpdate(this::refreshLogosSoon);
         rui = new ServiceLink(ctx, "carplay", ServiceLink.byComponent("com.allgo.rui", "com.allgo.rui.RemoteUIService", null));
@@ -326,6 +337,7 @@ public final class MediaClient {
             try {
                 PlaybackState ps = rc.getPlaybackState();
                 remotePlaying = ps != null && ps.getState() == PlaybackState.STATE_PLAYING;
+                Diag.put("carplay.riproduzione", ps == null ? "nessuno stato" : "stato " + ps.getState());
             } catch (Exception ignored) {
             }
         }
@@ -436,7 +448,13 @@ public final class MediaClient {
             }
             case SRC_RADIO: {
                 IBinder b = radio.binder();
+                if (radio.fragile()) {
+                    s.title = com.mg4.launcher.L.s(com.mg4.launcher.R.string.src_radio);
+                    s.subtitle = com.mg4.launcher.L.s(com.mg4.launcher.R.string.radio_protected);
+                    return;
+                }
                 if (b == null) return;
+                radio.lastCall = "stazione corrente (19)";
                 Rpc.call(b, RAD, RAD_CURRENT, Rpc.NONE, p -> Rpc.readNullable(p, q -> {
                     q.readInt();                       // enable (byte)
                     String name = q.readString();
@@ -493,6 +511,7 @@ public final class MediaClient {
                 s.playing = now < radioHoldUntil ? radioPlaying : (radioState > 0 ? radioState == 1 : isActive || radioPlaying);
                 if (s.radioBand == BAND_DAB) {
                     try {
+                        radio.lastCall = "logo DAB (52)";
                         Bitmap logo = Rpc.call(b, RAD, RAD_DAB_LOGO, Rpc.NONE, p -> Rpc.readNullable(p, Bitmap.CREATOR::createFromParcel));
                         if (logo != null) logos.put(s.stationKey, logo);
                     } catch (Exception e) {
@@ -566,7 +585,13 @@ public final class MediaClient {
      * L'esito di play e salto finisce nella diagnostica (media.comando).
      */
     private void command(String what, Cmd cmd) {
-        post(() -> attempt(what, cmd, 0));
+        post(() -> {
+            if (radio.fragile() && (last.source == SRC_RADIO || what.endsWith(sourceName(SRC_RADIO)))) {
+                Diag.put("media.comando", what + " · radio protetta: comando non inviato (usa l'app Radio)");
+                return;
+            }
+            attempt(what, cmd, 0);
+        });
     }
 
     private void attempt(String what, Cmd cmd, int n) {
@@ -678,6 +703,7 @@ public final class MediaClient {
         List<Station> out = new ArrayList<>();
         for (int band : new int[]{BAND_FM, BAND_DAB}) {
             try {
+                radio.lastCall = "preferiti (7)";
                 List<Station> l = Rpc.call(b, RAD, RAD_FAVORITES, p -> p.writeInt(band), MediaClient::readStations);
                 if (l != null) out.addAll(l);
             } catch (Exception e) {
@@ -706,6 +732,7 @@ public final class MediaClient {
         stationsBand = band;
         List<Station> out = new ArrayList<>();
         try {
+            radio.lastCall = "elenco stazioni (22)";
             List<Station> l = Rpc.call(b, RAD, RAD_LIST, p -> p.writeInt(band), MediaClient::readStations);
             java.util.Set<String> seen = new java.util.HashSet<>();
             if (l != null) {
@@ -920,16 +947,9 @@ public final class MediaClient {
                         break;
                     }
                     case SRC_CARPLAY:
-                    case SRC_AAUTO: {
-                        MediaController c = controller;
-                        if (c != null) {
-                            if (forward) c.getTransportControls().skipToNext();
-                            else c.getTransportControls().skipToPrevious();
-                        } else {
-                            remoteKey(forward ? 7 : 8, forward ? 11 : 12);
-                        }
+                    case SRC_AAUTO:
+                        remoteKey(forward ? 7 : 8, forward ? 11 : 12, forward ? "avanti" : "indietro");
                         break;
-                    }
                     default:
                         break;
                 }
@@ -937,20 +957,47 @@ public final class MediaClient {
         });
     }
 
-    private void remotePlay(boolean play) throws RemoteException {
+    /** True se la sessione CarPlay/Android Auto dice di essere in riproduzione. */
+    private boolean remoteIsPlaying() {
         MediaController c = controller;
-        if (c != null) {
-            if (play) c.getTransportControls().play();
-            else c.getTransportControls().pause();
-        } else {
-            remoteKey(20, 21);
+        if (c == null) return false;
+        try {
+            PlaybackState ps = c.getPlaybackState();
+            return ps != null && ps.getState() == PlaybackState.STATE_PLAYING;
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    private void remoteKey(int down, int up) throws RemoteException {
+    /** Play/pausa di CarPlay/AA: il tasto è uno solo (commuta), quindi si preme solo se serve. */
+    private void remotePlay(boolean play) throws RemoteException {
+        if (play == remoteIsPlaying() && controller != null) {
+            Diag.put("carplay.tasto", (play ? "play" : "pausa") + ": già in quello stato, nessun tasto");
+            return;
+        }
+        remoteKey(20, 21, play ? "play" : "pausa");
+    }
+
+    /**
+     * Tasti multimediali di CarPlay/Android Auto come il launcher MG originale: sendMediaPlayControlKey del servizio
+     * RemoteUI (premuto e poi rilasciato: play/pausa 20/21, avanti 7/11, indietro 8/12). Il controller multimediale di
+     * Android con alcuni adattatori wireless viene ignorato, quindi si usa solo se il servizio RemoteUI non c'è.
+     */
+    private void remoteKey(int down, int up, String what) throws RemoteException {
         IBinder r = rui.binder();
-        Rpc.call(r, RUI, RUI_MEDIA_KEY, p -> p.writeInt(down), Parcel::readInt);
-        Rpc.call(r, RUI, RUI_MEDIA_KEY, p -> p.writeInt(up), Parcel::readInt);
+        MediaController c = controller;
+        if (r == null && c != null) {
+            MediaController.TransportControls tc = c.getTransportControls();
+            if (down == 7) tc.skipToNext();
+            else if (down == 8) tc.skipToPrevious();
+            else if (remoteIsPlaying()) tc.pause();
+            else tc.play();
+            Diag.put("carplay.tasto", what + " · controller Android (servizio RemoteUI assente)");
+            return;
+        }
+        int a = Rpc.call(r, RUI, RUI_MEDIA_KEY, p -> p.writeInt(down), Parcel::readInt);
+        int b = Rpc.call(r, RUI, RUI_MEDIA_KEY, p -> p.writeInt(up), Parcel::readInt);
+        Diag.put("carplay.tasto", what + " · sendMediaPlayControlKey " + down + "/" + up + " → " + a + "/" + b);
     }
 
     /** Apre CarPlay o Android Auto a schermo intero. */

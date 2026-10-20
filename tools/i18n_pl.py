@@ -302,5 +302,6 @@ PL = {
     "news_4": "CarPlay i Android Auto: następny i odtwórz/wstrzymaj sterują telefonem",
     "news_5": "Data obok godziny, jednostka ciśnienia i przycisk tylnego światła przeciwmgłowego do wyboru",
     "news_6": "Opcja «Naciśnij Home sam po włączeniu» i język polski",
+    "radio_protected": "Usługa radia w tym oprogramowaniu nie odpowiada launcherowi: użyj aplikacji Radio",
     "news_7": "Stabilny ekran przy starcie i wiele poprawek z logów",
 }

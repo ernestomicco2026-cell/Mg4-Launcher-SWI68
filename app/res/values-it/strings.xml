@@ -296,5 +296,6 @@
     <string name="news_4" formatted="false">CarPlay e Android Auto: avanti e play/pausa comandano il telefono</string>
     <string name="news_5" formatted="false">Data accanto all\'ora, unità della pressione e pulsante retronebbia a scelta</string>
     <string name="news_6" formatted="false">Opzione «Premi Home da solo dopo l\'accensione» e lingua polacca</string>
+    <string name="radio_protected" formatted="false">Il servizio radio di questo firmware non risponde al launcher: usa l\'app Radio</string>
     <string name="news_7" formatted="false">Home stabile all\'avvio e tante correzioni dai log</string>
 </resources>

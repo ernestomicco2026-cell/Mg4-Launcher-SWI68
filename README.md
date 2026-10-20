@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.8.0](releases/MG4Launcher-0.8.0.apk)**
+**Ultima versione / Latest version: [0.8.1](releases/MG4Launcher-0.8.1.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -138,7 +138,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.8.0.apk
+   adb install -r -f MG4Launcher-0.8.1.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -209,6 +209,15 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.8.1
+- **CarPlay / Android Auto**: indietro, play/pausa e avanti funzionano di nuovo (anche con gli adattatori wireless):
+  i comandi passano dal servizio CarPlay dell'auto, come nel launcher MG originale.
+- **Radio sui firmware SWI68 più vecchi** (R46, R59): il launcher non fa più ripartire da solo il servizio radio
+  dell'auto, che lì si bloccava in continuazione; se cade comunque subito dopo il collegamento il launcher smette di
+  usarlo e lascia funzionare l'app Radio (nel pannello Media compare un avviso).
+- Diagnostica più dettagliata: tasti CarPlay, comandi della barra (clima, sedili, fendinebbia, ricircolo) e crash dei
+  servizi dell'auto nel log.
 
 #### 0.8.0
 
@@ -497,7 +506,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.8.0.apk
+   adb install -r -f MG4Launcher-0.8.1.apk
    ```
 3. Make it the default home:
    ```bash
@@ -569,6 +578,15 @@ the repository or a bug report help a lot too. Thank you!
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.8.1
+- **CarPlay / Android Auto**: previous, play/pause and next work again (also with wireless adapters): commands go
+  through the car's CarPlay service, as in the original MG launcher.
+- **Radio on older SWI68 firmware** (R46, R59): the launcher no longer restarts the car's radio service by itself,
+  which kept crashing there; if it still crashes right after connecting, the launcher stops using it and leaves the
+  Radio app working (a notice appears in the Media panel).
+- More detailed diagnostics: CarPlay keys, bar commands (climate, seats, fog lights, recirculation) and car service
+  crashes in the log.
 
 #### 0.8.0
 

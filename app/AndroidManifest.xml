@@ -28,6 +28,8 @@
     <!-- loghi radio dell'utente (cartella MG4Launcher/loghi su memoria o chiavetta): il permesso si concede da solo -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GRANT_RUNTIME_PERMISSIONS" />
+    <!-- nel log anche i crash dei servizi dell'auto (es. radio), per capirne la causa -->
+    <uses-permission android:name="android.permission.READ_LOGS" />
 
     <application
         android:label="@string/app_name"

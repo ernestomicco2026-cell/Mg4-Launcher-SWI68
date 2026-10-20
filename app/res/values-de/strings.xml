@@ -296,5 +296,6 @@
     <string name="news_4" formatted="false">CarPlay und Android Auto: Weiter und Play/Pause steuern das Telefon</string>
     <string name="news_5" formatted="false">Datum neben der Uhrzeit, Druckeinheit und optionale Nebelschlusstaste</string>
     <string name="news_6" formatted="false">Option „Nach dem Einschalten automatisch Home drücken“ und Polnisch</string>
+    <string name="radio_protected" formatted="false">Der Radiodienst dieser Firmware antwortet dem Launcher nicht: nutze die Radio-App</string>
     <string name="news_7" formatted="false">Stabile Startseite beim Start und viele Korrekturen aus den Logs</string>
 </resources>

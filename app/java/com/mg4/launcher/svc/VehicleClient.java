@@ -540,6 +540,7 @@ public final class VehicleClient {
             try {
                 IBinder b = sub(service);
                 if (b != null) Rpc.call(b, desc, setCode, p -> p.writeInt(1));
+                Diag.put("comando.ultimo", what + " · inviato (prima " + current + ")" + (b == null ? " · servizio assente" : ""));
             } catch (Exception e) {
                 Diag.error(what, e.toString());
                 synchronized (subs) {
@@ -597,6 +598,7 @@ public final class VehicleClient {
             try {
                 IBinder a = sub("aircondition");
                 if (a != null) Rpc.call(a, AC, setCode, p -> p.writeInt(1));
+                Diag.put("comando.ultimo", what + " · inviato" + (a == null ? " · servizio assente" : ""));
             } catch (Exception e) {
                 Diag.error(what, e.toString());
             }
@@ -640,7 +642,7 @@ public final class VehicleClient {
             try {
                 IBinder a = sub("aircondition");
                 if (a != null) Rpc.call(a, AC, toInner ? AC_LOOP_INNER : AC_LOOP_OUTSIDE, Rpc.NONE);
-                Diag.put("clima.ricircoloComando", (toInner ? "interno" : "esterno") + " (era " + cur + ")");
+                Diag.put("clima.ricircoloComando", (toInner ? "interno" : "esterno") + " (era " + cur + ", clima " + (last.hvacPower == 1 ? "acceso" : "spento") + ")");
             } catch (Exception e) {
                 Diag.error("clima.ricircolo", e.toString());
             }

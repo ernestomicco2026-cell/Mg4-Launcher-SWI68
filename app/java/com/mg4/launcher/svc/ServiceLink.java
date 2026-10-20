@@ -21,7 +21,18 @@ public final class ServiceLink implements ServiceConnection, IBinder.DeathRecipi
     private final Handler handler = new Handler(Looper.getMainLooper());
     private volatile IBinder binder;
     private boolean wanted;
+    /** False: ci si collega solo se il servizio è già avviato da qualcun altro (non lo si fa partire noi). */
+    private boolean autoCreate = true;
     private Runnable onConnected;
+    // protezione: servizio che muore subito dopo il collegamento (es. radio su firmware SWI68 più vecchi)
+    private long connectedAt;
+    private int quickDeaths;
+    private long firstQuickDeath;
+    private volatile boolean fragile;
+    /** Ultima chiamata fatta dal launcher a questo servizio (per capire quale lo fa morire). */
+    public volatile String lastCall = "";
+    private static final int FRAGILE_DEATHS = 3;
+    private static final long QUICK_MS = 6000, FRAGILE_WINDOW_MS = 60_000;
 
     public ServiceLink(Context context, String name, Intent intent) {
         this.context = context.getApplicationContext();
@@ -39,6 +50,10 @@ public final class ServiceLink implements ServiceConnection, IBinder.DeathRecipi
         return i;
     }
 
+    public void setAutoCreate(boolean b) {
+        autoCreate = b;
+    }
+
     public void setOnConnected(Runnable r) {
         onConnected = r;
     }
@@ -52,7 +67,16 @@ public final class ServiceLink implements ServiceConnection, IBinder.DeathRecipi
         return binder() != null;
     }
 
+    /**
+     * True se il servizio è morto almeno 3 volte in un minuto, ogni volta pochi secondi dopo il collegamento: il
+     * launcher smette di collegarsi e di interrogarlo, così il servizio dell'auto resta in piedi.
+     */
+    public boolean fragile() {
+        return fragile;
+    }
+
     public void start() {
+        if (fragile) return;
         wanted = true;
         bind();
     }
@@ -71,7 +95,7 @@ public final class ServiceLink implements ServiceConnection, IBinder.DeathRecipi
         if (!wanted) return;
         boolean ok;
         try {
-            ok = context.bindService(intent, this, Context.BIND_AUTO_CREATE);
+            ok = context.bindService(intent, this, autoCreate ? Context.BIND_AUTO_CREATE : 0);
         } catch (Exception e) {
             ok = false;
             Diag.error(name, "bindService: " + e);
@@ -83,6 +107,7 @@ public final class ServiceLink implements ServiceConnection, IBinder.DeathRecipi
     @Override
     public void onServiceConnected(ComponentName cn, IBinder service) {
         binder = service;
+        connectedAt = android.os.SystemClock.uptimeMillis();
         Diag.put(name + ".stato", "collegato");
         try {
             service.linkToDeath(this, 0);
@@ -101,7 +126,30 @@ public final class ServiceLink implements ServiceConnection, IBinder.DeathRecipi
     @Override
     public void binderDied() {
         binder = null;
-        Diag.put(name + ".stato", "servizio riavviato");
+        Diag.put(name + ".stato", "servizio riavviato" + (lastCall.isEmpty() ? "" : " (ultima chiamata: " + lastCall + ")"));
+        long now = android.os.SystemClock.uptimeMillis();
+        if (now - connectedAt < QUICK_MS) {
+            if (quickDeaths == 0 || now - firstQuickDeath > FRAGILE_WINDOW_MS) {
+                quickDeaths = 0;
+                firstQuickDeath = now;
+            }
+            quickDeaths++;
+            if (quickDeaths >= FRAGILE_DEATHS && !fragile) {
+                fragile = true;
+                Diag.error(name + ".protezione", "il servizio muore subito dopo il collegamento (" + quickDeaths
+                        + " volte, ultima chiamata: " + lastCall + "): il launcher non lo usa più fino al prossimo avvio");
+            }
+        }
+        if (fragile) {
+            wanted = false;
+            handler.post(() -> {
+                try {
+                    context.unbindService(this);
+                } catch (Exception ignored) {
+                }
+            });
+            return;
+        }
         handler.post(() -> {
             try {
                 context.unbindService(this);
