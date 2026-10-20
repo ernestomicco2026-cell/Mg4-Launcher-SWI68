@@ -153,7 +153,7 @@ class Source:
         return open(p, "rb").read() if os.path.exists(p) else None
 
     def rows(self):
-        data = self.read("indice.csv")
+        data = self.read("indice.csv") or b""   # cartella vuota (es. GG, JE): nessun logo
         return list(csv.DictReader(io.StringIO(data.decode("utf-8-sig"))))
 
 
