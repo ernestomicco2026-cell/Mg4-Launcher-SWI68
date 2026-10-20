@@ -9,7 +9,9 @@
 > ⚠️ **Compatibilità / Compatibility:** solo infotainment **SWI68 SAIC 1.0+** · only **SWI68 SAIC 1.0+** infotainment.
 > Provato su **MG4 Luxury MY22 R69**; dovrebbe funzionare su tutte le versioni con radio SAIC 1.0+ ·
 > tested on **MG4 Luxury MY22 R69**; it should work on every version with the SAIC 1.0+ radio.
-> Per **SWI69 Color Radio** usa [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69) · for **SWI69 Color Radio** use [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69).
+> Per gli altri software usa la versione dedicata · for the other software use the dedicated version:
+> **SWI69 Color Radio** → [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69) · **SWI132** (MG4 MY24) → [Mg4-Launcher-SWI132](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI132) ·
+> **SWI133** (nuova MG4 Luxury / new MG4 Luxury) → [Mg4-Launcher-SWI133](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI133).
 
 > Progetto amatoriale e **non ufficiale**: non è affiliato né approvato da MG Motor o SAIC Motor.
 > I nomi MG / MG4 servono solo a indicare l'auto compatibile (infotainment SWI68). Installalo e usalo a tuo rischio.
@@ -57,7 +59,7 @@ Guarda la [video recensione su YouTube](https://youtu.be/JKZ0N3Lr7FI) · Watch t
 
 ## Quale versione installare? / Which version should I install?
 
-Ci sono **due launcher diversi**, uno per ciascun software dell'infotainment MG4. Non sono intercambiabili:
+C'è un **launcher diverso per ciascun software** dell'infotainment MG4. Non sono intercambiabili:
 servizi dell'auto, radio, media e clima sono diversi, e con la versione sbagliata il launcher si apre ma non legge
 nulla dall'auto ("Servizio veicolo non disponibile").
 
@@ -65,16 +67,18 @@ nulla dall'auto ("Servizio veicolo non disponibile").
 |---|---|---|
 | **SWI68 SAIC 1.0+** | **questo repository** | `MG4Launcher-X.Y.Z.apk` |
 | **SWI69 Color Radio** | [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69) | `MG4Launcher-SWI69-X.Y.Z.apk` |
+| **SWI132** (MG4 MY24) | [Mg4-Launcher-SWI132](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI132) · in preparazione / in progress | — |
+| **SWI133** (nuova MG4 Luxury / new MG4 Luxury) | [Mg4-Launcher-SWI133](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI133) · in preparazione / in progress | — |
 
 **Come sapere quale software hai:** con il computer collegato all'auto
-`adb shell getprop ro.build.mt2712.version` → se inizia con `SWI69-` è la **SWI69**, altrimenti (es. `SWI68-…`) è la **SWI68**.
+`adb shell getprop ro.build.mt2712.version` → l'inizio dice il software: `SWI68-…`, `SWI69-…`, `SWI132-…` o `SWI133-…`.
 Se il launcher è già installato: impostazioni → riga **MG4 Launcher X.Y.Z · repository** sotto *Aggiornamenti*;
 il nome del repository dice quale versione hai. Se nella *Diagnostica* compaiono `veicolo.bind = fallito` e
 `media.usb.bind = fallito`, hai installato la versione SWI68 su un'auto SWI69 (o viceversa).
 
-There are **two different launchers**, one per MG4 infotainment software, and they are not interchangeable.
-Check your software with `adb shell getprop ro.build.mt2712.version` (starts with `SWI69-` = SWI69, otherwise SWI68) and
-use the matching repository above.
+There is **a different launcher for each MG4 infotainment software**, and they are not interchangeable.
+Check your software with `adb shell getprop ro.build.mt2712.version` (it starts with `SWI68-`, `SWI69-`, `SWI132-` or
+`SWI133-`) and use the matching repository above.
 
 ---
 
@@ -86,7 +90,7 @@ Launcher in stile Tesla per l'infotainment della **MG4** con software **SWI68 SA
 i servizi dell'auto possono essere diversi e il launcher potrebbe non funzionare (o funzionare solo in parte): non installarlo.
 Al momento il funzionamento è garantito sulla **MG4 Luxury MY22 R69**. Il launcher usa però gli stessi servizi e dati
 dell'infotainment originale (FICM), quindi dovrebbe funzionare su tutte le versioni con la radio **SAIC 1.0+**.
-Per **SWI69 Color Radio** c'è un launcher dedicato: [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69).
+Per gli altri software ci sono launcher dedicati: **SWI69 Color Radio** → [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69), **SWI132** (MG4 MY24) → [Mg4-Launcher-SWI132](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI132), **SWI133** (nuova MG4 Luxury) → [Mg4-Launcher-SWI133](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI133).
 Sostituisce la schermata home originale mantenendone le funzioni, con una grafica nuova e pulita.
 
 ### Cosa fa
@@ -454,7 +458,7 @@ Tesla-style launcher for the **MG4** infotainment system running **SWI68 SAIC 1.
 car services and the launcher may not work (or only partly): do not install it.
 It is currently guaranteed on the **MG4 Luxury MY22 R69**. However, the launcher uses the same services and data as the
 original infotainment unit (FICM), so it should work on every version with the **SAIC 1.0+** radio.
-For **SWI69 Color Radio** there is a dedicated launcher: [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69).
+For the other software there are dedicated launchers: **SWI69 Color Radio** → [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69), **SWI132** (MG4 MY24) → [Mg4-Launcher-SWI132](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI132), **SWI133** (new MG4 Luxury) → [Mg4-Launcher-SWI133](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI133).
 It replaces the original home screen, keeping its features, with a new, clean design.
 
 ### Features
