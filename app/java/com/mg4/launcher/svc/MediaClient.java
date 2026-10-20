@@ -70,7 +70,7 @@ public final class MediaClient {
 
     // --- CarPlay / Android Auto ---------------------------------------------------------------
     private static final String RUI = "com.allgo.rui.IRemoteUIService";
-    private static final int RUI_LAUNCH_APP = 8, RUI_ACTIVE_DEVICE = 15, RUI_MEDIA_KEY = 18;
+    private static final int RUI_LAUNCH_APP = 8, RUI_ACTIVE_DEVICE = 15, RUI_GET_STATUS = 17, RUI_MEDIA_KEY = 18;
     public static final int DEV_CARPLAY = 1, DEV_AAUTO = 2;
 
     /** Stazione radio (preferiti FM / DAB). */
@@ -171,6 +171,19 @@ public final class MediaClient {
 
     public void setListener(Listener l) {
         listener = l;
+    }
+
+    /** Chiamata in corso su CarPlay/Android Auto (stato di Allgo: com.allgo.extra.CallStatus diverso da 0). */
+    public boolean remoteCallActive() {
+        IBinder r = rui.binder();
+        if (r == null) return false;
+        try {
+            android.os.Bundle b = Rpc.call(r, RUI, RUI_GET_STATUS, Rpc.NONE,
+                    p -> Rpc.readNullable(p, q -> android.os.Bundle.CREATOR.createFromParcel(q)));
+            return b != null && b.getInt("com.allgo.extra.CallStatus", 0) != 0;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public State last() {

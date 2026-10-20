@@ -14,7 +14,6 @@ public final class Prefs {
     public static final int[] CAR_COLOR_VALUES = {
             0xFFE8E9E6, 0xFF202227, 0xFF5D6166, 0xFFA9ADB2,
             0xFF4C6A5A, 0xFF2E5597, 0xFFA5161E, 0xFFE1621F};
-    public static final int[] ACCENTS = {0xFF3E8BFF, 0xFFFFFFFF, 0xFF2BD4A4, 0xFFF5A524};
     public static final String THEME_AUTO = "auto", THEME_NIGHT = "notte", THEME_DAY = "giorno";
 
     private final SharedPreferences sp;
@@ -37,14 +36,6 @@ public final class Prefs {
 
     public void setBlackRoof(boolean b) {
         sp.edit().putBoolean("blackRoof", b).apply();
-    }
-
-    public int accent() {
-        return sp.getInt("accent", ACCENTS[0]);
-    }
-
-    public void setAccent(int c) {
-        sp.edit().putInt("accent", c).apply();
     }
 
     public String themeMode() {
@@ -137,10 +128,6 @@ public final class Prefs {
     /** Popup discreto quando su GitHub c'è una versione nuova. */
     public boolean updatePopup() {
         return sp.getBoolean("updatePopup", true);
-    }
-
-    public void setUpdatePopup(boolean b) {
-        sp.edit().putBoolean("updatePopup", b).apply();
     }
 
     /** Ultima versione per cui è stato premuto "Più tardi": per quella il popup non ricompare. */
@@ -241,6 +228,24 @@ public final class Prefs {
 
     public void setBigBar(boolean b) {
         sp.edit().putBoolean("barraGrande", b).apply();
+    }
+
+    /** 0.8.2: A/C, AUTO e ricircolo in "Clima", sedili e volante in "Comfort" (un pulsante per gruppo). */
+    public boolean groupedButtons() {
+        return sp.getBoolean("pulsantiRaggruppati", true);
+    }
+
+    public void setGroupedButtons(boolean b) {
+        sp.edit().putBoolean("pulsantiRaggruppati", b).apply();
+    }
+
+    /** 0.8.2: pulsanti LKA e OPD nella barra (se l'auto li ha). */
+    public boolean showAssist() {
+        return sp.getBoolean("mostraAssistenza", true);
+    }
+
+    public void setShowAssist(boolean b) {
+        sp.edit().putBoolean("mostraAssistenza", b).apply();
     }
 
     /** Secondi dopo l'accensione per premere Home da soli: 0 = spento, 5/10/15/20/30. */

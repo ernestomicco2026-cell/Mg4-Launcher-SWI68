@@ -388,8 +388,107 @@ public final class SettingsView extends FrameLayout {
                 toggle(c, prefs.showRearFog(), on -> {
                     prefs.setShowRearFog(on);
                     host.settingsChanged(true);
+                }), false));
+        card.addView(row(c, L.s(R.string.set_grouped), L.s(R.string.set_grouped_sub),
+                toggle(c, prefs.groupedButtons(), on -> {
+                    prefs.setGroupedButtons(on);
+                    host.settingsChanged(true);
+                }), false));
+        card.addView(row(c, L.s(R.string.set_assist), L.s(R.string.set_assist_sub),
+                toggle(c, prefs.showAssist(), on -> {
+                    prefs.setShowAssist(on);
+                    host.settingsChanged(true);
                 }), true));
         col.addView(card, topFull(14));
+
+        buildLogos(c, col);
+    }
+
+    // ---- loghi radio -----------------------------------------------------------------------
+
+    private final com.mg4.launcher.svc.LogoPacks.Listener logoListener = () -> {
+        if (section == SEC_HOME && !diagOpen && isAttachedToWindow()) showSection(SEC_HOME);
+    };
+
+    private void buildLogos(Context c, LinearLayout col) {
+        com.mg4.launcher.svc.LogoPacks lp = com.mg4.launcher.svc.LogoPacks.get(c);
+        col.addView(label(c, L.s(R.string.set_logos_card)), top(30));
+        LinearLayout card = card(c);
+        java.util.List<String> chosen = lp.chosen();
+        StringBuilder names = new StringBuilder();
+        for (String cc : chosen) names.append(names.length() == 0 ? "" : ", ").append(com.mg4.launcher.svc.LogoPacks.countryName(cc));
+        boolean auto = com.mg4.launcher.svc.LogoPacks.AUTO.equals(lp.choice());
+        String sub = auto ? L.f(R.string.logos_auto_sub, names) : names.toString();
+        card.addView(row(c, L.s(R.string.set_logos_country), sub, button(c, L.s(R.string.btn_change), v -> pickLogoCountries(lp)), false));
+
+        // stato dei pacchetti dei paesi scelti (e di quelli installati da chiavetta)
+        java.util.Map<String, com.mg4.launcher.svc.LogoPacks.Pack> inst = lp.installed();
+        StringBuilder st = new StringBuilder();
+        java.util.LinkedHashSet<String> show = new java.util.LinkedHashSet<>(chosen);
+        show.addAll(inst.keySet());
+        for (String cc : show) {
+            com.mg4.launcher.svc.LogoPacks.Pack p = inst.get(cc);
+            if (st.length() > 0) st.append('\n');
+            st.append(com.mg4.launcher.svc.LogoPacks.countryName(cc)).append(": ");
+            if (p == null) st.append(L.s(R.string.logos_not_downloaded));
+            else st.append(L.f(R.string.logos_pack_state, p.version > 0 ? String.valueOf(p.version) : "–", p.logos,
+                    String.format(L.locale(), "%.1f MB", p.size / 1048576f)));
+        }
+        String state = lp.status();
+        if (lp.isBusy()) st.append('\n').append(L.s(R.string.logos_downloading));
+        else if ("offline".equals(state)) st.append('\n').append(L.s(R.string.logos_offline));
+        else if ("error".equals(state)) st.append('\n').append(L.s(R.string.logos_error));
+        LinearLayout btns = Ui.row(c);
+        TextView upd = button(c, L.s(R.string.btn_update), v -> lp.refresh(true));
+        upd.setEnabled(!lp.isBusy());
+        upd.setAlpha(lp.isBusy() ? 0.4f : 1f);
+        btns.addView(upd);
+        if (!inst.isEmpty()) {
+            TextView del = button(c, L.s(R.string.btn_delete), v -> {
+                String[] ccs = inst.keySet().toArray(new String[0]);
+                if (ccs.length == 1) {
+                    Confirm.show(this, t, L.s(R.string.logos_delete_title), L.f(R.string.logos_delete_msg,
+                            com.mg4.launcher.svc.LogoPacks.countryName(ccs[0])), L.s(R.string.btn_cancel), L.s(R.string.btn_delete),
+                            () -> lp.delete(ccs[0]));
+                    return;
+                }
+                String[] nm = new String[ccs.length];
+                for (int i = 0; i < ccs.length; i++) nm[i] = com.mg4.launcher.svc.LogoPacks.countryName(ccs[i]);
+                Confirm.pick(this, t, L.s(R.string.logos_delete_title), L.s(R.string.logos_delete_pick), nm, -1,
+                        L.s(R.string.btn_cancel), i -> lp.delete(ccs[i]));
+            });
+            btns.addView(del, Ui.margins(Ui.lp(-2, tp(60)), dp(12), 0, 0, 0));
+        }
+        card.addView(row(c, L.s(R.string.set_logos_state), st.toString(), btns, true));
+        col.addView(card, topFull(14));
+    }
+
+    private void pickLogoCountries(com.mg4.launcher.svc.LogoPacks lp) {
+        String[] codes = com.mg4.launcher.svc.LogoPacks.COUNTRIES;
+        String[] opts = new String[codes.length + 1];
+        boolean[] on = new boolean[opts.length];
+        opts[0] = L.s(R.string.unit_auto);
+        boolean auto = com.mg4.launcher.svc.LogoPacks.AUTO.equals(lp.choice());
+        on[0] = auto;
+        java.util.List<String> chosen = lp.chosen();
+        // ordine alfabetico per nome nella lingua del launcher
+        Integer[] order = new Integer[codes.length];
+        for (int i = 0; i < codes.length; i++) order[i] = i;
+        java.text.Collator col = java.text.Collator.getInstance(L.locale());
+        java.util.Arrays.sort(order, (a, b) -> col.compare(com.mg4.launcher.svc.LogoPacks.countryName(codes[a]),
+                com.mg4.launcher.svc.LogoPacks.countryName(codes[b])));
+        for (int i = 0; i < codes.length; i++) {
+            String cc = codes[order[i]];
+            opts[i + 1] = com.mg4.launcher.svc.LogoPacks.countryName(cc);
+            on[i + 1] = !auto && chosen.contains(cc);
+        }
+        Confirm.multi(this, t, L.s(R.string.set_logos_country), L.s(R.string.logos_pick_msg), opts, on,
+                L.s(R.string.btn_cancel), L.s(R.string.btn_ok), idx -> {
+                    StringBuilder v = new StringBuilder();
+                    for (int i : idx) v.append(v.length() == 0 ? "" : ",").append(codes[order[i - 1]]);
+                    lp.setChoice(v.length() == 0 ? com.mg4.launcher.svc.LogoPacks.AUTO : v.toString());
+                    showSection(SEC_HOME);
+                });
     }
 
     private interface OnChoice {
@@ -550,6 +649,40 @@ public final class SettingsView extends FrameLayout {
         }), Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(14), 0, 0));
         hc.addView(ah);
         col.addView(hc, topFull(14));
+
+        // CarPlay / Android Auto: riavvio del dongle wireless che non si collega
+        com.mg4.launcher.svc.DongleWatch dw = com.mg4.launcher.svc.DongleWatch.peek();
+        if (dw != null) {
+            col.addView(label(c, L.s(R.string.set_projection_card)), top(30));
+            LinearLayout pc = card(c);
+            pc.addView(row(c, L.s(R.string.set_dongle), L.s(R.string.set_dongle_sub),
+                    toggle(c, dw.enabled(), on -> {
+                        dw.setEnabled(on);
+                        showSection(SEC_SYSTEM);
+                    }), false));
+            if (dw.enabled()) {
+                int[] ds = {15, 20, 30, 45};
+                String[] dn = new String[ds.length];
+                int dsel = 1;
+                for (int i = 0; i < ds.length; i++) {
+                    dn[i] = ds[i] + " s";
+                    if (ds[i] == dw.delaySeconds()) dsel = i;
+                }
+                pc.addView(row(c, L.s(R.string.set_dongle_delay), L.s(R.string.set_dongle_delay_sub), choices(c, dn, dsel, i -> {
+                    dw.setDelaySeconds(ds[i]);
+                    showSection(SEC_SYSTEM);
+                }), false));
+            }
+            pc.addView(row(c, L.s(R.string.set_dongle_now), L.s(R.string.set_dongle_now_sub), button(c, L.s(R.string.btn_restart), v -> {
+                if (dw.inCall()) {
+                    Confirm.notice(this, t, L.s(R.string.set_dongle_now), "", new String[]{L.s(R.string.dongle_in_call)}, L.s(R.string.btn_ok), null);
+                    return;
+                }
+                Confirm.show(this, t, L.s(R.string.set_dongle_now), L.s(R.string.dongle_confirm), L.s(R.string.btn_cancel),
+                        L.s(R.string.btn_restart), () -> dw.restartNow(null));
+            }), true));
+            col.addView(pc, topFull(14));
+        }
 
         col.addView(label(c, L.s(R.string.set_updates)), top(30));
         LinearLayout card = card(c);
@@ -849,6 +982,7 @@ public final class SettingsView extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         refreshTick.run();
+        com.mg4.launcher.svc.LogoPacks.get(getContext()).addListener(logoListener);
     }
 
     @Override
@@ -856,5 +990,6 @@ public final class SettingsView extends FrameLayout {
         super.onDetachedFromWindow();
         main.removeCallbacks(refreshTick);
         host.updater().setListener(null);
+        com.mg4.launcher.svc.LogoPacks.get(getContext()).removeListener(logoListener);
     }
 }

@@ -129,6 +129,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
             media.start();
             nav.start();
             logs.start();
+            com.mg4.launcher.svc.DongleWatch.get(this, media).start();
+            com.mg4.launcher.svc.EmbedCheck.log(this);
         });
         // avvio all'accensione: servizio di accessibilità, scadenza officina, riconferma della home predefinita
         com.mg4.launcher.svc.StartGuard.markProcess();
@@ -156,6 +158,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         root.postDelayed(saveDiag, 15000);
         // primo controllo aggiornamenti dopo l'avvio, quando la radio ha finito di caricare
         root.postDelayed(autoCheck, 90_000);
+        root.postDelayed(this::logoPacksTick, 20_000);
     }
 
     // ---- modalità officina: aperto il launcher durante l'officina, si chiede se disattivarla ----------
@@ -497,8 +500,32 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         @Override
         public void onReceive(Context c, Intent i) {
             if (home != null) home.updateClock();
+            logoPacksTick();
         }
     };
+
+    // ---- pacchetti loghi radio: download quando arriva la rete, zip su chiavetta da installare ----------
+
+    private int logoTicks;
+
+    private void logoPacksTick() {
+        com.mg4.launcher.svc.LogoPacks lp = com.mg4.launcher.svc.LogoPacks.get(this);
+        lp.tick();
+        if (logoTicks++ % 2 != 0) return;   // la chiavetta si controlla ogni 2 minuti
+        new Thread(() -> {
+            java.util.List<java.io.File> zips = lp.usbPacksToOffer();
+            for (java.io.File f : zips) root.post(() -> offerUsbPack(lp, f));
+        }, "mg4-usb-loghi").start();
+    }
+
+    private void offerUsbPack(com.mg4.launcher.svc.LogoPacks lp, java.io.File f) {
+        if (isFinishing()) return;
+        String cc = f.getName().substring(0, 2).toUpperCase(java.util.Locale.ROOT);
+        com.mg4.launcher.ui.Confirm.show(root, theme, L.s(R.string.logos_usb_title),
+                L.f(R.string.logos_usb_msg, com.mg4.launcher.svc.LogoPacks.countryName(cc), f.getParent()),
+                L.s(R.string.btn_cancel), L.s(R.string.btn_install), () -> lp.installUsb(f, true));
+        lp.installUsb(f, false);   // proposto una volta sola, anche se si annulla
+    }
 
     private final BroadcastReceiver packages = new BroadcastReceiver() {
         @Override

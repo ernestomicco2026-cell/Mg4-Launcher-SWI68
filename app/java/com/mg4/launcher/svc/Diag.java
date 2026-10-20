@@ -110,15 +110,37 @@ public final class Diag {
         try {
             Process p = Runtime.getRuntime().exec(new String[]{"logcat", "-d", "-v", "time", "-t", "1500",
                     "--pid=" + android.os.Process.myPid()});
+            int skipped = 0, dropped = 0;
             try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"))) {
                 String l;
-                while ((l = r.readLine()) != null) sb.append(l).append('\n');
+                while ((l = r.readLine()) != null) {
+                    if (l.contains("MG4L")) {
+                        sb.append(l).append('\n');
+                    } else if (l.contains("Skipped ") && l.contains(" frames")) {
+                        if (skipped++ == 0) sb.append(l).append('\n'); else dropped++;   // solo il primo
+                    } else if (noise(l)) {
+                        dropped++;
+                    } else {
+                        sb.append(l).append('\n');
+                    }
+                }
             }
             p.waitFor();
+            if (dropped > 0) sb.append("(").append(dropped).append(" righe di sistema ripetitive non incluse)\n");
         } catch (Exception e) {
             sb.append("logcat non disponibile: ").append(e).append('\n');
         }
         return sb.toString();
+    }
+
+    /** Righe di sistema che non servono a capire i problemi del launcher (si ripetono a centinaia). */
+    private static final String[] NOISE = {
+            "disconnect failed", "ioctl failed", "jdwp agent", "chatty", "gralloc", "Background concurrent copying",
+            "Background young concurrent copying", "Explicit concurrent copying"};
+
+    static boolean noise(String l) {
+        for (String n : NOISE) if (l.contains(n)) return true;
+        return false;
     }
 
     /** Crash recenti di tutte le app (buffer crash di logcat, serve READ_LOGS concesso dalla firma platform). */

@@ -8,22 +8,11 @@
     <string name="charge_charging" formatted="false">A carregar</string>
     <string name="charge_fast" formatted="false">Carregamento rápido</string>
     <string name="charge_wireless" formatted="false">Carregamento sem fios</string>
-    <string name="charge_done" formatted="false">Carregamento concluído</string>
     <string name="charge_balancing" formatted="false">Equilíbrio da bateria</string>
-    <string name="charge_error" formatted="false">Erro de carregamento</string>
-    <string name="charge_connecting" formatted="false">A ligar…</string>
-    <string name="charge_not_recognized" formatted="false">Ligado · não reconhecido</string>
-    <string name="charge_not_charging" formatted="false">Ligado · sem carregar</string>
-    <string name="charge_stopped" formatted="false">Carregamento interrompido</string>
-    <string name="charge_scheduled" formatted="false">Carregamento agendado</string>
-    <string name="charge_multiple" formatted="false">Carregamento múltiplo</string>
     <string name="v2l_active" formatted="false">V2L ativo · alimentação externa</string>
-    <string name="v2l_stopped" formatted="false">V2L interrompido</string>
-    <string name="v2l_done" formatted="false">V2L terminado</string>
     <string name="outside_temp">%s° exterior</string>
     <string name="ac_desc" formatted="false">Ar condicionado</string>
     <string name="auto_desc" formatted="false">Climatização automática</string>
-    <string name="defrost_desc" formatted="false">Desembaciar para-brisas</string>
     <string name="fog_front" formatted="false">Faróis de nevoeiro</string>
     <string name="fog_rear" formatted="false">Farol de nevoeiro traseiro</string>
     <string name="inside_temp">%s° interior</string>
@@ -32,17 +21,12 @@
     <string name="seat_left" formatted="false">Banco esquerdo aquecido</string>
     <string name="seat_right" formatted="false">Banco direito aquecido</string>
     <string name="wheel_heat" formatted="false">Volante aquecido</string>
-    <string name="display" formatted="false">VISUALIZAÇÃO</string>
-    <string name="soc_decimals" formatted="false">Percentagem da bateria com decimais</string>
-    <string name="show_tpms" formatted="false">Pressão dos pneus por baixo do carro</string>
-    <string name="log_upload_label" formatted="false">ENVIO DE REGISTOS</string>
     <string name="log_upload_on" formatted="false">Enviar registos automaticamente</string>
     <string name="log_upload_last">Último envio às %1$s</string>
     <string name="log_upload_never" formatted="false">Ainda nenhum registo enviado (o primeiro sai 90 s após o arranque)</string>
     <string name="log_upload_error">Falha no envio (%1$s): nova tentativa mais tarde</string>
     <string name="log_upload_off" formatted="false">Envio de registos desativado</string>
     <string name="log_upload_nokey" formatted="false">Envio de registos indisponível nesta versão</string>
-    <string name="show_inside_temp" formatted="false">Temperatura interior</string>
     <string name="sec_car" formatted="false">CARRO</string>
     <string name="sec_car_sub" formatted="false">Cor, tejadilho</string>
     <string name="sec_home" formatted="false">Início</string>
@@ -121,8 +105,6 @@
     <string name="drive_auto" formatted="false">Como o carro</string>
     <string name="drive_left" formatted="false">Volante à esquerda</string>
     <string name="drive_right" formatted="false">Volante à direita</string>
-    <string name="left" formatted="false">Esquerda</string>
-    <string name="right" formatted="false">Direita</string>
     <string name="climate" formatted="false">Climatização</string>
     <string name="tab_map" formatted="false">Mapa</string>
     <string name="tab_media" formatted="false">Multimédia</string>
@@ -185,36 +167,17 @@
     <string name="app_sos" formatted="false">Chamada SOS</string>
     <string name="app_android_settings" formatted="false">Definições Android</string>
     <string name="app_android_files" formatted="false">Ficheiros Android</string>
-    <string name="settings_title" formatted="false">Definições do launcher</string>
     <string name="settings_desc" formatted="false">Definições do launcher</string>
-    <string name="car_color" formatted="false">COR DO CARRO</string>
-    <string name="black_roof" formatted="false">Tejadilho preto</string>
     <string name="theme" formatted="false">TEMA</string>
-    <string name="language" formatted="false">IDIOMA</string>
     <string name="lang_auto" formatted="false">Como o carro</string>
-    <string name="lang_auto_hint" formatted="false">Automático segue o idioma do sistema do carro.</string>
-    <string name="default_nav" formatted="false">NAVEGADOR PREDEFINIDO</string>
-    <string name="nav_auto_hint" formatted="false">Automático: o do telemóvel se o CarPlay ou o Android Auto estiver ligado; caso contrário, MG.</string>
     <string name="auto" formatted="false">Automático</string>
-    <string name="night" formatted="false">Noite</string>
     <string name="day" formatted="false">Dia</string>
-    <string name="open_original_home" formatted="false">Abrir o início original da MG</string>
-    <string name="diag_title" formatted="false">DIAGNÓSTICO DOS SERVIÇOS</string>
     <string name="save_log" formatted="false">Guardar registo</string>
-    <string name="save_log_hint" formatted="false">Guardar registo: com uma pen USB ligada, o ficheiro também fica lá.</string>
     <string name="close" formatted="false">Fechar</string>
-    <string name="updates" formatted="false">ATUALIZAÇÕES</string>
-    <string name="check_updates" formatted="false">Procurar atualizações</string>
-    <string name="download_install" formatted="false">Transferir e instalar</string>
-    <string name="download_install_v">Transferir e instalar %s</string>
-    <string name="busy" formatted="false">Em curso…</string>
-    <string name="press_check" formatted="false">Toque em Procurar para verificar se há uma nova versão</string>
-    <string name="saving_log" formatted="false">A guardar o registo…</string>
     <string name="log_failed" formatted="false">Não foi possível guardar o registo em nenhuma pasta.</string>
     <string name="log_saved_usb" formatted="false">Registo guardado, também na pen USB:</string>
     <string name="log_saved" formatted="false">Registo guardado:</string>
     <string name="log_usb_hint" formatted="false">Para o ter numa pen USB: ligue-a e toque de novo em Guardar registo.</string>
-    <string name="waiting_services" formatted="false">À espera dos serviços do carro…</string>
     <string name="upd_checking" formatted="false">A verificar no GitHub…</string>
     <string name="upd_no_apk">A versão mais recente (%s) não contém um APK</string>
     <string name="upd_available">Nova versão disponível: %s</string>
@@ -238,7 +201,6 @@
     <string name="upd_popup_text">MG4 Launcher %s está pronto a instalar</string>
     <string name="upd_later" formatted="false">Mais tarde</string>
     <string name="upd_now" formatted="false">Atualizar</string>
-    <string name="upd_popup_setting" formatted="false">Avisar quando houver uma nova atualização</string>
     <string name="upd_error_code">erro %d</string>
     <string name="btn_ok" formatted="false">OK</string>
     <string name="time_h_min">%1$d h %2$d min</string>
@@ -298,4 +260,52 @@
     <string name="news_6" formatted="false">Opção «Premir Início sozinho após ligar» e língua polaca</string>
     <string name="radio_protected" formatted="false">O serviço de rádio deste firmware não responde ao launcher: use a app Rádio</string>
     <string name="news_7" formatted="false">Ecrã estável no arranque e muitas correções a partir dos registos</string>
+    <string name="btn_change" formatted="false">Alterar</string>
+    <string name="btn_update" formatted="false">Atualizar</string>
+    <string name="btn_delete" formatted="false">Eliminar</string>
+    <string name="set_logos_card" formatted="false">Logótipos de rádio</string>
+    <string name="set_logos_country" formatted="false">Logótipos de rádio: país</string>
+    <string name="logos_auto_sub">Automático: %s</string>
+    <string name="logos_pick_msg" formatted="false">Escolha um ou mais países (útil perto de uma fronteira). Automático usa o país do sistema.</string>
+    <string name="set_logos_state" formatted="false">Pacotes de logótipos</string>
+    <string name="logos_not_downloaded" formatted="false">ainda não transferido (precisa de internet uma vez)</string>
+    <string name="logos_pack_state">versão %1$s · %2$d logótipos · %3$s</string>
+    <string name="logos_downloading" formatted="false">A transferir…</string>
+    <string name="logos_offline" formatted="false">Sem internet: transfere assim que houver ligação.</string>
+    <string name="logos_error" formatted="false">A transferência falhou: nova tentativa em 30 minutos.</string>
+    <string name="logos_delete_title" formatted="false">Eliminar os logótipos?</string>
+    <string name="logos_delete_msg">O pacote %s é removido da memória. \"Atualizar\" transfere-o de novo.</string>
+    <string name="logos_delete_pick" formatted="false">Que pacote quer eliminar?</string>
+    <string name="logos_usb_title" formatted="false">Logótipos de rádio encontrados</string>
+    <string name="logos_usb_msg">Há um pacote de logótipos para %1$s em %2$s. Instalar? Funciona também sem internet.</string>
+    <string name="group_clima" formatted="false">Climatização</string>
+    <string name="group_comfort" formatted="false">Conforto</string>
+    <string name="tap_outside_close" formatted="false">toque fora para fechar</string>
+    <string name="lka_desc" formatted="false">Assistente de manutenção de faixa (LKA)</string>
+    <string name="opd_desc" formatted="false">One Pedal Drive (OPD)</string>
+    <string name="opd_blocked" formatted="false">O carro não permite alterar o One Pedal Drive agora (a carregar ou condições não adequadas).</string>
+    <string name="set_grouped" formatted="false">Botões agrupados</string>
+    <string name="set_grouped_sub" formatted="false">A/C, AUTO e recirculação em \"Climatização\", bancos e volante em \"Conforto\": um toque abre os quadrados grandes</string>
+    <string name="set_assist" formatted="false">Botões LKA e OPD</string>
+    <string name="set_assist_sub" formatted="false">Manutenção de faixa e One Pedal Drive, só manual: o carro volta a ligá-los a cada arranque</string>
+    <string name="set_projection_card" formatted="false">CarPlay e Android Auto</string>
+    <string name="set_dongle" formatted="false">Reiniciar o dongle se não ligar</string>
+    <string name="set_dongle_sub" formatted="false">Só com um dongle sem fios reconhecido, nunca durante uma chamada: no máximo 2 tentativas por arranque</string>
+    <string name="set_dongle_delay" formatted="false">Espera após o arranque</string>
+    <string name="set_dongle_delay_sub" formatted="false">Se o CarPlay ou o Android Auto não arrancar neste tempo, o launcher intervém</string>
+    <string name="set_dongle_now" formatted="false">Reiniciar CarPlay/AA</string>
+    <string name="set_dongle_now_sub" formatted="false">Como desligar e voltar a ligar o dongle, depois reinício do serviço CarPlay/AA</string>
+    <string name="btn_restart" formatted="false">Reiniciar</string>
+    <string name="dongle_confirm" formatted="false">O CarPlay e o Android Auto param alguns segundos e depois voltam a ligar.</string>
+    <string name="dongle_in_call" formatted="false">Há uma chamada em curso: tente mais tarde.</string>
+    <string name="tile_auto" formatted="false">Automático</string>
+    <string name="tile_recirc" formatted="false">Recirculação</string>
+    <string name="tile_seat_driver" formatted="false">Banco condutor</string>
+    <string name="tile_seat_passenger" formatted="false">Banco passageiro</string>
+    <string name="tile_wheel" formatted="false">Volante</string>
+    <string name="tile_on_f" formatted="false">Ligado</string>
+    <string name="tile_off_f" formatted="false">Desligado</string>
+    <string name="tile_on_m" formatted="false">Ligado</string>
+    <string name="tile_off_m" formatted="false">Desligado</string>
+    <string name="tile_level">Nível %d</string>
 </resources>

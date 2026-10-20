@@ -84,6 +84,85 @@ public final class Confirm {
         root.addView(dim, new FrameLayout.LayoutParams(-1, -1));
     }
 
+    public interface OnMulti {
+        /** Indici scelti; vuoto = prima voce ("Automatico"). */
+        void chosen(java.util.List<Integer> indices);
+    }
+
+    /**
+     * Scelta multipla su griglia (es. paesi dei loghi radio). La voce 0 è esclusiva ("Automatico"): sceglierla
+     * deseleziona le altre e viceversa. "Annulla" e "OK".
+     */
+    public static void multi(FrameLayout root, Theme t, String title, String msg, String[] options, boolean[] checked,
+                             String cancel, String ok, OnMulti onOk) {
+        Context c = root.getContext();
+        FrameLayout dim = new FrameLayout(c);
+        dim.setBackgroundColor(t.day ? 0x66000000 : 0xB3000000);
+        dim.setClickable(true);
+        LinearLayout card = Ui.column(c);
+        card.setBackground(Ui.round(t.panel, Ui.dp(c, 28)));
+        card.setPadding(Ui.dp(c, 40), Ui.dp(c, 34), Ui.dp(c, 40), Ui.dp(c, 30));
+        card.setClickable(true);
+        card.addView(Ui.text(c, title, 30, t.text, Ui.MEDIUM));
+        if (msg != null && !msg.isEmpty()) {
+            TextView m = Ui.text(c, msg, 18, t.sub, Ui.REGULAR);
+            m.setLineSpacing(0, 1.15f);
+            card.addView(m, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, Ui.dp(c, 12), 0, 0));
+        }
+        boolean[] on = checked.clone();
+        TextView[] chips = new TextView[options.length];
+        Runnable paint = () -> {
+            for (int i = 0; i < chips.length; i++) {
+                chips[i].setTextColor(on[i] ? t.panel : t.text);
+                chips[i].setBackground(on[i] ? Ui.round(t.text, Ui.tp(c, 14)) : Ui.pressable(c, t.chip, 14 * Ui.K, t));
+            }
+        };
+        LinearLayout grid = Ui.column(c);
+        int cols = 5;
+        LinearLayout row = null;
+        for (int i = 0; i < options.length; i++) {
+            if (i % cols == 0) {
+                row = Ui.row(c);
+                grid.addView(row, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, i == 0 ? 0 : Ui.dp(c, 10), 0, 0));
+            }
+            final int idx = i;
+            TextView b = Ui.oneLine(Ui.text(c, options[i], Ui.ts(18), t.text, Ui.MEDIUM));
+            b.setGravity(Gravity.CENTER);
+            b.setPadding(Ui.dp(c, 8), 0, Ui.dp(c, 8), 0);
+            b.setClickable(true);
+            b.setOnClickListener(v -> {
+                on[idx] = !on[idx];
+                if (idx == 0 && on[0]) for (int k = 1; k < on.length; k++) on[k] = false;
+                if (idx != 0 && on[idx]) on[0] = false;
+                boolean any = false;
+                for (boolean x : on) any |= x;
+                if (!any) on[0] = true;
+                paint.run();
+            });
+            chips[i] = b;
+            row.addView(b, Ui.margins(Ui.lpWeight(0, Ui.tp(c, 60), 1), i % cols == 0 ? 0 : Ui.dp(c, 10), 0, 0, 0));
+        }
+        int rest = (cols - options.length % cols) % cols;
+        for (int k = 0; k < rest && row != null; k++) row.addView(new View(c), Ui.margins(Ui.lpWeight(0, 1, 1), Ui.dp(c, 10), 0, 0, 0));
+        paint.run();
+        android.widget.ScrollView sv = new android.widget.ScrollView(c);
+        sv.setVerticalScrollBarEnabled(false);
+        sv.addView(grid);
+        card.addView(sv, Ui.margins(new LinearLayout.LayoutParams(-1, Ui.dp(c, 420)), 0, Ui.dp(c, 22), 0, 0));
+        LinearLayout btns = Ui.row(c);
+        btns.setGravity(Gravity.END);
+        btns.addView(button(c, t, cancel, false, v -> ((ViewGroup) dim.getParent()).removeView(dim)), Ui.lp(-2, Ui.tp(c, 60)));
+        btns.addView(button(c, t, ok, true, v -> {
+            ((ViewGroup) dim.getParent()).removeView(dim);
+            java.util.List<Integer> out = new java.util.ArrayList<>();
+            for (int i = 1; i < on.length; i++) if (on[i]) out.add(i);
+            onOk.chosen(out);
+        }), Ui.margins(Ui.lp(-2, Ui.tp(c, 60)), Ui.dp(c, 12), 0, 0, 0));
+        card.addView(btns, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, Ui.dp(c, 24), 0, 0));
+        dim.addView(card, new FrameLayout.LayoutParams(Ui.dp(c, 1180), -2, Gravity.CENTER));
+        root.addView(dim, new FrameLayout.LayoutParams(-1, -1));
+    }
+
     /** Avviso con elenco puntato e un solo pulsante (popup "Novità"). */
     public static void notice(FrameLayout root, Theme t, String title, String subtitle, String[] items, String ok, Runnable onClose) {
         Context c = root.getContext();

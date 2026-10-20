@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.8.1](releases/MG4Launcher-0.8.1.apk)**
+**Ultima versione / Latest version: [0.8.2](releases/MG4Launcher-0.8.2.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -20,6 +20,15 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
+![MG4 Launcher 0.8.2 — home (simulazione / mock-up)](docs/home-0.8.2.png)
+*Home 0.8.2: barra con i gruppi Clima e Comfort, LKA e OPD, mini player · 0.8.2 home: bar with the Climate and Comfort groups, LKA and OPD, mini player (mock-up).*
+
+![MG4 Launcher 0.8.2 — gruppo Clima aperto (simulazione / mock-up)](docs/home-0.8.2-clima.png)
+*Gruppo Clima aperto: A/C, AUTO, ricircolo · Climate group open: A/C, AUTO, recirculation (mock-up).*
+
+![MG4 Launcher 0.8.2 — gruppo Comfort aperto (simulazione / mock-up)](docs/home-0.8.2-comfort.png)
+*Gruppo Comfort aperto: sedili a 3 livelli e volante · Comfort group open: 3-level seats and steering wheel (mock-up).*
+
 ![MG4 Launcher 0.8.0 — home (simulazione / mock-up)](docs/home-0.8.0.png)
 *Home 0.8.0, notte, guida a sinistra · 0.8.0 home, night, left-hand drive (mock-up).*
 
@@ -105,15 +114,19 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
   - **Media**: mostra la sorgente che sta suonando (CarPlay/Android Auto compresi), altrimenti la radio; in alto un pulsante per ogni sorgente
     (Radio, USB, Bluetooth, Online, e CarPlay/Android Auto se il telefono è collegato). Per la radio: logo della stazione,
     pulsanti **FM / DAB** per cambiare banda, **elenco delle stazioni trovate** sulla banda attuale (a destra, tocca per
-    sintonizzare) e preferiti FM/DAB con i loghi. I loghi funzionano anche senza internet (pacchetto integrato e loghi
-    già scaricati) e puoi aggiungere i tuoi nella cartella **MG4Launcher/loghi** (memoria o chiavetta USB), un file
-    `nome.png` per stazione con il nome in minuscolo, solo lettere e cifre (es. `rtl1025.png`).
+    sintonizzare) e preferiti FM/DAB con i loghi (con il logo il nome non serve e non compare). I **pacchetti dei loghi
+    per paese** si scaricano una volta (paese automatico o scelto nelle impostazioni, anche più di uno) e poi
+    funzionano senza internet; si installano anche da chiavetta (`MG4Launcher/loghi/IT.zip`). Puoi aggiungere i tuoi
+    nella cartella **MG4Launcher/loghi** (memoria o chiavetta USB), un file `nome.png` per stazione con il nome in
+    minuscolo, solo lettere e cifre (es. `rtl1025.png`): hanno la priorità.
   - **CarPlay / Android Auto**: la scheda compare da sola quando colleghi il telefono; è una scorciatoia che apre
     CarPlay/Android Auto a schermo intero e, durante la navigazione, mostra la prossima manovra.
 - **Barra in basso**: clima con pulsanti grandi da usare in guida — temperatura ‹ › (17 = LO … 33 = HI),
   ventola ‹ › (OFF / 1…11 / A = automatico; tocca l'icona = app Clima, tieni premuto = accendi/spegni),
-  **A/C**, **AUTO**, **ricircolo** (se l'auto lo supporta), **sedili riscaldati** sinistro/destro (3 livelli) e **volante riscaldato** —, mini-player compatto, **fendinebbia** (anteriori se presenti
-  e retronebbia, che si può nascondere), Telefono, Radio, **360°**, Impostazioni. Con **Barra grande** i pulsanti del clima diventano più grandi.
+  i gruppi **Clima** (A/C, AUTO, ricircolo) e **Comfort** (sedili riscaldati a 3 livelli e volante riscaldato, solo quelli che l'auto ha):
+  un tocco apre sopra la barra le caselle grandi, la pressione lunga accende l'A/C o il sedile guida —, i pulsanti **LKA** e **OPD**
+  (se l'auto li ha), mini-player, **fendinebbia** (anteriori se presenti e retronebbia, che si può nascondere), Telefono, Radio,
+  **360°**, Impostazioni. Con **Barra grande** i pulsanti diventano più grandi; con *Pulsanti raggruppati* spento torna la barra con i pulsanti separati.
 - **In alto a destra**: indicatori di **Bluetooth**, **Wi-Fi** e rete **4G** della T-Box (con le tacche del segnale).
 - **App**: scorri la home verso sinistra per le app dell'auto e quelle che installi tu,
   con le icone tutte nello stesso stile; scorri verso destra per tornare. Con **Modifica** scegli quali app installate mostrare.
@@ -121,12 +134,12 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
 - **Impostazioni** (tieni premuta l'auto): a schermo intero, con un menu di cinque sezioni e la versione con lo stato
   degli aggiornamenti sempre visibile in basso (con **Installa** quando c'è una versione nuova):
   - **Auto**: colore dell'auto (con anteprima) e tetto nero;
-  - **Home**: data, percentuale batteria con decimali, pressione pneumatici e sua unità, **temperatura interna** (se l'auto la fornisce), pulsanti di ricarica, barra grande, pulsante retronebbia;
+  - **Home**: data, percentuale batteria con decimali, pressione pneumatici e sua unità, **temperatura interna** (se l'auto la fornisce), pulsanti di ricarica, barra grande, pulsante retronebbia, pulsanti raggruppati, pulsanti LKA/OPD, **loghi radio** (paese, stato dei pacchetti, Aggiorna, Elimina);
   - **Aspetto**: tema (automatico, notte, giorno), **dimensione dei comandi** (Normale, Grande, Molto grande), **lingua**;
   - **Guida**: **posizione di guida** (come l'auto, sinistra, destra: con la guida a destra la home si specchia e auto e
     clima passano dal lato del guidatore), home originale MG (il navigatore predefinito si sceglie tenendo premuto un
     pulsante della riga *Apri con* nella Mappa);
-  - **Sistema**: home predefinita, modalità officina, **Premi Home da solo dopo l'accensione**, aggiornamenti e avviso, invio automatico dei log, **Salva log**, diagnostica dei servizi.
+  - **Sistema**: home predefinita, modalità officina, **Premi Home da solo dopo l'accensione**, **CarPlay e Android Auto** (riavvio del dongle, attesa, *Riavvia CarPlay/AA*), aggiornamenti e avviso, invio automatico dei log, **Salva log**, diagnostica dei servizi.
   Si aprono anche dall'ingranaggio in alto a destra nella pagina App.
 - **Schermo intero**: barra di stato e dock MG nascosti (trascina dal bordo per richiamarli).
 - **Aggiornamenti**: le nuove versioni si scaricano e si installano dalle impostazioni, senza computer.
@@ -142,7 +155,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.8.1.apk
+   adb install -r -f MG4Launcher-0.8.2.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -213,6 +226,22 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.8.2
+- **Pulsanti raggruppati** nella barra: **Clima** (A/C, AUTO, ricircolo) e **Comfort** (sedili e volante riscaldati).
+  Un tocco apre sopra la barra un riquadro con le caselle grandi (si chiude toccando fuori o da solo dopo pochi secondi);
+  i sedili vanno spento → 1 → 2 → 3 → spento. Pressione lunga: A/C o sedile guida. Funzionano anche con la barra grande,
+  che ora ha di nuovo il mini player. Si possono spegnere nelle impostazioni (*Pulsanti raggruppati*).
+- **LKA** (mantenimento corsia) e **OPD** (One Pedal Drive) nella barra, con lo stato reale dell'auto: solo comando
+  manuale, nessun automatismo all'avvio. Compaiono solo se l'auto li ha; si possono nascondere.
+- **Pacchetti dei loghi radio per paese**: si scaricano una volta (con controllo dell'integrità) e poi funzionano senza
+  internet; paese automatico o scelta di uno o più paesi, *Aggiorna* ed *Elimina* nelle impostazioni, installazione da
+  chiavetta. Più nomi RDS riconosciuti. Con il logo il nome della stazione non compare.
+- **Riavvio del dongle CarPlay/Android Auto** che non si collega: solo con un dongle wireless riconosciuto (mai con un
+  telefono via cavo o una chiavetta), al massimo 2 tentativi per accensione, mai durante una chiamata. Attesa
+  regolabile e pulsante *Riavvia CarPlay/AA* nelle impostazioni.
+- Launcher più leggero: log senza le righe di sistema ripetitive, tolti testi e icone non più usati, immagini dell'auto
+  più leggere (identiche), i loghi non sono più dentro l'app.
 
 #### 0.8.1
 - **CarPlay / Android Auto**: indietro, play/pausa e avanti funzionano di nuovo (anche con gli adattatori wireless):
@@ -473,15 +502,19 @@ It replaces the original home screen, keeping its features, with a new, clean de
   - **Media**: shows the source that is playing (CarPlay/Android Auto included), otherwise the radio; one button per source at the top
     (Radio, USB, Bluetooth, Online, plus CarPlay/Android Auto when a phone is connected). For the radio: station logo,
     **FM / DAB** buttons to switch band, the **list of stations found** on the current band (on the right, tap to
-    tune in) and FM/DAB favourites with logos. Logos work offline too (built-in pack and logos already downloaded) and you
-    can add your own in the **MG4Launcher/loghi** folder (storage or USB stick), one `name.png` per station, lowercase,
-    letters and digits only (e.g. `rtl1025.png`).
+    tune in) and FM/DAB favourites with logos (with a logo the name is not needed and is not shown). **Logo packs per
+    country** are downloaded once (automatic country or chosen in settings, even more than one) and then work offline;
+    they can also be installed from a USB stick (`MG4Launcher/loghi/IT.zip`). You can add your own in the
+    **MG4Launcher/loghi** folder (storage or USB stick), one `name.png` per station, lowercase, letters and digits only
+    (e.g. `rtl1025.png`): they take priority.
   - **CarPlay / Android Auto**: the tab appears by itself when you connect a phone; it is a shortcut that opens
     CarPlay/Android Auto full screen and shows the next manoeuvre while navigating.
 - **Bottom bar**: climate with large buttons for use while driving — temperature ‹ › (17 = LO … 33 = HI),
-  fan ‹ › (OFF / 1…11 / A = auto; tap the icon = Climate app, long-press = climate on/off), **A/C**, **AUTO**, **recirculation** (if supported), left/right **heated seats** (3 levels) and **heated steering wheel** —,
-  compact mini player, **fog lights** (front if fitted, and rear, which can be hidden), Phone, Radio, **360°**, Settings.
-  With **Large bar** the climate buttons get bigger.
+  fan ‹ › (OFF / 1…11 / A = auto; tap the icon = Climate app, long-press = climate on/off), the **Climate** group (A/C, AUTO,
+  recirculation) and the **Comfort** group (3-level heated seats and heated steering wheel, only those the car has): one tap
+  opens the big tiles above the bar, a long press turns on A/C or the driver's seat —, **LKA** and **OPD** buttons (if the car has
+  them), mini player, **fog lights** (front if fitted, and rear, which can be hidden), Phone, Radio, **360°**, Settings.
+  With **Large bar** the buttons get bigger; with *Grouped buttons* off you get the bar with separate buttons back.
 - **Top right**: **Bluetooth**, **Wi-Fi** and T-Box **4G** indicators (with signal bars).
 - **Apps**: swipe the home screen left for the car's apps and the ones you install,
   all with matching icons; swipe right to go back. Use **Modifica** (Edit) to choose which installed apps to show.
@@ -489,12 +522,12 @@ It replaces the original home screen, keeping its features, with a new, clean de
 - **Settings** (long-press the car): full screen, with a menu of five sections and the version with the update status
   always visible at the bottom (with **Install** when a new version is out):
   - **Car**: car colour (with preview) and black roof;
-  - **Home**: date, battery percentage with decimals, tyre pressure and its unit, **interior temperature** (if the car provides it), charging buttons, large bar, rear fog button;
+  - **Home**: date, battery percentage with decimals, tyre pressure and its unit, **interior temperature** (if the car provides it), charging buttons, large bar, rear fog button, grouped buttons, LKA/OPD buttons, **radio logos** (country, pack status, Update, Delete);
   - **Appearance**: theme (auto, night, day), **control size** (Normal, Large, Extra large), **language**;
   - **Driving**: **driving side** (same as car, left, right: with right-hand drive the home is mirrored so the car and
     climate are on the driver's side), original MG home (the default navigator is chosen by long-pressing a button of
     the *Open with* row on the Map);
-  - **System**: default home, service mode, **Press Home automatically after power-on**, updates and update notice, automatic log upload, **Save log**, service diagnostics.
+  - **System**: default home, service mode, **Press Home automatically after power-on**, **CarPlay and Android Auto** (dongle restart, wait, *Restart CarPlay/AA*), updates and update notice, automatic log upload, **Save log**, service diagnostics.
   Also available from the gear at the top right of the Apps page.
 - **Full screen**: status bar and MG dock hidden (swipe from the edge to bring them back).
 - **Updates**: new versions download and install from the settings, no computer needed.
@@ -510,7 +543,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.8.1.apk
+   adb install -r -f MG4Launcher-0.8.2.apk
    ```
 3. Make it the default home:
    ```bash
@@ -582,6 +615,22 @@ the repository or a bug report help a lot too. Thank you!
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.8.2
+- **Grouped buttons** in the bar: **Climate** (A/C, AUTO, recirculation) and **Comfort** (heated seats and steering wheel).
+  One tap opens a panel with big tiles above the bar (it closes when you tap outside or by itself after a few seconds);
+  seats go off → 1 → 2 → 3 → off. Long press: A/C or driver's seat. They also work with the large bar, which now has the
+  mini player again. They can be turned off in settings (*Grouped buttons*).
+- **LKA** (lane keeping) and **OPD** (One Pedal Drive) in the bar, with the car's real state: manual command only, nothing
+  automatic at start-up. They only appear if the car has them; they can be hidden.
+- **Radio logo packs per country**: downloaded once (with an integrity check) and then they work offline; automatic
+  country or one or more countries of your choice, *Update* and *Delete* in settings, install from a USB stick. More RDS
+  names recognised. With a logo the station name is not shown.
+- **Restart of a CarPlay/Android Auto dongle** that does not connect: only with a recognised wireless dongle (never with a
+  wired phone or a USB stick), at most 2 attempts per start, never during a call. Adjustable wait and a *Restart
+  CarPlay/AA* button in settings.
+- Lighter launcher: logs without repetitive system lines, unused texts and icons removed, lighter car images (identical),
+  logos no longer inside the app.
 
 #### 0.8.1
 - **CarPlay / Android Auto**: previous, play/pause and next work again (also with wireless adapters): commands go

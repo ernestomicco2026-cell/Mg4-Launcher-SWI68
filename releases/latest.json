@@ -1,6 +1,6 @@
 {
-  "version": "0.8.1",
-  "apk": "releases/MG4Launcher-0.8.1.apk",
-  "size": 545604,
-  "notes": "CarPlay/Android Auto: indietro, play/pausa e avanti funzionano di nuovo. Protezione del servizio radio sui firmware SWI68 più vecchi."
+  "version": "0.8.2",
+  "apk": "releases/MG4Launcher-0.8.2.apk",
+  "size": 512206,
+  "notes": "Pulsanti raggruppati Clima e Comfort, LKA e OPD, pacchetti dei loghi radio per paese, riavvio del dongle CarPlay/AA che non si collega, launcher più leggero."
 }

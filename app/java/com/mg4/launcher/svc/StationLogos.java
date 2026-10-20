@@ -1,7 +1,6 @@
 package com.mg4.launcher.svc;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -33,7 +32,7 @@ import java.util.Set;
  * Loghi delle stazioni radio. Si cerca, in quest'ordine:
  * <ol>
  *   <li>cartella dell'utente {@code MG4Launcher/loghi/NOME.png} (memoria interna o chiavetta USB): ha la priorità;</li>
- *   <li>pacchetto integrato nell'app (assets/loghi), per le stazioni più comuni: funziona senza internet;</li>
+ *   <li>pacchetti dei paesi scaricati (LogoPacks, con i nomi alternativi RDS/DAB): funzionano senza internet;</li>
  *   <li>loghi già salvati nella memoria dell'app (trasmessi dalla stazione DAB o scaricati in passato);</li>
  *   <li>solo con la rete: ricerca per nome su radio-browser.info, poi salvato in modo permanente.</li>
  * </ol>
@@ -57,8 +56,9 @@ public final class StationLogos {
     private final Handler bg;
     private volatile Runnable onUpdate;
 
-    private final Set<String> builtin = new HashSet<>();
-    private final Map<String, String> aliases = new HashMap<>();
+    private final LogoPacks packs;
+    /** Nomi delle stazioni viste, con e senza logo (per la diagnostica: i nomi RDS da aggiungere agli alias). */
+    private final Set<String> seenWith = new java.util.TreeSet<>(), seenWithout = new java.util.TreeSet<>();
     private volatile Map<String, File> user = new HashMap<>();
     private long userScanAt;
     private long offlineUntil, offlineStep = OFFLINE_MIN_MS;
@@ -70,7 +70,15 @@ public final class StationLogos {
         dir.mkdirs();
         thread.start();
         bg = new Handler(thread.getLooper());
-        bg.post(this::loadBuiltin);
+        packs = LogoPacks.get(ctx);
+        packs.addListener(() -> {
+            synchronized (this) {
+                mem.clear();
+                missUntil.clear();
+            }
+            Runnable r = onUpdate;
+            if (r != null) r.run();
+        });
         bg.post(this::grantStorage);
         bg.post(this::scanUser);
     }
@@ -94,38 +102,6 @@ public final class StationLogos {
 
     private static String clean(String s) {
         return s == null ? "" : s.replaceAll("\\s+", " ").trim();
-    }
-
-    // ---- pacchetto integrato ---------------------------------------------------------------
-
-    private void loadBuiltin() {
-        try {
-            AssetManager am = ctx.getAssets();
-            String[] files = am.list("loghi");
-            if (files != null) for (String f : files) if (f.endsWith(".png")) builtin.add(f.substring(0, f.length() - 4));
-            try (InputStream in = am.open("loghi/alias.txt")) {
-                for (String line : new String(readAll(in), "UTF-8").split("\n")) {
-                    line = line.trim();
-                    int eq = line.indexOf('=');
-                    if (line.isEmpty() || line.startsWith("#") || eq <= 0) continue;
-                    aliases.put(norm(line.substring(0, eq)), norm(line.substring(eq + 1)));
-                }
-            } catch (Exception ignored) {
-            }
-        } catch (Exception e) {
-            Diag.error("loghi.integrati", e.toString());
-        }
-        Diag.put("loghi.integrati", builtin.size() + " loghi, " + aliases.size() + " nomi alternativi");
-    }
-
-    private Bitmap builtinLogo(String n) {
-        String name = builtin.contains(n) ? n : aliases.get(n);
-        if (name == null || !builtin.contains(name)) return null;
-        try (InputStream in = ctx.getAssets().open("loghi/" + name + ".png")) {
-            return BitmapFactory.decodeStream(in);
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     // ---- cartella dell'utente --------------------------------------------------------------
@@ -198,6 +174,28 @@ public final class StationLogos {
         }
     }
 
+    private Bitmap packLogo(String n) {
+        File f = packs.find(n);
+        return f == null ? null : decode(f);
+    }
+
+    private void seen(String name, boolean has) {
+        String nm = clean(name);
+        if (nm.length() < 2 || nm.matches("[0-9.,\\s]+( FM| MHz)?")) return;
+        boolean changed = has ? seenWith.add(nm) | seenWithout.remove(nm) : !seenWith.contains(nm) && seenWithout.add(nm);
+        if (!changed) return;
+        Diag.put("loghi.stazioni", seenWith.size() + " con logo, " + seenWithout.size() + " senza");
+        StringBuilder sb = new StringBuilder();
+        for (String s : seenWithout) {
+            if (sb.length() > 600) {
+                sb.append("…");
+                break;
+            }
+            sb.append(sb.length() == 0 ? "" : " | ").append(s);
+        }
+        Diag.put("loghi.senzaLogo", sb.length() == 0 ? "nessuna" : sb.toString());
+    }
+
     private static Bitmap decode(File f) {
         try {
             Bitmap b = BitmapFactory.decodeFile(f.getPath());
@@ -225,12 +223,13 @@ public final class StationLogos {
         File uf = user.get(k);
         if (uf == null && !n.isEmpty()) uf = user.get(n);
         if (uf != null) b = decode(uf);
-        if (b == null) b = builtinLogo(k);
-        if (b == null && !n.isEmpty() && !n.equals(k)) b = builtinLogo(n);
+        if (b == null) b = packLogo(k);
+        if (b == null && !n.isEmpty() && !n.equals(k)) b = packLogo(n);
         if (b == null) {
             File f = new File(dir, key + ".png");
             if (f.exists()) b = BitmapFactory.decodeFile(f.getPath());
         }
+        seen(name, b != null);
         if (b != null) {
             mem.put(key, b);
             return b;
@@ -239,7 +238,7 @@ public final class StationLogos {
         File none = new File(dir, key + ".none");
         boolean recentMiss = none.exists() && System.currentTimeMillis() - none.lastModified() < RETRY_MS;
         String nm = clean(name);
-        if (!recentMiss && nm.length() >= 2 && !nm.matches("[0-9.,\\s]+") && now >= offlineUntil && online() && pending.add(key)) {
+        if (!recentMiss && nm.length() >= 2 && !nm.matches("[0-9.,\\s]+( FM| MHz)?") && now >= offlineUntil && online() && pending.add(key)) {
             bg.post(() -> lookup(key, nm));
         }
         return null;
@@ -342,14 +341,6 @@ public final class StationLogos {
         if (b.getWidth() <= max && b.getHeight() <= max) return b;
         float k = max / (float) Math.max(b.getWidth(), b.getHeight());
         return Bitmap.createScaledBitmap(b, Math.round(b.getWidth() * k), Math.round(b.getHeight() * k), true);
-    }
-
-    private static byte[] readAll(InputStream in) throws Exception {
-        ByteArrayOutputStream bo = new ByteArrayOutputStream();
-        byte[] buf = new byte[16384];
-        int n;
-        while ((n = in.read(buf)) > 0) bo.write(buf, 0, n);
-        return bo.toByteArray();
     }
 
     private static byte[] fetch(String url, int maxBytes) throws Exception {

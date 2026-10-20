@@ -8,22 +8,11 @@
     <string name="charge_charging" formatted="false">Şarj oluyor</string>
     <string name="charge_fast" formatted="false">Hızlı şarj</string>
     <string name="charge_wireless" formatted="false">Kablosuz şarj</string>
-    <string name="charge_done" formatted="false">Şarj tamamlandı</string>
     <string name="charge_balancing" formatted="false">Batarya dengeleme</string>
-    <string name="charge_error" formatted="false">Şarj hatası</string>
-    <string name="charge_connecting" formatted="false">Bağlanıyor…</string>
-    <string name="charge_not_recognized" formatted="false">Takılı · tanınmadı</string>
-    <string name="charge_not_charging" formatted="false">Takılı · şarj olmuyor</string>
-    <string name="charge_stopped" formatted="false">Şarj durduruldu</string>
-    <string name="charge_scheduled" formatted="false">Planlı şarj</string>
-    <string name="charge_multiple" formatted="false">Çoklu şarj</string>
     <string name="v2l_active" formatted="false">V2L açık · harici güç</string>
-    <string name="v2l_stopped" formatted="false">V2L durduruldu</string>
-    <string name="v2l_done" formatted="false">V2L bitti</string>
     <string name="outside_temp">Dış %s°</string>
     <string name="ac_desc" formatted="false">Klima</string>
     <string name="auto_desc" formatted="false">Otomatik klima</string>
-    <string name="defrost_desc" formatted="false">Ön cam buz çözme</string>
     <string name="fog_front" formatted="false">Ön sis farları</string>
     <string name="fog_rear" formatted="false">Arka sis lambası</string>
     <string name="inside_temp">İç %s°</string>
@@ -32,17 +21,12 @@
     <string name="seat_left" formatted="false">Sol koltuk ısıtma</string>
     <string name="seat_right" formatted="false">Sağ koltuk ısıtma</string>
     <string name="wheel_heat" formatted="false">Direksiyon ısıtma</string>
-    <string name="display" formatted="false">GÖRÜNÜM</string>
-    <string name="soc_decimals" formatted="false">Ondalıklı batarya yüzdesi</string>
-    <string name="show_tpms" formatted="false">Aracın altında lastik basıncı</string>
-    <string name="log_upload_label" formatted="false">GÜNLÜK GÖNDERİMİ</string>
     <string name="log_upload_on" formatted="false">Günlükleri otomatik gönder</string>
     <string name="log_upload_last">Son gönderim %1$s</string>
     <string name="log_upload_never" formatted="false">Henüz günlük gönderilmedi (ilki başlangıçtan 90 sn sonra)</string>
     <string name="log_upload_error">Gönderilemedi (%1$s): daha sonra yeniden denenecek</string>
     <string name="log_upload_off" formatted="false">Günlük gönderimi kapalı</string>
     <string name="log_upload_nokey" formatted="false">Bu sürümde günlük gönderimi yok</string>
-    <string name="show_inside_temp" formatted="false">İç sıcaklık</string>
     <string name="sec_car" formatted="false">ARAÇ</string>
     <string name="sec_car_sub" formatted="false">Renk, tavan</string>
     <string name="sec_home" formatted="false">Ana ekran</string>
@@ -121,8 +105,6 @@
     <string name="drive_auto" formatted="false">Araç gibi</string>
     <string name="drive_left" formatted="false">Soldan direksiyon</string>
     <string name="drive_right" formatted="false">Sağdan direksiyon</string>
-    <string name="left" formatted="false">Sol</string>
-    <string name="right" formatted="false">Sağ</string>
     <string name="climate" formatted="false">Klima</string>
     <string name="tab_map" formatted="false">Harita</string>
     <string name="tab_media" formatted="false">Medya</string>
@@ -185,36 +167,17 @@
     <string name="app_sos" formatted="false">SOS çağrısı</string>
     <string name="app_android_settings" formatted="false">Android ayarları</string>
     <string name="app_android_files" formatted="false">Android dosyaları</string>
-    <string name="settings_title" formatted="false">Başlatıcı ayarları</string>
     <string name="settings_desc" formatted="false">Başlatıcı ayarları</string>
-    <string name="car_color" formatted="false">ARAÇ RENGİ</string>
-    <string name="black_roof" formatted="false">Siyah tavan</string>
     <string name="theme" formatted="false">TEMA</string>
-    <string name="language" formatted="false">DİL</string>
     <string name="lang_auto" formatted="false">Araçla aynı</string>
-    <string name="lang_auto_hint" formatted="false">Otomatik, aracın sistem dilini izler.</string>
-    <string name="default_nav" formatted="false">VARSAYILAN NAVİGASYON</string>
-    <string name="nav_auto_hint" formatted="false">Otomatik: CarPlay veya Android Auto bağlıysa telefonunki, değilse MG.</string>
     <string name="auto" formatted="false">Otomatik</string>
-    <string name="night" formatted="false">Gece</string>
     <string name="day" formatted="false">Gündüz</string>
-    <string name="open_original_home" formatted="false">Orijinal MG ana ekranını aç</string>
-    <string name="diag_title" formatted="false">ARAÇ HİZMETLERİ TANILAMA</string>
     <string name="save_log" formatted="false">Günlüğü kaydet</string>
-    <string name="save_log_hint" formatted="false">Günlüğü kaydet: USB bellek takılıysa dosya oraya da kaydedilir.</string>
     <string name="close" formatted="false">Kapat</string>
-    <string name="updates" formatted="false">GÜNCELLEMELER</string>
-    <string name="check_updates" formatted="false">Güncellemeleri denetle</string>
-    <string name="download_install" formatted="false">İndir ve yükle</string>
-    <string name="download_install_v">%s indir ve yükle</string>
-    <string name="busy" formatted="false">İşlem sürüyor…</string>
-    <string name="press_check" formatted="false">Yeni sürüm aramak için Denetle\'ye dokunun</string>
-    <string name="saving_log" formatted="false">Günlük kaydediliyor…</string>
     <string name="log_failed" formatted="false">Günlük hiçbir klasöre kaydedilemedi.</string>
     <string name="log_saved_usb" formatted="false">Günlük kaydedildi, USB belleğe de:</string>
     <string name="log_saved" formatted="false">Günlük kaydedildi:</string>
     <string name="log_usb_hint" formatted="false">USB belleğe almak için: takın ve tekrar Günlüğü kaydet\'e dokunun.</string>
-    <string name="waiting_services" formatted="false">Araç hizmetleri bekleniyor…</string>
     <string name="upd_checking" formatted="false">GitHub denetleniyor…</string>
     <string name="upd_no_apk">Son sürüm (%s) APK içermiyor</string>
     <string name="upd_available">Yeni sürüm mevcut: %s</string>
@@ -238,7 +201,6 @@
     <string name="upd_popup_text">MG4 Launcher %s kuruluma hazır</string>
     <string name="upd_later" formatted="false">Daha sonra</string>
     <string name="upd_now" formatted="false">Güncelle</string>
-    <string name="upd_popup_setting" formatted="false">Yeni güncelleme olduğunda bildir</string>
     <string name="upd_error_code">hata %d</string>
     <string name="btn_ok" formatted="false">Tamam</string>
     <string name="time_h_min">%1$d sa %2$d dk</string>
@@ -298,4 +260,52 @@
     <string name="news_6" formatted="false">«Açılıştan sonra Ana ekrana otomatik bas» seçeneği ve Lehçe dili</string>
     <string name="radio_protected" formatted="false">Bu yazılımın radyo hizmeti launcher\'a yanıt vermiyor: Radyo uygulamasını kullanın</string>
     <string name="news_7" formatted="false">Açılışta sabit ana ekran ve günlüklerden birçok düzeltme</string>
+    <string name="btn_change" formatted="false">Değiştir</string>
+    <string name="btn_update" formatted="false">Güncelle</string>
+    <string name="btn_delete" formatted="false">Sil</string>
+    <string name="set_logos_card" formatted="false">Radyo logoları</string>
+    <string name="set_logos_country" formatted="false">Radyo logoları: ülke</string>
+    <string name="logos_auto_sub">Otomatik: %s</string>
+    <string name="logos_pick_msg" formatted="false">Bir veya birden fazla ülke seçin (sınıra yakınsanız faydalı). Otomatik, sistem ülkesini kullanır.</string>
+    <string name="set_logos_state" formatted="false">Logo paketleri</string>
+    <string name="logos_not_downloaded" formatted="false">henüz indirilmedi (bir kez internet gerekir)</string>
+    <string name="logos_pack_state">sürüm %1$s · %2$d logo · %3$s</string>
+    <string name="logos_downloading" formatted="false">İndiriliyor…</string>
+    <string name="logos_offline" formatted="false">İnternet yok: bağlantı olunca indirilecek.</string>
+    <string name="logos_error" formatted="false">İndirme başarısız: 30 dakika sonra tekrar denenecek.</string>
+    <string name="logos_delete_title" formatted="false">Logolar silinsin mi?</string>
+    <string name="logos_delete_msg">%s paketi bellekten silinir. \"Güncelle\" ile yeniden indirilir.</string>
+    <string name="logos_delete_pick" formatted="false">Hangi paketi silmek istiyorsunuz?</string>
+    <string name="logos_usb_title" formatted="false">Radyo logoları bulundu</string>
+    <string name="logos_usb_msg">%2$s içinde %1$s için logo paketi var. Yüklensin mi? İnternetsiz de çalışır.</string>
+    <string name="group_clima" formatted="false">Klima</string>
+    <string name="group_comfort" formatted="false">Konfor</string>
+    <string name="tap_outside_close" formatted="false">kapatmak için dışarı dokunun</string>
+    <string name="lka_desc" formatted="false">Şerit takip asistanı (LKA)</string>
+    <string name="opd_desc" formatted="false">One Pedal Drive (OPD)</string>
+    <string name="opd_blocked" formatted="false">Araç şu anda One Pedal Drive değişikliğine izin vermiyor (şarjda veya koşullar uygun değil).</string>
+    <string name="set_grouped" formatted="false">Gruplanmış düğmeler</string>
+    <string name="set_grouped_sub" formatted="false">A/C, AUTO ve iç hava \"Klima\"da, koltuklar ve direksiyon \"Konfor\"da: bir dokunuş büyük kutuları açar</string>
+    <string name="set_assist" formatted="false">LKA ve OPD düğmeleri</string>
+    <string name="set_assist_sub" formatted="false">Şerit takibi ve One Pedal Drive, yalnızca elle: araç her çalıştırmada yeniden açar</string>
+    <string name="set_projection_card" formatted="false">CarPlay ve Android Auto</string>
+    <string name="set_dongle" formatted="false">Bağlanmazsa dongle\'ı yeniden başlat</string>
+    <string name="set_dongle_sub" formatted="false">Yalnızca tanınan kablosuz dongle ile, asla arama sırasında değil: her çalıştırmada en fazla 2 deneme</string>
+    <string name="set_dongle_delay" formatted="false">Çalıştırmadan sonra bekleme</string>
+    <string name="set_dongle_delay_sub" formatted="false">Bu sürede CarPlay veya Android Auto başlamazsa launcher devreye girer</string>
+    <string name="set_dongle_now" formatted="false">CarPlay/AA\'yı yeniden başlat</string>
+    <string name="set_dongle_now_sub" formatted="false">Dongle\'ı çıkarıp takmak gibi, ardından CarPlay/AA hizmeti yeniden başlatılır</string>
+    <string name="btn_restart" formatted="false">Yeniden başlat</string>
+    <string name="dongle_confirm" formatted="false">CarPlay ve Android Auto birkaç saniye durur, sonra yeniden bağlanır.</string>
+    <string name="dongle_in_call" formatted="false">Devam eden bir arama var: daha sonra tekrar deneyin.</string>
+    <string name="tile_auto" formatted="false">Otomatik</string>
+    <string name="tile_recirc" formatted="false">İç hava</string>
+    <string name="tile_seat_driver" formatted="false">Sürücü koltuğu</string>
+    <string name="tile_seat_passenger" formatted="false">Yolcu koltuğu</string>
+    <string name="tile_wheel" formatted="false">Direksiyon</string>
+    <string name="tile_on_f" formatted="false">Açık</string>
+    <string name="tile_off_f" formatted="false">Kapalı</string>
+    <string name="tile_on_m" formatted="false">Açık</string>
+    <string name="tile_off_m" formatted="false">Kapalı</string>
+    <string name="tile_level">Seviye %d</string>
 </resources>

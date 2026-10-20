@@ -123,6 +123,13 @@ public final class HomeView extends LinearLayout {
     private TextView fanTv, outTv, inTv;
     private LinearLayout tpmsRow, tpmsFront, tpmsRear;
     private FrameLayout seatLeftBtn, seatRightBtn, wheelBtn;
+    // 0.8.2: gruppi Clima / Comfort, LKA e OPD
+    private boolean grouped;
+    private FrameLayout climaGroup, comfortGroup;
+    private LinearLayout climaDots, comfortDots;
+    private TextView lkaBtn, opdBtn;
+    private View barView;
+    private GroupPopup popup;
     private ImageView outIcon;
 
     /** Spazio lasciato libero in alto a sinistra quando la barra di sistema disegna la spia luci. */
@@ -445,6 +452,13 @@ public final class HomeView extends LinearLayout {
         styleToggle(recircBtn, s.loopMode < 0 ? -1 : s.loopMode == 0 ? 1 : 0);
         styleToggle(frontFogBtn, s.frontFog, 0xFF34C77B);
         styleToggle(rearFogBtn, s.rearFog, 0xFFFFB020);
+        if (grouped) styleGroups(s);
+        boolean assist = prefs.showAssist();
+        lkaBtn.setVisibility(assist && s.lka >= 0 ? VISIBLE : GONE);
+        opdBtn.setVisibility(assist && s.opd >= 0 ? VISIBLE : GONE);
+        styleToggle(lkaBtn, s.lka);
+        styleToggle(opdBtn, s.opd);
+        if (popup != null) popup.refresh(s);
     }
 
     /** Testo di stato: solo durante ricarica o scarica (tipo · potenza · tempo rimanente), altrimenti vuoto. */
@@ -1078,8 +1092,11 @@ public final class HomeView extends LinearLayout {
         blp.setMargins(0, 0, dp(5), dp(5));
         box.addView(band, blp);
         tile.addView(box, new LayoutParams(dp(80), dp(80)));
-        TextView name = Ui.oneLine(Ui.text(c, st.label(), 14, current ? t.text : t.sub, Ui.MEDIUM));
+        // con il logo il nome non serve: resta la frequenza FM (DAB: solo il logo)
+        String under = st.logo == null ? st.label() : st.band == MediaClient.BAND_DAB ? "" : String.format(L.locale(), "%.1f", st.khz / 1000f);
+        TextView name = Ui.oneLine(Ui.text(c, under, 14, current ? t.text : t.sub, Ui.MEDIUM));
         name.setGravity(Gravity.CENTER);
+        if (under.isEmpty()) name.setVisibility(INVISIBLE);
         tile.addView(name, Ui.margins(new LayoutParams(dp(96), -2), 0, dp(6), 0, 0));
         tile.setPadding(dp(4), dp(4), dp(4), dp(4));
         return tile;
@@ -1118,9 +1135,14 @@ public final class HomeView extends LinearLayout {
         }
         row.addView(box, new LayoutParams(tp(44), tp(44)));
         LinearLayout tx = Ui.column(c);
-        tx.addView(Ui.oneLine(Ui.text(c, st.label(), ts(18), t.text, current ? Ui.MEDIUM : Ui.REGULAR)));
         String sub = st.band == MediaClient.BAND_DAB ? "DAB+" : String.format(L.locale(), "FM %.1f MHz", st.khz / 1000f);
-        tx.addView(Ui.oneLine(Ui.text(c, sub, ts(14), t.sub, Ui.REGULAR)));
+        if (st.logo == null) {
+            tx.addView(Ui.oneLine(Ui.text(c, st.label(), ts(18), t.text, current ? Ui.MEDIUM : Ui.REGULAR)));
+            tx.addView(Ui.oneLine(Ui.text(c, sub, ts(14), t.sub, Ui.REGULAR)));
+        } else {
+            // con il logo il nome non serve: solo frequenza o DAB+
+            tx.addView(Ui.oneLine(Ui.text(c, sub, ts(18), current ? t.text : t.sub, current ? Ui.MEDIUM : Ui.REGULAR)));
+        }
         row.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(12), 0, 0, 0));
         if (current) row.addView(Ui.icon(c, R.drawable.ic_wave, t.text, 20), new LayoutParams(dp(20), dp(20)));
         return row;
@@ -1399,49 +1421,73 @@ public final class HomeView extends LinearLayout {
         fanGroup.addView(barIcon(c, R.drawable.ic_chev_right, t.text, 0, arrow, arrowIcon, rad, L.s(R.string.fan_up), v -> changeFan(1)));
         bar.addView(fanGroup, Ui.margins(new LayoutParams(-2, btn), dp(10), 0, 0, 0));
 
-        // A/C, AUTO e ricircolo (lo sbrinamento ha il tasto fisico)
+        // A/C, AUTO e ricircolo (lo sbrinamento ha il tasto fisico); riscaldamento: sedile sinistro, volante, sedile destro
         acBtn = toggleText(c, "A/C", L.s(R.string.ac_desc), v -> vehicle.toggleAc());
-        bar.addView(acBtn, Ui.margins(new LayoutParams(btn, btn), dp(10), 0, 0, 0));
         autoBtn = toggleText(c, "AUTO", L.s(R.string.auto_desc), v -> vehicle.toggleAuto());
-        bar.addView(autoBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
         recircBtn = toggleIcon(c, R.drawable.ic_recirc, L.s(R.string.recirc_desc), v -> vehicle.toggleRecirc());
         recircBtn.setVisibility(GONE);   // compare quando l'auto dice di supportarlo
-        bar.addView(recircBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
-        // riscaldamento: sedile sinistro, volante, sedile destro
-        // in un gruppo unico, così con la guida a destra il sedile sinistro resta a sinistra
-        LinearLayout heat = Ui.row(c);
         seatLeftBtn = heatButton(c, R.drawable.ic_seat_heat, false, L.s(R.string.seat_left), v -> vehicle.pressSeatLeft());
-        heat.addView(seatLeftBtn, new LayoutParams(btn, btn));
         wheelBtn = toggleIcon(c, R.drawable.ic_wheel_heat, L.s(R.string.wheel_heat), v -> vehicle.toggleWheelHeat());
-        heat.addView(wheelBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
         seatRightBtn = heatButton(c, R.drawable.ic_seat_heat, true, L.s(R.string.seat_right), v -> vehicle.pressSeatRight());
-        heat.addView(seatRightBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
-        bar.addView(heat, Ui.margins(new LayoutParams(-2, -2), dp(8), 0, 0, 0));
+        grouped = prefs.groupedButtons();
+        if (grouped) {
+            // un pulsante per gruppo: il tocco apre il riquadro sopra la barra, la pressione lunga fa il comando principale
+            climaGroup = groupButton(c, true);
+            bar.addView(climaGroup, Ui.margins(new LayoutParams(groupWidth(), btn), dp(10), 0, 0, 0));
+            comfortGroup = groupButton(c, false);
+            comfortGroup.setVisibility(GONE);   // compare quando l'auto dice di avere almeno un comando
+            bar.addView(comfortGroup, Ui.margins(new LayoutParams(groupWidth(), btn), dp(8), 0, 0, 0));
+        } else {
+            bar.addView(acBtn, Ui.margins(new LayoutParams(btn, btn), dp(10), 0, 0, 0));
+            bar.addView(autoBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
+            bar.addView(recircBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
+            // in un gruppo unico, così con la guida a destra il sedile sinistro resta a sinistra
+            LinearLayout heat = Ui.row(c);
+            heat.addView(seatLeftBtn, new LayoutParams(btn, btn));
+            heat.addView(wheelBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
+            heat.addView(seatRightBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
+            bar.addView(heat, Ui.margins(new LayoutParams(-2, -2), dp(8), 0, 0, 0));
+        }
+        // assistenza alla guida: solo comando manuale, stile come AUTO (bianco = attivo); nascosti se l'auto non li ha
+        lkaBtn = toggleText(c, "LKA", L.s(R.string.lka_desc), v -> vehicle.toggleLka());
+        lkaBtn.setVisibility(GONE);
+        bar.addView(lkaBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
+        opdBtn = toggleText(c, "OPD", L.s(R.string.opd_desc), v -> {
+            VehicleClient.State st = vehicle.last();
+            if (st.opdInhibit > 0 && st.opd == 0) {
+                android.widget.Toast.makeText(getContext(), L.s(R.string.opd_blocked), android.widget.Toast.LENGTH_LONG).show();
+            }
+            vehicle.toggleOpd();
+        });
+        opdBtn.setVisibility(GONE);
+        bar.addView(opdBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
+        bar.addView(new View(c), new LayoutParams(dp(8), 1));
 
         // mini-player compatto (unico elemento elastico). Con i comandi molto grandi o la barra grande lascia il posto ai
         // pulsanti: la musica resta nel pannello Media.
-        boolean showMini = !big && Ui.K < 1.25f;
-        if (showMini) bar.addView(Ui.divider(c, t.track, 48));
+        // con i gruppi c'è spazio anche con la barra grande
+        boolean showMini = grouped ? Ui.K < 1.5f : !big && Ui.K < 1.25f;
+        if (showMini) bar.addView(Ui.divider(c, t.track, big ? 72 : 48));
         LinearLayout mini = Ui.row(c);
         mini.setGravity(Gravity.CENTER_VERTICAL);
         mini.setPadding(dp(6), 0, dp(4), 0);
         miniArt = Ui.icon(c, R.drawable.ic_radio, t.sub, 26);
         FrameLayout artBox = new FrameLayout(c);
-        artBox.setBackground(Ui.round(t.chip, tp(12)));
-        artBox.addView(miniArt, new FrameLayout.LayoutParams(tp(26), tp(26), Gravity.CENTER));
-        mini.addView(artBox, new LayoutParams(tp(48), tp(48)));
+        artBox.setBackground(Ui.round(t.chip, big ? dp(16) : tp(12)));
+        artBox.addView(miniArt, new FrameLayout.LayoutParams(bs(26, 40), bs(26, 40), Gravity.CENTER));
+        mini.addView(artBox, new LayoutParams(bs(48, 76), bs(48, 76)));
         LinearLayout mt = Ui.column(c);
-        miniTitle = Ui.oneLine(Ui.text(c, "", ts(17), t.text, Ui.MEDIUM));
-        miniSub = Ui.oneLine(Ui.text(c, "", ts(14), t.sub, Ui.REGULAR));
+        miniTitle = Ui.oneLine(Ui.text(c, "", bt(17, 22), t.text, Ui.MEDIUM));
+        miniSub = Ui.oneLine(Ui.text(c, "", bt(14, 18), t.sub, Ui.REGULAR));
         mt.addView(miniTitle);
         mt.addView(miniSub, Ui.margins(new LayoutParams(-2, -2), 0, dp(2), 0, 0));
         mini.addView(mt, Ui.margins(Ui.lpWeight(0, -2, 1), dp(12), 0, dp(4), 0));
         mini.setClickable(true);
         mini.setOnClickListener(v -> selectTab(TAB_MEDIA, true));
-        FrameLayout mp = Ui.iconButton(c, t, R.drawable.ic_pause, t.text, 0, 52, 26, 26, L.s(R.string.play_pause), v -> media.playPause());
+        FrameLayout mp = Ui.iconButton(c, t, R.drawable.ic_pause, t.text, 0, big ? 76 : 52, big ? 36 : 26, 26, L.s(R.string.play_pause), v -> media.playPause());
         miniPlayIcon = (ImageView) mp.getChildAt(0);
         mini.addView(mp);
-        mini.addView(Ui.iconButton(c, t, R.drawable.ic_next, t.text, 0, 52, 24, 26, L.s(R.string.next), v -> media.skip(true)));
+        mini.addView(Ui.iconButton(c, t, R.drawable.ic_next, t.text, 0, big ? 76 : 52, big ? 34 : 24, 26, L.s(R.string.next), v -> media.skip(true)));
         if (showMini) bar.addView(mini, Ui.lpWeight(0, -1, 1));
         else bar.addView(Ui.spacer(c));
 
@@ -1466,6 +1512,7 @@ public final class HomeView extends LinearLayout {
         if (!big) bar.addView(shortcut(c, R.drawable.ic_gear, L.s(R.string.app_settings), "com.saicmotor.hmi.systemsettings", "com.saicmotor.hmi.systemsettings.SettingsActivity"));
         // le app si aprono scorrendo la home verso sinistra: niente pulsante dedicato
         if (rhd) mirrorRow(bar);
+        barView = bar;
         return bar;
     }
 
@@ -1640,6 +1687,334 @@ public final class HomeView extends LinearLayout {
             f.setOnClickListener(null);
         }
         return f;
+    }
+
+    // =========================================================================================
+    // Gruppi Clima / Comfort (0.8.2): grafica come gli esempi approvati (esempio-barra, -clima-aperto, -comfort-aperto)
+    // =========================================================================================
+
+    private static final int HEAT = 0xFFFF7A3D;
+
+    private int groupWidth() {
+        return bs(76, BIG_BTN);
+    }
+
+    /**
+     * Pulsante del gruppo, grande come AUTO: Clima = "A/C" + icona ricircolo, Comfort = sedile + volante (arancioni se
+     * accesi). Sotto, un puntino per ogni comando acceso (bianchi per Clima, arancioni per Comfort).
+     */
+    private FrameLayout groupButton(Context c, boolean clima) {
+        FrameLayout f = new FrameLayout(c);
+        f.setBackground(Ui.pressable(c, t.chip, big ? 24 : 20 * Ui.K, t));
+        f.setContentDescription(L.s(clima ? R.string.group_clima : R.string.group_comfort));
+        f.setClickable(true);
+        LinearLayout content = Ui.row(c);
+        content.setGravity(Gravity.CENTER);
+        int ic = bs(22, 32);
+        if (clima) {
+            content.addView(Ui.text(c, "A/C", bt(15, 21), t.text, Ui.MEDIUM));
+            content.addView(Ui.icon(c, R.drawable.ic_recirc, t.text, 22), Ui.margins(new LayoutParams(ic, ic), bs(5, 7), 0, 0, 0));
+        } else {
+            content.addView(Ui.icon(c, R.drawable.ic_seat_heat, t.text, 22), new LayoutParams(ic, ic));
+            content.addView(Ui.icon(c, R.drawable.ic_wheel_heat, t.text, 22), Ui.margins(new LayoutParams(ic, ic), bs(10, 14), 0, 0, 0));
+        }
+        FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER);
+        cl.bottomMargin = bs(8, 12);
+        f.addView(content, cl);
+        LinearLayout dots = Ui.row(c);
+        dots.setGravity(Gravity.CENTER);
+        for (int i = 0; i < 3; i++) {
+            View d = new View(c);
+            d.setBackground(Ui.round(clima ? t.text : HEAT, dp(3)));
+            d.setVisibility(GONE);
+            dots.addView(d, Ui.margins(new LayoutParams(bs(6, 9), bs(6, 9)), i == 0 ? 0 : bs(4, 6), 0, 0, 0));
+        }
+        FrameLayout.LayoutParams dl = new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+        dl.bottomMargin = bs(9, 14);
+        f.addView(dots, dl);
+        if (clima) climaDots = dots;
+        else comfortDots = dots;
+        f.setOnClickListener(v -> openGroup(clima));
+        f.setOnLongClickListener(v -> {
+            if (clima) vehicle.toggleAc();
+            else vehicle.stepSeat(true);
+            return true;
+        });
+        return f;
+    }
+
+    private static void showDots(LinearLayout dots, int on) {
+        for (int i = 0; i < dots.getChildCount(); i++) dots.getChildAt(i).setVisibility(i < on ? VISIBLE : GONE);
+    }
+
+    private void styleGroups(VehicleClient.State s) {
+        int recirc = s.loopMode < 0 ? -1 : s.loopMode == 0 ? 1 : 0;
+        showDots(climaDots, (s.acOn == 1 ? 1 : 0) + (s.autoOn == 1 ? 1 : 0) + (recirc == 1 ? 1 : 0));
+        climaGroup.setAlpha(s.acOn < 0 && s.autoOn < 0 ? 0.45f : 1f);
+        boolean seatOn = s.seatLeft > 0 || s.seatRight > 0;
+        showDots(comfortDots, (s.seatLeft > 0 ? 1 : 0) + (s.wheelHeat > 0 ? 1 : 0) + (s.seatRight > 0 ? 1 : 0));
+        LinearLayout icons = (LinearLayout) comfortGroup.getChildAt(0);
+        ((ImageView) icons.getChildAt(0)).setColorFilter(seatOn ? HEAT : t.text);
+        ((ImageView) icons.getChildAt(1)).setColorFilter(s.wheelHeat > 0 ? HEAT : t.text);
+        icons.getChildAt(0).setVisibility(s.seatLeft >= 0 || s.seatRight >= 0 ? VISIBLE : GONE);
+        icons.getChildAt(1).setVisibility(s.wheelHeat >= 0 ? VISIBLE : GONE);
+        boolean any = s.seatLeft >= 0 || s.seatRight >= 0 || s.wheelHeat >= 0;
+        comfortGroup.setVisibility(any ? VISIBLE : GONE);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (popup != null) popup.close();
+    }
+
+    private void openGroup(boolean clima) {
+        if (popup != null) popup.close();
+        popup = new GroupPopup(clima);
+        popup.show();
+    }
+
+    /** Schermo scurito tranne il pulsante del gruppo aperto, che resta in chiaro con il bordo (bianco o arancione). */
+    private final class Dimmer extends FrameLayout {
+        final android.graphics.Paint p = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+        final android.graphics.RectF hole = new android.graphics.RectF();
+        final android.graphics.Path path = new android.graphics.Path();
+        int ring;
+        float radius;
+
+        Dimmer(Context c) {
+            super(c);
+            setWillNotDraw(false);
+        }
+
+        @Override
+        protected void dispatchDraw(android.graphics.Canvas cv) {
+            path.reset();
+            path.setFillType(android.graphics.Path.FillType.EVEN_ODD);
+            path.addRect(0, 0, getWidth(), getHeight(), android.graphics.Path.Direction.CW);
+            if (!hole.isEmpty()) path.addRoundRect(hole, radius, radius, android.graphics.Path.Direction.CW);
+            p.setStyle(android.graphics.Paint.Style.FILL);
+            p.setColor(t.day ? 0x80000000 : 0x99000000);
+            cv.drawPath(path, p);
+            if (!hole.isEmpty()) {
+                p.setStyle(android.graphics.Paint.Style.STROKE);
+                p.setStrokeWidth(dp(3));
+                p.setColor(ring);
+                android.graphics.RectF r = new android.graphics.RectF(hole);
+                r.inset(-dp(2), -dp(2));
+                cv.drawRoundRect(r, radius + dp(2), radius + dp(2), p);
+            }
+            super.dispatchDraw(cv);
+        }
+    }
+
+    /**
+     * Riquadro sopra la barra con le caselle grandi, come negli esempi: titolo a sinistra, "tocca fuori per chiudere" a
+     * destra, nessuna X, punta verso il pulsante. Si chiude toccando fuori o da solo dopo 6 secondi senza tocchi.
+     */
+    private final class GroupPopup {
+        private static final long AUTO_CLOSE_MS = 6000;
+        final boolean clima;
+        final Dimmer catcher;
+        final LinearLayout card, tiles;
+        final View arrow;
+        final Runnable closer = this::close;
+        final java.util.List<FrameLayout> tileViews = new java.util.ArrayList<>();
+
+        GroupPopup(boolean clima) {
+            this.clima = clima;
+            Context c = getContext();
+            catcher = new Dimmer(c);
+            catcher.ring = clima ? t.text : HEAT;
+            catcher.radius = dp(big ? 24 : 20 * Ui.K);
+            catcher.setClickable(true);
+            catcher.setOnClickListener(v -> close());
+            card = Ui.column(c);
+            card.setClickable(true);
+            android.graphics.drawable.GradientDrawable bg = new android.graphics.drawable.GradientDrawable();
+            bg.setColor(t.panel);
+            bg.setCornerRadius(dp(28));
+            bg.setStroke(dp(1), t.track);
+            card.setBackground(bg);
+            card.setPadding(dp(32), dp(24), dp(32), dp(30));
+            LinearLayout head = Ui.row(c);
+            head.setGravity(Gravity.CENTER_VERTICAL);
+            TextView title = Ui.text(c, L.s(clima ? R.string.group_clima : R.string.group_comfort).toUpperCase(L.locale()), 16, t.sub, Ui.MEDIUM);
+            title.setLetterSpacing(0.12f);
+            head.addView(title, Ui.lpWeight(0, -2, 1));
+            head.addView(Ui.text(c, L.s(R.string.tap_outside_close), 15, t.sub, Ui.REGULAR), Ui.margins(new LayoutParams(-2, -2), dp(40), 0, 0, 0));
+            card.addView(head, new LayoutParams(-1, -2));
+            tiles = Ui.row(c);
+            card.addView(tiles, Ui.margins(new LayoutParams(-2, -2), 0, dp(24), 0, 0));
+            buildTiles(c);
+            arrow = new View(c) {
+                final android.graphics.Paint ap = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+                final android.graphics.Path tri = new android.graphics.Path();
+
+                @Override
+                protected void onDraw(android.graphics.Canvas cv) {
+                    tri.reset();
+                    tri.moveTo(0, 0);
+                    tri.lineTo(getWidth(), 0);
+                    tri.lineTo(getWidth() / 2f, getHeight());
+                    tri.close();
+                    ap.setColor(t.panel);
+                    cv.drawPath(tri, ap);
+                }
+            };
+            catcher.addView(card, new FrameLayout.LayoutParams(-2, -2));
+            catcher.addView(arrow, new FrameLayout.LayoutParams(dp(28), dp(14)));
+            card.setVisibility(INVISIBLE);
+            arrow.setVisibility(INVISIBLE);
+            card.addOnLayoutChangeListener((v, l, tp, r, b, ol, ot, or, ob) -> place());
+            refresh(vehicle.last());
+        }
+
+        private void buildTiles(Context c) {
+            VehicleClient.State s = vehicle.last();
+            if (clima) {
+                addTile(c, "ac", "A/C", 0, L.s(R.string.ac_desc), v -> vehicle.toggleAc());
+                addTile(c, "auto", "AUTO", 0, L.s(R.string.tile_auto), v -> vehicle.toggleAuto());
+                if (s.loopMode >= 0) addTile(c, "recirc", null, R.drawable.ic_recirc, L.s(R.string.tile_recirc), v -> vehicle.toggleRecirc());
+            } else {
+                if (s.seatLeft >= 0) addTile(c, "seatL", null, R.drawable.ic_seat_heat, L.s(R.string.tile_seat_driver), v -> vehicle.stepSeat(true));
+                if (s.wheelHeat >= 0) addTile(c, "wheel", null, R.drawable.ic_wheel_heat, L.s(R.string.tile_wheel), v -> vehicle.toggleWheelHeat());
+                if (s.seatRight >= 0) addTile(c, "seatR", null, R.drawable.ic_seat_heat, L.s(R.string.tile_seat_passenger), v -> vehicle.stepSeat(false));
+            }
+        }
+
+        /** Casella: scritta grande o icona, nome, stato sotto (Accesa / Spento / Livello 2) e, per Comfort, le tacche. */
+        private void addTile(Context c, String id, String text, int icon, String name, View.OnClickListener l) {
+            int w = big ? dp(210) : tp(185), h = big ? dp(256) : tp(228);
+            FrameLayout f = new FrameLayout(c);
+            f.setContentDescription(name);
+            f.setClickable(true);
+            f.setOnClickListener(v -> {
+                l.onClick(v);
+                touched();
+            });
+            LinearLayout col = Ui.column(c);
+            col.setGravity(Gravity.CENTER_HORIZONTAL);
+            View main;
+            int mh = big ? dp(66) : tp(58);
+            if (text != null) {
+                TextView tv = Ui.text(c, text, big ? 50 : ts(44), t.text, Ui.REGULAR);
+                tv.setGravity(Gravity.CENTER);
+                main = tv;
+                col.addView(tv, new LayoutParams(-2, mh));
+            } else {
+                ImageView iv = Ui.icon(c, icon, t.text, 48);
+                iv.setPadding(dp(4), dp(4), dp(4), dp(4));
+                main = iv;
+                col.addView(iv, new LayoutParams(mh, mh));
+            }
+            TextView nm = Ui.oneLine(Ui.text(c, name, big ? 22 : ts(20), t.text, Ui.REGULAR));
+            nm.setGravity(Gravity.CENTER);
+            col.addView(nm, Ui.margins(new LayoutParams(w - dp(10), -2), 0, dp(10), 0, 0));
+            TextView st = Ui.oneLine(Ui.text(c, "", big ? 18 : ts(16), t.sub, Ui.REGULAR));
+            st.setGravity(Gravity.CENTER);
+            col.addView(st, Ui.margins(new LayoutParams(w - dp(10), -2), 0, dp(4), 0, 0));
+            LinearLayout notches = Ui.row(c);
+            if (!clima) {
+                int n = id.equals("wheel") ? 1 : 3;
+                for (int i = 0; i < n; i++) {
+                    View d = new View(c);
+                    notches.addView(d, Ui.margins(new LayoutParams(big ? dp(34) : tp(30), big ? dp(7) : tp(6)), i == 0 ? 0 : dp(7), 0, 0, 0));
+                }
+            }
+            col.addView(notches, Ui.margins(new LayoutParams(-2, -2), 0, dp(14), 0, 0));
+            FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER);
+            f.addView(col, flp);
+            f.setTag(new Object[]{id, main, nm, st, notches});
+            tiles.addView(f, Ui.margins(new LayoutParams(w, h), tileViews.isEmpty() ? 0 : dp(20), 0, 0, 0));
+            tileViews.add(f);
+        }
+
+        void refresh(VehicleClient.State s) {
+            for (FrameLayout v : tileViews) {
+                Object[] tag = (Object[]) v.getTag();
+                String id = (String) tag[0];
+                int state, level = -1;
+                switch (id) {
+                    case "ac": state = s.acOn; break;
+                    case "auto": state = s.autoOn; break;
+                    case "recirc": state = s.loopMode < 0 ? -1 : s.loopMode == 0 ? 1 : 0; break;
+                    case "wheel": state = s.wheelHeat; level = s.wheelHeat > 0 ? 1 : 0; break;
+                    default:
+                        level = id.equals("seatL") ? s.seatLeft : s.seatRight;
+                        state = level < 0 ? -1 : level > 0 ? 1 : 0;
+                }
+                boolean on = state == 1;
+                v.setAlpha(state < 0 ? 0.45f : 1f);
+                float rad = dp(big ? 24 : 20 * Ui.K);
+                TextView nm = (TextView) tag[2], st = (TextView) tag[3];
+                String stateText = state < 0 ? "—" : (id.equals("seatL") || id.equals("seatR")) && on ? L.f(R.string.tile_level, level)
+                        : id.equals("ac") ? L.s(on ? R.string.tile_on_f : R.string.tile_off_f) : L.s(on ? R.string.tile_on_m : R.string.tile_off_m);
+                st.setText(stateText);
+                android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
+                g.setCornerRadius(rad);
+                if (clima) {
+                    // accesa = casella bianca con testo scuro, come il pulsante A/C
+                    g.setColor(on ? t.text : t.chip);
+                    int fg = on ? t.panel : t.text;
+                    if (tag[1] instanceof TextView) ((TextView) tag[1]).setTextColor(fg);
+                    else ((ImageView) tag[1]).setColorFilter(fg);
+                    nm.setTextColor(fg);
+                    st.setTextColor(on ? (t.panel & 0x00FFFFFF) | 0xB3000000 : t.sub);
+                } else {
+                    // accesa = sfondo caldo, bordo arancione, icona e stato arancioni, tacche del livello
+                    g.setColor(on ? (t.day ? 0xFFFFF1EA : 0xFF2E241F) : t.chip);
+                    if (on) g.setStroke(dp(2), HEAT);
+                    ((ImageView) tag[1]).setColorFilter(on ? HEAT : t.text);
+                    nm.setTextColor(t.text);
+                    st.setTextColor(on ? HEAT : t.sub);
+                    LinearLayout notches = (LinearLayout) tag[4];
+                    for (int i = 0; i < notches.getChildCount(); i++) {
+                        notches.getChildAt(i).setBackground(Ui.round(i < level ? HEAT : t.track, dp(3)));
+                    }
+                }
+                v.setBackground(new android.graphics.drawable.RippleDrawable(
+                        android.content.res.ColorStateList.valueOf(t.day ? 0x22000000 : 0x33FFFFFF), g, null));
+            }
+        }
+
+        /** Riquadro centrato sopra il pulsante del gruppo (dentro lo schermo), punta sul pulsante, buco nello scuro. */
+        private void place() {
+            View anchor = clima ? climaGroup : comfortGroup;
+            if (anchor == null || barView == null || card.getWidth() == 0) return;
+            int[] a = new int[2], root = new int[2], bar = new int[2];
+            anchor.getLocationOnScreen(a);
+            catcher.getLocationOnScreen(root);
+            barView.getLocationOnScreen(bar);
+            float ax = a[0] - root[0], ay = a[1] - root[1];
+            catcher.hole.set(ax, ay, ax + anchor.getWidth(), ay + anchor.getHeight());
+            float cx = ax + anchor.getWidth() / 2f;
+            float x = Math.max(dp(20), Math.min(catcher.getWidth() - card.getWidth() - dp(20), cx - card.getWidth() / 2f));
+            float y = bar[1] - root[1] - card.getHeight() - dp(20);
+            card.setX(x);
+            card.setY(y);
+            arrow.setX(cx - arrow.getWidth() / 2f);
+            arrow.setY(y + card.getHeight() - 1);
+            card.setVisibility(VISIBLE);
+            arrow.setVisibility(VISIBLE);
+            catcher.invalidate();
+        }
+
+        void show() {
+            host.overlay().addView(catcher, new FrameLayout.LayoutParams(-1, -1));
+            touched();
+        }
+
+        void touched() {
+            catcher.removeCallbacks(closer);
+            catcher.postDelayed(closer, AUTO_CLOSE_MS);
+        }
+
+        void close() {
+            catcher.removeCallbacks(closer);
+            if (catcher.getParent() != null) ((ViewGroup) catcher.getParent()).removeView(catcher);
+            if (popup == this) popup = null;
+        }
     }
 
     private static String tempLabel(int v) {

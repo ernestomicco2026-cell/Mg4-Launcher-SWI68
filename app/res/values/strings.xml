@@ -8,22 +8,11 @@
     <string name="charge_charging" formatted="false">Charging</string>
     <string name="charge_fast" formatted="false">Fast charging</string>
     <string name="charge_wireless" formatted="false">Wireless charging</string>
-    <string name="charge_done" formatted="false">Charging complete</string>
     <string name="charge_balancing" formatted="false">Battery balancing</string>
-    <string name="charge_error" formatted="false">Charging error</string>
-    <string name="charge_connecting" formatted="false">Connecting…</string>
-    <string name="charge_not_recognized" formatted="false">Plugged in · not recognised</string>
-    <string name="charge_not_charging" formatted="false">Plugged in · not charging</string>
-    <string name="charge_stopped" formatted="false">Charging stopped</string>
-    <string name="charge_scheduled" formatted="false">Scheduled charging</string>
-    <string name="charge_multiple" formatted="false">Multiple charging</string>
     <string name="v2l_active" formatted="false">V2L on · powering external devices</string>
-    <string name="v2l_stopped" formatted="false">V2L stopped</string>
-    <string name="v2l_done" formatted="false">V2L finished</string>
     <string name="outside_temp">%s° outside</string>
     <string name="ac_desc" formatted="false">Air conditioning</string>
     <string name="auto_desc" formatted="false">Automatic climate</string>
-    <string name="defrost_desc" formatted="false">Windscreen defrost</string>
     <string name="fog_front" formatted="false">Front fog lights</string>
     <string name="fog_rear" formatted="false">Rear fog light</string>
     <string name="inside_temp">%s° inside</string>
@@ -32,17 +21,12 @@
     <string name="seat_left" formatted="false">Left heated seat</string>
     <string name="seat_right" formatted="false">Right heated seat</string>
     <string name="wheel_heat" formatted="false">Heated steering wheel</string>
-    <string name="display" formatted="false">DISPLAY</string>
-    <string name="soc_decimals" formatted="false">Battery percentage with decimals</string>
-    <string name="show_tpms" formatted="false">Tyre pressure under the car</string>
-    <string name="log_upload_label" formatted="false">LOG UPLOAD</string>
     <string name="log_upload_on" formatted="false">Send logs automatically</string>
     <string name="log_upload_last">Last sent at %1$s</string>
     <string name="log_upload_never" formatted="false">No log sent yet (the first one goes 90 s after start)</string>
     <string name="log_upload_error">Upload failed (%1$s): will retry later</string>
     <string name="log_upload_off" formatted="false">Log upload turned off</string>
     <string name="log_upload_nokey" formatted="false">Log upload not available in this version</string>
-    <string name="show_inside_temp" formatted="false">Interior temperature</string>
     <string name="sec_car" formatted="false">CAR</string>
     <string name="sec_car_sub" formatted="false">Colour, roof</string>
     <string name="sec_home" formatted="false">Home</string>
@@ -121,8 +105,6 @@
     <string name="drive_auto" formatted="false">Same as car</string>
     <string name="drive_left" formatted="false">Left-hand drive</string>
     <string name="drive_right" formatted="false">Right-hand drive</string>
-    <string name="left" formatted="false">Left</string>
-    <string name="right" formatted="false">Right</string>
     <string name="climate" formatted="false">Climate</string>
     <string name="tab_map" formatted="false">Map</string>
     <string name="tab_media" formatted="false">Media</string>
@@ -185,36 +167,17 @@
     <string name="app_sos" formatted="false">SOS call</string>
     <string name="app_android_settings" formatted="false">Android settings</string>
     <string name="app_android_files" formatted="false">Android files</string>
-    <string name="settings_title" formatted="false">Launcher settings</string>
     <string name="settings_desc" formatted="false">Launcher settings</string>
-    <string name="car_color" formatted="false">CAR COLOUR</string>
-    <string name="black_roof" formatted="false">Black roof</string>
     <string name="theme" formatted="false">THEME</string>
-    <string name="language" formatted="false">LANGUAGE</string>
     <string name="lang_auto" formatted="false">Same as car</string>
-    <string name="lang_auto_hint" formatted="false">Automatic follows the car\'s system language.</string>
-    <string name="default_nav" formatted="false">DEFAULT NAVIGATOR</string>
-    <string name="nav_auto_hint" formatted="false">Automatic: the phone\'s when CarPlay or Android Auto is connected, otherwise MG.</string>
     <string name="auto" formatted="false">Automatic</string>
-    <string name="night" formatted="false">Night</string>
     <string name="day" formatted="false">Day</string>
-    <string name="open_original_home" formatted="false">Open the original MG home</string>
-    <string name="diag_title" formatted="false">CAR SERVICES DIAGNOSTICS</string>
     <string name="save_log" formatted="false">Save log</string>
-    <string name="save_log_hint" formatted="false">Save log: with a USB stick plugged in, the file is saved there too.</string>
     <string name="close" formatted="false">Close</string>
-    <string name="updates" formatted="false">UPDATES</string>
-    <string name="check_updates" formatted="false">Check for updates</string>
-    <string name="download_install" formatted="false">Download and install</string>
-    <string name="download_install_v">Download and install %s</string>
-    <string name="busy" formatted="false">Working…</string>
-    <string name="press_check" formatted="false">Tap Check to look for a new version</string>
-    <string name="saving_log" formatted="false">Saving the log…</string>
     <string name="log_failed" formatted="false">Could not save the log in any folder.</string>
     <string name="log_saved_usb" formatted="false">Log saved, also on the USB stick:</string>
     <string name="log_saved" formatted="false">Log saved:</string>
     <string name="log_usb_hint" formatted="false">To get it on a USB stick: plug one in and tap Save log again.</string>
-    <string name="waiting_services" formatted="false">Waiting for the car services…</string>
     <string name="upd_checking" formatted="false">Checking GitHub…</string>
     <string name="upd_no_apk">The latest release (%s) has no APK</string>
     <string name="upd_available">New version available: %s</string>
@@ -238,7 +201,6 @@
     <string name="upd_popup_text">MG4 Launcher %s is ready to install</string>
     <string name="upd_later" formatted="false">Later</string>
     <string name="upd_now" formatted="false">Update</string>
-    <string name="upd_popup_setting" formatted="false">Notify me when a new update is available</string>
     <string name="upd_error_code">error %d</string>
     <string name="btn_ok" formatted="false">OK</string>
     <string name="time_h_min">%1$d h %2$d min</string>
@@ -298,4 +260,52 @@
     <string name="news_6" formatted="false">«Press Home automatically after power-on» option and Polish language</string>
     <string name="radio_protected" formatted="false">This firmware\'s radio service does not answer the launcher: use the Radio app</string>
     <string name="news_7" formatted="false">Steady home at start-up and many fixes from the logs</string>
+    <string name="btn_change" formatted="false">Change</string>
+    <string name="btn_update" formatted="false">Update</string>
+    <string name="btn_delete" formatted="false">Delete</string>
+    <string name="set_logos_card" formatted="false">Radio logos</string>
+    <string name="set_logos_country" formatted="false">Radio logos: country</string>
+    <string name="logos_auto_sub">Automatic: %s</string>
+    <string name="logos_pick_msg" formatted="false">Choose one or more countries (useful near a border). Automatic uses the system country.</string>
+    <string name="set_logos_state" formatted="false">Logo packs</string>
+    <string name="logos_not_downloaded" formatted="false">not downloaded yet (needs internet once)</string>
+    <string name="logos_pack_state">version %1$s · %2$d logos · %3$s</string>
+    <string name="logos_downloading" formatted="false">Downloading…</string>
+    <string name="logos_offline" formatted="false">No internet: downloads as soon as there is a connection.</string>
+    <string name="logos_error" formatted="false">Download failed: retrying in 30 minutes.</string>
+    <string name="logos_delete_title" formatted="false">Delete the logos?</string>
+    <string name="logos_delete_msg">The %s pack is removed from memory. \"Update\" downloads it again.</string>
+    <string name="logos_delete_pick" formatted="false">Which pack do you want to delete?</string>
+    <string name="logos_usb_title" formatted="false">Radio logos found</string>
+    <string name="logos_usb_msg">There is a logo pack for %1$s in %2$s. Install it? It works without internet too.</string>
+    <string name="group_clima" formatted="false">Climate</string>
+    <string name="group_comfort" formatted="false">Comfort</string>
+    <string name="tap_outside_close" formatted="false">tap outside to close</string>
+    <string name="lka_desc" formatted="false">Lane keeping assist (LKA)</string>
+    <string name="opd_desc" formatted="false">One Pedal Drive (OPD)</string>
+    <string name="opd_blocked" formatted="false">The car does not allow changing One Pedal Drive right now (charging or conditions not met).</string>
+    <string name="set_grouped" formatted="false">Grouped buttons</string>
+    <string name="set_grouped_sub" formatted="false">A/C, AUTO and recirculation in \"Climate\", seats and wheel in \"Comfort\": one tap opens the big tiles</string>
+    <string name="set_assist" formatted="false">LKA and OPD buttons</string>
+    <string name="set_assist_sub" formatted="false">Lane keeping and One Pedal Drive, manual only: the car turns them back on at every start</string>
+    <string name="set_projection_card" formatted="false">CarPlay and Android Auto</string>
+    <string name="set_dongle" formatted="false">Restart the dongle if it doesn\'t connect</string>
+    <string name="set_dongle_sub" formatted="false">Only with a recognised wireless dongle, never during a call: at most 2 attempts per start</string>
+    <string name="set_dongle_delay" formatted="false">Wait after start</string>
+    <string name="set_dongle_delay_sub" formatted="false">If CarPlay or Android Auto doesn\'t start within this time, the launcher steps in</string>
+    <string name="set_dongle_now" formatted="false">Restart CarPlay/AA</string>
+    <string name="set_dongle_now_sub" formatted="false">Like unplugging and replugging the dongle, then a restart of the CarPlay/AA service</string>
+    <string name="btn_restart" formatted="false">Restart</string>
+    <string name="dongle_confirm" formatted="false">CarPlay and Android Auto stop for a few seconds and then reconnect.</string>
+    <string name="dongle_in_call" formatted="false">A call is in progress: try again later.</string>
+    <string name="tile_auto" formatted="false">Automatic</string>
+    <string name="tile_recirc" formatted="false">Recirculation</string>
+    <string name="tile_seat_driver" formatted="false">Driver\'s seat</string>
+    <string name="tile_seat_passenger" formatted="false">Passenger seat</string>
+    <string name="tile_wheel" formatted="false">Steering wheel</string>
+    <string name="tile_on_f" formatted="false">On</string>
+    <string name="tile_off_f" formatted="false">Off</string>
+    <string name="tile_on_m" formatted="false">On</string>
+    <string name="tile_off_m" formatted="false">Off</string>
+    <string name="tile_level">Level %d</string>
 </resources>

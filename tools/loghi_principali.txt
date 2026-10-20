@@ -1,0 +1,207 @@
+# Principali stazioni FM nazionali per paese: servono solo a elencare quelle che mancano nei pacchetti.
+# formato: CC | nome della stazione (confrontato con il nome normalizzato dei loghi e con gli alias)
+IT | RTL 102.5
+IT | Radio Deejay
+IT | Radio 105
+IT | RDS
+IT | Radio Italia
+IT | Radio Monte Carlo
+IT | R101
+IT | Virgin Radio
+IT | Radio Kiss Kiss
+IT | Radio Capital
+IT | m2o
+IT | Radio 24
+IT | Radio Freccia
+IT | Radio Zeta
+IT | Rai Radio 1
+IT | Rai Radio 2
+IT | Rai Radio 3
+IT | Radio Maria
+IT | Radio Subasio
+IT | Radio Radicale
+DE | 1LIVE
+DE | Bayern 3
+DE | SWR3
+DE | NDR 2
+DE | WDR 2
+DE | hr3
+DE | Antenne Bayern
+DE | Radio Hamburg
+DE | radioeins
+DE | Deutschlandfunk
+DE | Deutschlandfunk Kultur
+DE | Radio Bob
+DE | Klassik Radio
+DE | Energy
+FR | France Inter
+FR | France Info
+FR | France Culture
+FR | France Musique
+FR | FIP
+FR | Mouv
+FR | RTL
+FR | RTL2
+FR | Europe 1
+FR | NRJ
+FR | Nostalgie
+FR | Cherie FM
+FR | Skyrock
+FR | Fun Radio
+FR | RMC
+FR | Virgin Radio
+FR | Rire et Chansons
+FR | Radio Classique
+FR | Sud Radio
+ES | Cadena SER
+ES | COPE
+ES | Onda Cero
+ES | RNE
+ES | Radio 3
+ES | Los 40
+ES | Cadena 100
+ES | Europa FM
+ES | Rock FM
+ES | Kiss FM
+ES | Cadena Dial
+ES | Radio Marca
+GB | BBC Radio 1
+GB | BBC Radio 2
+GB | BBC Radio 3
+GB | BBC Radio 4
+GB | BBC Radio 5 Live
+GB | Classic FM
+GB | Capital
+GB | Heart
+GB | Smooth
+GB | Kiss
+GB | Absolute Radio
+GB | Magic
+GB | LBC
+GB | talkSPORT
+GB | Greatest Hits Radio
+GB | Virgin Radio
+NL | NPO Radio 1
+NL | NPO Radio 2
+NL | NPO 3FM
+NL | Radio 538
+NL | Qmusic
+NL | Sky Radio
+NL | Radio 10
+NL | 100% NL
+NL | Radio Veronica
+NL | SLAM!
+BE | Radio 1
+BE | Radio 2
+BE | Studio Brussel
+BE | MNM
+BE | Qmusic
+BE | Joe
+BE | La Premiere
+BE | VivaCite
+BE | Classic 21
+BE | Pure
+BE | NRJ
+BE | Bel RTL
+BE | Radio Contact
+AT | Ö1
+AT | Ö3
+AT | FM4
+AT | Kronehit
+AT | Radio Energy
+AT | Life Radio
+AT | 88.6
+CH | SRF 1
+CH | SRF 3
+CH | SRF Virus
+CH | RTS La Premiere
+CH | Couleur 3
+CH | RSI Rete Uno
+CH | Energy Zürich
+CH | Radio 24
+CH | Radio Swiss Pop
+PL | Polskie Radio Jedynka
+PL | Polskie Radio Trójka
+PL | RMF FM
+PL | Radio ZET
+PL | Radio Eska
+PL | RMF Maxx
+PL | Antyradio
+PL | Radio Maryja
+PL | Złote Przeboje
+PL | TOK FM
+PT | Antena 1
+PT | Antena 3
+PT | RFM
+PT | Rádio Comercial
+PT | M80
+PT | Renascença
+PT | Cidade FM
+PT | TSF
+SE | P1
+SE | P3
+SE | P4
+SE | Mix Megapol
+SE | NRJ
+SE | Rix FM
+SE | Bandit Rock
+NO | NRK P1
+NO | NRK P3
+NO | P4
+NO | Radio Norge
+NO | P5
+DK | DR P1
+DK | DR P3
+DK | DR P4
+DK | Radio 100
+DK | Nova
+DK | Pop FM
+FI | Yle Radio Suomi
+FI | YleX
+FI | Radio Nova
+FI | Radio Suomipop
+FI | Radio Rock
+IE | RTÉ Radio 1
+IE | RTÉ 2FM
+IE | Today FM
+IE | Newstalk
+IE | FM104
+IE | 98FM
+TR | TRT FM
+TR | Power FM
+TR | Kral FM
+TR | Süper FM
+TR | Radyo Fenomen
+TR | Metro FM
+TR | Joy FM
+TR | Best FM
+TR | Virgin Radio
+CZ | Radiožurnál
+CZ | Rádio Impuls
+CZ | Evropa 2
+CZ | Frekvence 1
+CZ | Kiss
+HU | Kossuth Rádió
+HU | Petőfi Rádió
+HU | Retro Rádió
+HU | Rádió 1
+GR | ERT
+GR | Skai
+GR | Real FM
+GR | Sfera
+RO | Radio România Actualități
+RO | Europa FM
+RO | Kiss FM
+RO | Radio ZU
+RO | Magic FM
+RO | Pro FM
+SI | Val 202
+SI | Radio 1
+HR | HR 1
+HR | Narodni radio
+HR | Otvoreni radio
+SK | Rádio Slovensko
+SK | Rádio Expres
+SK | Fun rádio
+LU | RTL Radio Lëtzebuerg
+LU | Eldoradio
