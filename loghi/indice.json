@@ -1,0 +1,974 @@
+{
+ "versione": 1,
+ "paesi": [
+  {
+   "codice": "AD",
+   "nomi": {
+    "it": "Andorra",
+    "en": "Andorra",
+    "es": "Andorra",
+    "de": "Andorra",
+    "pt": "Andorra",
+    "fr": "Andorre",
+    "tr": "Andorra",
+    "pl": "Andora"
+   },
+   "file": "AD.zip",
+   "versione": 1,
+   "dimensione": 42063,
+   "sha256": "45dbcda81022c45dc6ce473a32b041f502136530c7025abdde257af19f998200",
+   "loghi": 7,
+   "alias": 0
+  },
+  {
+   "codice": "AL",
+   "nomi": {
+    "it": "Albania",
+    "en": "Albania",
+    "es": "Albania",
+    "de": "Albanien",
+    "pt": "Albânia",
+    "fr": "Albanie",
+    "tr": "Arnavutluk",
+    "pl": "Albania"
+   },
+   "file": "AL.zip",
+   "versione": 1,
+   "dimensione": 112768,
+   "sha256": "9487902f35d751860a2dcbfa7e41c06f80ad8255f728ee828065fa7d675c8d04",
+   "loghi": 18,
+   "alias": 0
+  },
+  {
+   "codice": "AT",
+   "nomi": {
+    "it": "Austria",
+    "en": "Austria",
+    "es": "Austria",
+    "de": "Österreich",
+    "pt": "Áustria",
+    "fr": "Autriche",
+    "tr": "Avusturya",
+    "pl": "Austria"
+   },
+   "file": "AT.zip",
+   "versione": 1,
+   "dimensione": 459385,
+   "sha256": "297c48f2904031732dcca8a9fb693bba97b0f722ff7fca2a8d21d36926161cf0",
+   "loghi": 72,
+   "alias": 20
+  },
+  {
+   "codice": "AX",
+   "nomi": {
+    "it": "Isole Åland",
+    "en": "Åland Islands",
+    "es": "Islas Aland",
+    "de": "Ålandinseln",
+    "pt": "Ilhas Aland",
+    "fr": "Îles Åland",
+    "tr": "Åland Adaları",
+    "pl": "Wyspy Alandzkie"
+   },
+   "file": "AX.zip",
+   "versione": 1,
+   "dimensione": 5911,
+   "sha256": "43d107fd5dfe46fc43c28768728b6cb6f89dbb77547d31cbbea78ab0a31b1ec2",
+   "loghi": 1,
+   "alias": 0
+  },
+  {
+   "codice": "BA",
+   "nomi": {
+    "it": "Bosnia ed Erzegovina",
+    "en": "Bosnia & Herzegovina",
+    "es": "Bosnia y Herzegovina",
+    "de": "Bosnien und Herzegowina",
+    "pt": "Bósnia e Herzegovina",
+    "fr": "Bosnie-Herzégovine",
+    "tr": "Bosna-Hersek",
+    "pl": "Bośnia i Hercegowina"
+   },
+   "file": "BA.zip",
+   "versione": 1,
+   "dimensione": 248547,
+   "sha256": "709a95ad8bc646c831c6adf0b46ec127b274d6277df6a0bfd0f748442a9392b4",
+   "loghi": 41,
+   "alias": 5
+  },
+  {
+   "codice": "BE",
+   "nomi": {
+    "it": "Belgio",
+    "en": "Belgium",
+    "es": "Bélgica",
+    "de": "Belgien",
+    "pt": "Bélgica",
+    "fr": "Belgique",
+    "tr": "Belçika",
+    "pl": "Belgia"
+   },
+   "file": "BE.zip",
+   "versione": 1,
+   "dimensione": 587730,
+   "sha256": "0683fb4529e2a4e3c58dbd58952ab67eda445593e81c31d0c44dac848f61a4ae",
+   "loghi": 112,
+   "alias": 26
+  },
+  {
+   "codice": "BG",
+   "nomi": {
+    "it": "Bulgaria",
+    "en": "Bulgaria",
+    "es": "Bulgaria",
+    "de": "Bulgarien",
+    "pt": "Bulgária",
+    "fr": "Bulgarie",
+    "tr": "Bulgaristan",
+    "pl": "Bułgaria"
+   },
+   "file": "BG.zip",
+   "versione": 1,
+   "dimensione": 442844,
+   "sha256": "7a1b69967fbbd9bf481e1d7d93da2e18f6a356890292deb10c2ea8ea1b25ff4f",
+   "loghi": 85,
+   "alias": 8
+  },
+  {
+   "codice": "BY",
+   "nomi": {
+    "it": "Bielorussia",
+    "en": "Belarus",
+    "es": "Bielorrusia",
+    "de": "Belarus",
+    "pt": "Bielorrússia",
+    "fr": "Biélorussie",
+    "tr": "Belarus",
+    "pl": "Białoruś"
+   },
+   "file": "BY.zip",
+   "versione": 1,
+   "dimensione": 55312,
+   "sha256": "fa8fc55af489696577b0d5bed3ca3c886ddbe76ef13498564c6829a7077982ba",
+   "loghi": 12,
+   "alias": 0
+  },
+  {
+   "codice": "CH",
+   "nomi": {
+    "it": "Svizzera",
+    "en": "Switzerland",
+    "es": "Suiza",
+    "de": "Schweiz",
+    "pt": "Suíça",
+    "fr": "Suisse",
+    "tr": "İsviçre",
+    "pl": "Szwajcaria"
+   },
+   "file": "CH.zip",
+   "versione": 1,
+   "dimensione": 454572,
+   "sha256": "8eaf06c002198dd8901a375477244d23f9a1aa8888136dda864a1bf4ebed7b95",
+   "loghi": 95,
+   "alias": 24
+  },
+  {
+   "codice": "CY",
+   "nomi": {
+    "it": "Cipro",
+    "en": "Cyprus",
+    "es": "Chipre",
+    "de": "Zypern",
+    "pt": "Chipre",
+    "fr": "Chypre",
+    "tr": "Kıbrıs",
+    "pl": "Cypr"
+   },
+   "file": "CY.zip",
+   "versione": 1,
+   "dimensione": 93453,
+   "sha256": "80859ee4a126523cab63ae3b7dc8151e34bd25f17d71106759cdf277223bcc7b",
+   "loghi": 18,
+   "alias": 3
+  },
+  {
+   "codice": "CZ",
+   "nomi": {
+    "it": "Cechia",
+    "en": "Czechia",
+    "es": "Chequia",
+    "de": "Tschechien",
+    "pt": "Tchéquia",
+    "fr": "Tchéquie",
+    "tr": "Çekya",
+    "pl": "Czechy"
+   },
+   "file": "CZ.zip",
+   "versione": 1,
+   "dimensione": 333540,
+   "sha256": "ce6a01691834ec0fbe17053e18334633e88d34cf5a47b51f007efab1bbc9734a",
+   "loghi": 72,
+   "alias": 12
+  },
+  {
+   "codice": "DE",
+   "nomi": {
+    "it": "Germania",
+    "en": "Germany",
+    "es": "Alemania",
+    "de": "Deutschland",
+    "pt": "Alemanha",
+    "fr": "Allemagne",
+    "tr": "Almanya",
+    "pl": "Niemcy"
+   },
+   "file": "DE.zip",
+   "versione": 1,
+   "dimensione": 4406244,
+   "sha256": "1178433ac307669cdadf98e9823734f879c8d08e13bc3b9ef615886d7851ad31",
+   "loghi": 864,
+   "alias": 286
+  },
+  {
+   "codice": "DK",
+   "nomi": {
+    "it": "Danimarca",
+    "en": "Denmark",
+    "es": "Dinamarca",
+    "de": "Dänemark",
+    "pt": "Dinamarca",
+    "fr": "Danemark",
+    "tr": "Danimarka",
+    "pl": "Dania"
+   },
+   "file": "DK.zip",
+   "versione": 1,
+   "dimensione": 194536,
+   "sha256": "5af2f404afe5f11b8f90252d98fd06c865bef4ddc143b2cdcde6bd0dc6b2bf67",
+   "loghi": 37,
+   "alias": 23
+  },
+  {
+   "codice": "EE",
+   "nomi": {
+    "it": "Estonia",
+    "en": "Estonia",
+    "es": "Estonia",
+    "de": "Estland",
+    "pt": "Estônia",
+    "fr": "Estonie",
+    "tr": "Estonya",
+    "pl": "Estonia"
+   },
+   "file": "EE.zip",
+   "versione": 1,
+   "dimensione": 130651,
+   "sha256": "a91fd11c902f95efc036c6c24709d9bb1594a377068d4774fbb8161e5253f6b9",
+   "loghi": 30,
+   "alias": 5
+  },
+  {
+   "codice": "ES",
+   "nomi": {
+    "it": "Spagna",
+    "en": "Spain",
+    "es": "España",
+    "de": "Spanien",
+    "pt": "Espanha",
+    "fr": "Espagne",
+    "tr": "İspanya",
+    "pl": "Hiszpania"
+   },
+   "file": "ES.zip",
+   "versione": 1,
+   "dimensione": 1950170,
+   "sha256": "e03e01df7cf2e7f755700c61a5c1fe45895193130c0c011cea40044c0a34651e",
+   "loghi": 379,
+   "alias": 50
+  },
+  {
+   "codice": "FI",
+   "nomi": {
+    "it": "Finlandia",
+    "en": "Finland",
+    "es": "Finlandia",
+    "de": "Finnland",
+    "pt": "Finlândia",
+    "fr": "Finlande",
+    "tr": "Finlandiya",
+    "pl": "Finlandia"
+   },
+   "file": "FI.zip",
+   "versione": 1,
+   "dimensione": 245637,
+   "sha256": "246060d98409e472623aadbc4248685021bc85eefe8af77f557633ecd2339cb9",
+   "loghi": 62,
+   "alias": 4
+  },
+  {
+   "codice": "FO",
+   "nomi": {
+    "it": "Isole Fær Øer",
+    "en": "Faroe Islands",
+    "es": "Islas Feroe",
+    "de": "Färöer",
+    "pt": "Ilhas Faroé",
+    "fr": "Îles Féroé",
+    "tr": "Faroe Adaları",
+    "pl": "Wyspy Owcze"
+   },
+   "file": "FO.zip",
+   "versione": 1,
+   "dimensione": 23033,
+   "sha256": "667e1a88d51b7a96cfb0d246717fb8a8562df5c90c8f81ee7666cc2db70ce48a",
+   "loghi": 7,
+   "alias": 0
+  },
+  {
+   "codice": "FR",
+   "nomi": {
+    "it": "Francia",
+    "en": "France",
+    "es": "Francia",
+    "de": "Frankreich",
+    "pt": "França",
+    "fr": "France",
+    "tr": "Fransa",
+    "pl": "Francja"
+   },
+   "file": "FR.zip",
+   "versione": 1,
+   "dimensione": 3219339,
+   "sha256": "b584424d9b4dd2c0852c78bd74ce07f3cebe824157605a170e022111101f93b7",
+   "loghi": 561,
+   "alias": 105
+  },
+  {
+   "codice": "GB",
+   "nomi": {
+    "it": "Regno Unito",
+    "en": "United Kingdom",
+    "es": "Reino Unido",
+    "de": "Vereinigtes Königreich",
+    "pt": "Reino Unido",
+    "fr": "Royaume-Uni",
+    "tr": "Birleşik Krallık",
+    "pl": "Wielka Brytania"
+   },
+   "file": "GB.zip",
+   "versione": 1,
+   "dimensione": 3700721,
+   "sha256": "39d3f6c62fd0ca170c9a0471e5f98d39da6179f02ebc825db8abf8d7f1908add",
+   "loghi": 646,
+   "alias": 78
+  },
+  {
+   "codice": "GI",
+   "nomi": {
+    "it": "Gibilterra",
+    "en": "Gibraltar",
+    "es": "Gibraltar",
+    "de": "Gibraltar",
+    "pt": "Gibraltar",
+    "fr": "Gibraltar",
+    "tr": "Cebelitarık",
+    "pl": "Gibraltar"
+   },
+   "file": "GI.zip",
+   "versione": 1,
+   "dimensione": 9548,
+   "sha256": "4645caedc6aeec366cf999bd218c98748b91bdedf587ad533282ff44526f2602",
+   "loghi": 2,
+   "alias": 0
+  },
+  {
+   "codice": "GR",
+   "nomi": {
+    "it": "Grecia",
+    "en": "Greece",
+    "es": "Grecia",
+    "de": "Griechenland",
+    "pt": "Grécia",
+    "fr": "Grèce",
+    "tr": "Yunanistan",
+    "pl": "Grecja"
+   },
+   "file": "GR.zip",
+   "versione": 1,
+   "dimensione": 3855158,
+   "sha256": "567ada944c9f750ca2901bf82616bf88c35fff487b0c01280155c6700ddd991c",
+   "loghi": 706,
+   "alias": 152
+  },
+  {
+   "codice": "HR",
+   "nomi": {
+    "it": "Croazia",
+    "en": "Croatia",
+    "es": "Croacia",
+    "de": "Kroatien",
+    "pt": "Croácia",
+    "fr": "Croatie",
+    "tr": "Hırvatistan",
+    "pl": "Chorwacja"
+   },
+   "file": "HR.zip",
+   "versione": 1,
+   "dimensione": 279599,
+   "sha256": "542a511e4508a0b68aff48116671827f18b1c7cefcd36888add764e85469e5c1",
+   "loghi": 55,
+   "alias": 15
+  },
+  {
+   "codice": "HU",
+   "nomi": {
+    "it": "Ungheria",
+    "en": "Hungary",
+    "es": "Hungría",
+    "de": "Ungarn",
+    "pt": "Hungria",
+    "fr": "Hongrie",
+    "tr": "Macaristan",
+    "pl": "Węgry"
+   },
+   "file": "HU.zip",
+   "versione": 1,
+   "dimensione": 371602,
+   "sha256": "695b3f17ad7a140538f98de741ff76fed137f4e11a2dee177e7b7a524323b189",
+   "loghi": 71,
+   "alias": 21
+  },
+  {
+   "codice": "IE",
+   "nomi": {
+    "it": "Irlanda",
+    "en": "Ireland",
+    "es": "Irlanda",
+    "de": "Irland",
+    "pt": "Irlanda",
+    "fr": "Irlande",
+    "tr": "İrlanda",
+    "pl": "Irlandia"
+   },
+   "file": "IE.zip",
+   "versione": 1,
+   "dimensione": 414557,
+   "sha256": "6ec9a704dfc86aa87f4ce28fa3c169dc3e21c4a05942b140ab0b7e26f424de20",
+   "loghi": 74,
+   "alias": 3
+  },
+  {
+   "codice": "IM",
+   "nomi": {
+    "it": "Isola di Man",
+    "en": "Isle of Man",
+    "es": "Isla de Man",
+    "de": "Isle of Man",
+    "pt": "Ilha de Man",
+    "fr": "Île de Man",
+    "tr": "Man Adası",
+    "pl": "Wyspa Man"
+   },
+   "file": "IM.zip",
+   "versione": 1,
+   "dimensione": 18819,
+   "sha256": "28e9f30df6a12499a734c4d76772c15cf73c7668029b9a9ccf36cf543d39f08b",
+   "loghi": 2,
+   "alias": 0
+  },
+  {
+   "codice": "IS",
+   "nomi": {
+    "it": "Islanda",
+    "en": "Iceland",
+    "es": "Islandia",
+    "de": "Island",
+    "pt": "Islândia",
+    "fr": "Islande",
+    "tr": "İzlanda",
+    "pl": "Islandia"
+   },
+   "file": "IS.zip",
+   "versione": 1,
+   "dimensione": 38747,
+   "sha256": "817996990d01ac4b7f32a5a2fe007141c7b7eb7b0ace64cf972d242e4aaf3748",
+   "loghi": 9,
+   "alias": 4
+  },
+  {
+   "codice": "IT",
+   "nomi": {
+    "it": "Italia",
+    "en": "Italy",
+    "es": "Italia",
+    "de": "Italien",
+    "pt": "Itália",
+    "fr": "Italie",
+    "tr": "İtalya",
+    "pl": "Włochy"
+   },
+   "file": "IT.zip",
+   "versione": 1,
+   "dimensione": 2657706,
+   "sha256": "3123fe3b123f42c74afc355b94f937dd3d64e3a48da1777f7ba82f9deb53d0b7",
+   "loghi": 432,
+   "alias": 74
+  },
+  {
+   "codice": "LI",
+   "nomi": {
+    "it": "Liechtenstein",
+    "en": "Liechtenstein",
+    "es": "Liechtenstein",
+    "de": "Liechtenstein",
+    "pt": "Liechtenstein",
+    "fr": "Liechtenstein",
+    "tr": "Liechtenstein",
+    "pl": "Liechtenstein"
+   },
+   "file": "LI.zip",
+   "versione": 1,
+   "dimensione": 3490,
+   "sha256": "1ee9e567d1c547024ca1177ef6c173a0a1689a84a18c294748843164dd51c8f4",
+   "loghi": 1,
+   "alias": 0
+  },
+  {
+   "codice": "LT",
+   "nomi": {
+    "it": "Lituania",
+    "en": "Lithuania",
+    "es": "Lituania",
+    "de": "Litauen",
+    "pt": "Lituânia",
+    "fr": "Lituanie",
+    "tr": "Litvanya",
+    "pl": "Litwa"
+   },
+   "file": "LT.zip",
+   "versione": 1,
+   "dimensione": 82921,
+   "sha256": "10087506dbe69c2809941bd823bf28a66d47b2c4179325a6d6ce8e8e9c8b1a93",
+   "loghi": 15,
+   "alias": 0
+  },
+  {
+   "codice": "LU",
+   "nomi": {
+    "it": "Lussemburgo",
+    "en": "Luxembourg",
+    "es": "Luxemburgo",
+    "de": "Luxemburg",
+    "pt": "Luxemburgo",
+    "fr": "Luxembourg",
+    "tr": "Lüksemburg",
+    "pl": "Luksemburg"
+   },
+   "file": "LU.zip",
+   "versione": 1,
+   "dimensione": 28333,
+   "sha256": "3c79cbc3f4076406df8ecdce34e503a3a62faf6b78d0d58531498605013626c0",
+   "loghi": 5,
+   "alias": 0
+  },
+  {
+   "codice": "LV",
+   "nomi": {
+    "it": "Lettonia",
+    "en": "Latvia",
+    "es": "Letonia",
+    "de": "Lettland",
+    "pt": "Letônia",
+    "fr": "Lettonie",
+    "tr": "Letonya",
+    "pl": "Łotwa"
+   },
+   "file": "LV.zip",
+   "versione": 1,
+   "dimensione": 94207,
+   "sha256": "ff77e13a44bd248b738979ba6c58f3f423771c5ff24f1db6e670349abd2d089c",
+   "loghi": 21,
+   "alias": 3
+  },
+  {
+   "codice": "MC",
+   "nomi": {
+    "it": "Monaco",
+    "en": "Monaco",
+    "es": "Mónaco",
+    "de": "Monaco",
+    "pt": "Mônaco",
+    "fr": "Monaco",
+    "tr": "Monako",
+    "pl": "Monako"
+   },
+   "file": "MC.zip",
+   "versione": 1,
+   "dimensione": 5938,
+   "sha256": "1f62bb73e3054f6209b2da0b4e65743473f896621fdbfe0d9725760fc70e8ac6",
+   "loghi": 2,
+   "alias": 0
+  },
+  {
+   "codice": "MD",
+   "nomi": {
+    "it": "Moldavia",
+    "en": "Moldova",
+    "es": "Moldavia",
+    "de": "Republik Moldau",
+    "pt": "Moldávia",
+    "fr": "Moldavie",
+    "tr": "Moldova",
+    "pl": "Mołdawia"
+   },
+   "file": "MD.zip",
+   "versione": 1,
+   "dimensione": 146878,
+   "sha256": "17fbaf00ae68cfdafb58ad4e0c37cc1f9d35f0a1f32976cc220fd9eb505c3b87",
+   "loghi": 29,
+   "alias": 12
+  },
+  {
+   "codice": "ME",
+   "nomi": {
+    "it": "Montenegro",
+    "en": "Montenegro",
+    "es": "Montenegro",
+    "de": "Montenegro",
+    "pt": "Montenegro",
+    "fr": "Monténégro",
+    "tr": "Karadağ",
+    "pl": "Czarnogóra"
+   },
+   "file": "ME.zip",
+   "versione": 1,
+   "dimensione": 41452,
+   "sha256": "ab7ccd47cef6704f4c9918297fddf123fbc15176a28e576d5c68a217c4413dce",
+   "loghi": 6,
+   "alias": 3
+  },
+  {
+   "codice": "MK",
+   "nomi": {
+    "it": "Macedonia del Nord",
+    "en": "North Macedonia",
+    "es": "Macedonia del Norte",
+    "de": "Nordmazedonien",
+    "pt": "Macedônia do Norte",
+    "fr": "Macédoine du Nord",
+    "tr": "Kuzey Makedonya",
+    "pl": "Macedonia Północna"
+   },
+   "file": "MK.zip",
+   "versione": 1,
+   "dimensione": 43836,
+   "sha256": "5fa061fd5b6a2f8a182e4779313e9b1f1dfdc2da88b6d1e71828bdb01dc8b3c7",
+   "loghi": 6,
+   "alias": 4
+  },
+  {
+   "codice": "MT",
+   "nomi": {
+    "it": "Malta",
+    "en": "Malta",
+    "es": "Malta",
+    "de": "Malta",
+    "pt": "Malta",
+    "fr": "Malte",
+    "tr": "Malta",
+    "pl": "Malta"
+   },
+   "file": "MT.zip",
+   "versione": 1,
+   "dimensione": 24946,
+   "sha256": "3483624b4d8c81ecbbba92f9804507e51e54e9ffacefc5794bdb3c529ecd7563",
+   "loghi": 6,
+   "alias": 1
+  },
+  {
+   "codice": "NL",
+   "nomi": {
+    "it": "Paesi Bassi",
+    "en": "Netherlands",
+    "es": "Países Bajos",
+    "de": "Niederlande",
+    "pt": "Países Baixos",
+    "fr": "Pays-Bas",
+    "tr": "Hollanda",
+    "pl": "Holandia"
+   },
+   "file": "NL.zip",
+   "versione": 1,
+   "dimensione": 1649889,
+   "sha256": "47025ea988d4cfd38516d3717cf670a0198fad646027758c314e741d9539dbf7",
+   "loghi": 287,
+   "alias": 55
+  },
+  {
+   "codice": "NO",
+   "nomi": {
+    "it": "Norvegia",
+    "en": "Norway",
+    "es": "Noruega",
+    "de": "Norwegen",
+    "pt": "Noruega",
+    "fr": "Norvège",
+    "tr": "Norveç",
+    "pl": "Norwegia"
+   },
+   "file": "NO.zip",
+   "versione": 1,
+   "dimensione": 161199,
+   "sha256": "1aba9ccf1142e0051a5dc5b88f4384bf34d20f086f85d80b12fcd1326f6cf5bb",
+   "loghi": 39,
+   "alias": 2
+  },
+  {
+   "codice": "PL",
+   "nomi": {
+    "it": "Polonia",
+    "en": "Poland",
+    "es": "Polonia",
+    "de": "Polen",
+    "pt": "Polônia",
+    "fr": "Pologne",
+    "tr": "Polonya",
+    "pl": "Polska"
+   },
+   "file": "PL.zip",
+   "versione": 1,
+   "dimensione": 982731,
+   "sha256": "c9f3fe383edc62539eecc515b921fbe57f19079560febce4b2eb9daf2da5d202",
+   "loghi": 177,
+   "alias": 92
+  },
+  {
+   "codice": "PT",
+   "nomi": {
+    "it": "Portogallo",
+    "en": "Portugal",
+    "es": "Portugal",
+    "de": "Portugal",
+    "pt": "Portugal",
+    "fr": "Portugal",
+    "tr": "Portekiz",
+    "pl": "Portugalia"
+   },
+   "file": "PT.zip",
+   "versione": 1,
+   "dimensione": 622942,
+   "sha256": "8a66d62046aafae2a6e3093025d5928bf2050891fa7f39e0a8c91f9f3726838e",
+   "loghi": 130,
+   "alias": 15
+  },
+  {
+   "codice": "RO",
+   "nomi": {
+    "it": "Romania",
+    "en": "Romania",
+    "es": "Rumanía",
+    "de": "Rumänien",
+    "pt": "Romênia",
+    "fr": "Roumanie",
+    "tr": "Romanya",
+    "pl": "Rumunia"
+   },
+   "file": "RO.zip",
+   "versione": 1,
+   "dimensione": 2196305,
+   "sha256": "d1396f3bbdc45024b9a46b22e7e3b7679f1d0bc2bcac8300d5caf7b5abbc47fa",
+   "loghi": 359,
+   "alias": 82
+  },
+  {
+   "codice": "RS",
+   "nomi": {
+    "it": "Serbia",
+    "en": "Serbia",
+    "es": "Serbia",
+    "de": "Serbien",
+    "pt": "Sérvia",
+    "fr": "Serbie",
+    "tr": "Sırbistan",
+    "pl": "Serbia"
+   },
+   "file": "RS.zip",
+   "versione": 1,
+   "dimensione": 512791,
+   "sha256": "156058f00938bfd02cd287695e5adfca7fde24c87fec49840abe90b0db55e8c2",
+   "loghi": 91,
+   "alias": 12
+  },
+  {
+   "codice": "RU",
+   "nomi": {
+    "it": "Russia",
+    "en": "Russia",
+    "es": "Rusia",
+    "de": "Russland",
+    "pt": "Rússia",
+    "fr": "Russie",
+    "tr": "Rusya",
+    "pl": "Rosja"
+   },
+   "file": "RU.zip",
+   "versione": 1,
+   "dimensione": 1329368,
+   "sha256": "7d25dd7a47538c6f61788cac9950a09173fa9a70ac3e9a4e26d750301d19033e",
+   "loghi": 262,
+   "alias": 88
+  },
+  {
+   "codice": "SE",
+   "nomi": {
+    "it": "Svezia",
+    "en": "Sweden",
+    "es": "Suecia",
+    "de": "Schweden",
+    "pt": "Suécia",
+    "fr": "Suède",
+    "tr": "İsveç",
+    "pl": "Szwecja"
+   },
+   "file": "SE.zip",
+   "versione": 1,
+   "dimensione": 294282,
+   "sha256": "c1dc5bb8890448563f0335d48c44608884abe9e258321e046188597bb0b7ef97",
+   "loghi": 58,
+   "alias": 47
+  },
+  {
+   "codice": "SI",
+   "nomi": {
+    "it": "Slovenia",
+    "en": "Slovenia",
+    "es": "Eslovenia",
+    "de": "Slowenien",
+    "pt": "Eslovênia",
+    "fr": "Slovénie",
+    "tr": "Slovenya",
+    "pl": "Słowenia"
+   },
+   "file": "SI.zip",
+   "versione": 1,
+   "dimensione": 131562,
+   "sha256": "0e0e5b245c6b2f39c13829aeb878a378ff9f802ba0a2393aedcbf420a40a438d",
+   "loghi": 31,
+   "alias": 4
+  },
+  {
+   "codice": "SK",
+   "nomi": {
+    "it": "Slovacchia",
+    "en": "Slovakia",
+    "es": "Eslovaquia",
+    "de": "Slowakei",
+    "pt": "Eslováquia",
+    "fr": "Slovaquie",
+    "tr": "Slovakya",
+    "pl": "Słowacja"
+   },
+   "file": "SK.zip",
+   "versione": 1,
+   "dimensione": 143583,
+   "sha256": "f2fb3587ab8a17336a2d2fec1b8d4b54abe07ffda4de1fdc6323ac043fe45295",
+   "loghi": 33,
+   "alias": 1
+  },
+  {
+   "codice": "SM",
+   "nomi": {
+    "it": "San Marino",
+    "en": "San Marino",
+    "es": "San Marino",
+    "de": "San Marino",
+    "pt": "San Marino",
+    "fr": "Saint-Marin",
+    "tr": "San Marino",
+    "pl": "San Marino"
+   },
+   "file": "SM.zip",
+   "versione": 1,
+   "dimensione": 13261,
+   "sha256": "fc97f1ec1d5673c1920070f63f014d36155893062bd906263a9460958be0dc03",
+   "loghi": 2,
+   "alias": 0
+  },
+  {
+   "codice": "TR",
+   "nomi": {
+    "it": "Turchia",
+    "en": "Türkiye",
+    "es": "Turquía",
+    "de": "Türkei",
+    "pt": "Turquia",
+    "fr": "Turquie",
+    "tr": "Türkiye",
+    "pl": "Turcja"
+   },
+   "file": "TR.zip",
+   "versione": 1,
+   "dimensione": 786724,
+   "sha256": "d4ad7099b2934ebd2a9e1906bcae261dc8d15d58ca27eaa7604e551a491911b5",
+   "loghi": 136,
+   "alias": 9
+  },
+  {
+   "codice": "UA",
+   "nomi": {
+    "it": "Ucraina",
+    "en": "Ukraine",
+    "es": "Ucrania",
+    "de": "Ukraine",
+    "pt": "Ucrânia",
+    "fr": "Ukraine",
+    "tr": "Ukrayna",
+    "pl": "Ukraina"
+   },
+   "file": "UA.zip",
+   "versione": 1,
+   "dimensione": 296222,
+   "sha256": "b7b1c4c3ebd8b948f24a765750c40548732136b82e24d23734c7f5f08c8a8f3d",
+   "loghi": 55,
+   "alias": 1
+  },
+  {
+   "codice": "VA",
+   "nomi": {
+    "it": "Città del Vaticano",
+    "en": "Vatican City",
+    "es": "Ciudad del Vaticano",
+    "de": "Vatikanstadt",
+    "pt": "Cidade do Vaticano",
+    "fr": "État de la Cité du Vatican",
+    "tr": "Vatikan",
+    "pl": "Watykan"
+   },
+   "file": "VA.zip",
+   "versione": 1,
+   "dimensione": 17211,
+   "sha256": "9f9595a2a7118af8dd8cd492d2f3342d23724acaadb0e4180484f6c973f0c4b4",
+   "loghi": 4,
+   "alias": 8
+  },
+  {
+   "codice": "XK",
+   "nomi": {
+    "it": "Kosovo",
+    "en": "Kosovo",
+    "es": "Kosovo",
+    "de": "Kosovo",
+    "pt": "Kosovo",
+    "fr": "Kosovo",
+    "tr": "Kosova",
+    "pl": "Kosowo"
+   },
+   "file": "XK.zip",
+   "versione": 1,
+   "dimensione": 30994,
+   "sha256": "3fb8f2c28ae734d05c5004f2fbc0edbf044a4a9f8217786d33d576f3762f0d1f",
+   "loghi": 5,
+   "alias": 3
+  }
+ ]
+}
