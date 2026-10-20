@@ -171,6 +171,9 @@ def build_country(src, extra_alias, preview=None):
             before_n += 1
             before_bytes += len(data)
         name = clean_name(r.get("nome") or r["file"].rsplit("_", 1)[0])
+        if len(norm(name)) > 40:   # nomi-spam lunghissimi: nessuna stazione vera si chiama così
+            dropped["rotti"].append(name[:40] + "… (nome troppo lungo)")
+            continue
         if not data:
             dropped["rotti"].append(name + " (file mancante)")
             continue
