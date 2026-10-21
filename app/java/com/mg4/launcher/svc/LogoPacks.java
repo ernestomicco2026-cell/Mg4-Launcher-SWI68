@@ -77,7 +77,7 @@ public final class LogoPacks {
         final Map<String, String> alias = new HashMap<>();
     }
 
-    private static LogoPacks instance;
+    private static volatile LogoPacks instance;
 
     public static synchronized LogoPacks get(Context c) {
         if (instance == null) instance = new LogoPacks(c.getApplicationContext());
@@ -144,24 +144,283 @@ public final class LogoPacks {
         refresh(true);
     }
 
-    /** Paese automatico: regione del sistema, altrimenti lingua del launcher. */
+    // ---- paese automatico ------------------------------------------------------------------
+    //
+    // Il firmware MG usa regioni della lingua che non corrispondono al paese (auto italiane "it-CH", francesi "fr-BE"),
+    // quindi l'ordine è: fuso orario del sistema → lingua del launcher → regione della lingua di sistema.
+    // Le stazioni DAB (identificativo del servizio: paese RDS nei 4 bit alti, ECC se presente) confermano la scelta,
+    // oppure la correggono quando il fuso non indica un paese dei pacchetti.
+
+    /** Fuso orario del sistema -> paese (tutti i paesi dei pacchetti; il Kosovo usa Europe/Belgrade). */
+    private static final Map<String, String> TZ_COUNTRY = new HashMap<>();
+
+    static {
+        String[][] tz = {
+                {"AD", "Europe/Andorra"}, {"AL", "Europe/Tirane"}, {"AT", "Europe/Vienna"}, {"AX", "Europe/Mariehamn"},
+                {"BA", "Europe/Sarajevo"}, {"BE", "Europe/Brussels"}, {"BG", "Europe/Sofia"}, {"BY", "Europe/Minsk"},
+                {"CH", "Europe/Zurich"}, {"CY", "Asia/Nicosia", "Asia/Famagusta", "Europe/Nicosia"},
+                {"CZ", "Europe/Prague"}, {"DE", "Europe/Berlin", "Europe/Busingen"}, {"DK", "Europe/Copenhagen"},
+                {"EE", "Europe/Tallinn"}, {"ES", "Europe/Madrid", "Africa/Ceuta", "Atlantic/Canary"},
+                {"FI", "Europe/Helsinki"}, {"FO", "Atlantic/Faroe", "Atlantic/Faeroe"}, {"FR", "Europe/Paris"},
+                {"GB", "Europe/London", "Europe/Belfast", "GB", "GB-Eire"}, {"GI", "Europe/Gibraltar"},
+                {"GR", "Europe/Athens"}, {"HR", "Europe/Zagreb"}, {"HU", "Europe/Budapest"},
+                {"IE", "Europe/Dublin", "Eire"}, {"IM", "Europe/Isle_of_Man"}, {"IS", "Atlantic/Reykjavik", "Iceland"},
+                {"IT", "Europe/Rome"}, {"LI", "Europe/Vaduz"}, {"LT", "Europe/Vilnius"}, {"LU", "Europe/Luxembourg"},
+                {"LV", "Europe/Riga"}, {"MC", "Europe/Monaco"}, {"MD", "Europe/Chisinau", "Europe/Tiraspol"},
+                {"ME", "Europe/Podgorica"}, {"MK", "Europe/Skopje"}, {"MT", "Europe/Malta"},
+                {"NL", "Europe/Amsterdam"}, {"NO", "Europe/Oslo", "Arctic/Longyearbyen", "Atlantic/Jan_Mayen"},
+                {"PL", "Europe/Warsaw", "Poland"}, {"PT", "Europe/Lisbon", "Atlantic/Madeira", "Atlantic/Azores", "Portugal"},
+                {"RO", "Europe/Bucharest"}, {"RS", "Europe/Belgrade"},
+                {"RU", "Europe/Moscow", "W-SU", "Europe/Kaliningrad", "Europe/Samara", "Europe/Volgograd", "Europe/Saratov",
+                        "Europe/Ulyanovsk", "Europe/Astrakhan", "Europe/Kirov", "Asia/Yekaterinburg", "Asia/Omsk",
+                        "Asia/Novosibirsk", "Asia/Krasnoyarsk", "Asia/Irkutsk", "Asia/Vladivostok"},
+                {"SE", "Europe/Stockholm"}, {"SI", "Europe/Ljubljana"}, {"SK", "Europe/Bratislava"},
+                {"SM", "Europe/San_Marino"}, {"TR", "Europe/Istanbul", "Asia/Istanbul", "Turkey"},
+                {"UA", "Europe/Kiev", "Europe/Kyiv", "Europe/Uzhgorod", "Europe/Zaporozhye"}, {"VA", "Europe/Vatican"}};
+        for (String[] r : tz) for (int i = 1; i < r.length; i++) TZ_COUNTRY.put(r[i], r[0]);
+    }
+
+    /** Paese RDS/DAB: chiave "ECC:cifra" (es. "E0:5" = Italia), per i paesi dei pacchetti. */
+    private static final Map<String, String> RDS_COUNTRY = new HashMap<>();
+
+    static {
+        String[] m = {
+                "E0:1=DE", "E0:3=AD", "E0:5=IT", "E0:6=BE", "E0:7=RU", "E0:9=AL", "E0:A=AT", "E0:B=HU", "E0:C=MT", "E0:D=DE",
+                "E1:1=GR", "E1:2=CY", "E1:3=SM", "E1:4=CH", "E1:6=FI", "E1:7=LU", "E1:8=BG", "E1:9=DK", "E1:A=GI", "E1:C=GB",
+                "E1:E=RO", "E1:F=FR",
+                "E2:2=CZ", "E2:3=PL", "E2:4=VA", "E2:5=SK", "E2:9=LI", "E2:A=IS", "E2:B=MC", "E2:C=LT", "E2:D=RS", "E2:E=ES",
+                "E2:F=NO",
+                "E3:1=ME", "E3:2=IE", "E3:3=TR", "E3:4=MK", "E3:8=NL", "E3:9=LV", "E3:C=HR", "E3:E=SE", "E3:F=BY",
+                "E4:1=MD", "E4:2=EE", "E4:6=UA", "E4:7=XK", "E4:8=PT", "E4:9=SI", "E4:F=BA"};
+        for (String s : m) RDS_COUNTRY.put(s.substring(0, 4), s.substring(5));
+    }
+
+    /** Cifra del paese RDS di un paese (i territori usano quella del paese a cui appartengono le stazioni). */
+    static char rdsDigit(String cc) {
+        if ("AX".equals(cc)) cc = "FI";
+        else if ("FO".equals(cc)) cc = "DK";
+        else if ("IM".equals(cc)) cc = "GB";
+        for (Map.Entry<String, String> e : RDS_COUNTRY.entrySet()) if (e.getValue().equals(cc)) return e.getKey().charAt(3);
+        return 0;
+    }
+
+    /** Paesi dei pacchetti con quella cifra RDS. */
+    static List<String> rdsCandidates(char digit) {
+        List<String> out = new ArrayList<>();
+        for (Map.Entry<String, String> e : RDS_COUNTRY.entrySet())
+            if (e.getKey().charAt(3) == digit && !out.contains(e.getValue())) out.add(e.getValue());
+        java.util.Collections.sort(out);
+        return out;
+    }
+
+    private static boolean known(String cc) {
+        return cc != null && Arrays.asList(COUNTRIES).contains(cc);
+    }
+
+    /** Fonti del paese automatico, per la scelta e la diagnostica. */
+    public static final class AutoInfo {
+        public String tz = "", tzCountry, lang = "", langCountry, region = "", regionCountry;
+        /** RDS: cifra più frequente (0 = nessun dato), paese esatto se c'è l'ECC, numero di servizi. */
+        public char rdsDigit;
+        public String rdsExact;
+        public int rdsServices;
+        public String country, reason, rdsNote = "";
+
+        public String describe() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("fuso ").append(tz.isEmpty() ? "?" : tz).append(" → ").append(tzCountry == null ? "—" : tzCountry);
+            sb.append(" · lingua ").append(lang.isEmpty() ? "?" : lang).append(" → ").append(langCountry == null ? "—" : langCountry);
+            sb.append(" · regione ").append(region.isEmpty() ? "?" : region).append(" → ").append(regionCountry == null ? "—" : regionCountry);
+            sb.append(" · RDS ");
+            if (rdsDigit == 0) sb.append("nessun dato");
+            else {
+                sb.append(rdsDigit).append(" (").append(rdsExact != null ? rdsExact : String.join("/", rdsCandidates(rdsDigit)))
+                        .append(", ").append(rdsServices).append(" servizi DAB)");
+            }
+            sb.append(" ⇒ ").append(country).append(" (").append(reason).append(rdsNote.isEmpty() ? "" : ", " + rdsNote).append(')');
+            return sb.toString();
+        }
+    }
+
+    /** Dati RDS raccolti dalle stazioni DAB (identificativi distinti -> cifra/ECC). */
+    private final Map<Long, String> rdsSeen = new HashMap<>();
+    private volatile AutoInfo lastAuto;
+    private volatile String lastAutoDiag = "";
+
+    /** Paese automatico (compatibilità: senza dati RDS). */
     public static String autoCountry(String launcherLang) {
+        LogoPacks p = instance;
+        return p != null ? p.auto(launcherLang).country : resolve(launcherLang, (char) 0, null, 0).country;
+    }
+
+    private AutoInfo auto(String launcherLang) {
+        char digit = 0;
+        String exact = null;
+        int services;
+        synchronized (rdsSeen) {
+            services = rdsSeen.size();
+            if (services == 0) {
+                // ultimo dato RDS sicuro delle accensioni precedenti
+                String saved = sp.getString("rds_dato", "");
+                if (saved.length() >= 1) {
+                    digit = saved.charAt(0);
+                    exact = saved.length() >= 4 ? saved.substring(2) : null;
+                    services = sp.getInt("rds_servizi", 0);
+                }
+            } else {
+                Map<Character, Integer> count = new HashMap<>();
+                Map<Character, String> ex = new HashMap<>();
+                for (String v : rdsSeen.values()) {
+                    char d = v.charAt(0);
+                    count.put(d, count.containsKey(d) ? count.get(d) + 1 : 1);
+                    if (v.length() >= 4) ex.put(d, v.substring(2));
+                }
+                int best = 0;
+                for (Map.Entry<Character, Integer> e : count.entrySet()) if (e.getValue() > best) {
+                    best = e.getValue();
+                    digit = e.getKey();
+                }
+                // dato sicuro: almeno 3 servizi e 3 su 4 con la stessa cifra
+                if (best < 3 || best * 4 < services * 3) digit = 0;
+                exact = digit == 0 ? null : ex.get(digit);
+                if (digit != 0) {
+                    String v = digit + (exact == null ? "" : ":" + exact);
+                    if (!v.equals(sp.getString("rds_dato", "")) || sp.getInt("rds_servizi", 0) != services)
+                        sp.edit().putString("rds_dato", v).putInt("rds_servizi", services).apply();
+                }
+            }
+        }
+        AutoInfo a = resolve(launcherLang, digit, exact, services);
+        lastAuto = a;
+        String d = a.describe();
+        if (!d.equals(lastAutoDiag)) {
+            lastAutoDiag = d;
+            Diag.put("loghi.paeseAuto", d);
+        }
+        return a;
+    }
+
+    /** Scelta: fuso → lingua del launcher → regione; RDS conferma, o corregge quando il fuso non indica il paese. */
+    static AutoInfo resolve(String launcherLang, char digit, String exact, int services) {
+        AutoInfo a = new AutoInfo();
         try {
-            String c = android.content.res.Resources.getSystem().getConfiguration().getLocales().get(0).getCountry();
-            if (c != null && Arrays.asList(COUNTRIES).contains(c.toUpperCase(Locale.ROOT))) return c.toUpperCase(Locale.ROOT);
+            java.util.TimeZone z = java.util.TimeZone.getDefault();
+            a.tz = z == null ? "" : z.getID();
         } catch (Throwable ignored) {
         }
+        a.tzCountry = TZ_COUNTRY.get(a.tz);
         String lang = launcherLang == null ? "" : launcherLang;
         if (lang.isEmpty() || lang.equals("auto")) lang = Locale.getDefault().getLanguage();
-        String cc = LANG_COUNTRY.get(lang);
-        return cc == null ? "IT" : cc;
+        a.lang = lang;
+        a.langCountry = LANG_COUNTRY.get(lang);
+        try {
+            Locale sys;
+            try {
+                sys = android.content.res.Resources.getSystem().getConfiguration().getLocales().get(0);
+            } catch (Throwable e) {
+                sys = Locale.getDefault();
+            }
+            a.region = sys.toLanguageTag();
+            String c = sys.getCountry() == null ? "" : sys.getCountry().toUpperCase(Locale.ROOT);
+            a.regionCountry = known(c) ? c : null;
+        } catch (Throwable ignored) {
+        }
+        a.rdsDigit = digit;
+        a.rdsExact = exact;
+        a.rdsServices = services;
+
+        if (known(a.tzCountry)) {
+            a.country = a.tzCountry;
+            a.reason = "fuso";
+        } else if (known(a.langCountry)) {
+            a.country = a.langCountry;
+            a.reason = "lingua";
+        } else if (a.regionCountry != null) {
+            a.country = a.regionCountry;
+            a.reason = "regione";
+        } else {
+            a.country = "IT";
+            a.reason = "predefinito";
+        }
+        if (digit == 0) return a;
+
+        List<String> cand = exact != null ? java.util.Collections.singletonList(exact) : rdsCandidates(digit);
+        if (cand.contains(a.country) || rdsDigit(a.country) == digit && exact == null) {
+            a.rdsNote = "confermato da RDS";
+            return a;
+        }
+        if ("fuso".equals(a.reason)) {
+            // il fuso è un dato del paese: un RDS diverso di solito vuol dire che l'auto è all'estero
+            a.rdsNote = "RDS diverso (all'estero?), resta il fuso";
+            return a;
+        }
+        // fuso assente: si corregge con RDS, preferendo il paese di un'altra fonte che RDS conferma
+        String pick = null;
+        for (String s : new String[]{a.langCountry, a.regionCountry}) if (s != null && cand.contains(s)) { pick = s; break; }
+        if (pick == null && cand.size() == 1) pick = cand.get(0);
+        if (pick != null) {
+            a.rdsNote = "corretto da RDS (era " + a.country + ")";
+            a.country = pick;
+            a.reason = "RDS";
+        } else {
+            a.rdsNote = "RDS ambiguo, resta " + a.reason;
+        }
+        return a;
+    }
+
+    /**
+     * Stazioni DAB trovate dalla radio: dall'identificativo del servizio si ricava il paese RDS
+     * (4 bit alti dei 16 bit; con 32 bit c'è anche l'ECC). Le FM si scrivono solo nella diagnostica.
+     */
+    public static void noteStations(int band, List<MediaClient.Station> list) {
+        LogoPacks p = instance;
+        if (p == null || list == null || list.isEmpty()) return;
+        if (band == MediaClient.BAND_FM) {
+            StringBuilder sb = new StringBuilder();
+            for (MediaClient.Station st : list) {
+                if (st.sid <= 0) continue;
+                if (sb.length() > 120) { sb.append('…'); break; }
+                sb.append(sb.length() == 0 ? "" : " ").append(Long.toHexString(st.sid).toUpperCase(Locale.ROOT));
+            }
+            Diag.put("loghi.rdsFM", sb.length() == 0 ? "nessun codice" : sb.toString());
+            return;
+        }
+        if (band != MediaClient.BAND_DAB) return;
+        boolean changed = false;
+        synchronized (p.rdsSeen) {
+            for (MediaClient.Station st : list) {
+                long sid = st.sid;
+                if (sid <= 0 || p.rdsSeen.containsKey(sid)) continue;
+                String v;
+                if (sid > 0xFFFFL) {
+                    // servizio a 32 bit: ECC (8 bit) + cifra del paese (4 bit) + numero
+                    int ecc = (int) ((sid >> 24) & 0xFF);
+                    char d = Character.toUpperCase(Character.forDigit((int) ((sid >> 20) & 0xF), 16));
+                    String cc = RDS_COUNTRY.get(String.format(Locale.ROOT, "%02X:%c", ecc, d));
+                    v = d + (cc == null ? "" : ":" + cc);
+                } else {
+                    v = String.valueOf(Character.toUpperCase(Character.forDigit((int) ((sid >> 12) & 0xF), 16)));
+                }
+                if (v.charAt(0) == '0') continue;
+                p.rdsSeen.put(sid, v);
+                changed = true;
+            }
+        }
+        if (changed) {
+            String before = p.lastAuto == null ? "" : p.lastAuto.country;
+            AutoInfo a = p.auto(com.mg4.launcher.L.locale().getLanguage());
+            if (AUTO.equals(p.choice()) && !a.country.equals(before)) {
+                Diag.put("loghi.paesi", AUTO + " → [" + a.country + "]");
+                p.refresh(false);
+            }
+        }
     }
 
     public List<String> chosen() {
         String v = choice();
         List<String> out = new ArrayList<>();
         if (AUTO.equals(v)) {
-            out.add(autoCountry(com.mg4.launcher.L.locale().getLanguage()));
+            out.add(auto(com.mg4.launcher.L.locale().getLanguage()).country);
         } else {
             for (String s : v.split(",")) if (s.trim().length() == 2) out.add(s.trim().toUpperCase(Locale.ROOT));
         }
@@ -206,6 +465,19 @@ public final class LogoPacks {
             if (f == null && norm.startsWith("radio")) f = pk.files.get(norm.substring(5));
             if (f == null) f = pk.files.get("radio" + norm);
             if (f != null) return f;
+        }
+        // varianti di una stazione senza logo proprio ("RTL 102.5 Traffic" → rtl1025): solo nei paesi scelti,
+        // con un nome di almeno 7 caratteri e mai tra due cifre ("radio10" non vale per "radio101")
+        for (String cc : chosen()) {
+            Pack pk = p.get(cc);
+            if (pk == null) continue;
+            String best = null;
+            for (String k : pk.files.keySet()) {
+                if (k.length() < 7 || k.length() >= norm.length() || !norm.startsWith(k)) continue;
+                if (Character.isDigit(k.charAt(k.length() - 1)) && Character.isDigit(norm.charAt(k.length()))) continue;
+                if (best == null || k.length() > best.length()) best = k;
+            }
+            if (best != null) return pk.files.get(best);
         }
         return null;
     }
@@ -268,6 +540,8 @@ public final class LogoPacks {
                     .append(p.source.isEmpty() ? "" : " (" + p.source + ")");
         }
         Diag.put("loghi.paesi", choice() + " → " + chosen());
+        AutoInfo a = auto(com.mg4.launcher.L.locale().getLanguage());
+        if (!AUTO.equals(choice())) Diag.put("loghi.paeseAuto", a.describe() + " · non usato: paesi scelti a mano");
         Diag.put("loghi.pacchetti", sb.length() == 0 ? "nessuno" : sb.toString());
     }
 
@@ -334,6 +608,7 @@ public final class LogoPacks {
             }
             sp.edit().putLong("controllo", System.currentTimeMillis()).apply();
             Diag.put("loghi.download", res.toString().trim());
+            migrate083();
             setStatus("ok");
             nextTry = 0;
         } catch (Exception e) {
@@ -344,6 +619,30 @@ public final class LogoPacks {
             busy = false;
             loadAll();
         }
+    }
+
+    /**
+     * 0.8.3, una volta sola: chi era su "Automatico" aveva il pacchetto del paese sbagliato (regione del firmware, es. CH
+     * per le auto italiane). Appena c'è quello giusto, si tolgono gli altri pacchetti scaricati in automatico.
+     * Chi ha scelto i paesi a mano non viene toccato.
+     */
+    private void migrate083() {
+        if (sp.getBoolean("migrazione083", false)) return;
+        if (!AUTO.equals(choice())) {
+            sp.edit().putBoolean("migrazione083", true).apply();
+            return;
+        }
+        List<String> ch = chosen();
+        for (String cc : ch) if (!new File(root, cc).isDirectory()) return;   // prima deve esserci quello giusto
+        StringBuilder gone = new StringBuilder();
+        for (String cc : new ArrayList<>(packs.keySet())) {
+            if (ch.contains(cc) || !"internet".equals(sp.getString("src_" + cc, ""))) continue;
+            deleteTree(new File(root, cc));
+            sp.edit().remove("sha_" + cc).remove("ver_" + cc).remove("src_" + cc).apply();
+            gone.append(gone.length() == 0 ? "" : ", ").append(cc);
+        }
+        sp.edit().putBoolean("migrazione083", true).apply();
+        Diag.put("loghi.migrazione", gone.length() == 0 ? "niente da cambiare (" + ch + ")" : "tolto " + gone + ", ora " + ch);
     }
 
     private void setStatus(String s) {

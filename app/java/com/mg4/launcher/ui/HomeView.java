@@ -1091,13 +1091,15 @@ public final class HomeView extends LinearLayout {
         FrameLayout.LayoutParams blp = new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.END);
         blp.setMargins(0, 0, dp(5), dp(5));
         box.addView(band, blp);
-        tile.addView(box, new LayoutParams(dp(80), dp(80)));
-        // con il logo il nome non serve: resta la frequenza FM (DAB: solo il logo)
-        String under = st.logo == null ? st.label() : st.band == MediaClient.BAND_DAB ? "" : String.format(L.locale(), "%.1f", st.khz / 1000f);
-        TextView name = Ui.oneLine(Ui.text(c, under, 14, current ? t.text : t.sub, Ui.MEDIUM));
+        tile.addView(box, new LayoutParams(dp(72), dp(72)));
+        // sempre nome + frequenza (o DAB+), anche con il logo
+        TextView name = Ui.oneLine(Ui.text(c, st.label(), 14, current ? t.text : t.sub, Ui.MEDIUM));
         name.setGravity(Gravity.CENTER);
-        if (under.isEmpty()) name.setVisibility(INVISIBLE);
-        tile.addView(name, Ui.margins(new LayoutParams(dp(96), -2), 0, dp(6), 0, 0));
+        tile.addView(name, Ui.margins(new LayoutParams(dp(96), -2), 0, dp(4), 0, 0));
+        String freq = st.band == MediaClient.BAND_DAB ? "DAB+" : String.format(L.locale(), "%.1f MHz", st.khz / 1000f);
+        TextView fq = Ui.oneLine(Ui.text(c, freq, 12, t.sub, Ui.REGULAR));
+        fq.setGravity(Gravity.CENTER);
+        tile.addView(fq, new LayoutParams(dp(96), -2));
         tile.setPadding(dp(4), dp(4), dp(4), dp(4));
         return tile;
     }
@@ -1136,13 +1138,9 @@ public final class HomeView extends LinearLayout {
         row.addView(box, new LayoutParams(tp(44), tp(44)));
         LinearLayout tx = Ui.column(c);
         String sub = st.band == MediaClient.BAND_DAB ? "DAB+" : String.format(L.locale(), "FM %.1f MHz", st.khz / 1000f);
-        if (st.logo == null) {
-            tx.addView(Ui.oneLine(Ui.text(c, st.label(), ts(18), t.text, current ? Ui.MEDIUM : Ui.REGULAR)));
-            tx.addView(Ui.oneLine(Ui.text(c, sub, ts(14), t.sub, Ui.REGULAR)));
-        } else {
-            // con il logo il nome non serve: solo frequenza o DAB+
-            tx.addView(Ui.oneLine(Ui.text(c, sub, ts(18), current ? t.text : t.sub, current ? Ui.MEDIUM : Ui.REGULAR)));
-        }
+        // sempre logo (o iniziali) + nome + frequenza o DAB+
+        tx.addView(Ui.oneLine(Ui.text(c, st.label(), ts(18), t.text, current ? Ui.MEDIUM : Ui.REGULAR)));
+        tx.addView(Ui.oneLine(Ui.text(c, sub, ts(14), t.sub, Ui.REGULAR)));
         row.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(12), 0, 0, 0));
         if (current) row.addView(Ui.icon(c, R.drawable.ic_wave, t.text, 20), new LayoutParams(dp(20), dp(20)));
         return row;

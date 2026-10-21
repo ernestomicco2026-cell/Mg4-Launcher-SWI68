@@ -278,8 +278,8 @@ public final class StationLogos {
     private void lookup(String key, String name) {
         Bitmap found = null;
         try {
-            // stazioni del paese dell'auto (lingua di sistema), le più ascoltate per prime
-            String country = L_country();
+            // stazioni del paese dei loghi (scelto a mano o automatico), le più ascoltate per prime
+            String country = L_country(packs);
             String url = API + "?name=" + URLEncoder.encode(name, "UTF-8")
                     + (country.isEmpty() ? "" : "&countrycode=" + country)
                     + "&hidebroken=true&order=clickcount&reverse=true&limit=8";
@@ -327,10 +327,10 @@ public final class StationLogos {
         if (found != null && r != null) r.run();
     }
 
-    private static String L_country() {
+    private static String L_country(LogoPacks packs) {
         try {
-            String c = android.content.res.Resources.getSystem().getConfiguration().getLocales().get(0).getCountry();
-            return c == null ? "" : c.toUpperCase(Locale.ROOT);
+            List<String> ch = packs.chosen();
+            return ch.isEmpty() ? "" : ch.get(0);
         } catch (Throwable e) {
             return "";
         }

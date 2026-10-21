@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.8.2](releases/MG4Launcher-0.8.2.apk)**
+**Ultima versione / Latest version: [0.8.3](releases/MG4Launcher-0.8.3.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -20,6 +20,9 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
+![MG4 Launcher 0.8.3 — home con la lista stazioni (simulazione / mock-up)](docs/home-0.8.3.png)
+*Home 0.8.3: lista stazioni e preferiti con logo, nome e frequenza · 0.8.3 home: station list and favourites with logo, name and frequency (mock-up).*
+
 ![MG4 Launcher 0.8.2 — home (simulazione / mock-up)](docs/home-0.8.2.png)
 *Home 0.8.2: barra con i gruppi Clima e Comfort, LKA e OPD, mini player · 0.8.2 home: bar with the Climate and Comfort groups, LKA and OPD, mini player (mock-up).*
 
@@ -114,8 +117,8 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
   - **Media**: mostra la sorgente che sta suonando (CarPlay/Android Auto compresi), altrimenti la radio; in alto un pulsante per ogni sorgente
     (Radio, USB, Bluetooth, Online, e CarPlay/Android Auto se il telefono è collegato). Per la radio: logo della stazione,
     pulsanti **FM / DAB** per cambiare banda, **elenco delle stazioni trovate** sulla banda attuale (a destra, tocca per
-    sintonizzare) e preferiti FM/DAB con i loghi (con il logo il nome non serve e non compare). I **pacchetti dei loghi
-    per paese** si scaricano una volta (paese automatico o scelto nelle impostazioni, anche più di uno) e poi
+    sintonizzare) e preferiti FM/DAB con logo, nome e frequenza. I **pacchetti dei loghi
+    per paese** si scaricano una volta (paese automatico dal fuso orario, o scelto nelle impostazioni, anche più di uno) e poi
     funzionano senza internet; si installano anche da chiavetta (`MG4Launcher/loghi/IT.zip`). Puoi aggiungere i tuoi
     nella cartella **MG4Launcher/loghi** (memoria o chiavetta USB), un file `nome.png` per stazione con il nome in
     minuscolo, solo lettere e cifre (es. `rtl1025.png`): hanno la priorità.
@@ -155,7 +158,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.8.2.apk
+   adb install -r -f MG4Launcher-0.8.3.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -226,6 +229,19 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.8.3
+- **Nome delle stazioni sempre visibile**: nella lista delle stazioni e nei preferiti ci sono sempre logo, nome e
+  frequenza (o DAB+), anche quando il logo c'è. Solo nella copertina grande il logo resta da solo, con il nome accanto.
+- **Paese automatico dei loghi corretto**: il firmware MG usa regioni della lingua che non sono il paese dell'auto (le
+  auto italiane risultavano Svizzera, quelle francesi Belgio) e scaricavano il pacchetto sbagliato. Ora il paese si
+  ricava dal **fuso orario** dell'auto, poi dalla lingua del launcher e solo per ultima dalla regione; le stazioni DAB
+  (codice del paese RDS) confermano la scelta o la correggono quando il fuso non basta. Chi ha scelto i paesi a mano
+  li mantiene; chi era su *Automatico* riceve il pacchetto giusto al primo avvio e quello sbagliato viene tolto.
+  Nella diagnostica ci sono tutte le fonti e il paese scelto.
+- **Più loghi trovati**: i nomi DAB con `#` davanti (`#RTL 102.5`, `#RadioZeta`) e le varianti di RTL 102.5
+  (b&s, Best, Disco, Napulè, Traffic, Caliente) usano il logo della stazione; riconosciuti anche KISSKISS, RMC, Radio Italia
+  SMI, RadioItaliaLive e 105HITS. Pacchetto Italia aggiornato.
 
 #### 0.8.2
 - **Pulsanti raggruppati** nella barra: **Clima** (A/C, AUTO, ricircolo) e **Comfort** (sedili e volante riscaldati).
@@ -502,8 +518,8 @@ It replaces the original home screen, keeping its features, with a new, clean de
   - **Media**: shows the source that is playing (CarPlay/Android Auto included), otherwise the radio; one button per source at the top
     (Radio, USB, Bluetooth, Online, plus CarPlay/Android Auto when a phone is connected). For the radio: station logo,
     **FM / DAB** buttons to switch band, the **list of stations found** on the current band (on the right, tap to
-    tune in) and FM/DAB favourites with logos (with a logo the name is not needed and is not shown). **Logo packs per
-    country** are downloaded once (automatic country or chosen in settings, even more than one) and then work offline;
+    tune in) and FM/DAB favourites with logo, name and frequency. **Logo packs per
+    country** are downloaded once (automatic country from the time zone, or chosen in settings, even more than one) and then work offline;
     they can also be installed from a USB stick (`MG4Launcher/loghi/IT.zip`). You can add your own in the
     **MG4Launcher/loghi** folder (storage or USB stick), one `name.png` per station, lowercase, letters and digits only
     (e.g. `rtl1025.png`): they take priority.
@@ -543,7 +559,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.8.2.apk
+   adb install -r -f MG4Launcher-0.8.3.apk
    ```
 3. Make it the default home:
    ```bash
@@ -615,6 +631,19 @@ the repository or a bug report help a lot too. Thank you!
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.8.3
+- **Station names always shown**: the station list and the favourites always show logo, name and frequency (or DAB+),
+  even when there is a logo. Only the large cover keeps the logo on its own, with the name next to it.
+- **Fixed automatic logo country**: the MG firmware uses language regions that are not the car's country (Italian cars
+  showed up as Switzerland, French ones as Belgium) and downloaded the wrong pack. The country now comes from the car's
+  **time zone**, then from the launcher language and only last from the region; DAB stations (RDS country code)
+  confirm the choice or correct it when the time zone is not enough. Countries chosen by hand are kept; cars on
+  *Automatic* get the right pack at the first start and the wrong one is removed. Diagnostics list every source and
+  the chosen country.
+- **More logos found**: DAB names starting with `#` (`#RTL 102.5`, `#RadioZeta`) and the RTL 102.5 variants
+  (b&s, Best, Disco, Napulè, Traffic, Caliente) use the station's logo; KISSKISS, RMC, Radio Italia SMI, RadioItaliaLive and
+  105HITS are recognised too. Italy pack updated.
 
 #### 0.8.2
 - **Grouped buttons** in the bar: **Climate** (A/C, AUTO, recirculation) and **Comfort** (heated seats and steering wheel).

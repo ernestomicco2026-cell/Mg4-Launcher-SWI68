@@ -1,6 +1,6 @@
 {
-  "version": "0.8.2",
-  "apk": "releases/MG4Launcher-0.8.2.apk",
-  "size": 512206,
-  "notes": "Pulsanti raggruppati Clima e Comfort, LKA e OPD, pacchetti dei loghi radio per paese, riavvio del dongle CarPlay/AA che non si collega, launcher più leggero."
+  "version": "0.8.3",
+  "apk": "releases/MG4Launcher-0.8.3.apk",
+  "size": 520398,
+  "notes": "Nome delle stazioni sempre visibile nella lista e nei preferiti, paese automatico dei loghi dal fuso orario (corretto per le auto italiane e francesi), più loghi trovati (nomi DAB con #, varianti di RTL 102.5)."
 }

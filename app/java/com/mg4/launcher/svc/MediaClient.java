@@ -761,6 +761,8 @@ public final class MediaClient {
         } catch (Exception e) {
             Diag.error("radio.elenco", e.toString());
         }
+        // paese RDS dalle stazioni trovate (conferma o corregge il paese automatico dei loghi)
+        LogoPacks.noteStations(band, out);
         if (band == BAND_DAB) {
             java.util.Collections.sort(out, (x, y) -> x.label().compareToIgnoreCase(y.label()));
         } else {
