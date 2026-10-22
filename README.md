@@ -223,8 +223,8 @@ Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartell
 ### Sostieni il progetto
 
 MG4 Launcher è e resterà **gratuito**. Se ti è utile e ti va di contribuire alle ore passate a svilupparlo e provarlo
-in auto, puoi lasciare una piccola offerta: è del tutto **facoltativa**, e anche una stella al repository o una
-segnalazione di un problema sono un aiuto prezioso. Grazie!
+in auto, puoi lasciare un'offerta: è del tutto **volontaria** e **non c'è un importo minimo**, puoi donare quello che
+vuoi. Anche una stella al repository o una segnalazione di un problema sono un aiuto prezioso. Grazie!
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -625,8 +625,8 @@ With a USB stick plugged in, the file is written there too, in the same folder.
 ### Support the project
 
 MG4 Launcher is and will stay **free**. If you find it useful and would like to contribute to the hours spent
-developing it and testing it in the car, you can leave a small donation: it's completely **optional**, and a star on
-the repository or a bug report help a lot too. Thank you!
+developing it and testing it in the car, you can leave a donation: it's completely **voluntary** and **there is no
+minimum amount**, you can give whatever you like. A star on the repository or a bug report help a lot too. Thank you!
 
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
