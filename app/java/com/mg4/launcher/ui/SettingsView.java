@@ -345,6 +345,11 @@ public final class SettingsView extends FrameLayout {
                     prefs.setSocDecimals(on);
                     host.settingsChanged(false);
                 }), false));
+        card.addView(row(c, L.s(R.string.set_soc_big), L.s(R.string.set_soc_big_sub),
+                toggle(c, prefs.socBig(), on -> {
+                    prefs.setSocBig(on);
+                    host.settingsChanged(true);
+                }), false));
         card.addView(row(c, L.s(R.string.set_tpms_title), L.s(R.string.set_tpms_sub),
                 toggle(c, prefs.showTpms(), on -> {
                     prefs.setShowTpms(on);
@@ -721,6 +726,12 @@ public final class SettingsView extends FrameLayout {
         card.addView(dr);
         col.addView(card, topFull(14));
 
+        // 0.8.6-beta: disinstallazione dall'auto (rimette la home MG e toglie il launcher)
+        card = card(c);
+        View unBtn = button(c, L.s(R.string.btn_uninstall), v -> askUninstall());
+        card.addView(row(c, L.s(R.string.uninstall_title), L.s(R.string.uninstall_sub), unBtn, false));
+        col.addView(card, topFull(14));
+
         refreshUpdateViews(up.isBusy());
     }
 
@@ -736,6 +747,15 @@ public final class SettingsView extends FrameLayout {
     }
 
     /** Salva il log completo (in background) e mostra dove è finito. */
+    /** Conferma e disinstallazione del launcher; se non riesce lo si dice. */
+    private void askUninstall() {
+        Confirm.show(this, t, L.s(R.string.uninstall_title), L.s(R.string.uninstall_confirm),
+                L.s(R.string.btn_cancel), L.s(R.string.btn_uninstall),
+                () -> com.mg4.launcher.svc.SelfUninstall.run(getContext(), why -> post(() ->
+                        Confirm.show(this, t, L.s(R.string.uninstall_title), L.f(R.string.uninstall_failed, why),
+                                L.s(R.string.btn_cancel), "OK", () -> { }))));
+    }
+
     private void saveLog() {
         logSaveBtn.setEnabled(false);
         logSaveBtn.setAlpha(0.5f);

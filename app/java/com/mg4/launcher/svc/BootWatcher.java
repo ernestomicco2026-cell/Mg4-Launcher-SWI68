@@ -38,9 +38,14 @@ public final class BootWatcher extends BroadcastReceiver {
         Diag.put("avvio.boot", "ricevuto alle " + time + " (" + (locked ? "locked" : "normale") + ")"
                 + " · " + (SystemClock.elapsedRealtime() / 1000) + " s dall'accensione");
         StartGuard.markBoot();
+        BootAccessibility.ensureEnabled(c);
+        // 0.8.7-beta: prima dello sblocco le impostazioni non sono leggibili; il lavoro si fa con BOOT_COMPLETED
+        if (!StartGuard.unlocked(c)) {
+            Diag.put("avvio.homeRipresa", "in attesa dello sblocco");
+            return;
+        }
         HomeMode.checkExpiry(c);
         HomeMode.diag(c);
-        BootAccessibility.ensureEnabled(c);
         if (!HomeMode.active(c)) {
             Diag.put("avvio.homeRipresa", "no (" + HomeMode.reason(c) + ")");
             return;

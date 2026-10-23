@@ -63,6 +63,8 @@
     <string name="set_show_inside_temp" formatted="false">Inside temperature</string>
     <string name="set_soc_decimals" formatted="false">Battery percentage with decimals</string>
     <string name="set_soc_decimals_sub" formatted="false">E.g. 88.1% instead of 88%</string>
+    <string name="set_soc_big" formatted="false">Large battery percentage</string>
+    <string name="set_soc_big_sub" formatted="false">Swaps km and percentage: the percentage becomes the big number</string>
     <string name="set_theme" formatted="false">THEME</string>
     <string name="set_tpms_sub" formatted="false">Under the wheels of the drawn car</string>
     <string name="set_tpms_title" formatted="false">Tyre pressure (TPMS)</string>
@@ -88,6 +90,11 @@
     <string name="days_7" formatted="false">7 days</string>
     <string name="btn_activate" formatted="false">Activate</string>
     <string name="btn_deactivate" formatted="false">Turn off</string>
+    <string name="uninstall_title" formatted="false">Uninstall MG4 Launcher</string>
+    <string name="uninstall_sub" formatted="false">Restores the original MG home and removes the launcher from the car</string>
+    <string name="btn_uninstall" formatted="false">Uninstall</string>
+    <string name="uninstall_confirm" formatted="false">The launcher will be removed and the original MG home will come back. To get it back you will need to install it again.</string>
+    <string name="uninstall_failed">Uninstall failed: %1$s</string>
     <string name="btn_cancel" formatted="false">Cancel</string>
     <string name="btn_turn_off" formatted="false">Turn off</string>
     <string name="btn_keep" formatted="false">Keep it on</string>
@@ -259,7 +266,14 @@
     <string name="news_5" formatted="false">Date next to the time, pressure unit and optional rear fog button</string>
     <string name="news_6" formatted="false">«Press Home automatically after power-on» option and Polish language</string>
     <string name="radio_protected" formatted="false">This firmware\'s radio service does not answer the launcher: use the Radio app</string>
+    <string name="radio_waiting" formatted="false">Radio starting: tap to open the Radio app</string>
+    <string name="radio_repairing" formatted="false">Repairing the radio, wait a few minutes</string>
     <string name="news_7" formatted="false">Steady home at start-up and many fixes from the logs</string>
+    <string name="news9_1" formatted="false">The home opens by itself at start-up, without crashes</string>
+    <string name="news9_2" formatted="false">More stable radio on older firmware, with automatic repair</string>
+    <string name="news9_3" formatted="false">Amazon Music in online music</string>
+    <string name="news9_4" formatted="false">Large battery percentage (option) and easier-to-read temperature</string>
+    <string name="news9_5" formatted="false">Uninstall the launcher from the settings</string>
     <string name="btn_change" formatted="false">Change</string>
     <string name="btn_update" formatted="false">Update</string>
     <string name="btn_delete" formatted="false">Delete</string>

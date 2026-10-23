@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.8.3](releases/MG4Launcher-0.8.3.apk)**
+**Ultima versione / Latest version: [0.9](releases/MG4Launcher-0.9.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -20,6 +20,12 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
+![MG4 Launcher 0.9 — home (simulazione / mock-up)](docs/home-0.9.png)
+*Home 0.9: percentuale della batteria e temperatura più grandi · 0.9 home: bigger battery percentage and temperature (mock-up).*
+
+![MG4 Launcher 0.9 — percentuale in grande (simulazione / mock-up)](docs/home-0.9-percentuale.png)
+*Opzione "Percentuale batteria in grande": km e percentuale invertiti · "Large battery percentage" option: km and percentage swapped (mock-up).*
+
 ![MG4 Launcher 0.8.3 — home con la lista stazioni (simulazione / mock-up)](docs/home-0.8.3.png)
 *Home 0.8.3: lista stazioni e preferiti con logo, nome e frequenza · 0.8.3 home: station list and favourites with logo, name and frequency (mock-up).*
 
@@ -158,7 +164,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.8.3.apk
+   adb install -r -f MG4Launcher-0.9.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -168,7 +174,8 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 
 All'accensione il firmware apre comunque la home MG originale: il launcher se ne accorge e torna in primo piano da solo
 (dalla 0.7.2; dalla 0.7.4 prima, grazie a un servizio di accessibilità che guarda solo quale app è in primo piano),
-senza toccare la retrocamera, CarPlay/Android Auto o una chiamata. A ogni avvio riconferma anche di essere la home predefinita.
+senza toccare la retrocamera, CarPlay/Android Auto o una chiamata. Dalla 0.9, se la home MG arriva dopo il launcher, il
+launcher la aspetta (fino a 3 minuti) e torna davanti. A ogni avvio riconferma anche di essere la home predefinita.
 
 **Home MG originale e modalità officina** (Impostazioni → Sistema):
 - *Usa come home predefinita* spento: la home MG torna quella predefinita, anche all'accensione; il launcher resta
@@ -191,7 +198,9 @@ Dal launcher: impostazioni → **Apri la home originale MG**. Per renderla di nu
 adb shell cmd package set-home-activity com.saicmotor.hmi.launcher/.ui.MainActivity
 ```
 
-Per rimuovere del tutto il launcher: `adb uninstall com.mg4.launcher`. L'app originale non viene mai modificata.
+Per rimuovere del tutto il launcher, anche senza computer (dalla 0.9): impostazioni → **Disinstalla MG4 Launcher**.
+Rimette la home MG originale e toglie il launcher dall'auto. Da computer: `adb uninstall com.mg4.launcher`.
+L'app originale non viene mai modificata.
 
 ### Comandi utili
 
@@ -229,6 +238,28 @@ vuoi. Anche una stella al repository o una segnalazione di un problema sono un a
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.9
+- **La home si apre da sola all'accensione**: su alcune auto (es. R69) il firmware porta la home MG davanti *dopo* il
+  launcher, e prima il launcher non se ne accorgeva più. Ora, finché la home MG non è comparsa, il launcher la aspetta
+  (al massimo 3 minuti) e poi torna davanti; anche *Premi Home da solo* riprova invece di fare un solo tentativo.
+  Retrocamera, CarPlay/Android Auto, chiamate e la home MG aperta apposta restano come prima.
+- **Niente più crash all'accensione**: prima dello sblocco del sistema le impostazioni del launcher non sono leggibili;
+  ora il launcher aspetta lo sblocco invece di chiudersi 2-3 volte a ogni avvio.
+- **Radio sui firmware vecchi** (servizio radio `RadioService.*`, es. R46): il launcher comanda la radio solo 30 s dopo
+  l'avvio del servizio radio, altrimenti apre l'app Radio (sulla home: *Radio in avvio*). Se il servizio radio va in
+  crash per un **promemoria DAB rotto** (difetto del firmware MG che può far riavviare l'infotainment in continuazione),
+  il launcher lo ripara da solo cancellando i dati del servizio radio quando è fermo (al massimo 3 volte al giorno;
+  sulla home: *Radio in riparazione*). I firmware recenti (R69, R73) funzionano come prima.
+- **Amazon Music**: la sorgente *Musica online* riconosce Amazon Music (auto europee) oltre a Spotify. Se dopo averla
+  scelta non suona nulla, per esempio al primo uso senza login, si apre l'app Amazon Music. Amazon Music c'è anche tra le App.
+- **Percentuale batteria in grande** (Impostazioni → Home): inverte km e percentuale.
+- **Temperatura interna/esterna e percentuale della batteria più grandi** e più chiare.
+- **Disinstallazione dall'auto**: Impostazioni → Sistema → *Disinstalla MG4 Launcher*. Rimette la home MG originale e
+  toglie il launcher, senza computer.
+- Diagnostica: versione e profilo del servizio radio, riparazioni, app di musica e sessioni media; sulle auto con un
+  servizio radio non ancora conosciuto, il launcher invia una copia di quel software al repository privato dei log, per
+  poterlo analizzare.
 
 #### 0.8.3
 - **Nome delle stazioni sempre visibile**: nella lista delle stazioni e nei preferiti ci sono sempre logo, nome e
@@ -559,7 +590,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.8.3.apk
+   adb install -r -f MG4Launcher-0.9.apk
    ```
 3. Make it the default home:
    ```bash
@@ -593,7 +624,9 @@ From the launcher: settings → **Apri la home originale MG** (Open the original
 adb shell cmd package set-home-activity com.saicmotor.hmi.launcher/.ui.MainActivity
 ```
 
-To remove the launcher completely: `adb uninstall com.mg4.launcher`. The original app is never modified.
+To remove the launcher completely, even without a computer (since 0.9): settings → **Uninstall MG4 Launcher**.
+It restores the original MG home and removes the launcher from the car. From a computer: `adb uninstall com.mg4.launcher`.
+The original app is never modified.
 
 ### Useful commands
 
@@ -631,6 +664,27 @@ minimum amount**, you can give whatever you like. A star on the repository or a 
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.9
+- **The home opens by itself at start-up**: on some cars (e.g. R69) the firmware brings the MG home to the front *after*
+  the launcher, and the launcher used to miss it. Now, until the MG home has appeared, the launcher waits for it (up to
+  3 minutes) and then comes back to the front; *Press Home automatically* also retries instead of trying once.
+  Rear camera, CarPlay/Android Auto, calls and an MG home opened on purpose are left alone as before.
+- **No more crashes at start-up**: before the system is unlocked the launcher settings can't be read; the launcher now
+  waits for the unlock instead of closing 2-3 times at every start.
+- **Radio on older firmware** (`RadioService.*` radio service, e.g. R46): the launcher only controls the radio 30 s
+  after the radio service starts, otherwise it opens the Radio app (home: *Radio starting*). If the radio service
+  crashes because of a **broken DAB reminder** (an MG firmware bug that can make the infotainment reboot over and over),
+  the launcher repairs it by clearing the radio service data while it is stopped (at most 3 times a day; home:
+  *Radio repairing*). Recent firmware (R69, R73) works as before.
+- **Amazon Music**: the *Online music* source recognises Amazon Music (European cars) as well as Spotify. If nothing
+  plays after choosing it, for example on first use without a login, the Amazon Music app opens. Amazon Music is also in Apps.
+- **Large battery percentage** (Settings → Home): swaps km and percentage.
+- **Bigger, brighter inside/outside temperature and battery percentage.**
+- **Uninstall from the car**: Settings → System → *Uninstall MG4 Launcher*. It restores the original MG home and removes
+  the launcher, no computer needed.
+- Diagnostics: radio service version and profile, repairs, music apps and media sessions; on cars with a radio service
+  we don't know yet, the launcher sends a copy of that software to the private log repository so it can be analysed.
 
 #### 0.8.3
 - **Station names always shown**: the station list and the favourites always show logo, name and frequency (or DAB+),

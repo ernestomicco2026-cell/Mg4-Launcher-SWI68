@@ -63,6 +63,8 @@
     <string name="set_show_inside_temp" formatted="false">İç sıcaklık</string>
     <string name="set_soc_decimals" formatted="false">Ondalıklı batarya yüzdesi</string>
     <string name="set_soc_decimals_sub" formatted="false">Örn. %88 yerine %88,1</string>
+    <string name="set_soc_big" formatted="false">Büyük batarya yüzdesi</string>
+    <string name="set_soc_big_sub" formatted="false">Km ve yüzdeyi değiştirir: yüzde büyük sayı olur</string>
     <string name="set_theme" formatted="false">TEMA</string>
     <string name="set_tpms_sub" formatted="false">Çizili aracın tekerleklerinin altında</string>
     <string name="set_tpms_title" formatted="false">Lastik basıncı (TPMS)</string>
@@ -88,6 +90,11 @@
     <string name="days_7" formatted="false">7 gün</string>
     <string name="btn_activate" formatted="false">Etkinleştir</string>
     <string name="btn_deactivate" formatted="false">Kapat</string>
+    <string name="uninstall_title" formatted="false">MG4 Launcher\'ı kaldır</string>
+    <string name="uninstall_sub" formatted="false">Orijinal MG ana ekranını geri yükler ve launcher\'ı araçtan kaldırır</string>
+    <string name="btn_uninstall" formatted="false">Kaldır</string>
+    <string name="uninstall_confirm" formatted="false">Launcher kaldırılacak ve orijinal MG ana ekranı geri gelecek. Tekrar kullanmak için yeniden yüklemeniz gerekir.</string>
+    <string name="uninstall_failed">Kaldırılamadı: %1$s</string>
     <string name="btn_cancel" formatted="false">İptal</string>
     <string name="btn_turn_off" formatted="false">Kapat</string>
     <string name="btn_keep" formatted="false">Açık bırak</string>
@@ -259,7 +266,14 @@
     <string name="news_5" formatted="false">Saatin yanında tarih, basınç birimi ve isteğe bağlı arka sis düğmesi</string>
     <string name="news_6" formatted="false">«Açılıştan sonra Ana ekrana otomatik bas» seçeneği ve Lehçe dili</string>
     <string name="radio_protected" formatted="false">Bu yazılımın radyo hizmeti launcher\'a yanıt vermiyor: Radyo uygulamasını kullanın</string>
+    <string name="radio_waiting" formatted="false">Radyo başlatılıyor: Radyo uygulamasını açmak için dokunun</string>
+    <string name="radio_repairing" formatted="false">Radyo onarılıyor, birkaç dakika bekleyin</string>
     <string name="news_7" formatted="false">Açılışta sabit ana ekran ve günlüklerden birçok düzeltme</string>
+    <string name="news9_1" formatted="false">Ana ekran açılışta kendiliğinden açılır, çökme olmadan</string>
+    <string name="news9_2" formatted="false">Eski yazılımlarda daha kararlı radyo, otomatik onarımla</string>
+    <string name="news9_3" formatted="false">Çevrimiçi müzikte Amazon Music</string>
+    <string name="news9_4" formatted="false">Büyük batarya yüzdesi (seçenek) ve daha okunaklı sıcaklık</string>
+    <string name="news9_5" formatted="false">Launcher\'ı ayarlardan kaldırma</string>
     <string name="btn_change" formatted="false">Değiştir</string>
     <string name="btn_update" formatted="false">Güncelle</string>
     <string name="btn_delete" formatted="false">Sil</string>

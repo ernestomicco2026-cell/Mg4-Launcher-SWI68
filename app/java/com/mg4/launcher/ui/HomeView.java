@@ -225,7 +225,7 @@ public final class HomeView extends LinearLayout {
         rangeTv = Ui.text(c, "—", 76, t.text, Ui.LIGHT);
         rangeTv.setLetterSpacing(-0.03f);
         head.addView(rangeTv);
-        rangeUnitTv = Ui.text(c, "km", 26, t.sub, Ui.REGULAR);
+        rangeUnitTv = Ui.text(c, prefs.socBig() ? "%" : "km", 26, t.sub, Ui.REGULAR);
         head.addView(rangeUnitTv, Ui.margins(Ui.lp(-2, -2), dp(14), 0, 0, dp(8)));
         head.addView(Ui.spacer(c));
         // data (opzione) tra l'autonomia e l'ora, allineata alla base dei numeri
@@ -245,7 +245,7 @@ public final class HomeView extends LinearLayout {
         battery = new Bars.Progress(c);
         battery.setColors(t.track, t.battery);
         batRow.addView(battery, Ui.lpWeight(0, dp(8), 1));
-        socTv = Ui.text(c, "—", 24, t.text, Ui.MEDIUM);
+        socTv = Ui.text(c, "—", 32, t.text, Ui.MEDIUM);   // 0.8.6-beta: più grande (era 24)
         batRow.addView(socTv, Ui.margins(Ui.lp(-2, -2), dp(16), 0, 0, 0));
         p.addView(batRow, Ui.margins(new LayoutParams(-1, -2), 0, dp(10), 0, 0));
         updateClock();
@@ -256,16 +256,16 @@ public final class HomeView extends LinearLayout {
         statusTv = Ui.oneLine(Ui.text(c, L.s(R.string.connecting_vehicle), 20, t.sub, Ui.REGULAR));
         status.addView(statusTv, Ui.margins(Ui.lpWeight(0, -2, 1), dp(10), 0, 0, 0));
         // altezza fissa: a riposo la riga resta vuota senza spostare l'auto
-        status.setMinimumHeight(dp(prefs.showInsideTemp() && !prefs.insideTempMissing() ? 42 : 24));
+        status.setMinimumHeight(dp(prefs.showInsideTemp() && !prefs.insideTempMissing() ? 62 : 34));
         // temperatura esterna e, sotto, quella interna
-        outIcon = Ui.icon(c, R.drawable.ic_thermo, t.sub, 22);
+        outIcon = Ui.icon(c, R.drawable.ic_thermo, t.text, 26);
         outIcon.setVisibility(GONE);
         status.addView(outIcon);
         LinearLayout temps = Ui.column(c);
         temps.setGravity(Gravity.END);
-        outTv = Ui.text(c, "", 20, t.sub, Ui.REGULAR);
+        outTv = Ui.text(c, "", 26, t.text, Ui.REGULAR);   // 0.8.6-beta: più grande e chiara (era 20, grigia)
         temps.addView(outTv);
-        inTv = Ui.text(c, "", 17, t.sub, Ui.REGULAR);
+        inTv = Ui.text(c, "", 24, t.text, Ui.REGULAR);    // 0.8.6-beta: più grande e chiara (era 17, grigia)
         inTv.setVisibility(showInside() ? VISIBLE : GONE);
         temps.addView(inTv);
         status.addView(temps, Ui.margins(Ui.lp(-2, -2), dp(6), 0, 0, 0));
@@ -407,12 +407,21 @@ public final class HomeView extends LinearLayout {
             return;
         }
         lastVehicle = s;
-        rangeTv.setText(s.rangeKm > 0 && s.rangeKm < 2000 ? String.valueOf(s.rangeKm) : "—");
-        if (s.distUnit == 1) rangeUnitTv.setText("mi");
-        if (s.soc >= 0 && s.soc <= 100) {
-            socTv.setText(prefs.socDecimals() ? String.format(L.locale(), "%.1f%%", s.soc) : Math.round(s.soc) + "%");
-            battery.setValue(s.soc / 100f);
+        String km = s.rangeKm > 0 && s.rangeKm < 2000 ? String.valueOf(s.rangeKm) : "—";
+        String unit = s.distUnit == 1 ? "mi" : "km";
+        boolean socOk = s.soc >= 0 && s.soc <= 100;
+        String soc = prefs.socDecimals() ? String.format(L.locale(), "%.1f", s.soc) : String.valueOf(Math.round(s.soc));
+        if (prefs.socBig()) {
+            // 0.9: percentuale in grande, autonomia accanto alla barra
+            if (socOk) rangeTv.setText(soc);
+            rangeUnitTv.setText("%");
+            socTv.setText("—".equals(km) ? "—" : km + " " + unit);
+        } else {
+            rangeTv.setText(km);
+            rangeUnitTv.setText(unit);
+            if (socOk) socTv.setText(soc + "%");
         }
+        if (socOk) battery.setValue(s.soc / 100f);
         battery.setLimit(s.chargeLimit > 0 && s.chargeLimit < 100 ? s.chargeLimit / 100f : -1);
         // stato solo durante ricarica o scarica (tipo, potenza, tempo rimanente); a riposo lo spazio resta vuoto
         String st = chargeText(s);
@@ -1200,7 +1209,9 @@ public final class HomeView extends LinearLayout {
                 host.launch("com.saicmotor.hmi.radio", "com.saicmotor.hmi.radio.app.RadioHomeActivity");
                 break;
             case MediaClient.SRC_ONLINE:
-                host.launch("com.saicmotor.mediacenter", "com.saicmotor.mediacenter.spotify.MainActivity");
+                // 0.9: Amazon Music se c'è, altrimenti Spotify
+                if (MediaClient.ONLINE_AMAZON.equals(media.onlinePackage())) media.openOnlineApp("tocco sul lettore");
+                else host.launch("com.saicmotor.mediacenter", "com.saicmotor.mediacenter.spotify.MainActivity");
                 break;
             case MediaClient.SRC_CARPLAY:
             case MediaClient.SRC_AAUTO:
@@ -1242,7 +1253,7 @@ public final class HomeView extends LinearLayout {
             artFreq.setTextSize(dab ? 30 : 56);
             artUnit.setText(m.radioUnit);
             mMeta.setText(dab ? band + (m.radioUnit.isEmpty() ? "" : " · " + m.radioUnit)
-                    : band + " · " + m.radioFreq + " " + m.radioUnit);
+                    : band + (m.radioFreq.isEmpty() ? "" : " · " + m.radioFreq + " " + m.radioUnit));
             styleBands(SystemClock.uptimeMillis() < pendingBandUntil ? pendingBand : m.radioBand);
             showFavorites(m);
         } else {

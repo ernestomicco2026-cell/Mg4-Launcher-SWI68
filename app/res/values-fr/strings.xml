@@ -63,6 +63,8 @@
     <string name="set_show_inside_temp" formatted="false">Température intérieure</string>
     <string name="set_soc_decimals" formatted="false">Pourcentage de batterie avec décimales</string>
     <string name="set_soc_decimals_sub" formatted="false">Ex. 88,1 % au lieu de 88 %</string>
+    <string name="set_soc_big" formatted="false">Pourcentage de batterie en grand</string>
+    <string name="set_soc_big_sub" formatted="false">Inverse km et pourcentage : le pourcentage devient le grand chiffre</string>
     <string name="set_theme" formatted="false">THÈME</string>
     <string name="set_tpms_sub" formatted="false">Sous les roues de la voiture dessinée</string>
     <string name="set_tpms_title" formatted="false">Pression des pneus (TPMS)</string>
@@ -88,6 +90,11 @@
     <string name="days_7" formatted="false">7 jours</string>
     <string name="btn_activate" formatted="false">Activer</string>
     <string name="btn_deactivate" formatted="false">Désactiver</string>
+    <string name="uninstall_title" formatted="false">Désinstaller MG4 Launcher</string>
+    <string name="uninstall_sub" formatted="false">Rétablit l\'accueil MG d\'origine et supprime le launcher de la voiture</string>
+    <string name="btn_uninstall" formatted="false">Désinstaller</string>
+    <string name="uninstall_confirm" formatted="false">Le launcher sera supprimé et l\'accueil MG d\'origine reviendra. Pour le récupérer, il faudra le réinstaller.</string>
+    <string name="uninstall_failed">Échec de la désinstallation : %1$s</string>
     <string name="btn_cancel" formatted="false">Annuler</string>
     <string name="btn_turn_off" formatted="false">Désactiver</string>
     <string name="btn_keep" formatted="false">Garder</string>
@@ -259,7 +266,14 @@
     <string name="news_5" formatted="false">Date à côté de l\'heure, unité de pression et bouton antibrouillard arrière au choix</string>
     <string name="news_6" formatted="false">Option « Appuyer sur Accueil tout seul après l\'allumage » et langue polonaise</string>
     <string name="radio_protected" formatted="false">Le service radio de ce firmware ne répond pas au launcher : utilisez l\'app Radio</string>
+    <string name="radio_waiting" formatted="false">Radio en démarrage : touchez pour ouvrir l\'app Radio</string>
+    <string name="radio_repairing" formatted="false">Réparation de la radio, patientez quelques minutes</string>
     <string name="news_7" formatted="false">Accueil stable au démarrage et de nombreuses corrections issues des journaux</string>
+    <string name="news9_1" formatted="false">L\'accueil s\'ouvre tout seul au démarrage, sans plantage</string>
+    <string name="news9_2" formatted="false">Radio plus stable sur les anciens firmwares, avec réparation automatique</string>
+    <string name="news9_3" formatted="false">Amazon Music dans la musique en ligne</string>
+    <string name="news9_4" formatted="false">Pourcentage de batterie en grand (option) et température plus lisible</string>
+    <string name="news9_5" formatted="false">Désinstaller le launcher depuis les réglages</string>
     <string name="btn_change" formatted="false">Modifier</string>
     <string name="btn_update" formatted="false">Mettre à jour</string>
     <string name="btn_delete" formatted="false">Supprimer</string>

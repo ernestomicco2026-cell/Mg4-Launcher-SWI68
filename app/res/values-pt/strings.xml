@@ -63,6 +63,8 @@
     <string name="set_show_inside_temp" formatted="false">Temperatura interior</string>
     <string name="set_soc_decimals" formatted="false">Percentagem da bateria com decimais</string>
     <string name="set_soc_decimals_sub" formatted="false">Ex. 88,1% em vez de 88%</string>
+    <string name="set_soc_big" formatted="false">Percentagem da bateria em grande</string>
+    <string name="set_soc_big_sub" formatted="false">Troca km e percentagem: a percentagem passa a ser o número grande</string>
     <string name="set_theme" formatted="false">TEMA</string>
     <string name="set_tpms_sub" formatted="false">Sob as rodas do carro desenhado</string>
     <string name="set_tpms_title" formatted="false">Pressão dos pneus (TPMS)</string>
@@ -88,6 +90,11 @@
     <string name="days_7" formatted="false">7 dias</string>
     <string name="btn_activate" formatted="false">Ativar</string>
     <string name="btn_deactivate" formatted="false">Desativar</string>
+    <string name="uninstall_title" formatted="false">Desinstalar MG4 Launcher</string>
+    <string name="uninstall_sub" formatted="false">Repõe o ecrã inicial MG original e remove o launcher do carro</string>
+    <string name="btn_uninstall" formatted="false">Desinstalar</string>
+    <string name="uninstall_confirm" formatted="false">O launcher será removido e o ecrã inicial MG original volta. Para o ter de novo terá de o instalar outra vez.</string>
+    <string name="uninstall_failed">Falha ao desinstalar: %1$s</string>
     <string name="btn_cancel" formatted="false">Cancelar</string>
     <string name="btn_turn_off" formatted="false">Desligar</string>
     <string name="btn_keep" formatted="false">Manter</string>
@@ -259,7 +266,14 @@
     <string name="news_5" formatted="false">Data junto à hora, unidade de pressão e botão de nevoeiro traseiro opcional</string>
     <string name="news_6" formatted="false">Opção «Premir Início sozinho após ligar» e língua polaca</string>
     <string name="radio_protected" formatted="false">O serviço de rádio deste firmware não responde ao launcher: use a app Rádio</string>
+    <string name="radio_waiting" formatted="false">Rádio a iniciar: toque para abrir a app Rádio</string>
+    <string name="radio_repairing" formatted="false">A reparar o rádio, aguarde alguns minutos</string>
     <string name="news_7" formatted="false">Ecrã estável no arranque e muitas correções a partir dos registos</string>
+    <string name="news9_1" formatted="false">O ecrã inicial abre sozinho ao ligar, sem falhas</string>
+    <string name="news9_2" formatted="false">Rádio mais estável em firmware antigo, com reparação automática</string>
+    <string name="news9_3" formatted="false">Amazon Music na música online</string>
+    <string name="news9_4" formatted="false">Percentagem da bateria em grande (opção) e temperatura mais legível</string>
+    <string name="news9_5" formatted="false">Desinstalar o launcher nas definições</string>
     <string name="btn_change" formatted="false">Alterar</string>
     <string name="btn_update" formatted="false">Atualizar</string>
     <string name="btn_delete" formatted="false">Eliminar</string>

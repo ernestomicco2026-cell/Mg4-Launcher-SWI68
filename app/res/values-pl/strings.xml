@@ -63,6 +63,8 @@
     <string name="set_show_inside_temp" formatted="false">Temperatura wewnątrz</string>
     <string name="set_soc_decimals" formatted="false">Procent baterii z miejscem po przecinku</string>
     <string name="set_soc_decimals_sub" formatted="false">Np. 88,1% zamiast 88%</string>
+    <string name="set_soc_big" formatted="false">Procent baterii w dużym rozmiarze</string>
+    <string name="set_soc_big_sub" formatted="false">Zamienia km i procent: procent staje się dużą liczbą</string>
     <string name="set_theme" formatted="false">MOTYW</string>
     <string name="set_tpms_sub" formatted="false">Pod kołami narysowanego samochodu</string>
     <string name="set_tpms_title" formatted="false">Ciśnienie w oponach (TPMS)</string>
@@ -88,6 +90,11 @@
     <string name="days_7" formatted="false">7 dni</string>
     <string name="btn_activate" formatted="false">Włącz</string>
     <string name="btn_deactivate" formatted="false">Wyłącz</string>
+    <string name="uninstall_title" formatted="false">Odinstaluj MG4 Launcher</string>
+    <string name="uninstall_sub" formatted="false">Przywraca oryginalny ekran główny MG i usuwa launcher z auta</string>
+    <string name="btn_uninstall" formatted="false">Odinstaluj</string>
+    <string name="uninstall_confirm" formatted="false">Launcher zostanie usunięty i wróci oryginalny ekran główny MG. Aby go odzyskać, trzeba będzie zainstalować go ponownie.</string>
+    <string name="uninstall_failed">Nie udało się odinstalować: %1$s</string>
     <string name="btn_cancel" formatted="false">Anuluj</string>
     <string name="btn_turn_off" formatted="false">Wyłącz</string>
     <string name="btn_keep" formatted="false">Zostaw włączony</string>
@@ -259,7 +266,14 @@
     <string name="news_5" formatted="false">Data obok godziny, jednostka ciśnienia i przycisk tylnego światła przeciwmgłowego do wyboru</string>
     <string name="news_6" formatted="false">Opcja «Naciśnij Home sam po włączeniu» i język polski</string>
     <string name="radio_protected" formatted="false">Usługa radia w tym oprogramowaniu nie odpowiada launcherowi: użyj aplikacji Radio</string>
+    <string name="radio_waiting" formatted="false">Radio się uruchamia: dotknij, aby otworzyć aplikację Radio</string>
+    <string name="radio_repairing" formatted="false">Naprawa radia, poczekaj kilka minut</string>
     <string name="news_7" formatted="false">Stabilny ekran przy starcie i wiele poprawek z logów</string>
+    <string name="news9_1" formatted="false">Ekran główny otwiera się sam po uruchomieniu, bez awarii</string>
+    <string name="news9_2" formatted="false">Stabilniejsze radio na starszym oprogramowaniu, z automatyczną naprawą</string>
+    <string name="news9_3" formatted="false">Amazon Music w muzyce online</string>
+    <string name="news9_4" formatted="false">Duży procent baterii (opcja) i czytelniejsza temperatura</string>
+    <string name="news9_5" formatted="false">Odinstalowanie launchera w ustawieniach</string>
     <string name="btn_change" formatted="false">Zmień</string>
     <string name="btn_update" formatted="false">Aktualizuj</string>
     <string name="btn_delete" formatted="false">Usuń</string>

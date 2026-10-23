@@ -57,6 +57,9 @@ public final class BootAccessibility extends AccessibilityService {
 
     private final Runnable autoHome = this::autoHomeNow;
     private String autoHomeWhy = "";
+    /** Fino a quando riprovare se la home MG non è ancora comparsa (0.8.6-beta). */
+    private long autoHomeUntil;
+    private static final long AUTO_HOME_RETRY_MS = 5000, AUTO_HOME_WAIT_MS = 180_000;
 
     /** Una sola volta dopo l'accensione o il risveglio, dopo i secondi scelti nelle impostazioni. */
     private void scheduleAutoHome(String why) {
@@ -67,6 +70,7 @@ public final class BootAccessibility extends AccessibilityService {
             return;
         }
         autoHomeWhy = why;
+        autoHomeUntil = android.os.SystemClock.elapsedRealtime() + AUTO_HOME_WAIT_MS;
         Diag.put("avvio.premiHome", "tra " + sec + " s (" + why + ")");
         h.postDelayed(autoHome, sec * 1000L);
     }
@@ -79,6 +83,12 @@ public final class BootAccessibility extends AccessibilityService {
         String top = StartGuard.topPackage(this);
         String result;
         if (getPackageName().equals(top)) {
+            // la home MG può arrivare dopo: si ricontrolla finché non compare (al massimo 3 minuti)
+            if (!StartGuard.mgSeenInWindow() && android.os.SystemClock.elapsedRealtime() < autoHomeUntil) {
+                Diag.put("avvio.premiHome", "launcher davanti, in attesa della home MG · " + autoHomeWhy);
+                h.postDelayed(autoHome, AUTO_HOME_RETRY_MS);
+                return;
+            }
             result = "non serviva (launcher già davanti)";
         } else if (BootWatcher.MG_HOME.equals(top)) {
             boolean ok = performGlobalAction(GLOBAL_ACTION_HOME);
@@ -97,14 +107,42 @@ public final class BootAccessibility extends AccessibilityService {
         }
     };
 
+    /** 0.8.7-beta: collegato prima dello sblocco → si parte all'arrivo di USER_UNLOCKED. */
+    private boolean started, unlockRegistered;
+    private final BroadcastReceiver unlock = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context c, Intent i) {
+            Diag.put("avvio.accessibilita", "utente sbloccato: avvio");
+            start();
+        }
+    };
+
     @Override
     protected void onServiceConnected() {
         if (Firmware.wrong(this)) {
             Diag.put("avvio.accessibilita", "inattivo (firmware non SWI68)");
             return;
         }
-        StartGuard.a11yConnected = true;
         StartGuard.markA11y();
+        if (!StartGuard.unlocked(this)) {
+            Diag.put("avvio.accessibilita", "collegato prima dello sblocco: aspetto lo sblocco");
+            try {
+                registerReceiver(unlock, new IntentFilter(Intent.ACTION_USER_UNLOCKED));
+                unlockRegistered = true;
+            } catch (Throwable ignored) {
+            }
+            // sblocco avvenuto nel frattempo?
+            if (StartGuard.unlocked(this)) start();
+            return;
+        }
+        start();
+    }
+
+    /** Avvio vero e proprio, una sola volta, a utente sbloccato. */
+    private void start() {
+        if (started) return;
+        started = true;
+        StartGuard.a11yConnected = true;
         Diag.put("avvio.accessibilita", "attivo");
         HomeMode.checkExpiry(this);
         StartGuard.openWindow(this, "accensione");
@@ -121,7 +159,7 @@ public final class BootAccessibility extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent e) {
         if (e == null || e.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || e.getPackageName() == null) return;
-        if (!StartGuard.a11yConnected) return;   // firmware sbagliato: il servizio non fa nulla
+        if (!started || !StartGuard.a11yConnected) return;   // firmware sbagliato o utente non ancora sbloccato
         String pkg = e.getPackageName().toString();
         StartGuard.onForeground(this, pkg);
         // il nostro launcher deve restare in primo piano 5 s: si ricontrolla senza aspettare un altro evento
@@ -138,9 +176,17 @@ public final class BootAccessibility extends AccessibilityService {
     public void onDestroy() {
         StartGuard.a11yConnected = false;
         h.removeCallbacksAndMessages(null);
-        try {
-            unregisterReceiver(screenOn);
-        } catch (Throwable ignored) {
+        if (started) {
+            try {
+                unregisterReceiver(screenOn);
+            } catch (Throwable ignored) {
+            }
+        }
+        if (unlockRegistered) {
+            try {
+                unregisterReceiver(unlock);
+            } catch (Throwable ignored) {
+            }
         }
         super.onDestroy();
     }

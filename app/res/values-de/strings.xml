@@ -63,6 +63,8 @@
     <string name="set_show_inside_temp" formatted="false">Innentemperatur</string>
     <string name="set_soc_decimals" formatted="false">Akkustand mit Nachkommastelle</string>
     <string name="set_soc_decimals_sub" formatted="false">Z. B. 88,1 % statt 88 %</string>
+    <string name="set_soc_big" formatted="false">Akkustand groß anzeigen</string>
+    <string name="set_soc_big_sub" formatted="false">Tauscht km und Prozent: der Akkustand wird zur großen Zahl</string>
     <string name="set_theme" formatted="false">DESIGN</string>
     <string name="set_tpms_sub" formatted="false">Unter den Rädern des gezeichneten Autos</string>
     <string name="set_tpms_title" formatted="false">Reifendruck (TPMS)</string>
@@ -88,6 +90,11 @@
     <string name="days_7" formatted="false">7 Tage</string>
     <string name="btn_activate" formatted="false">Aktivieren</string>
     <string name="btn_deactivate" formatted="false">Deaktivieren</string>
+    <string name="uninstall_title" formatted="false">MG4 Launcher deinstallieren</string>
+    <string name="uninstall_sub" formatted="false">Stellt den originalen MG-Startbildschirm wieder her und entfernt den Launcher aus dem Auto</string>
+    <string name="btn_uninstall" formatted="false">Deinstallieren</string>
+    <string name="uninstall_confirm" formatted="false">Der Launcher wird entfernt und der originale MG-Startbildschirm kehrt zurück. Um ihn wieder zu nutzen, musst du ihn neu installieren.</string>
+    <string name="uninstall_failed">Deinstallation fehlgeschlagen: %1$s</string>
     <string name="btn_cancel" formatted="false">Abbrechen</string>
     <string name="btn_turn_off" formatted="false">Ausschalten</string>
     <string name="btn_keep" formatted="false">Beibehalten</string>
@@ -259,7 +266,14 @@
     <string name="news_5" formatted="false">Datum neben der Uhrzeit, Druckeinheit und optionale Nebelschlusstaste</string>
     <string name="news_6" formatted="false">Option „Nach dem Einschalten automatisch Home drücken“ und Polnisch</string>
     <string name="radio_protected" formatted="false">Der Radiodienst dieser Firmware antwortet dem Launcher nicht: nutze die Radio-App</string>
+    <string name="radio_waiting" formatted="false">Radio startet: tippen, um die Radio-App zu öffnen</string>
+    <string name="radio_repairing" formatted="false">Radio wird repariert, bitte einige Minuten warten</string>
     <string name="news_7" formatted="false">Stabile Startseite beim Start und viele Korrekturen aus den Logs</string>
+    <string name="news9_1" formatted="false">Der Startbildschirm öffnet sich beim Start von selbst, ohne Abstürze</string>
+    <string name="news9_2" formatted="false">Stabileres Radio auf älterer Firmware, mit automatischer Reparatur</string>
+    <string name="news9_3" formatted="false">Amazon Music bei der Online-Musik</string>
+    <string name="news9_4" formatted="false">Großer Akkustand (Option) und besser lesbare Temperatur</string>
+    <string name="news9_5" formatted="false">Launcher in den Einstellungen deinstallieren</string>
     <string name="btn_change" formatted="false">Ändern</string>
     <string name="btn_update" formatted="false">Aktualisieren</string>
     <string name="btn_delete" formatted="false">Löschen</string>

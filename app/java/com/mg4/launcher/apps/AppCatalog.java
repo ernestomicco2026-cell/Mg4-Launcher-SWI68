@@ -69,6 +69,7 @@ public final class AppCatalog {
             {"@app_navigator", "@nav", "", "nav"},
             {"EV Route", "com.saicmotor.evrouting", "com.saicmotor.evrouting.view.MainActivity", "route"},
             {"Spotify", "com.saicmotor.mediacenter", "com.saicmotor.mediacenter.spotify.MainActivity", "wave"},
+            {"Amazon Music", "com.saicmotor.onlinemedia.amazon.v2", "", "wave"},
             {"@app_weather", "com.saicmotor.weathers", "com.saicmotor.weathers.activity.MainActivity", "cloud"},
             {"@app_manual", "com.saicmotor.hmi.pdfreader", "com.saicmotor.hmi.pdfreader.QRcodeActivity", "book"},
             {"MG Touchpoint", "com.saic.saicmaintenance", "com.saic.saicmaintenance.module.maintaince.MaintaiceEp21Activity", "info"},

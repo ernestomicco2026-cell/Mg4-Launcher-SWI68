@@ -63,6 +63,8 @@
     <string name="set_show_inside_temp" formatted="false">Temperatura interna</string>
     <string name="set_soc_decimals" formatted="false">Percentuale batteria con decimali</string>
     <string name="set_soc_decimals_sub" formatted="false">Es. 88,1% invece di 88%</string>
+    <string name="set_soc_big" formatted="false">Percentuale batteria in grande</string>
+    <string name="set_soc_big_sub" formatted="false">Inverte km e percentuale: la percentuale diventa il numero grande</string>
     <string name="set_theme" formatted="false">TEMA</string>
     <string name="set_tpms_sub" formatted="false">Sotto le ruote dell\'auto disegnata</string>
     <string name="set_tpms_title" formatted="false">Pressione pneumatici (TPMS)</string>
@@ -88,6 +90,11 @@
     <string name="days_7" formatted="false">7 giorni</string>
     <string name="btn_activate" formatted="false">Attiva</string>
     <string name="btn_deactivate" formatted="false">Disattiva</string>
+    <string name="uninstall_title" formatted="false">Disinstalla MG4 Launcher</string>
+    <string name="uninstall_sub" formatted="false">Rimette la home MG originale e toglie il launcher dall\'auto</string>
+    <string name="btn_uninstall" formatted="false">Disinstalla</string>
+    <string name="uninstall_confirm" formatted="false">Il launcher verrà tolto e tornerà la home MG originale. Per riaverlo dovrai installarlo di nuovo.</string>
+    <string name="uninstall_failed">Disinstallazione non riuscita: %1$s</string>
     <string name="btn_cancel" formatted="false">Annulla</string>
     <string name="btn_turn_off" formatted="false">Spegni</string>
     <string name="btn_keep" formatted="false">Lascia attiva</string>
@@ -259,7 +266,14 @@
     <string name="news_5" formatted="false">Data accanto all\'ora, unità della pressione e pulsante retronebbia a scelta</string>
     <string name="news_6" formatted="false">Opzione «Premi Home da solo dopo l\'accensione» e lingua polacca</string>
     <string name="radio_protected" formatted="false">Il servizio radio di questo firmware non risponde al launcher: usa l\'app Radio</string>
+    <string name="radio_waiting" formatted="false">Radio in avvio: tocca per aprire l\'app Radio</string>
+    <string name="radio_repairing" formatted="false">Radio in riparazione, attendi qualche minuto</string>
     <string name="news_7" formatted="false">Home stabile all\'avvio e tante correzioni dai log</string>
+    <string name="news9_1" formatted="false">La home si apre da sola all\'accensione, senza crash</string>
+    <string name="news9_2" formatted="false">Radio più stabile sui firmware vecchi, con riparazione automatica</string>
+    <string name="news9_3" formatted="false">Amazon Music nella musica online</string>
+    <string name="news9_4" formatted="false">Percentuale batteria in grande (opzione) e temperatura più leggibile</string>
+    <string name="news9_5" formatted="false">Disinstallazione del launcher dalle impostazioni</string>
     <string name="btn_change" formatted="false">Cambia</string>
     <string name="btn_update" formatted="false">Aggiorna</string>
     <string name="btn_delete" formatted="false">Elimina</string>

@@ -1,6 +1,6 @@
 {
-  "version": "0.8.3",
-  "apk": "releases/MG4Launcher-0.8.3.apk",
-  "size": 520398,
-  "notes": "Nome delle stazioni sempre visibile nella lista e nei preferiti, paese automatico dei loghi dal fuso orario (corretto per le auto italiane e francesi), più loghi trovati (nomi DAB con #, varianti di RTL 102.5)."
+  "version": "0.9",
+  "apk": "releases/MG4Launcher-0.9.apk",
+  "size": 536782,
+  "notes": "Home che si apre da sola all'accensione e niente crash all'avvio, radio più stabile sui firmware vecchi (riparazione automatica del promemoria DAB), Amazon Music, percentuale batteria in grande, testi più grandi, disinstallazione dalle impostazioni."
 }

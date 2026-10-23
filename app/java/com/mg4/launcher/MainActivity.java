@@ -129,6 +129,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
             media.start();
             nav.start();
             logs.start();
+            com.mg4.launcher.svc.FirmwareExport.schedule(this);
             com.mg4.launcher.svc.DongleWatch.get(this, media).start();
             com.mg4.launcher.svc.EmbedCheck.log(this);
         });
@@ -334,12 +335,13 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         }
         prefs.setNewsShownFor(ver);
         if (!updated) return;
-        showNews(major + ".0");
+        showNews(major);
     }
 
     private void showNews(String ver) {
-        String[] items = {L.s(R.string.news_1), L.s(R.string.news_2), L.s(R.string.news_3), L.s(R.string.news_4),
-                L.s(R.string.news_5), L.s(R.string.news_6), L.s(R.string.news_7)};
+        // 0.9: novità della 0.9
+        String[] items = {L.s(R.string.news9_1), L.s(R.string.news9_2), L.s(R.string.news9_3), L.s(R.string.news9_4),
+                L.s(R.string.news9_5)};
         com.mg4.launcher.ui.Confirm.notice(root, theme, L.f(R.string.news_title, ver), L.s(R.string.news_sub), items,
                 L.s(R.string.btn_ok), null);
     }
