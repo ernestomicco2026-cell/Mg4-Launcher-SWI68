@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.9](releases/MG4Launcher-0.9.apk)**
+**Ultima versione / Latest version: [0.9.1](releases/MG4Launcher-0.9.1.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -20,6 +20,13 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
+![MG4 Launcher 0.9.1 — home (simulazione / mock-up)](docs/home-0.9.1.png)
+*Home 0.9.1: grafica uguale alla 0.9 · 0.9.1 home: same look as 0.9 (mock-up).*
+
+![MG4 Clima aperto dal tasto del clima del launcher (simulazione / mock-up)](docs/clima-0.9.1-mg4clima.png)
+*Dalla 0.9.1 il tasto del clima apre [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4), se è installato ·
+from 0.9.1 the climate button opens [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4), if installed (mock-up).*
+
 ![MG4 Launcher 0.9 — home (simulazione / mock-up)](docs/home-0.9.png)
 *Home 0.9: percentuale della batteria e temperatura più grandi · 0.9 home: bigger battery percentage and temperature (mock-up).*
 
@@ -164,7 +171,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.9.apk
+   adb install -r -f MG4Launcher-0.9.1.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -238,6 +245,23 @@ vuoi. Anche una stella al repository o una segnalazione di un problema sono un a
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.9.1
+- **Radio sui firmware con servizio `RadioService.3A111`**: in questa versione del servizio radio i comandi sono
+  spostati di uno rispetto alle altre; il launcher ora usa la tabella giusta per ogni versione. Finiscono i promemoria
+  DAB vuoti che facevano andare in crash la radio e riavviare l'infotainment. Con un servizio radio non ancora
+  conosciuto, elenco stazioni, play e loghi DAB passano dall'app Radio originale.
+- **Musica online** compare solo se l'auto ha Amazon Music o Spotify.
+- **Dongle CarPlay / Android Auto wireless**:
+  - riconosciuto anche dal nome (OKBox, SmartBox, smartlinkBox…) e imparato durante tutte le sessioni, anche quelle che
+    partono tardi;
+  - **porta media**: quando, ad auto accesa, inserisci il dongle (o una chiavetta) il launcher vede quale porta USB si è
+    accesa e la memorizza. Se all'accensione CarPlay/AA non parte, spegne e riaccende **solo quella porta**, come
+    staccare e riattaccare il dongle; anche il pulsante *Riavvia CarPlay/AA* fa lo stesso. Con una chiavetta inserita
+    non interviene; modem e altri dispositivi interni non vengono mai toccati.
+- **Tasto del clima**: se è installato [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4) apre
+  direttamente quello, senza far vedere per un istante l'app clima originale. Senza MG4 Clima tutto resta come prima.
+- Raccolta del software radio: le versioni già analizzate non vengono più richieste.
 
 #### 0.9
 - **La home si apre da sola all'accensione**: su alcune auto (es. R69) il firmware porta la home MG davanti *dopo* il
@@ -590,7 +614,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.9.apk
+   adb install -r -f MG4Launcher-0.9.1.apk
    ```
 3. Make it the default home:
    ```bash
@@ -664,6 +688,22 @@ minimum amount**, you can give whatever you like. A star on the repository or a 
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.9.1
+- **Radio on firmware with the `RadioService.3A111` service**: in this radio service version the commands are shifted
+  by one compared to the others; the launcher now uses the right table for each version. No more empty DAB reminders
+  that crashed the radio and rebooted the infotainment. With a radio service we don't know yet, station list, play and
+  DAB logos go through the original Radio app.
+- **Online music** only appears if the car has Amazon Music or Spotify.
+- **Wireless CarPlay / Android Auto dongle**:
+  - also recognised by its name (OKBox, SmartBox, smartlinkBox…) and learned during every session, even late ones;
+  - **media port**: when you plug the dongle (or a USB stick) in with the car on, the launcher sees which USB port came on
+    and remembers it. If CarPlay/AA doesn't start at start-up, it switches **only that port** off and on again, like
+    unplugging and replugging the dongle; the *Restart CarPlay/AA* button does the same. With a USB stick plugged in it
+    does nothing; the modem and other internal devices are never touched.
+- **Climate button**: if [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4) is installed it opens it
+  directly, without briefly showing the original climate app. Without MG4 Clima everything stays as before.
+- Radio software collection: versions already analysed are no longer requested.
 
 #### 0.9
 - **The home opens by itself at start-up**: on some cars (e.g. R69) the firmware brings the MG home to the front *after*

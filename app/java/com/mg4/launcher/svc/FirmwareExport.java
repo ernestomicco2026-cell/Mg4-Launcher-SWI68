@@ -32,7 +32,9 @@ public final class FirmwareExport {
     private static final String FOLDER = "SWI68/firmware";
     private static final String[] PACKAGES = {"com.saicmotor.service.radio", "com.saicmotor.hmi.radio"};
     /** Versioni del servizio radio già analizzate (R46, R69). */
-    private static final String[] KNOWN = {"RadioService.44231", "1.0.0_EH32_SOP_2502201114"};
+    private static final String[] KNOWN = {"RadioService.44231", "1.0.0_EH32_SOP_2502201114",
+            // 0.9.1: analizzate dai file raccolti (3A111 ha i codici da 21 spostati, le altre come R69)
+            "RadioService.3A111", "RadioService.4C051", "1.0.0_EH32_SOP_2407251340", "1.0.0_EH32_SOP_TUR_20241128_2501131436"};
     private static final long DELAY_MS = 180_000;
     private static final long MAX_FILE = 40L * 1024 * 1024;
 

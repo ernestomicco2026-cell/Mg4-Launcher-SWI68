@@ -44,7 +44,10 @@ public final class AppCatalog {
 
         public Intent intent() {
             Intent i;
-            if (component != null) {
+            Intent mg4 = component != null ? climaOverride(component.getPackageName()) : null;
+            if (mg4 != null) {
+                i = mg4;
+            } else if (component != null) {
                 i = new Intent(Intent.ACTION_MAIN).setComponent(component);
             } else {
                 i = new Intent(launchIntent);
@@ -96,6 +99,7 @@ public final class AppCatalog {
     public AppCatalog(Context c) {
         ctx = c.getApplicationContext();
         pm = ctx.getPackageManager();
+        spm = pm;
     }
 
     public static int iconFor(Context c, String name) {
@@ -304,7 +308,26 @@ public final class AppCatalog {
      * (su alcuni firmware SWI68 HvacActivity e ChargeManagementActivity non ci sono). Null se manca anche quella:
      * scritto una sola volta nella diagnostica.
      */
+    private static volatile android.content.pm.PackageManager spm;
+
+    /**
+     * MG4 Clima installato: il clima si apre direttamente lì (prima si apriva l'app originale e si vedeva per un
+     * istante prima di essere sostituita). MG4 Clima rimanda all'originale se la sostituzione è spenta.
+     */
+    static Intent climaOverride(String pkg) {
+        if (!"com.saicmotor.hmi.hvac".equals(pkg) || spm == null) return null;
+        Intent i = new Intent("com.mg4.clima.APRI").setPackage("com.mg4.clima").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            return spm.resolveActivity(i, 0) != null ? i : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public Intent resolveLaunch(String pkg, String cls) {
+        spm = pm;
+        Intent mg4 = climaOverride(pkg);
+        if (mg4 != null) return mg4;
         Intent exact = new Intent(Intent.ACTION_MAIN).setComponent(new ComponentName(pkg, cls));
         try {
             if (cls != null && pm.resolveActivity(exact, 0) != null) return exact;

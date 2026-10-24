@@ -63,9 +63,17 @@ public final class MediaClient {
     private static final String RADIO_PKG = "com.saicmotor.service.radio";
     private static final String RADIO_ACTION = "com.saicmotor.service.radio.radioservice";
     private static final String RAD = "com.saicmotor.sdk.radio.IRadioAppService";
-    private static final int RAD_NEXT = 13, RAD_PREV = 14, RAD_CURRENT = 19, RAD_PLAY = 27, RAD_PAUSE = 28;
-    private static final int RAD_FAVORITES = 7, RAD_TUNE = 8, RAD_TUNE_DAB = 9, RAD_SET_MUTED = 18, RAD_DAB_LOGO = 52;
-    private static final int RAD_LAST_INFO = 21, RAD_LIST = 22;
+    // codici fino a 20: uguali in tutte le versioni del servizio radio SWI68 analizzate
+    private static final int RAD_NEXT = 13, RAD_PREV = 14, RAD_CURRENT = 19;
+    private static final int RAD_FAVORITES = 7, RAD_TUNE = 8, RAD_TUNE_DAB = 9, RAD_SET_MUTED = 18;
+    /**
+     * 0.9.1: dal codice 21 in poi la tabella dipende dalla versione del servizio radio (-1 = non usare).
+     * In RadioService.3A111 manca getLastRadioInfo (21) e tutti i codici successivi sono spostati di uno: il "22"
+     * delle altre versioni (elenco stazioni) lì è orderProgram, e la chiamata del launcher salvava un promemoria DAB
+     * vuoto che faceva crashare il servizio radio (e riavviare l'infotainment) a ogni avvio.
+     */
+    private final int radLastInfo, radList, radPlay, radDabLogo;
+    private final String radTable;
     public static final int BAND_AM = 1, BAND_FM = 2, BAND_DAB = 4;
 
     // --- CarPlay / Android Auto ---------------------------------------------------------------
@@ -175,10 +183,23 @@ public final class MediaClient {
         } catch (Exception ignored) {
         }
         oldRadio = radioApk.contains("RadioService_eh32_P") || radioVer.startsWith("RadioService.");
+        String vName = radioVer.contains(" (") ? radioVer.substring(0, radioVer.indexOf(" (")) : radioVer;
+        if ("RadioService.3A111".equals(vName)) {
+            radTable = "3A111 (codici da 21 spostati di uno)";
+            radLastInfo = -1; radList = 21; radPlay = 26; radDabLogo = 51;
+        } else if ("RadioService.44231".equals(vName) || "RadioService.4C051".equals(vName) || vName.startsWith("1.0.0_EH32_SOP_")) {
+            radTable = "standard (verificata)";
+            radLastInfo = 21; radList = 22; radPlay = 27; radDabLogo = 52;
+        } else {
+            // versione non analizzata: niente codici da 21 in su (potrebbero essere altri metodi, come in 3A111)
+            radTable = "sconosciuta: elenco, play e logo DAB disattivati";
+            radLastInfo = -1; radList = -1; radPlay = -1; radDabLogo = -1;
+        }
         radio.setAutoCreate(!oldRadio);
         Diag.put("radio.servizio", (radioApk.isEmpty() ? "?" : radioApk.substring(radioApk.lastIndexOf('/') + 1))
                 + (oldRadio ? " · firmware vecchio: collegamento senza avvio" : ""));
         Diag.put("radio.versione", radioVer.isEmpty() ? "?" : radioVer);
+        Diag.put("radio.codici", radTable);
         Diag.put("radio.profilo", oldRadio
                 ? "vecchio (R46/R59): comandi solo " + (OLD_RADIO_SETTLE_MS / 1000) + " s dopo l'avvio del servizio, altrimenti app Radio"
                 : "normale");
@@ -293,6 +314,7 @@ public final class MediaClient {
      */
     public static final String ONLINE_AMAZON = "com.saicmotor.onlinemedia.amazon.v2", ONLINE_SPOTIFY = "com.saicmotor.mediacenter";
     private volatile String onlinePkg = null, onlineName = "Spotify";
+    private volatile boolean onlineChecked;
 
     /** App della musica online presente sull'auto (Amazon Music prima di Spotify), null se nessuna. */
     public String onlinePackage() {
@@ -313,6 +335,7 @@ public final class MediaClient {
         }
         onlinePkg = pkg;
         onlineName = name;
+        onlineChecked = true;
         Diag.put("media.online.servizio", pkg == null ? "nessuno (né Amazon Music né Spotify)" : name + " · " + pkg);
     }
 
@@ -519,8 +542,9 @@ public final class MediaClient {
         s.sources.add(SRC_RADIO);
         s.sources.add(SRC_USB);
         s.sources.add(SRC_BT);
-        s.sources.add(SRC_ONLINE);
         musicAppsDiag();
+        // 0.9.1: "Musica online" solo se l'auto ha Amazon Music o Spotify (i firmware vecchi non hanno nessuno dei due)
+        if (!onlineChecked || onlinePkg != null) s.sources.add(SRC_ONLINE);
         if (s.deviceType == DEV_CARPLAY) s.sources.add(SRC_CARPLAY);
         if (s.deviceType == DEV_AAUTO) s.sources.add(SRC_AAUTO);
 
@@ -731,7 +755,8 @@ public final class MediaClient {
                 if (s.radioBand == BAND_DAB) {
                     try {
                         markRadio("logo DAB (52)");
-                        Bitmap logo = Rpc.call(b, RAD, RAD_DAB_LOGO, Rpc.NONE, p -> Rpc.readNullable(p, Bitmap.CREATOR::createFromParcel));
+                        Bitmap logo = radDabLogo < 0 ? null
+                                : Rpc.call(b, RAD, radDabLogo, Rpc.NONE, p -> Rpc.readNullable(p, Bitmap.CREATOR::createFromParcel));
                         if (logo != null) logos.put(s.stationKey, logo);
                     } catch (Exception e) {
                         Diag.error("radio.logo", e.toString());
@@ -915,8 +940,13 @@ public final class MediaClient {
                 p.writeInt(cur.khz);
             });
         } else {
-            markRadio("play (27)");
-            Rpc.call(b, RAD, RAD_PLAY, Rpc.NONE, Parcel::readInt);
+            if (radPlay < 0) {
+                // servizio radio non verificato: niente codice di play, si apre l'app Radio
+                openRadioApp("play · servizio radio non verificato");
+                return;
+            }
+            markRadio("play (" + radPlay + ")");
+            Rpc.call(b, RAD, radPlay, Rpc.NONE, Parcel::readInt);
         }
         radioPlaying = true;
         radioHoldUntil = android.os.SystemClock.uptimeMillis() + 3000;
@@ -964,8 +994,9 @@ public final class MediaClient {
         stationsBand = band;
         List<Station> out = new ArrayList<>();
         try {
-            markRadio("elenco stazioni (22)");
-            List<Station> l = Rpc.call(b, RAD, RAD_LIST, p -> p.writeInt(band), MediaClient::readStations);
+            if (radList < 0) return;
+            markRadio("elenco stazioni (" + radList + ")");
+            List<Station> l = Rpc.call(b, RAD, radList, p -> p.writeInt(band), MediaClient::readStations);
             java.util.Set<String> seen = new java.util.HashSet<>();
             if (l != null) {
                 for (Station st : l) {
@@ -1058,7 +1089,8 @@ public final class MediaClient {
                 if (b == null) throw new RemoteException("servizio radio non collegato");
                 Station st = null;
                 try {
-                    st = Rpc.call(b, RAD, RAD_LAST_INFO, p -> p.writeInt(band), p -> Rpc.readNullable(p, MediaClient::readStationHead));
+                    st = radLastInfo < 0 ? null
+                            : Rpc.call(b, RAD, radLastInfo, p -> p.writeInt(band), p -> Rpc.readNullable(p, MediaClient::readStationHead));
                 } catch (Exception e) {
                     Diag.error("radio.banda.ultima", e.toString());
                 }
@@ -1068,7 +1100,8 @@ public final class MediaClient {
                 }
                 if (st == null) {
                     try {
-                        List<Station> list = Rpc.call(b, RAD, RAD_LIST, p -> p.writeInt(band), MediaClient::readStations);
+                        List<Station> list = radList < 0 ? null
+                                : Rpc.call(b, RAD, radList, p -> p.writeInt(band), MediaClient::readStations);
                         if (list != null) for (Station f : list) if (valid(f, band)) { st = f; break; }
                     } catch (Exception e) {
                         Diag.error("radio.banda.elenco", e.toString());

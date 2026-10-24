@@ -1,6 +1,6 @@
 {
-  "version": "0.9",
-  "apk": "releases/MG4Launcher-0.9.apk",
-  "size": 536782,
-  "notes": "Home che si apre da sola all'accensione e niente crash all'avvio, radio più stabile sui firmware vecchi (riparazione automatica del promemoria DAB), Amazon Music, percentuale batteria in grande, testi più grandi, disinstallazione dalle impostazioni."
+  "version": "0.9.1",
+  "apk": "releases/MG4Launcher-0.9.1.apk",
+  "size": 540878,
+  "notes": "Radio stabile anche sul servizio RadioService.3A111, Musica online solo se c'è Amazon Music o Spotify, riavvio automatico della porta USB del dongle CarPlay/AA, tasto clima che apre MG4 Clima se installato."
 }
