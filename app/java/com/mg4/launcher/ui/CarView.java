@@ -17,7 +17,8 @@ import com.mg4.launcher.R;
 
 /**
  * La MG4 ricavata dalla foto: carrozzeria ricolorata (ombre × colore + riflessi), tetto nero
- * opzionale, tutto il resto (vetri, gomme, cerchi, plastiche, luci) originale.
+ * opzionale, tutto il resto (vetri, gomme, plastiche, luci) originale. Cerchi a scelta (dalla foto: 17" Aero) disegnati
+ * sopra quelli della foto, con la gomma originale intorno: 16" un po' più piccoli, 18" un po' più grandi.
  */
 public final class CarView extends View {
     private static Bitmap base, shade, highlight, roofShade;
@@ -30,6 +31,15 @@ public final class CarView extends View {
     private final RectF dst = new RectF();
     private boolean blackRoof;
     private int glow, shadow;
+    /** Cerchi (indice di {@link Prefs#WHEEL_RES}); quello della foto non si ridisegna. */
+    private int wheel = Prefs.WHEEL_PHOTO;
+    private static final android.util.SparseArray<Bitmap> RIMS = new android.util.SparseArray<>();
+    /** Centri e raggio dei cerchi nella foto (car_base 763×287). */
+    private static final float[][] WHEEL_CENTERS = {{144.3f, 220.2f}, {634.3f, 220.2f}};
+    private static final float RIM_R = 43.6f;
+    private final Paint rimPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
+    private final Paint rimShade = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final RectF rimDst = new RectF();
 
     public CarView(Context c) {
         super(c);
@@ -53,6 +63,24 @@ public final class CarView extends View {
         Paint p = new Paint();
         p.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
         cv.drawBitmap(roofMask, 0, 0, p);
+    }
+
+    public void setLook(int bodyColor, boolean blackRoof, int wheel, Theme t) {
+        this.wheel = wheel;
+        setLook(bodyColor, blackRoof, t);
+    }
+
+    private Bitmap rim(int idx) {
+        synchronized (RIMS) {
+            Bitmap b = RIMS.get(idx);
+            if (b == null) {
+                BitmapFactory.Options o = new BitmapFactory.Options();
+                o.inScaled = false;
+                b = BitmapFactory.decodeResource(getResources(), Prefs.WHEEL_RES[idx], o);
+                if (b != null) RIMS.put(idx, b);
+            }
+            return b;
+        }
     }
 
     public void setLook(int bodyColor, boolean blackRoof, Theme t) {
@@ -90,5 +118,21 @@ public final class CarView extends View {
         if (blackRoof) c.drawBitmap(roofShade, null, dst, roofLayer);
         c.drawBitmap(highlight, null, dst, hlLayer);
         c.drawBitmap(base, null, dst, plain);
+        drawWheels(c, s, dst.left, dst.top);
+    }
+
+    private void drawWheels(Canvas c, float s, float left, float top) {
+        if (wheel == Prefs.WHEEL_PHOTO || wheel < 0 || wheel >= Prefs.WHEEL_RES.length) return;
+        Bitmap b = rim(wheel);
+        if (b == null) return;
+        float r = RIM_R * Prefs.WHEEL_SCALE[wheel] * s;
+        for (float[] w : WHEEL_CENTERS) {
+            float cx = left + w[0] * s, cy = top + w[1] * s;
+            rimDst.set(cx - r, cy - r, cx + r, cy + r);
+            c.drawBitmap(b, null, rimDst, rimPaint);
+            // ombra in basso come nella foto (luce dall'alto)
+            rimShade.setShader(new android.graphics.LinearGradient(0, cy - r, 0, cy + r, 0x00000000, 0x55000000, Shader.TileMode.CLAMP));
+            c.drawCircle(cx, cy, r, rimShade);
+        }
     }
 }

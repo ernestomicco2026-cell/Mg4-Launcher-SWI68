@@ -14,6 +14,14 @@ public final class Prefs {
     public static final int[] CAR_COLOR_VALUES = {
             0xFFE8E9E6, 0xFF202227, 0xFF5D6166, 0xFFA9ADB2,
             0xFF4C6A5A, 0xFF2E5597, 0xFFA5161E, 0xFFE1621F};
+    /** Cerchi: nomi, immagini e grandezza rispetto ai 17" della foto. */
+    public static final int[] WHEEL_NAMES = {com.mg4.launcher.R.string.wheel_16, com.mg4.launcher.R.string.wheel_17,
+            com.mg4.launcher.R.string.wheel_18_lux, com.mg4.launcher.R.string.wheel_18_xpower};
+    public static final int[] WHEEL_RES = {com.mg4.launcher.R.drawable.rim_nero16, com.mg4.launcher.R.drawable.rim_aero17,
+            com.mg4.launcher.R.drawable.rim_luxury18, com.mg4.launcher.R.drawable.rim_xpower18};
+    public static final float[] WHEEL_SCALE = {0.95f, 1f, 1.06f, 1.06f};
+    /** I cerchi della foto dell'auto (di serie): non si ridisegnano. */
+    public static final int WHEEL_PHOTO = 1;
     public static final String THEME_AUTO = "auto", THEME_NIGHT = "notte", THEME_DAY = "giorno";
 
     private final SharedPreferences sp;
@@ -28,6 +36,14 @@ public final class Prefs {
 
     public void setCarColorIndex(int i) {
         sp.edit().putInt("carColor", i).apply();
+    }
+
+    public int wheelIndex() {
+        return Math.max(0, Math.min(WHEEL_RES.length - 1, sp.getInt("cerchi", WHEEL_PHOTO)));
+    }
+
+    public void setWheelIndex(int i) {
+        sp.edit().putInt("cerchi", i).apply();
     }
 
     public boolean blackRoof() {

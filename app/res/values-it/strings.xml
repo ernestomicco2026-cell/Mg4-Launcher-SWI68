@@ -28,7 +28,7 @@
     <string name="log_upload_off" formatted="false">Invio dei log disattivato</string>
     <string name="log_upload_nokey" formatted="false">Invio dei log non disponibile in questa versione</string>
     <string name="sec_car" formatted="false">AUTO</string>
-    <string name="sec_car_sub" formatted="false">Colore, tetto</string>
+    <string name="sec_car_sub" formatted="false">Colore, cerchi, tetto</string>
     <string name="sec_home" formatted="false">Home</string>
     <string name="sec_home_sub" formatted="false">Batteria, pneumatici, temperature</string>
     <string name="sec_look" formatted="false">Aspetto</string>
@@ -274,7 +274,6 @@
     <string name="news9_3" formatted="false">Amazon Music nella musica online</string>
     <string name="news9_4" formatted="false">Percentuale batteria in grande (opzione) e temperatura più leggibile</string>
     <string name="news9_5" formatted="false">Disinstallazione del launcher dalle impostazioni</string>
-    <string name="news92_1" formatted="false">Radio sui firmware più vecchi (3A111): la riparazione automatica ora ferma anche i riavvii continui dell\'infotainment</string>
     <string name="btn_change" formatted="false">Cambia</string>
     <string name="btn_update" formatted="false">Aggiorna</string>
     <string name="btn_delete" formatted="false">Elimina</string>
@@ -323,4 +322,14 @@
     <string name="tile_on_m" formatted="false">Acceso</string>
     <string name="tile_off_m" formatted="false">Spento</string>
     <string name="tile_level">Livello %d</string>
+    <string name="news92_1" formatted="false">Radio sui firmware più vecchi (3A111): la riparazione automatica ora ferma anche i riavvii continui dell\'infotainment</string>
+    <string name="set_wheels" formatted="false">Cerchi</string>
+    <string name="wheel_16" formatted="false">16″ copricerchi neri</string>
+    <string name="wheel_17" formatted="false">17″ Aero bicolore</string>
+    <string name="wheel_18_lux" formatted="false">18″ Luxury / Trophy</string>
+    <string name="wheel_18_xpower" formatted="false">18″ XPOWER</string>
+    <string name="news93_1" formatted="false">Cerchi a scelta nelle impostazioni, sotto il colore: 16″, 17″ Aero, 18″ Luxury/Trophy, 18″ XPOWER</string>
+    <string name="news93_2" formatted="false">Temperatura esterna più affidabile: i valori non validi (come -40°) non si vedono più</string>
+    <string name="news93_3" formatted="false">Temperatura interna nascosta: l\'auto non la fornisce (mostrava quella esterna); la stiamo cercando nei log</string>
+    <string name="news93_4" formatted="false">I dongle CarPlay/Android Auto che si presentano come iPhone ora vengono riconosciuti e riavviati se non partono</string>
 </resources>

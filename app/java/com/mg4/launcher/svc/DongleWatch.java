@@ -32,6 +32,11 @@ import java.util.Set;
  *   il dongle non parte, spegne e riaccende l'alimentazione di quella sola porta (come staccarlo e riattaccarlo), solo
  *   se l'hub comanda le porte una per una. Modem e STM32 sono sempre collegati e non possono mai essere "la porta
  *   appena accesa"; con una chiavetta inserita non interviene;</li>
+ *   <li>0.9.3: alcuni dongle (es. SmartBox) si presentano sull'USB come un iPhone (05ac:12a8) e a CarPlay col nome
+ *   "iPhone": non venivano mai riconosciuti. Ora, se dopo il ritardo non c'è nessuna sessione, conta come dongle qualsiasi
+ *   dispositivo Apple o Android (AOA) collegato all'USB (anche un telefono col cavo: il riavvio è come staccarlo e
+ *   riattaccarlo). La porta media si impara anche quando il dongle è già collegato all'accensione: se sul suo bus USB c'è
+ *   una sola porta occupata, è quella;</li>
  *   <li>mai durante una chiamata.</li>
  * </ul>
  * Ogni passo va nella diagnostica (chiavi dongle.*).
@@ -301,9 +306,11 @@ public final class DongleWatch {
             if (d.getVendorId() == GOOGLE_AOAP_VID && dongleName(product(d))) return d;   // es. "OKBox", "SmartBox", "smartlinkBox"
             String serial = serial(d);
             if (!serial.isEmpty() && s.contains(serial)) return d;
-            // numero di serie non leggibile: un Apple/AOAP collegato in un'auto che usa un dongle
+        }
+        // 0.9.3: riconoscimento automatico (dongle che si presentano come iPhone o telefono Android)
+        for (UsbDevice d : devices()) {
             int vid = d.getVendorId();
-            if (usesDongle() && s.isEmpty() && (vid == APPLE_VID || vid == GOOGLE_AOAP_VID)) return d;
+            if (vid == APPLE_VID || vid == GOOGLE_AOAP_VID) return d;
         }
         return null;
     }
@@ -485,6 +492,7 @@ public final class DongleWatch {
                 pendingPort = null;   // più porte insieme (accensione): nessun dubbio va lasciato
             }
         }
+        if (mediaPort().isEmpty()) inferPortAtBoot(ports);
         if (newest != null && pendingPort != null && now - pendingAt < 12_000 && ports.contains(pendingPort)) {
             if (!pendingPort.equals(mediaPort())) {
                 sp.edit().putString("portaMedia", pendingPort).apply();
@@ -494,6 +502,38 @@ public final class DongleWatch {
         }
         prevPorts = ports;
         prevDevs = devs;
+    }
+
+    /**
+     * 0.9.3: dongle già collegato all'accensione (nessun "inserimento" da vedere). Se c'è un dispositivo Apple/AOAP/dongle
+     * e sul suo bus USB gli hub hanno una sola porta occupata, quella è la porta media. Sul bus del modem e dell'STM32
+     * (più porte occupate) non si impara nulla.
+     */
+    private void inferPortAtBoot(Set<String> ports) {
+        UsbDevice cand = null;
+        for (UsbDevice d : devices()) {
+            int vid = d.getVendorId();
+            if (vid == APPLE_VID || vid == GOOGLE_AOAP_VID || isDongleVid(vid)) {
+                if (cand != null && bus(cand) != bus(d)) return;   // due candidati su bus diversi: niente dubbi
+                cand = d;
+            }
+        }
+        if (cand == null) return;
+        int b = bus(cand);
+        if (b < 0) return;
+        String found = null;
+        int count = 0;
+        for (String p : ports) {
+            int at = p.lastIndexOf('@'), hash = p.lastIndexOf('#');
+            if (at < 0 || hash < at) continue;
+            if (parse(p.substring(at + 1, hash)) != b) continue;
+            count++;
+            found = p;
+        }
+        if (count == 1) {
+            sp.edit().putString("portaMedia", found).apply();
+            Diag.put("dongle.portaMedia", "imparata " + found + " (già collegato all'accensione: " + describe(cand) + ")");
+        }
     }
 
     /**

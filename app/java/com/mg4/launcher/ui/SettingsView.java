@@ -313,6 +313,21 @@ public final class SettingsView extends FrameLayout {
         col.addView(sw, top(14));
         col.addView(Ui.text(c, Prefs.CAR_COLORS[sel], 18, t.sub, Ui.REGULAR), top(14));
 
+        // cerchi (0.9.3): miniature come i colori, quelli della foto sono "di serie"
+        col.addView(label(c, L.s(R.string.set_wheels).toUpperCase(java.util.Locale.getDefault())), top(30));
+        LinearLayout wr = Ui.row(c);
+        int wsel = prefs.wheelIndex();
+        for (int i = 0; i < Prefs.WHEEL_RES.length; i++) {
+            final int idx = i;
+            wr.addView(wheelThumb(c, i, i == wsel, v -> {
+                prefs.setWheelIndex(idx);
+                host.settingsChanged(false);
+                showSection(SEC_CAR);
+            }), Ui.margins(Ui.lp(tp(92), tp(92)), 0, 0, dp(18), 0));
+        }
+        col.addView(wr, top(14));
+        col.addView(Ui.text(c, L.s(Prefs.WHEEL_NAMES[wsel]), 18, t.sub, Ui.REGULAR), top(14));
+
         col.addView(label(c, L.s(R.string.set_bodywork)), top(30));
         LinearLayout card = card(c);
         card.addView(row(c, L.s(R.string.set_black_roof), L.s(R.string.set_black_roof_sub),
@@ -325,7 +340,7 @@ public final class SettingsView extends FrameLayout {
 
         // anteprima dell'auto con colore e tetto scelti
         CarView car = new CarView(c);
-        car.setLook(Prefs.CAR_COLOR_VALUES[sel], prefs.blackRoof(), t);
+        car.setLook(Prefs.CAR_COLOR_VALUES[sel], prefs.blackRoof(), prefs.wheelIndex(), t);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(520), dp(230));
         lp.gravity = rhd ? Gravity.LEFT : Gravity.RIGHT;
         lp.topMargin = dp(10);
@@ -862,6 +877,26 @@ public final class SettingsView extends FrameLayout {
         b.setOnClickListener(l);
         b.setLayoutParams(new ViewGroup.LayoutParams(-2, tp(60)));
         return b;
+    }
+
+    /** Miniatura di un cerchio: cerchio con la gomma intorno, bordo come i colori se è quello scelto. */
+    private View wheelThumb(Context c, int idx, boolean selected, View.OnClickListener l) {
+        FrameLayout f = new FrameLayout(c);
+        GradientDrawable g = new GradientDrawable();
+        g.setShape(GradientDrawable.OVAL);
+        g.setColor(0xFF1B1B1C);   // gomma
+        g.setStroke(dp(selected ? 4 : 1), selected ? t.text : t.track);
+        f.setBackground(g);
+        android.widget.ImageView iv = new android.widget.ImageView(c);
+        iv.setImageResource(Prefs.WHEEL_RES[idx]);
+        iv.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
+        int pad = tp(13);
+        f.addView(iv, new FrameLayout.LayoutParams(-1, -1));
+        ((FrameLayout.LayoutParams) iv.getLayoutParams()).setMargins(pad, pad, pad, pad);
+        f.setContentDescription(L.s(Prefs.WHEEL_NAMES[idx]));
+        f.setClickable(true);
+        f.setOnClickListener(l);
+        return f;
     }
 
     private View swatch(Context c, int color, boolean selected, String desc, View.OnClickListener l) {

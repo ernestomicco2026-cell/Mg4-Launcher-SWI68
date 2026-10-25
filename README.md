@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.9.2](releases/MG4Launcher-0.9.2.apk)**
+**Ultima versione / Latest version: [0.9.3](releases/MG4Launcher-0.9.3.apk)**
 
 > 🌡️ **Nuovo: [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4)** — la schermata del clima in stile Tesla, per SWI68, SWI69, SWI132 e SWI133. Con MG4 Clima installato il tasto del clima del launcher apre direttamente quella.
 >
@@ -25,8 +25,11 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
-![MG4 Launcher 0.9.2 — home (simulazione / mock-up)](docs/home-0.9.2.png)
-*Home 0.9.2: grafica uguale alla 0.9.1 · 0.9.2 home: same look as 0.9.1 (mock-up).*
+![MG4 Launcher 0.9.3 — home con i cerchi 18″ (simulazione / mock-up)](docs/home-0.9.3.png)
+*Home 0.9.3 con i cerchi 18″ Luxury / Trophy · 0.9.3 home with the 18″ Luxury / Trophy wheels (mock-up).*
+
+![MG4 Launcher 0.9.3 — impostazioni, cerchi (simulazione / mock-up)](docs/impostazioni-0.9.3-cerchi.png)
+*Impostazioni → Auto: colore, cerchi e tetto · Settings → Car: colour, wheels and roof (mock-up).*
 
 ![MG4 Clima aperto dal tasto del clima del launcher (simulazione / mock-up)](docs/clima-0.9.1-mg4clima.png)
 *Dalla 0.9.1 il tasto del clima apre [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4), se è installato ·
@@ -176,7 +179,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.9.2.apk
+   adb install -r -f MG4Launcher-0.9.3.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -250,6 +253,18 @@ vuoi. Anche una stella al repository o una segnalazione di un problema sono un a
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.9.3
+- **Cerchi a scelta** nelle impostazioni (Auto, sotto il colore): 16″ copricerchi neri, 17″ Aero bicolore (di serie),
+  18″ Luxury / Trophy e 18″ XPOWER. Si vedono sull'auto della home e nell'anteprima.
+- **Temperatura esterna più affidabile**: il launcher controlla il flag di validità del firmware, come il pannello
+  originale, e non mostra più valori non validi come -40°.
+- **Temperatura interna nascosta**: l'auto non la fornisce con le proprietà standard. Quella chiamata "ambient" è la
+  temperatura esterna, che prima con l'opzione accesa si vedeva come interna. Il launcher ora la cerca tra tutte le
+  proprietà dell'auto e scrive nei log i valori trovati, per poterla aggiungere in una prossima versione.
+- **Dongle CarPlay / Android Auto**: riconosciuti anche quelli che si presentano come un iPhone o un telefono Android
+  (es. SmartBox). Se dopo il ritardo non parte nessuna sessione, il dispositivo viene riavviato. La porta media si
+  impara anche quando il dongle è già collegato all'accensione.
 
 #### 0.9.2
 - **Radio sui firmware con servizio `RadioService.3A111`**: se nel servizio radio erano rimasti i promemoria DAB
@@ -627,7 +642,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.9.2.apk
+   adb install -r -f MG4Launcher-0.9.3.apk
    ```
 3. Make it the default home:
    ```bash
@@ -701,6 +716,18 @@ minimum amount**, you can give whatever you like. A star on the repository or a 
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.9.3
+- **Choose your wheels** in the settings (Car, under the colour): 16″ black covers, 17″ Aero two-tone (standard),
+  18″ Luxury / Trophy and 18″ XPOWER. They show on the car in the home and in the preview.
+- **More reliable outside temperature**: the launcher checks the firmware validity flag, like the original panel, and
+  no longer shows invalid values such as -40°.
+- **Inside temperature hidden**: the car doesn't provide it through the standard properties. The one called "ambient"
+  is the outside temperature, which used to show as inside with the option on. The launcher now looks for it among all
+  the car properties and writes what it finds in the logs, so it can be added in a future version.
+- **CarPlay / Android Auto dongles**: those that show up as an iPhone or an Android phone (e.g. SmartBox) are now
+  recognised too. If no session starts after the delay, the device is restarted. The media port is also learned when the dongle
+  is already plugged in at start-up.
 
 #### 0.9.2
 - **Radio on firmware with the `RadioService.3A111` service**: if broken DAB reminders were left in the radio service

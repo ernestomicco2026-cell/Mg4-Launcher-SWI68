@@ -28,7 +28,7 @@
     <string name="log_upload_off" formatted="false">Log-Upload ausgeschaltet</string>
     <string name="log_upload_nokey" formatted="false">Log-Upload in dieser Version nicht verfügbar</string>
     <string name="sec_car" formatted="false">FAHRZEUG</string>
-    <string name="sec_car_sub" formatted="false">Farbe, Dach</string>
+    <string name="sec_car_sub" formatted="false">Farbe, Felgen, Dach</string>
     <string name="sec_home" formatted="false">Startseite</string>
     <string name="sec_home_sub" formatted="false">Batterie, Reifen, Temperaturen</string>
     <string name="sec_look" formatted="false">Darstellung</string>
@@ -274,7 +274,6 @@
     <string name="news9_3" formatted="false">Amazon Music bei der Online-Musik</string>
     <string name="news9_4" formatted="false">Großer Akkustand (Option) und besser lesbare Temperatur</string>
     <string name="news9_5" formatted="false">Launcher in den Einstellungen deinstallieren</string>
-    <string name="news92_1" formatted="false">Ältere Radios (3A111): Die automatische Reparatur stoppt jetzt auch die ständigen Neustarts des Infotainments</string>
     <string name="btn_change" formatted="false">Ändern</string>
     <string name="btn_update" formatted="false">Aktualisieren</string>
     <string name="btn_delete" formatted="false">Löschen</string>
@@ -323,4 +322,14 @@
     <string name="tile_on_m" formatted="false">Ein</string>
     <string name="tile_off_m" formatted="false">Aus</string>
     <string name="tile_level">Stufe %d</string>
+    <string name="news92_1" formatted="false">Ältere Radios (3A111): Die automatische Reparatur stoppt jetzt auch die ständigen Neustarts des Infotainments</string>
+    <string name="set_wheels" formatted="false">Felgen</string>
+    <string name="wheel_16" formatted="false">16″ schwarze Radblenden</string>
+    <string name="wheel_17" formatted="false">17″ Aero zweifarbig</string>
+    <string name="wheel_18_lux" formatted="false">18″ Luxury / Trophy</string>
+    <string name="wheel_18_xpower" formatted="false">18″ XPOWER</string>
+    <string name="news93_1" formatted="false">Felgen wählbar in den Einstellungen, unter der Farbe: 16″, 17″ Aero, 18″ Luxury/Trophy, 18″ XPOWER</string>
+    <string name="news93_2" formatted="false">Zuverlässigere Außentemperatur: ungültige Werte (wie -40°) werden nicht mehr angezeigt</string>
+    <string name="news93_3" formatted="false">Innentemperatur ausgeblendet: Das Auto liefert sie nicht (es zeigte die Außentemperatur); wir suchen sie in den Logs</string>
+    <string name="news93_4" formatted="false">CarPlay-/Android-Auto-Dongles, die sich als iPhone melden, werden jetzt erkannt und neu gestartet, wenn sie nicht starten</string>
 </resources>

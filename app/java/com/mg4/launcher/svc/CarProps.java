@@ -20,11 +20,15 @@ public final class CarProps {
     public static final int TIRE_FL = 557847891, TIRE_FR = 557847892, TIRE_RL = 557847893, TIRE_RR = 557847894;
     // temperatura abitacolo (FLOAT, area sedile/zona): corrente e "ambient" del clima
     public static final int HVAC_TEMPERATURE_CURRENT = 358614274, HVAC_AMBIENT_TEMPERATURE = 358622506;
+    /** Validità della temperatura esterna (0 = valida, 1 = non valida), come la usa il SystemUI originale. */
+    public static final int HVAC_TEMPERATURE_OUTCARV = 356525352;
 
     private final Context ctx;
     private Object car, propertyManager;
     private volatile boolean connected;
     private final Map<Integer, Integer> areas = new HashMap<>();
+    /** Tutte le aree di ogni proprietà (per la sonda della temperatura interna). */
+    private final Map<Integer, int[]> allAreas = new HashMap<>();
     private boolean areasRead;
     private String lastError = "";
     /** Proprietà che l'auto rifiuta (IllegalArgumentException): non si rileggono più. */
@@ -83,6 +87,7 @@ public final class CarProps {
                         int id = (Integer) cfg.getClass().getMethod("getPropertyId").invoke(cfg);
                         int[] ids = (int[]) cfg.getClass().getMethod("getAreaIds").invoke(cfg);
                         areas.put(id, ids != null && ids.length > 0 ? ids[0] : 0);
+                        allAreas.put(id, ids != null && ids.length > 0 ? ids : new int[]{0});
                     }
                     Diag.put("auto.proprietà", cfgs.size() + " disponibili; TPMS " + (areas.containsKey(TIRE_FL) ? "sì" : "no")
                             + ", temp. interna " + (areas.containsKey(HVAC_TEMPERATURE_CURRENT) || areas.containsKey(HVAC_AMBIENT_TEMPERATURE) ? "sì" : "no"));
@@ -141,6 +146,65 @@ public final class CarProps {
             error("lettura " + prop, e);
             return Float.NaN;
         }
+    }
+
+    // ---- sonda della temperatura interna (0.9.3) ------------------------------------------------
+    // L'auto non espone la temperatura dell'abitacolo con le proprietà standard: HVAC_TEMPERATURE_CURRENT vale sempre 0 e
+    // HVAC_AMBIENT_TEMPERATURE è la temperatura esterna. L'app iSmart però la mostra, quindi passa da qualche parte.
+    // La sonda legge tutte le proprietà decimali (tipo FLOAT) dell'auto, in tutte le aree, e scrive nei log quelle con
+    // valori da temperatura e quanto variano: una che cambia col clima acceso e non segue l'esterna è quella giusta.
+
+    private static final int TYPE_MASK = 0x00FF0000, TYPE_FLOAT = 0x00600000;
+    /** Già note (impostazioni del clima, esterna): non servono alla ricerca. */
+    private static final int[] PROBE_SKIP = {358622475, 358622476, 358614275, 358622481, 291505923};
+    private final Map<String, float[]> probe = new java.util.TreeMap<>();
+
+    /** Una lettura della sonda; restituisce il riassunto per la diagnostica ("" se il CarService non è pronto). */
+    public synchronized String probeInsideTemp(float outside) {
+        area(0);
+        if (!areasRead) return "";
+        StringBuilder all = new StringBuilder();
+        int n = 0;
+        try {
+            Object p = pm();
+            if (p == null) return "";
+            Method m = p.getClass().getMethod("getFloatProperty", int.class, int.class);
+            for (Map.Entry<Integer, int[]> e : allAreas.entrySet()) {
+                int id = e.getKey();
+                if ((id & TYPE_MASK) != TYPE_FLOAT || unsupported.contains(id)) continue;
+                boolean skip = false;
+                for (int k : PROBE_SKIP) if (k == id) skip = true;
+                if (skip) continue;
+                for (int a : e.getValue()) {
+                    float v;
+                    try {
+                        v = (Float) m.invoke(p, id, a);
+                    } catch (Throwable t) {
+                        continue;
+                    }
+                    if (Float.isNaN(v) || v <= -30f || v >= 70f || v == 0f) continue;
+                    String key = "0x" + Integer.toHexString(id) + "/" + a;
+                    float[] r = probe.get(key);
+                    if (r == null) probe.put(key, new float[]{v, v, v});
+                    else {
+                        r[0] = Math.min(r[0], v);
+                        r[1] = Math.max(r[1], v);
+                        r[2] = v;
+                    }
+                    n++;
+                }
+            }
+        } catch (Throwable e) {
+            return "errore " + e;
+        }
+        // candidati: valori da abitacolo che non sono l'esterna
+        for (Map.Entry<String, float[]> e : probe.entrySet()) {
+            float[] r = e.getValue();
+            boolean outsideLike = !Float.isNaN(outside) && Math.abs(r[2] - outside) < 0.6f;
+            all.append(all.length() == 0 ? "" : " | ").append(e.getKey()).append('=').append(r[2])
+                    .append(" (").append(r[0]).append('…').append(r[1]).append(')').append(outsideLike ? " =est" : "");
+        }
+        return n + " letture · " + (all.length() == 0 ? "nessun valore da temperatura" : all);
     }
 
     /** False se la proprietà non è nell'elenco dell'auto o è stata rifiutata; null se non si sa ancora. */

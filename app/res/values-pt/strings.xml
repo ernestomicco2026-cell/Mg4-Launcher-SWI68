@@ -28,7 +28,7 @@
     <string name="log_upload_off" formatted="false">Envio de registos desativado</string>
     <string name="log_upload_nokey" formatted="false">Envio de registos indisponível nesta versão</string>
     <string name="sec_car" formatted="false">CARRO</string>
-    <string name="sec_car_sub" formatted="false">Cor, tejadilho</string>
+    <string name="sec_car_sub" formatted="false">Cor, jantes, tejadilho</string>
     <string name="sec_home" formatted="false">Início</string>
     <string name="sec_home_sub" formatted="false">Bateria, pneus, temperaturas</string>
     <string name="sec_look" formatted="false">Aspeto</string>
@@ -274,7 +274,6 @@
     <string name="news9_3" formatted="false">Amazon Music na música online</string>
     <string name="news9_4" formatted="false">Percentagem da bateria em grande (opção) e temperatura mais legível</string>
     <string name="news9_5" formatted="false">Desinstalar o launcher nas definições</string>
-    <string name="news92_1" formatted="false">Rádio antigo (3A111): a reparação automática agora também trava os reinícios contínuos do infoentretenimento</string>
     <string name="btn_change" formatted="false">Alterar</string>
     <string name="btn_update" formatted="false">Atualizar</string>
     <string name="btn_delete" formatted="false">Eliminar</string>
@@ -323,4 +322,14 @@
     <string name="tile_on_m" formatted="false">Ligado</string>
     <string name="tile_off_m" formatted="false">Desligado</string>
     <string name="tile_level">Nível %d</string>
+    <string name="news92_1" formatted="false">Rádio antigo (3A111): a reparação automática agora também trava os reinícios contínuos do infoentretenimento</string>
+    <string name="set_wheels" formatted="false">Jantes</string>
+    <string name="wheel_16" formatted="false">16″ tampões pretos</string>
+    <string name="wheel_17" formatted="false">17″ Aero bicolor</string>
+    <string name="wheel_18_lux" formatted="false">18″ Luxury / Trophy</string>
+    <string name="wheel_18_xpower" formatted="false">18″ XPOWER</string>
+    <string name="news93_1" formatted="false">Jantes à escolha nas definições, por baixo da cor: 16″, 17″ Aero, 18″ Luxury/Trophy, 18″ XPOWER</string>
+    <string name="news93_2" formatted="false">Temperatura exterior mais fiável: valores inválidos (como -40°) já não aparecem</string>
+    <string name="news93_3" formatted="false">Temperatura interior oculta: o carro não a fornece (mostrava a exterior); estamos à procura dela nos registos</string>
+    <string name="news93_4" formatted="false">Os dongles CarPlay/Android Auto que aparecem como iPhone são agora reconhecidos e reiniciados se não arrancarem</string>
 </resources>

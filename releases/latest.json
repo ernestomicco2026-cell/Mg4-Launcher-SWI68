@@ -1,6 +1,6 @@
 {
-  "version": "0.9.2",
-  "apk": "releases/MG4Launcher-0.9.2.apk",
-  "size": 544974,
-  "notes": "Radio 3A111: la riparazione automatica ferma anche i riavvii continui dell'infotainment (promemoria DAB rovinati). Popup delle novità a ogni versione."
+  "version": "0.9.3",
+  "apk": "releases/MG4Launcher-0.9.3.apk",
+  "size": 590354,
+  "notes": "Cerchi a scelta nelle impostazioni (16″, 17″ Aero, 18″ Luxury/Trophy, 18″ XPOWER), temperatura esterna senza valori non validi, temperatura interna nascosta (mostrava l'esterna) con ricerca nei log, dongle CarPlay/AA che si presentano come iPhone riconosciuti e riavviati, porta del dongle imparata anche se già collegato."
 }

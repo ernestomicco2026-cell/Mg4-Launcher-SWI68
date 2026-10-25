@@ -28,7 +28,7 @@
     <string name="log_upload_off" formatted="false">Log upload turned off</string>
     <string name="log_upload_nokey" formatted="false">Log upload not available in this version</string>
     <string name="sec_car" formatted="false">CAR</string>
-    <string name="sec_car_sub" formatted="false">Colour, roof</string>
+    <string name="sec_car_sub" formatted="false">Colour, wheels, roof</string>
     <string name="sec_home" formatted="false">Home</string>
     <string name="sec_home_sub" formatted="false">Battery, tyres, temperatures</string>
     <string name="sec_look" formatted="false">Appearance</string>
@@ -274,7 +274,6 @@
     <string name="news9_3" formatted="false">Amazon Music in online music</string>
     <string name="news9_4" formatted="false">Large battery percentage (option) and easier-to-read temperature</string>
     <string name="news9_5" formatted="false">Uninstall the launcher from the settings</string>
-    <string name="news92_1" formatted="false">Older radio (3A111): the automatic repair now also stops the infotainment restarting over and over</string>
     <string name="btn_change" formatted="false">Change</string>
     <string name="btn_update" formatted="false">Update</string>
     <string name="btn_delete" formatted="false">Delete</string>
@@ -323,4 +322,14 @@
     <string name="tile_on_m" formatted="false">On</string>
     <string name="tile_off_m" formatted="false">Off</string>
     <string name="tile_level">Level %d</string>
+    <string name="news92_1" formatted="false">Older radio (3A111): the automatic repair now also stops the infotainment restarting over and over</string>
+    <string name="set_wheels" formatted="false">Wheels</string>
+    <string name="wheel_16" formatted="false">16″ black covers</string>
+    <string name="wheel_17" formatted="false">17″ Aero two-tone</string>
+    <string name="wheel_18_lux" formatted="false">18″ Luxury / Trophy</string>
+    <string name="wheel_18_xpower" formatted="false">18″ XPOWER</string>
+    <string name="news93_1" formatted="false">Choose your wheels in the settings, under the colour: 16″, 17″ Aero, 18″ Luxury/Trophy, 18″ XPOWER</string>
+    <string name="news93_2" formatted="false">More reliable outside temperature: invalid values (such as -40°) are no longer shown</string>
+    <string name="news93_3" formatted="false">Inside temperature hidden: the car doesn\'t provide it (it showed the outside one); we\'re looking for it in the logs</string>
+    <string name="news93_4" formatted="false">CarPlay/Android Auto dongles that show up as an iPhone are now recognised and restarted if they don\'t start</string>
 </resources>

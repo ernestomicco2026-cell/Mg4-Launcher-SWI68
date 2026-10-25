@@ -28,7 +28,7 @@
     <string name="log_upload_off" formatted="false">Günlük gönderimi kapalı</string>
     <string name="log_upload_nokey" formatted="false">Bu sürümde günlük gönderimi yok</string>
     <string name="sec_car" formatted="false">ARAÇ</string>
-    <string name="sec_car_sub" formatted="false">Renk, tavan</string>
+    <string name="sec_car_sub" formatted="false">Renk, jantlar, tavan</string>
     <string name="sec_home" formatted="false">Ana ekran</string>
     <string name="sec_home_sub" formatted="false">Batarya, lastikler, sıcaklıklar</string>
     <string name="sec_look" formatted="false">Görünüm</string>
@@ -274,7 +274,6 @@
     <string name="news9_3" formatted="false">Çevrimiçi müzikte Amazon Music</string>
     <string name="news9_4" formatted="false">Büyük batarya yüzdesi (seçenek) ve daha okunaklı sıcaklık</string>
     <string name="news9_5" formatted="false">Launcher\'ı ayarlardan kaldırma</string>
-    <string name="news92_1" formatted="false">Eski radyo (3A111): otomatik onarım artık bilgi-eğlence sisteminin sürekli yeniden başlamasını da durduruyor</string>
     <string name="btn_change" formatted="false">Değiştir</string>
     <string name="btn_update" formatted="false">Güncelle</string>
     <string name="btn_delete" formatted="false">Sil</string>
@@ -323,4 +322,14 @@
     <string name="tile_on_m" formatted="false">Açık</string>
     <string name="tile_off_m" formatted="false">Kapalı</string>
     <string name="tile_level">Seviye %d</string>
+    <string name="news92_1" formatted="false">Eski radyo (3A111): otomatik onarım artık bilgi-eğlence sisteminin sürekli yeniden başlamasını da durduruyor</string>
+    <string name="set_wheels" formatted="false">Jantlar</string>
+    <string name="wheel_16" formatted="false">16″ siyah jant kapakları</string>
+    <string name="wheel_17" formatted="false">17″ Aero çift renkli</string>
+    <string name="wheel_18_lux" formatted="false">18″ Luxury / Trophy</string>
+    <string name="wheel_18_xpower" formatted="false">18″ XPOWER</string>
+    <string name="news93_1" formatted="false">Ayarlarda, rengin altında jant seçimi: 16″, 17″ Aero, 18″ Luxury/Trophy, 18″ XPOWER</string>
+    <string name="news93_2" formatted="false">Daha güvenilir dış sıcaklık: geçersiz değerler (ör. -40°) artık gösterilmiyor</string>
+    <string name="news93_3" formatted="false">İç sıcaklık gizlendi: araç bunu sağlamıyor (dış sıcaklığı gösteriyordu); kayıtlarda arıyoruz</string>
+    <string name="news93_4" formatted="false">iPhone olarak görünen CarPlay/Android Auto adaptörleri artık tanınıyor ve başlamazsa yeniden başlatılıyor</string>
 </resources>

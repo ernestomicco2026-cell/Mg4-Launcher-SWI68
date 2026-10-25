@@ -309,7 +309,14 @@ public final class VehicleClient {
                     s.fanMax = fanMax;
                     s.hvacPower = Rpc.callInt(a, AC, AC_GET_POWER);
                     s.outsideTemp = Rpc.callFloat(a, AC, AC_GET_OUT_TEMP);
-                    Diag.put("clima.tempEsterna", s.outsideTemp);
+                    // 0.9.3: valore non valido (flag del firmware, come il SystemUI originale) o -40 di "nessun dato": non si mostra
+                    float rawOut = s.outsideTemp;
+                    int outV = outValid;
+                    boolean outBad = outV == 1 || rawOut <= -39.5f;
+                    if (outBad) s.outsideTemp = -10000f;
+                    else lastOutside = rawOut;
+                    Diag.put("clima.tempEsterna", rawOut + (outV == Integer.MIN_VALUE ? "" : " · validità " + (outV == 0 ? "ok" : outV == 1 ? "NON valida" : String.valueOf(outV)))
+                            + (outBad ? " → nascosta" : ""));
                     Diag.put("clima.tempGuidatore", readTemp + (s.acTemp != readTemp ? " (richiesta " + s.acTemp + ")" : ""));
                     Diag.put("clima.ventola", readFan + (s.fanLevel != readFan ? " (richiesta " + s.fanLevel + ")" : ""));
                     Diag.put("clima.accensione", s.hvacPower);
@@ -438,6 +445,10 @@ public final class VehicleClient {
     private long propsAt;
     private final float[] tireCache = {Float.NaN, Float.NaN, Float.NaN, Float.NaN};
     private float insideCache = Float.NaN;
+    private boolean insideHidden;
+    private long probeAt = -120_000;
+    private volatile int outValid = Integer.MIN_VALUE;
+    private volatile float lastOutside = Float.NaN;
 
     private void readCarProps(State s) {
         if (props == null) {
@@ -456,22 +467,21 @@ public final class VehicleClient {
                 raw.append(i == 0 ? "" : " / ").append(v == Integer.MIN_VALUE ? "?" : String.valueOf(v));
             }
             Diag.put("pneumatici (grezzo AS/AD/PS/PD)", raw);
-            // temperatura interna: si legge solo se l'opzione è accesa nelle impostazioni (spesso l'auto non la fornisce)
-            boolean wantInside = ctx.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE).getBoolean("showInsideTemp", false);
-            Boolean avail = insideAvailable();
-            if (avail != null) ctx.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE).edit()
-                    .putBoolean("tempInternaAssente", !avail).apply();
-            if (wantInside && Boolean.FALSE.equals(avail)) {
-                Diag.put("clima.tempInterna (corrente / ambient)", "non disponibile su questa auto");
-                insideCache = Float.NaN;
-            } else if (wantInside) {
-                float in = props.getFloat(CarProps.HVAC_TEMPERATURE_CURRENT);
-                float amb = props.getFloat(CarProps.HVAC_AMBIENT_TEMPERATURE);
-                Diag.put("clima.tempInterna (corrente / ambient)", in + " / " + amb);
-                insideCache = valid(in) ? in : valid(amb) ? amb : Float.NaN;
-            } else {
-                Diag.put("clima.tempInterna (corrente / ambient)", "non letta (opzione spenta)");
-                insideCache = Float.NaN;
+            // 0.9.3: temperatura esterna, validità (0 valida, 1 non valida)
+            outValid = props.getIntQuiet(CarProps.HVAC_TEMPERATURE_OUTCARV);
+            // 0.9.3: temperatura interna nascosta. L'auto non la fornisce: HVAC_TEMPERATURE_CURRENT vale sempre 0 e
+            // HVAC_AMBIENT_TEMPERATURE è la temperatura ESTERNA (prima, con l'opzione accesa, si vedeva l'esterna come
+            // interna). La sonda cerca la proprietà giusta e la scrive nei log (sonda.tempInterna).
+            if (!insideHidden) {
+                insideHidden = true;
+                ctx.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE).edit().putBoolean("tempInternaAssente", true).apply();
+                Diag.put("clima.tempInterna", "nascosta: l'auto non la fornisce (ricerca in corso: sonda.tempInterna)");
+            }
+            insideCache = Float.NaN;
+            if (now - probeAt > 60_000) {
+                probeAt = now;
+                String r = props.probeInsideTemp(lastOutside);
+                if (!r.isEmpty()) Diag.put("sonda.tempInterna", r.length() > 1800 ? r.substring(0, 1800) + "…" : r);
             }
         }
         System.arraycopy(tireCache, 0, s.tireBar, 0, 4);

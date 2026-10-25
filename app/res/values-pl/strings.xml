@@ -28,7 +28,7 @@
     <string name="log_upload_off" formatted="false">Wysyłanie logów wyłączone</string>
     <string name="log_upload_nokey" formatted="false">Wysyłanie logów niedostępne w tej wersji</string>
     <string name="sec_car" formatted="false">SAMOCHÓD</string>
-    <string name="sec_car_sub" formatted="false">Kolor, dach</string>
+    <string name="sec_car_sub" formatted="false">Kolor, felgi, dach</string>
     <string name="sec_home" formatted="false">Ekran główny</string>
     <string name="sec_home_sub" formatted="false">Bateria, opony, temperatury</string>
     <string name="sec_look" formatted="false">Wygląd</string>
@@ -274,7 +274,6 @@
     <string name="news9_3" formatted="false">Amazon Music w muzyce online</string>
     <string name="news9_4" formatted="false">Duży procent baterii (opcja) i czytelniejsza temperatura</string>
     <string name="news9_5" formatted="false">Odinstalowanie launchera w ustawieniach</string>
-    <string name="news92_1" formatted="false">Starsze radio (3A111): automatyczna naprawa zatrzymuje teraz także ciągłe restarty systemu multimedialnego</string>
     <string name="btn_change" formatted="false">Zmień</string>
     <string name="btn_update" formatted="false">Aktualizuj</string>
     <string name="btn_delete" formatted="false">Usuń</string>
@@ -323,4 +322,14 @@
     <string name="tile_on_m" formatted="false">Włączony</string>
     <string name="tile_off_m" formatted="false">Wyłączony</string>
     <string name="tile_level">Poziom %d</string>
+    <string name="news92_1" formatted="false">Starsze radio (3A111): automatyczna naprawa zatrzymuje teraz także ciągłe restarty systemu multimedialnego</string>
+    <string name="set_wheels" formatted="false">Felgi</string>
+    <string name="wheel_16" formatted="false">16″ czarne kołpaki</string>
+    <string name="wheel_17" formatted="false">17″ Aero dwukolorowe</string>
+    <string name="wheel_18_lux" formatted="false">18″ Luxury / Trophy</string>
+    <string name="wheel_18_xpower" formatted="false">18″ XPOWER</string>
+    <string name="news93_1" formatted="false">Wybór felg w ustawieniach, pod kolorem: 16″, 17″ Aero, 18″ Luxury/Trophy, 18″ XPOWER</string>
+    <string name="news93_2" formatted="false">Bardziej wiarygodna temperatura zewnętrzna: nieprawidłowe wartości (np. -40°) nie są już pokazywane</string>
+    <string name="news93_3" formatted="false">Temperatura wewnętrzna ukryta: auto jej nie podaje (pokazywała zewnętrzną); szukamy jej w logach</string>
+    <string name="news93_4" formatted="false">Dongle CarPlay/Android Auto widoczne jako iPhone są teraz rozpoznawane i restartowane, gdy nie startują</string>
 </resources>

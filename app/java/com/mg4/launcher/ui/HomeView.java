@@ -202,7 +202,7 @@ public final class HomeView extends LinearLayout {
     }
 
     public void applyCarLook() {
-        car.setLook(Prefs.CAR_COLOR_VALUES[prefs.carColorIndex()], prefs.blackRoof(), t);
+        car.setLook(Prefs.CAR_COLOR_VALUES[prefs.carColorIndex()], prefs.blackRoof(), prefs.wheelIndex(), t);
     }
 
     // =========================================================================================
