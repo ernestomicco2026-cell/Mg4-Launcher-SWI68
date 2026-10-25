@@ -333,4 +333,18 @@
     <string name="news93_3" formatted="false">Inside temperature hidden: the car doesn\'t provide it (it showed the outside one); we\'re looking for it in the logs</string>
     <string name="news93_4" formatted="false">CarPlay/Android Auto dongles that show up as an iPhone are now recognised and restarted if they don\'t start</string>
     <string name="newsf_1" formatted="false">Fan set to OFF now really turns the climate off (it used to come back to 1)</string>
+    <string name="group_guida" formatted="false">Driving</string>
+    <string name="tile_lka" formatted="false">Lane</string>
+    <string name="tile_acc" formatted="false">Assistant</string>
+    <string name="tile_pedal" formatted="false">Brake pedal</string>
+    <string name="recirc_in" formatted="false">Inside</string>
+    <string name="recirc_out" formatted="false">Outside</string>
+    <string name="guida_stopped" formatted="false">Can only be changed with the car stopped</string>
+    <string name="set_inside_none" formatted="false">Not available: the car does not send it to the screen. The «ambient» value read before was actually the outside temperature</string>
+    <string name="newsg_1" formatted="false">New Driving button in the bar: LKA, One Pedal, assistant (Off/ACC/TJA) and brake pedal (Comfort/Medium/Sport) in a single panel</string>
+    <string name="newsg_2" formatted="false">Assistant and brake pedal can only be changed with the car stopped, for safety</string>
+    <string name="newsg_3" formatted="false">3-state recirculation like the original climate app: Inside → Outside → Auto, with a changing icon</string>
+    <string name="newsg_4" formatted="false">Inside temperature removed: the car does not send it to the screen (the value that looked like inside was the outside one)</string>
+    <string name="newsg_5" formatted="false">Outside temperature: no more false 0° when the car does not have the reading yet</string>
+    <string name="newsg_6" formatted="false">Apps page: in Edit you can now hide the car apps too, not only the installed ones</string>
 </resources>

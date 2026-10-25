@@ -333,4 +333,18 @@
     <string name="news93_3" formatted="false">Innentemperatur ausgeblendet: Das Auto liefert sie nicht (es zeigte die Außentemperatur); wir suchen sie in den Logs</string>
     <string name="news93_4" formatted="false">CarPlay-/Android-Auto-Dongles, die sich als iPhone melden, werden jetzt erkannt und neu gestartet, wenn sie nicht starten</string>
     <string name="newsf_1" formatted="false">Lüfter auf AUS schaltet die Klimaanlage jetzt wirklich aus (vorher sprang er auf 1 zurück)</string>
+    <string name="group_guida" formatted="false">Fahren</string>
+    <string name="tile_lka" formatted="false">Spur</string>
+    <string name="tile_acc" formatted="false">Assistent</string>
+    <string name="tile_pedal" formatted="false">Bremspedal</string>
+    <string name="recirc_in" formatted="false">Innen</string>
+    <string name="recirc_out" formatted="false">Außen</string>
+    <string name="guida_stopped" formatted="false">Nur bei stehendem Auto änderbar</string>
+    <string name="set_inside_none" formatted="false">Nicht verfügbar: Das Auto sendet sie nicht an den Bildschirm. Der früher gelesene „Umgebungs“-Wert war in Wirklichkeit die Außentemperatur</string>
+    <string name="newsg_1" formatted="false">Neue Fahren-Taste in der Leiste: LKA, One Pedal, Assistent (Aus/ACC/TJA) und Bremspedal (Comfort/Medium/Sport) in einem Feld</string>
+    <string name="newsg_2" formatted="false">Assistent und Bremspedal lassen sich aus Sicherheitsgründen nur bei stehendem Auto ändern</string>
+    <string name="newsg_3" formatted="false">Umluft mit 3 Stufen wie in der Original-Klima-App: Innen → Außen → Auto, mit wechselndem Symbol</string>
+    <string name="newsg_4" formatted="false">Innentemperatur entfernt: Das Auto sendet sie nicht an den Bildschirm (der scheinbare Innenwert war der Außenwert)</string>
+    <string name="newsg_5" formatted="false">Außentemperatur: keine falschen 0° mehr, wenn das Auto noch keinen Wert hat</string>
+    <string name="newsg_6" formatted="false">App-Seite: Unter Bearbeiten lassen sich jetzt auch die Fahrzeug-Apps ausblenden, nicht nur die installierten</string>
 </resources>

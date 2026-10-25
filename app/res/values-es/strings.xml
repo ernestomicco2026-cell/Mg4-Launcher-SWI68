@@ -333,4 +333,18 @@
     <string name="news93_3" formatted="false">Temperatura interior oculta: el coche no la proporciona (mostraba la exterior); la estamos buscando en los registros</string>
     <string name="news93_4" formatted="false">Los dongles CarPlay/Android Auto que aparecen como iPhone ahora se reconocen y se reinician si no arrancan</string>
     <string name="newsf_1" formatted="false">El ventilador en OFF ahora apaga de verdad el climatizador (antes volvía a 1)</string>
+    <string name="group_guida" formatted="false">Conducción</string>
+    <string name="tile_lka" formatted="false">Carril</string>
+    <string name="tile_acc" formatted="false">Asistente</string>
+    <string name="tile_pedal" formatted="false">Pedal de freno</string>
+    <string name="recirc_in" formatted="false">Interior</string>
+    <string name="recirc_out" formatted="false">Exterior</string>
+    <string name="guida_stopped" formatted="false">Solo se puede cambiar con el coche parado</string>
+    <string name="set_inside_none" formatted="false">No disponible: el coche no la envía a la pantalla. El valor «ambiente» que se leía antes era en realidad la temperatura exterior</string>
+    <string name="newsg_1" formatted="false">Nuevo botón Conducción en la barra: LKA, One Pedal, asistente (Apagado/ACC/TJA) y pedal de freno (Comfort/Medium/Sport) en un solo panel</string>
+    <string name="newsg_2" formatted="false">El asistente y el pedal de freno solo se cambian con el coche parado, por seguridad</string>
+    <string name="newsg_3" formatted="false">Recirculación de 3 estados como la app original: Interior → Exterior → Auto, con el icono que cambia</string>
+    <string name="newsg_4" formatted="false">Eliminada la temperatura interior: el coche no la envía a la pantalla (el valor que parecía interior era el exterior)</string>
+    <string name="newsg_5" formatted="false">Temperatura exterior: no más 0° falsos cuando el coche aún no tiene el dato</string>
+    <string name="newsg_6" formatted="false">Página de apps: en Editar ahora también se pueden ocultar las apps del coche, no solo las instaladas</string>
 </resources>

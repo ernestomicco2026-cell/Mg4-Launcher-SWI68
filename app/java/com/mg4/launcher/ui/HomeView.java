@@ -127,7 +127,10 @@ public final class HomeView extends LinearLayout {
     private boolean grouped;
     private FrameLayout climaGroup, comfortGroup;
     private LinearLayout climaDots, comfortDots;
-    private TextView lkaBtn, opdBtn;
+    /** Gruppo Guida (0.9.5): LKA, One Pedal, assistente ACC/TJA e pedale del freno in un solo pulsante. */
+    private FrameLayout guidaGroup;
+    private LinearLayout guidaDots;
+    private int recircIcon;
     private View barView;
     private GroupPopup popup;
     private ImageView outIcon;
@@ -256,7 +259,7 @@ public final class HomeView extends LinearLayout {
         statusTv = Ui.oneLine(Ui.text(c, L.s(R.string.connecting_vehicle), 20, t.sub, Ui.REGULAR));
         status.addView(statusTv, Ui.margins(Ui.lpWeight(0, -2, 1), dp(10), 0, 0, 0));
         // altezza fissa: a riposo la riga resta vuota senza spostare l'auto
-        status.setMinimumHeight(dp(prefs.showInsideTemp() && !prefs.insideTempMissing() ? 62 : 34));
+        status.setMinimumHeight(dp(34));
         // temperatura esterna e, sotto, quella interna
         outIcon = Ui.icon(c, R.drawable.ic_thermo, t.text, 26);
         outIcon.setVisibility(GONE);
@@ -392,8 +395,9 @@ public final class HomeView extends LinearLayout {
         });
     }
 
+    /** 0.9.5: temperatura interna tolta, l'auto non la manda allo schermo (vedi Impostazioni › Home). */
     private boolean showInside() {
-        return prefs.showInsideTemp() && !prefs.insideTempMissing();
+        return false;
     }
 
     private final long createdAt = System.currentTimeMillis();
@@ -459,14 +463,11 @@ public final class HomeView extends LinearLayout {
         // ricircolo: si nasconde se l'auto non lo supporta (lettura -1)
         recircBtn.setVisibility(s.loopMode >= 0 ? VISIBLE : GONE);
         styleToggle(recircBtn, s.loopMode < 0 ? -1 : s.loopMode == 0 ? 1 : 0);
+        setRecircIcon(s.loopMode);
         styleToggle(frontFogBtn, s.frontFog, 0xFF34C77B);
         styleToggle(rearFogBtn, s.rearFog, 0xFFFFB020);
         if (grouped) styleGroups(s);
-        boolean assist = prefs.showAssist();
-        lkaBtn.setVisibility(assist && s.lka >= 0 ? VISIBLE : GONE);
-        opdBtn.setVisibility(assist && s.opd >= 0 ? VISIBLE : GONE);
-        styleToggle(lkaBtn, s.lka);
-        styleToggle(opdBtn, s.opd);
+        styleGuida(s);
         if (popup != null) popup.refresh(s);
     }
 
@@ -1457,19 +1458,10 @@ public final class HomeView extends LinearLayout {
             heat.addView(seatRightBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
             bar.addView(heat, Ui.margins(new LayoutParams(-2, -2), dp(8), 0, 0, 0));
         }
-        // assistenza alla guida: solo comando manuale, stile come AUTO (bianco = attivo); nascosti se l'auto non li ha
-        lkaBtn = toggleText(c, "LKA", L.s(R.string.lka_desc), v -> vehicle.toggleLka());
-        lkaBtn.setVisibility(GONE);
-        bar.addView(lkaBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
-        opdBtn = toggleText(c, "OPD", L.s(R.string.opd_desc), v -> {
-            VehicleClient.State st = vehicle.last();
-            if (st.opdInhibit > 0 && st.opd == 0) {
-                android.widget.Toast.makeText(getContext(), L.s(R.string.opd_blocked), android.widget.Toast.LENGTH_LONG).show();
-            }
-            vehicle.toggleOpd();
-        });
-        opdBtn.setVisibility(GONE);
-        bar.addView(opdBtn, Ui.margins(new LayoutParams(btn, btn), dp(8), 0, 0, 0));
+        // guida (0.9.5): LKA, OPD, assistente e pedale in un gruppo; nascosto se l'auto non ha nessuno dei comandi
+        guidaGroup = guidaButton(c);
+        guidaGroup.setVisibility(GONE);
+        bar.addView(guidaGroup, Ui.margins(new LayoutParams(groupWidth(), btn), dp(8), 0, 0, 0));
         bar.addView(new View(c), new LayoutParams(dp(8), 1));
 
         // mini-player compatto (unico elemento elastico). Con i comandi molto grandi o la barra grande lascia il posto ai
@@ -1703,6 +1695,7 @@ public final class HomeView extends LinearLayout {
     // =========================================================================================
 
     private static final int HEAT = 0xFFFF7A3D;
+    private static final int CLIMA = 0, COMFORT = 1, GUIDA = 2;
 
     private int groupWidth() {
         return bs(76, BIG_BTN);
@@ -1743,7 +1736,7 @@ public final class HomeView extends LinearLayout {
         f.addView(dots, dl);
         if (clima) climaDots = dots;
         else comfortDots = dots;
-        f.setOnClickListener(v -> openGroup(clima));
+        f.setOnClickListener(v -> openGroup(clima ? CLIMA : COMFORT));
         f.setOnLongClickListener(v -> {
             if (clima) vehicle.toggleAc();
             else vehicle.stepSeat(true);
@@ -1771,15 +1764,88 @@ public final class HomeView extends LinearLayout {
         comfortGroup.setVisibility(any ? VISIBLE : GONE);
     }
 
+    /** Icona del ricircolo come l'app clima originale: interno, aria esterna o automatico. */
+    static int recircRes(int loopMode) {
+        return loopMode == 1 ? R.drawable.ic_recirc_out : loopMode == 2 ? R.drawable.ic_recirc_auto : R.drawable.ic_recirc;
+    }
+
+    private void setRecircIcon(int loopMode) {
+        int res = recircRes(loopMode);
+        if (res == recircIcon) return;
+        recircIcon = res;
+        ((ImageView) recircBtn.getChildAt(0)).setImageResource(res);
+        if (climaGroup != null) {
+            LinearLayout content = (LinearLayout) climaGroup.getChildAt(0);
+            if (content.getChildCount() > 1) ((ImageView) content.getChildAt(1)).setImageResource(res);
+        }
+    }
+
+    static String recircName(int loopMode) {
+        return loopMode == 0 ? L.s(R.string.recirc_in) : loopMode == 1 ? L.s(R.string.recirc_out) : loopMode == 2 ? "Auto" : "—";
+    }
+
+    /** Pulsante del gruppo Guida: icona della strada con le corsie (il volante si confonde col riscaldamento), un puntino per ogni aiuto acceso (LKA, OPD, ACC/TJA). */
+    private FrameLayout guidaButton(Context c) {
+        FrameLayout f = new FrameLayout(c);
+        f.setBackground(Ui.pressable(c, t.chip, big ? 24 : 20 * Ui.K, t));
+        f.setContentDescription(L.s(R.string.group_guida));
+        f.setClickable(true);
+        int ic = bs(28, 40);
+        FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(ic, ic, Gravity.CENTER);
+        cl.bottomMargin = bs(8, 12);
+        f.addView(Ui.icon(c, R.drawable.ic_lanes, t.text, 28), cl);
+        guidaDots = Ui.row(c);
+        guidaDots.setGravity(Gravity.CENTER);
+        for (int i = 0; i < 3; i++) {
+            View d = new View(c);
+            d.setBackground(Ui.round(t.text, dp(3)));
+            d.setVisibility(GONE);
+            guidaDots.addView(d, Ui.margins(new LayoutParams(bs(6, 9), bs(6, 9)), i == 0 ? 0 : bs(4, 6), 0, 0, 0));
+        }
+        FrameLayout.LayoutParams dl = new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+        dl.bottomMargin = bs(9, 14);
+        f.addView(guidaDots, dl);
+        f.setOnClickListener(v -> openGroup(GUIDA));
+        return f;
+    }
+
+    private void styleGuida(VehicleClient.State s) {
+        boolean any = s.lka >= 0 || s.opd >= 0 || s.accTja >= 0 || s.pedal >= 0;
+        guidaGroup.setVisibility(prefs.showAssist() && any ? VISIBLE : GONE);
+        showDots(guidaDots, (s.lka == 1 ? 1 : 0) + (s.opd == 1 ? 1 : 0) + (s.accTja == 1 || s.accTja == 2 ? 1 : 0));
+    }
+
+    /** Pedale: Comfort 1 tacca, Medium 2, Sport 3 (valori dell'auto 1, 0, 2). */
+    static int pedalNotches(int v) {
+        return v == 1 ? 1 : v == 0 ? 2 : v == 2 ? 3 : 0;
+    }
+
+    static String pedalName(int v) {
+        return v == 1 ? "Comfort" : v == 0 ? "Medium" : v == 2 ? "Sport" : "—";
+    }
+
+    static String accName(int v) {
+        return v == 1 ? "ACC" : v == 2 ? "TJA" : v == 4 ? "OFF" : "—";
+    }
+
+    private void guidaTap(boolean pedal) {
+        if (!VehicleClient.stopped()) {
+            android.widget.Toast.makeText(getContext(), L.s(R.string.guida_stopped), android.widget.Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (pedal) vehicle.cyclePedal();
+        else vehicle.cycleAccTja();
+    }
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (popup != null) popup.close();
     }
 
-    private void openGroup(boolean clima) {
+    private void openGroup(int kind) {
         if (popup != null) popup.close();
-        popup = new GroupPopup(clima);
+        popup = new GroupPopup(kind);
         popup.show();
     }
 
@@ -1823,15 +1889,17 @@ public final class HomeView extends LinearLayout {
      */
     private final class GroupPopup {
         private static final long AUTO_CLOSE_MS = 6000;
-        final boolean clima;
+        /** clima: caselle bianche quando accese (Clima e Guida); altrimenti arancioni (Comfort). */
+        final boolean clima, guida;
         final Dimmer catcher;
         final LinearLayout card, tiles;
         final View arrow;
         final Runnable closer = this::close;
         final java.util.List<FrameLayout> tileViews = new java.util.ArrayList<>();
 
-        GroupPopup(boolean clima) {
-            this.clima = clima;
+        GroupPopup(int kind) {
+            this.clima = kind != COMFORT;
+            this.guida = kind == GUIDA;
             Context c = getContext();
             catcher = new Dimmer(c);
             catcher.ring = clima ? t.text : HEAT;
@@ -1848,7 +1916,7 @@ public final class HomeView extends LinearLayout {
             card.setPadding(dp(32), dp(24), dp(32), dp(30));
             LinearLayout head = Ui.row(c);
             head.setGravity(Gravity.CENTER_VERTICAL);
-            TextView title = Ui.text(c, L.s(clima ? R.string.group_clima : R.string.group_comfort).toUpperCase(L.locale()), 16, t.sub, Ui.MEDIUM);
+            TextView title = Ui.text(c, L.s(guida ? R.string.group_guida : clima ? R.string.group_clima : R.string.group_comfort).toUpperCase(L.locale()), 16, t.sub, Ui.MEDIUM);
             title.setLetterSpacing(0.12f);
             head.addView(title, Ui.lpWeight(0, -2, 1));
             head.addView(Ui.text(c, L.s(R.string.tap_outside_close), 15, t.sub, Ui.REGULAR), Ui.margins(new LayoutParams(-2, -2), dp(40), 0, 0, 0));
@@ -1881,10 +1949,21 @@ public final class HomeView extends LinearLayout {
 
         private void buildTiles(Context c) {
             VehicleClient.State s = vehicle.last();
-            if (clima) {
+            if (guida) {
+                if (s.lka >= 0) addTile(c, "lka", "LKA", 0, L.s(R.string.tile_lka), v -> vehicle.toggleLka());
+                if (s.opd >= 0) addTile(c, "opd", "OPD", 0, "One Pedal", v -> {
+                    VehicleClient.State st = vehicle.last();
+                    if (st.opdInhibit > 0 && st.opd == 0) {
+                        android.widget.Toast.makeText(getContext(), L.s(R.string.opd_blocked), android.widget.Toast.LENGTH_LONG).show();
+                    }
+                    vehicle.toggleOpd();
+                });
+                if (s.accTja >= 0) addTile(c, "acc", accName(s.accTja), 0, L.s(R.string.tile_acc), v -> guidaTap(false));
+                if (s.pedal >= 0) addTile(c, "pedal", null, R.drawable.ic_pedal, L.s(R.string.tile_pedal), v -> guidaTap(true));
+            } else if (clima) {
                 addTile(c, "ac", "A/C", 0, L.s(R.string.ac_desc), v -> vehicle.toggleAc());
                 addTile(c, "auto", "AUTO", 0, L.s(R.string.tile_auto), v -> vehicle.toggleAuto());
-                if (s.loopMode >= 0) addTile(c, "recirc", null, R.drawable.ic_recirc, L.s(R.string.tile_recirc), v -> vehicle.toggleRecirc());
+                if (s.loopMode >= 0) addTile(c, "recirc", null, recircRes(s.loopMode), L.s(R.string.tile_recirc), v -> vehicle.toggleRecirc());
             } else {
                 if (s.seatLeft >= 0) addTile(c, "seatL", null, R.drawable.ic_seat_heat, L.s(R.string.tile_seat_driver), v -> vehicle.stepSeat(true));
                 if (s.wheelHeat >= 0) addTile(c, "wheel", null, R.drawable.ic_wheel_heat, L.s(R.string.tile_wheel), v -> vehicle.toggleWheelHeat());
@@ -1924,7 +2003,7 @@ public final class HomeView extends LinearLayout {
             st.setGravity(Gravity.CENTER);
             col.addView(st, Ui.margins(new LayoutParams(w - dp(10), -2), 0, dp(4), 0, 0));
             LinearLayout notches = Ui.row(c);
-            if (!clima) {
+            if (!clima || id.equals("pedal")) {
                 int n = id.equals("wheel") ? 1 : 3;
                 for (int i = 0; i < n; i++) {
                     View d = new View(c);
@@ -1948,6 +2027,10 @@ public final class HomeView extends LinearLayout {
                     case "ac": state = s.acOn; break;
                     case "auto": state = s.autoOn; break;
                     case "recirc": state = s.loopMode < 0 ? -1 : s.loopMode == 0 ? 1 : 0; break;
+                    case "lka": state = s.lka; break;
+                    case "opd": state = s.opd; break;
+                    case "acc": state = s.accTja < 0 ? -1 : s.accTja == 4 ? 0 : 1; break;
+                    case "pedal": state = s.pedal < 0 ? -1 : 0; level = pedalNotches(s.pedal); break;
                     case "wheel": state = s.wheelHeat; level = s.wheelHeat > 0 ? 1 : 0; break;
                     default:
                         level = id.equals("seatL") ? s.seatLeft : s.seatRight;
@@ -1959,6 +2042,15 @@ public final class HomeView extends LinearLayout {
                 TextView nm = (TextView) tag[2], st = (TextView) tag[3];
                 String stateText = state < 0 ? "—" : (id.equals("seatL") || id.equals("seatR")) && on ? L.f(R.string.tile_level, level)
                         : id.equals("ac") ? L.s(on ? R.string.tile_on_f : R.string.tile_off_f) : L.s(on ? R.string.tile_on_m : R.string.tile_off_m);
+                if (state >= 0 && id.equals("recirc")) {
+                    stateText = recircName(s.loopMode);
+                    ((ImageView) tag[1]).setImageResource(recircRes(s.loopMode));
+                }
+                if (state >= 0 && id.equals("acc")) {
+                    stateText = s.accTja == 4 ? L.s(R.string.tile_off_m) : accName(s.accTja);
+                    ((TextView) tag[1]).setText(accName(s.accTja));
+                }
+                if (state >= 0 && id.equals("pedal")) stateText = pedalName(s.pedal);
                 st.setText(stateText);
                 android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
                 g.setCornerRadius(rad);
@@ -1970,6 +2062,10 @@ public final class HomeView extends LinearLayout {
                     else ((ImageView) tag[1]).setColorFilter(fg);
                     nm.setTextColor(fg);
                     st.setTextColor(on ? (t.panel & 0x00FFFFFF) | 0xB3000000 : t.sub);
+                    LinearLayout notches = (LinearLayout) tag[4];
+                    for (int i = 0; i < notches.getChildCount(); i++) {
+                        notches.getChildAt(i).setBackground(Ui.round(i < level ? t.text : t.track, dp(3)));
+                    }
                 } else {
                     // accesa = sfondo caldo, bordo arancione, icona e stato arancioni, tacche del livello
                     g.setColor(on ? (t.day ? 0xFFFFF1EA : 0xFF2E241F) : t.chip);
@@ -1989,7 +2085,7 @@ public final class HomeView extends LinearLayout {
 
         /** Riquadro centrato sopra il pulsante del gruppo (dentro lo schermo), punta sul pulsante, buco nello scuro. */
         private void place() {
-            View anchor = clima ? climaGroup : comfortGroup;
+            View anchor = guida ? guidaGroup : clima ? climaGroup : comfortGroup;
             if (anchor == null || barView == null || card.getWidth() == 0) return;
             int[] a = new int[2], root = new int[2], bar = new int[2];
             anchor.getLocationOnScreen(a);

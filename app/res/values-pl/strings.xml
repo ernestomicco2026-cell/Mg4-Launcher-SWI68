@@ -333,4 +333,18 @@
     <string name="news93_3" formatted="false">Temperatura wewnętrzna ukryta: auto jej nie podaje (pokazywała zewnętrzną); szukamy jej w logach</string>
     <string name="news93_4" formatted="false">Dongle CarPlay/Android Auto widoczne jako iPhone są teraz rozpoznawane i restartowane, gdy nie startują</string>
     <string name="newsf_1" formatted="false">Wentylator na OFF teraz naprawdę wyłącza klimatyzację (wcześniej wracał do 1)</string>
+    <string name="group_guida" formatted="false">Jazda</string>
+    <string name="tile_lka" formatted="false">Pas ruchu</string>
+    <string name="tile_acc" formatted="false">Asystent</string>
+    <string name="tile_pedal" formatted="false">Pedał hamulca</string>
+    <string name="recirc_in" formatted="false">Wewnętrzny</string>
+    <string name="recirc_out" formatted="false">Zewnętrzny</string>
+    <string name="guida_stopped" formatted="false">Można zmienić tylko na postoju</string>
+    <string name="set_inside_none" formatted="false">Niedostępna: samochód nie przesyła jej na ekran. Odczytywana wcześniej wartość «otoczenia» była w rzeczywistości temperaturą zewnętrzną</string>
+    <string name="newsg_1" formatted="false">Nowy przycisk Jazda na pasku: LKA, One Pedal, asystent (Wył./ACC/TJA) i pedał hamulca (Comfort/Medium/Sport) w jednym panelu</string>
+    <string name="newsg_2" formatted="false">Asystenta i pedał hamulca można zmienić tylko na postoju, dla bezpieczeństwa</string>
+    <string name="newsg_3" formatted="false">Recyrkulacja 3-stanowa jak w oryginalnej aplikacji: Wewnętrzny → Zewnętrzny → Auto, ze zmieniającą się ikoną</string>
+    <string name="newsg_4" formatted="false">Usunięto temperaturę wewnętrzną: samochód nie przesyła jej na ekran (wartość, która wyglądała na wewnętrzną, była zewnętrzną)</string>
+    <string name="newsg_5" formatted="false">Temperatura zewnętrzna: koniec z fałszywym 0°, gdy samochód nie ma jeszcze odczytu</string>
+    <string name="newsg_6" formatted="false">Strona aplikacji: w Edycji można teraz ukryć także aplikacje samochodu, nie tylko zainstalowane</string>
 </resources>

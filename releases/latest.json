@@ -1,6 +1,6 @@
 {
-  "version": "0.9.4",
-  "apk": "releases/MG4Launcher-0.9.4.apk",
-  "size": 594450,
-  "notes": "Ventola su OFF: ora spegne davvero il clima (prima tornava a 1). Contiene anche le novità della 0.9.3 (cerchi, temperature, dongle)."
+  "version": "0.9.5",
+  "apk": "releases/MG4Launcher-0.9.5.apk",
+  "size": 607033,
+  "notes": "Gruppo Guida (LKA, One Pedal, assistente ACC/TJA, pedale del freno), ricircolo a 3 stati, temperatura interna tolta, app dell'auto nascondibili."
 }

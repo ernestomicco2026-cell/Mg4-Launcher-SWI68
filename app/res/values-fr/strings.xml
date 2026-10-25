@@ -333,4 +333,18 @@
     <string name="news93_3" formatted="false">Température intérieure masquée : la voiture ne la fournit pas (elle affichait l\'extérieure) ; nous la cherchons dans les journaux</string>
     <string name="news93_4" formatted="false">Les dongles CarPlay/Android Auto qui se présentent comme un iPhone sont reconnus et redémarrés s\'ils ne démarrent pas</string>
     <string name="newsf_1" formatted="false">La ventilation sur OFF éteint maintenant vraiment la climatisation (avant elle revenait à 1)</string>
+    <string name="group_guida" formatted="false">Conduite</string>
+    <string name="tile_lka" formatted="false">Voie</string>
+    <string name="tile_acc" formatted="false">Assistant</string>
+    <string name="tile_pedal" formatted="false">Pédale de frein</string>
+    <string name="recirc_in" formatted="false">Intérieur</string>
+    <string name="recirc_out" formatted="false">Extérieur</string>
+    <string name="guida_stopped" formatted="false">Modifiable uniquement voiture à l\'arrêt</string>
+    <string name="set_inside_none" formatted="false">Non disponible : la voiture ne l\'envoie pas à l\'écran. La valeur « ambiante » lue auparavant était en fait la température extérieure</string>
+    <string name="newsg_1" formatted="false">Nouveau bouton Conduite dans la barre : LKA, One Pedal, assistant (Désactivé/ACC/TJA) et pédale de frein (Comfort/Medium/Sport) dans un seul panneau</string>
+    <string name="newsg_2" formatted="false">L\'assistant et la pédale de frein ne se modifient qu\'à l\'arrêt, par sécurité</string>
+    <string name="newsg_3" formatted="false">Recyclage à 3 états comme l\'appli d\'origine : Intérieur → Extérieur → Auto, avec l\'icône qui change</string>
+    <string name="newsg_4" formatted="false">Température intérieure retirée : la voiture ne l\'envoie pas à l\'écran (la valeur qui semblait intérieure était l\'extérieure)</string>
+    <string name="newsg_5" formatted="false">Température extérieure : plus de faux 0° quand la voiture n\'a pas encore la valeur</string>
+    <string name="newsg_6" formatted="false">Page Apps : en Modifier, on peut maintenant masquer aussi les applis du véhicule, pas seulement celles installées</string>
 </resources>

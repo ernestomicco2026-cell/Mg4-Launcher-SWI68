@@ -101,16 +101,23 @@ public final class AppsView extends LinearLayout {
     public void reload() {
         Context c = getContext();
         content.removeAllViews();
-        content.addView(section(c, L.s(R.string.section_car), null));
-        addGrid(c, catalog.carApps(host.navPackageHint()), null);
-        List<AppCatalog.App> all = catalog.userApps();
         Set<String> hidden = prefs.hiddenApps();
+        String note = editing ? L.s(R.string.edit_note) : null;
+        // 0.9.5: anche le app dell'auto si possono nascondere in Modifica (stesso elenco delle app nascoste)
+        List<AppCatalog.App> car = new ArrayList<>();
+        for (AppCatalog.App a : catalog.carApps(host.navPackageHint())) {
+            if (editing || !hidden.contains(key(a))) car.add(a);
+        }
+        if (!car.isEmpty()) {
+            content.addView(section(c, L.s(R.string.section_car), note));
+            addGrid(c, car, hidden);
+        }
+        List<AppCatalog.App> all = catalog.userApps();
         List<AppCatalog.App> mine = new ArrayList<>();
         for (AppCatalog.App a : all) {
             if (editing || !hidden.contains(key(a))) mine.add(a);
         }
-        String note = editing ? L.s(R.string.edit_note) : null;
-        content.addView(section(c, L.s(R.string.section_mine), note), Ui.margins(new LayoutParams(-1, -2), 0, dp(10), 0, 0));
+        content.addView(section(c, L.s(R.string.section_mine), note), Ui.margins(new LayoutParams(-1, -2), car.isEmpty() ? 0 : dp(10), 0, 0, 0));
         if (!mine.isEmpty()) addGrid(c, mine, hidden);
     }
 
@@ -125,7 +132,7 @@ public final class AppsView extends LinearLayout {
         return r;
     }
 
-    /** editable != null: app installate, che in modalità Modifica si possono nascondere. */
+    /** editable: elenco delle app nascoste; in modalità Modifica ogni app (dell'auto o installata) si può nascondere. */
     private void addGrid(Context c, List<AppCatalog.App> apps, Set<String> editable) {
         LinearLayout row = null;
         for (int i = 0; i < apps.size(); i++) {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- aria esterna: sagoma dell'auto con freccia che entra da fuori -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:pathData="M2.5 18.5h19M3.5 18.5v-4.3l2.1-5c0.3-0.8 1.1-1.3 1.9-1.3h9c0.8 0 1.6 0.5 1.9 1.3l2.1 5v4.3" android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="1.8" android:strokeLineCap="round" android:strokeLineJoin="round"/>
+    <path android:pathData="M1.5 4.5h6.3c2.3 0 4.2 1.9 4.2 4.2v6.6M10.2 13.6l1.8 1.8 1.8-1.8" android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="1.8" android:strokeLineCap="round" android:strokeLineJoin="round"/>
+</vector>

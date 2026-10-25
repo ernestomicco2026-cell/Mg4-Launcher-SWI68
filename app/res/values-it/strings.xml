@@ -333,4 +333,18 @@
     <string name="news93_3" formatted="false">Temperatura interna nascosta: l\'auto non la fornisce (mostrava quella esterna); la stiamo cercando nei log</string>
     <string name="news93_4" formatted="false">I dongle CarPlay/Android Auto che si presentano come iPhone ora vengono riconosciuti e riavviati se non partono</string>
     <string name="newsf_1" formatted="false">La ventola su OFF ora spegne davvero il clima (prima tornava a 1)</string>
+    <string name="group_guida" formatted="false">Guida</string>
+    <string name="tile_lka" formatted="false">Corsia</string>
+    <string name="tile_acc" formatted="false">Assistente</string>
+    <string name="tile_pedal" formatted="false">Pedale freno</string>
+    <string name="recirc_in" formatted="false">Interno</string>
+    <string name="recirc_out" formatted="false">Esterno</string>
+    <string name="guida_stopped" formatted="false">Si cambia solo ad auto ferma</string>
+    <string name="set_inside_none" formatted="false">Non disponibile: l\'auto non la manda allo schermo. Il valore «ambiente» che si leggeva prima era in realtà la temperatura esterna</string>
+    <string name="newsg_1" formatted="false">Nuovo pulsante Guida nella barra: LKA, One Pedal, assistente (Spento/ACC/TJA) e pedale del freno (Comfort/Medium/Sport) in un unico riquadro</string>
+    <string name="newsg_2" formatted="false">Assistente e pedale del freno si cambiano solo ad auto ferma, per sicurezza</string>
+    <string name="newsg_3" formatted="false">Ricircolo a 3 stati come l\'app clima originale: Interno → Esterno → Auto, con l\'icona che cambia</string>
+    <string name="newsg_4" formatted="false">Tolta la temperatura interna: l\'auto non la manda allo schermo (il valore che sembrava interno era quello esterno)</string>
+    <string name="newsg_5" formatted="false">Temperatura esterna: niente più 0° falso quando l\'auto non ha ancora il dato</string>
+    <string name="newsg_6" formatted="false">Pagina App: in Modifica ora si possono nascondere anche le app dell\'auto, non solo quelle installate</string>
 </resources>

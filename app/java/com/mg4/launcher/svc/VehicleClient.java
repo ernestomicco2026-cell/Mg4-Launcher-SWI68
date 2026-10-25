@@ -62,7 +62,7 @@ public final class VehicleClient {
     private static final int AC_GET_DRV_SEAT_HEAT = 77, AC_GET_PSG_SEAT_HEAT = 79, AC_GET_WHEEL_HEAT = 94;
     private static final int AC_OPEN_FRONT_DEFROST = 48, AC_CLOSE_FRONT_DEFROST = 49, AC_GET_FRONT_DEFROST = 92;
     // ricircolo, come l'app Clima originale: 0 = ricircolo interno, 1 = aria esterna, 2 = automatico, -1 = non supportato
-    private static final int AC_LOOP_INNER = 10, AC_LOOP_OUTSIDE = 11, AC_GET_LOOP = 56;
+    private static final int AC_LOOP_PRESS = 9, AC_LOOP_INNER = 10, AC_LOOP_OUTSIDE = 11, AC_GET_LOOP = 56;
 
     // fendinebbia, come la barra di stato originale (SystemUI): set(1) = premuto, get 1 = acceso
     private static final String SET = "com.saicmotor.sdk.vehiclesettings.IVehicleSettingService";
@@ -71,6 +71,8 @@ public final class VehicleClient {
     private static final int COND_FRONT_FOG_CONFIG = 45;   // 0 = fendinebbia anteriori presenti
     private static final int COND_BMS_AVAILABLE = 56;      // 1 = batteria (BMS) pronta a ricevere comandi
     // assistenza alla guida, come l'app Impostazioni veicolo originale (sicurezza / guida)
+    // assistente di guida (ACC/TJA) e pedale del freno, stesse proprietà dell'auto su tutti i firmware (0.9.5)
+    private static final int SET_GET_ACC_TJA = 81, SET_SET_ACC_TJA = 82, SET_GET_PEDAL = 135, SET_SET_PEDAL = 136;
     private static final int SET_GET_LKA = 83, SET_SET_LKA = 84, SET_GET_LAST_LKA = 147, SET_GET_LKA_FAILURE = 91;
     // LKA: 0 non disponibile, 1 spento, 2 LDW, 3 LDP, 4 LKA, 5 ELK, 6-7 riservati
     private static final int SET_GET_OPD = 163, SET_SET_OPD = 164, SET_GET_OPD_INHIBIT = 165;   // One Pedal Drive: 1 acceso
@@ -117,6 +119,10 @@ public final class VehicleClient {
         public boolean hasFrontFog;
         public int lka = -1;              // 1 acceso, 0 spento, -1 non disponibile
         public int lkaMode = -1;          // valore grezzo dell'auto (vedi SET_GET_LKA)
+        /** Assistente di guida (valori dell'auto): 1 ACC, 2 TJA, 4 spento; -1 non disponibile. */
+        public int accTja = -1;
+        /** Sensibilità del pedale del freno: 1 Comfort, 0 Medium, 2 Sport; -1 non disponibile. */
+        public int pedal = -1;
         public int opd = -1;              // One Pedal Drive: 1 acceso, 0 spento, -1 non disponibile
         public int opdInhibit;            // motivo del blocco OPD (1 in carica, 2 sistema, 3 condizioni), 0 nessuno
         public int fanLevel = -1;         // 0 spenta, 1..max, 15 auto
@@ -440,7 +446,7 @@ public final class VehicleClient {
         });
     }
 
-    // ---- TPMS e temperatura interna dal CarService ----------------------------------------------
+    // ---- TPMS e validità della temperatura esterna dal CarService (0.9.5: la temperatura interna non c'è) ----------------------------------------------
 
     private CarProps props;
     private static volatile CarProps shared;
@@ -451,9 +457,6 @@ public final class VehicleClient {
     }
     private long propsAt;
     private final float[] tireCache = {Float.NaN, Float.NaN, Float.NaN, Float.NaN};
-    private float insideCache = Float.NaN;
-    private boolean insideHidden;
-    private long probeAt = -120_000;
     private volatile int outValid = Integer.MIN_VALUE;
     private volatile float lastOutside = Float.NaN;
 
@@ -476,23 +479,8 @@ public final class VehicleClient {
             Diag.put("pneumatici (grezzo AS/AD/PS/PD)", raw);
             // 0.9.3: temperatura esterna, validità (0 valida, 1 non valida)
             outValid = props.getIntQuiet(CarProps.HVAC_TEMPERATURE_OUTCARV);
-            // 0.9.3: temperatura interna nascosta. L'auto non la fornisce: HVAC_TEMPERATURE_CURRENT vale sempre 0 e
-            // HVAC_AMBIENT_TEMPERATURE è la temperatura ESTERNA (prima, con l'opzione accesa, si vedeva l'esterna come
-            // interna). La sonda cerca la proprietà giusta e la scrive nei log (sonda.tempInterna).
-            if (!insideHidden) {
-                insideHidden = true;
-                ctx.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE).edit().putBoolean("tempInternaAssente", true).apply();
-                Diag.put("clima.tempInterna", "nascosta: l'auto non la fornisce (ricerca in corso: sonda.tempInterna)");
-            }
-            insideCache = Float.NaN;
-            if (now - probeAt > 60_000) {
-                probeAt = now;
-                String r = props.probeInsideTemp(lastOutside);
-                if (!r.isEmpty()) Diag.put("sonda.tempInterna", r.length() > 1800 ? r.substring(0, 1800) + "…" : r);
-            }
         }
         System.arraycopy(tireCache, 0, s.tireBar, 0, 4);
-        s.insideTemp = insideCache;
     }
 
     /** Temperatura interna leggibile? true / false, null finché non si sa (CarService non ancora pronto). */
@@ -535,6 +523,15 @@ public final class VehicleClient {
             s.opd = held(SET_GET_OPD, v == 1 ? 1 : v == 0 ? 0 : -1, now);
             s.opdInhibit = Rpc.callInt(st, SET, SET_GET_OPD_INHIBIT);
         }
+        try {
+            int at = Rpc.callInt(st, SET, SET_GET_ACC_TJA);
+            s.accTja = held(SET_GET_ACC_TJA, at == 1 || at == 2 || at == 4 ? at : -1, now);
+            int bp = Rpc.callInt(st, SET, SET_GET_PEDAL);
+            s.pedal = held(SET_GET_PEDAL, bp >= 0 && bp <= 2 ? bp : -1, now);
+            Diag.put("assistenza.guida", "ACC/TJA " + at + ", pedale " + bp);
+        } catch (Exception e) {
+            Diag.put("assistenza.guida", "non leggibile: " + e);
+        }
         Diag.put("assistenza.stato", "LKA " + s.lka + " (modo " + s.lkaMode + "), OPD " + s.opd + " (blocco " + s.opdInhibit + ")");
     }
 
@@ -563,6 +560,64 @@ public final class VehicleClient {
             }
             poll();
         });
+    }
+
+    // ---- assistente di guida e pedale (0.9.5 / 0.3.8 / 0.2.5) -------------------------------------
+
+    /** Velocità in km/h dal CarService (NaN se non leggibile). */
+    public static float speedKmh() {
+        CarProps p = shared;
+        if (p == null) return Float.NaN;
+        float v = p.getFloat(291504647);   // PERF_VEHICLE_SPEED, m/s
+        return Float.isNaN(v) ? Float.NaN : Math.abs(v) * 3.6f;
+    }
+
+    /** Si cambiano solo ad auto ferma (sopra 3 km/h no): sono impostazioni della guida. */
+    public static boolean stopped() {
+        float v = speedKmh();
+        return Float.isNaN(v) || v < 3f;
+    }
+
+    /** Assistente di guida: Spento → ACC → TJA → Spento, come le impostazioni dell'auto. */
+    public boolean cycleAccTja() {
+        if (bg == null || !stopped()) return false;
+        int cur = predicted(SET_GET_ACC_TJA, last.accTja);
+        if (cur < 0) return false;
+        int next = cur == 4 ? 1 : cur == 1 ? 2 : 4;
+        hold(SET_GET_ACC_TJA, next);
+        bg.post(() -> {
+            try {
+                IBinder b = sub("vehiclesetting");
+                if (b == null) return;
+                Rpc.call(b, SET, SET_SET_ACC_TJA, p -> p.writeInt(next));
+                Diag.put("comando.ultimo", "assistenza.accTja · " + cur + " → " + next);
+            } catch (Exception e) {
+                Diag.error("assistenza.accTja", e.toString());
+            }
+            poll();
+        });
+        return true;
+    }
+
+    /** Pedale del freno: Comfort → Medium → Sport → Comfort. */
+    public boolean cyclePedal() {
+        if (bg == null || !stopped()) return false;
+        int cur = predicted(SET_GET_PEDAL, last.pedal);
+        if (cur < 0) return false;
+        int next = cur == 1 ? 0 : cur == 0 ? 2 : 1;
+        hold(SET_GET_PEDAL, next);
+        bg.post(() -> {
+            try {
+                IBinder b = sub("vehiclesetting");
+                if (b == null) return;
+                Rpc.call(b, SET, SET_SET_PEDAL, p -> p.writeInt(next));
+                Diag.put("comando.ultimo", "assistenza.pedale · " + cur + " → " + next);
+            } catch (Exception e) {
+                Diag.error("assistenza.pedale", e.toString());
+            }
+            poll();
+        });
+        return true;
     }
 
     /** One Pedal Drive acceso/spento. Se l'auto lo blocca (in carica, condizioni…) lo stato letto resta com'era. */
@@ -779,13 +834,14 @@ public final class VehicleClient {
         if (bg == null) return;
         int cur = predicted(AC_GET_LOOP, last.loopMode);
         if (cur < 0) return;
-        boolean toInner = cur != 0;
-        hold(AC_GET_LOOP, toInner ? 0 : 1);
+        // 0.9.5: come il tasto dell'app originale, un comando che fa il giro Interno → Esterno → Auto
+        int next = cur == 0 ? 1 : cur == 1 ? 2 : 0;
+        hold(AC_GET_LOOP, next);
         bg.post(() -> {
             try {
                 IBinder a = sub("aircondition");
-                if (a != null) Rpc.call(a, AC, toInner ? AC_LOOP_INNER : AC_LOOP_OUTSIDE, Rpc.NONE);
-                Diag.put("clima.ricircoloComando", (toInner ? "interno" : "esterno") + " (era " + cur + ", clima " + (last.hvacPower == 1 ? "acceso" : "spento") + ")");
+                if (a != null) Rpc.call(a, AC, AC_LOOP_PRESS, p -> p.writeInt(1));
+                Diag.put("clima.ricircoloComando", "cambia (era " + cur + ", previsto " + next + ", clima " + (last.hvacPower == 1 ? "acceso" : "spento") + ")");
             } catch (Exception e) {
                 Diag.error("clima.ricircolo", e.toString());
             }

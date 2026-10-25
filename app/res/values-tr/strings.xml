@@ -333,4 +333,18 @@
     <string name="news93_3" formatted="false">İç sıcaklık gizlendi: araç bunu sağlamıyor (dış sıcaklığı gösteriyordu); kayıtlarda arıyoruz</string>
     <string name="news93_4" formatted="false">iPhone olarak görünen CarPlay/Android Auto adaptörleri artık tanınıyor ve başlamazsa yeniden başlatılıyor</string>
     <string name="newsf_1" formatted="false">Fan KAPALI konumunda artık klimayı gerçekten kapatıyor (önceden 1\'e dönüyordu)</string>
+    <string name="group_guida" formatted="false">Sürüş</string>
+    <string name="tile_lka" formatted="false">Şerit</string>
+    <string name="tile_acc" formatted="false">Asistan</string>
+    <string name="tile_pedal" formatted="false">Fren pedalı</string>
+    <string name="recirc_in" formatted="false">İç</string>
+    <string name="recirc_out" formatted="false">Dış</string>
+    <string name="guida_stopped" formatted="false">Yalnızca araç dururken değiştirilebilir</string>
+    <string name="set_inside_none" formatted="false">Mevcut değil: araç bunu ekrana göndermiyor. Önceden okunan «ortam» değeri aslında dış sıcaklıktı</string>
+    <string name="newsg_1" formatted="false">Çubukta yeni Sürüş düğmesi: LKA, One Pedal, asistan (Kapalı/ACC/TJA) ve fren pedalı (Comfort/Medium/Sport) tek panelde</string>
+    <string name="newsg_2" formatted="false">Güvenlik için asistan ve fren pedalı yalnızca araç dururken değiştirilir</string>
+    <string name="newsg_3" formatted="false">Orijinal klima uygulaması gibi 3 durumlu iç hava: İç → Dış → Otomatik, simge değişir</string>
+    <string name="newsg_4" formatted="false">İç sıcaklık kaldırıldı: araç bunu ekrana göndermiyor (iç gibi görünen değer dış sıcaklıktı)</string>
+    <string name="newsg_5" formatted="false">Dış sıcaklık: araç henüz değeri almadığında artık yanlış 0° yok</string>
+    <string name="newsg_6" formatted="false">Uygulamalar sayfası: Düzenle\'de artık yalnızca yüklenenleri değil, araç uygulamalarını da gizleyebilirsiniz</string>
 </resources>

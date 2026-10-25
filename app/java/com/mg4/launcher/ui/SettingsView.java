@@ -382,14 +382,8 @@ public final class SettingsView extends FrameLayout {
                         showSection(SEC_HOME);
                     }), false));
         }
-        // temperatura interna: l'opzione si nasconde se l'auto non la fornisce
-        if (!prefs.insideTempMissing()) {
-            card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_sub),
-                    toggle(c, prefs.showInsideTemp(), on -> {
-                        prefs.setShowInsideTemp(on);
-                        host.settingsChanged(true);
-                    }), false));
-        }
+        // temperatura interna (tolta nella 0.9.5): l'auto non la manda allo schermo, si spiega perché
+        card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_none), new View(c), false));
         card.addView(row(c, L.s(R.string.set_charge_buttons), L.s(R.string.set_charge_buttons_sub),
                 toggle(c, prefs.chargeButtons(), on -> {
                     prefs.setChargeButtons(on);

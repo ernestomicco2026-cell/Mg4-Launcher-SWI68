@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- pedale: perno in alto, braccio e piastra con le righe antiscivolo -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:pathData="M12 3.2a1.4 1.4 0 1 0 0.001 0zM12 4.6v4.4" android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="1.8" android:strokeLineCap="round"/>
+    <path android:pathData="M8.8 9h6.4c1 0 1.8 0.8 1.8 1.8v8.4c0 1-0.8 1.8-1.8 1.8H8.8c-1 0-1.8-0.8-1.8-1.8v-8.4C7 9.8 7.8 9 8.8 9z" android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="1.8" android:strokeLineJoin="round"/>
+    <path android:pathData="M9.8 12.6h4.4M9.8 15h4.4M9.8 17.4h4.4" android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="1.6" android:strokeLineCap="round"/>
+</vector>
