@@ -274,6 +274,7 @@
     <string name="news9_3" formatted="false">Çevrimiçi müzikte Amazon Music</string>
     <string name="news9_4" formatted="false">Büyük batarya yüzdesi (seçenek) ve daha okunaklı sıcaklık</string>
     <string name="news9_5" formatted="false">Launcher\'ı ayarlardan kaldırma</string>
+    <string name="news92_1" formatted="false">Eski radyo (3A111): otomatik onarım artık bilgi-eğlence sisteminin sürekli yeniden başlamasını da durduruyor</string>
     <string name="btn_change" formatted="false">Değiştir</string>
     <string name="btn_update" formatted="false">Güncelle</string>
     <string name="btn_delete" formatted="false">Sil</string>

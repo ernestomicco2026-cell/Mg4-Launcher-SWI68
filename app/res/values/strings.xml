@@ -274,6 +274,7 @@
     <string name="news9_3" formatted="false">Amazon Music in online music</string>
     <string name="news9_4" formatted="false">Large battery percentage (option) and easier-to-read temperature</string>
     <string name="news9_5" formatted="false">Uninstall the launcher from the settings</string>
+    <string name="news92_1" formatted="false">Older radio (3A111): the automatic repair now also stops the infotainment restarting over and over</string>
     <string name="btn_change" formatted="false">Change</string>
     <string name="btn_update" formatted="false">Update</string>
     <string name="btn_delete" formatted="false">Delete</string>

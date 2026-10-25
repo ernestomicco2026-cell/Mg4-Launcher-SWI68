@@ -1,6 +1,6 @@
 {
-  "version": "0.9.1",
-  "apk": "releases/MG4Launcher-0.9.1.apk",
-  "size": 540878,
-  "notes": "Radio stabile anche sul servizio RadioService.3A111, Musica online solo se c'è Amazon Music o Spotify, riavvio automatico della porta USB del dongle CarPlay/AA, tasto clima che apre MG4 Clima se installato."
+  "version": "0.9.2",
+  "apk": "releases/MG4Launcher-0.9.2.apk",
+  "size": 544974,
+  "notes": "Radio 3A111: la riparazione automatica ferma anche i riavvii continui dell'infotainment (promemoria DAB rovinati). Popup delle novità a ogni versione."
 }

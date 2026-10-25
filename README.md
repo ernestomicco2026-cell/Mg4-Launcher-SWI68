@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.9.1](releases/MG4Launcher-0.9.1.apk)**
+**Ultima versione / Latest version: [0.9.2](releases/MG4Launcher-0.9.2.apk)**
 
 > 🌡️ **Nuovo: [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4)** — la schermata del clima in stile Tesla, per SWI68, SWI69, SWI132 e SWI133. Con MG4 Clima installato il tasto del clima del launcher apre direttamente quella.
 >
@@ -25,8 +25,8 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
-![MG4 Launcher 0.9.1 — home (simulazione / mock-up)](docs/home-0.9.1.png)
-*Home 0.9.1: grafica uguale alla 0.9 · 0.9.1 home: same look as 0.9 (mock-up).*
+![MG4 Launcher 0.9.2 — home (simulazione / mock-up)](docs/home-0.9.2.png)
+*Home 0.9.2: grafica uguale alla 0.9.1 · 0.9.2 home: same look as 0.9.1 (mock-up).*
 
 ![MG4 Clima aperto dal tasto del clima del launcher (simulazione / mock-up)](docs/clima-0.9.1-mg4clima.png)
 *Dalla 0.9.1 il tasto del clima apre [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4), se è installato ·
@@ -176,7 +176,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.9.1.apk
+   adb install -r -f MG4Launcher-0.9.2.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -250,6 +250,14 @@ vuoi. Anche una stella al repository o una segnalazione di un problema sono un a
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.9.2
+- **Radio sui firmware con servizio `RadioService.3A111`**: se nel servizio radio erano rimasti i promemoria DAB
+  rovinati (creati dalle versioni prima della 0.9.1), la radio andava in crash a ogni avvio e l'infotainment si
+  riavviava ogni 10–15 minuti. La riparazione automatica aspettava che il servizio radio fosse fermo, ma in crash
+  continuo non lo è mai: ora, se i crash sono continui, ripara subito (al massimo un riavvio, poi il giro si ferma).
+  La riparazione cancella i dati del servizio radio, quindi anche le stazioni memorizzate.
+- **Popup delle novità a ogni versione**, anche per le correzioni.
 
 #### 0.9.1
 - **Radio sui firmware con servizio `RadioService.3A111`**: in questa versione del servizio radio i comandi sono
@@ -619,7 +627,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.9.1.apk
+   adb install -r -f MG4Launcher-0.9.2.apk
    ```
 3. Make it the default home:
    ```bash
@@ -693,6 +701,14 @@ minimum amount**, you can give whatever you like. A star on the repository or a 
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.9.2
+- **Radio on firmware with the `RadioService.3A111` service**: if broken DAB reminders were left in the radio service
+  (created by versions before 0.9.1), the radio crashed at every start and the infotainment rebooted every 10–15
+  minutes. The automatic repair waited for the radio service to be stopped, but in a continuous crash it never is:
+  now, with continuous crashes, it repairs straight away (one reboot at most, then the loop stops). The repair clears
+  the radio service data, so the saved stations too.
+- **What's new popup for every version**, fixes included.
 
 #### 0.9.1
 - **Radio on firmware with the `RadioService.3A111` service**: in this radio service version the commands are shifted

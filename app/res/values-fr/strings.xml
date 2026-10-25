@@ -274,6 +274,7 @@
     <string name="news9_3" formatted="false">Amazon Music dans la musique en ligne</string>
     <string name="news9_4" formatted="false">Pourcentage de batterie en grand (option) et température plus lisible</string>
     <string name="news9_5" formatted="false">Désinstaller le launcher depuis les réglages</string>
+    <string name="news92_1" formatted="false">Radio ancienne (3A111) : la réparation automatique arrête aussi les redémarrages en boucle de l\'infodivertissement</string>
     <string name="btn_change" formatted="false">Modifier</string>
     <string name="btn_update" formatted="false">Mettre à jour</string>
     <string name="btn_delete" formatted="false">Supprimer</string>

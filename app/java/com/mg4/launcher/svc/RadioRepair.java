@@ -23,11 +23,21 @@ import java.util.Locale;
  * Se nel buffer crash di logcat c'è questo crash, il launcher cancella i dati del servizio radio
  * (come "pm clear com.saicmotor.service.radio"), solo quando il servizio NON è in esecuzione: così il
  * promemoria rotto sparisce senza far morire il servizio con la sessione DAB aperta.
+ * <p>
+ * 0.9.2: se il servizio è in <b>crash continuo</b> (almeno {@link #LOOP_CRASHES} crash dei promemoria negli ultimi
+ * {@link #LOOP_WINDOW_MS} ms) non sarà mai "fermo": muore e riparte da solo ogni secondo, e a ogni morte con la sessione
+ * DAB aperta può riavviare tutto l'infotainment. In quel caso i dati si cancellano anche col servizio in esecuzione
+ * (al massimo un riavvio, poi il giro si ferma). Visto nei log su due auto con radio 3A111 (riavvii ogni 10–15 minuti).
  */
 public final class RadioRepair {
     public static final String PKG = "com.saicmotor.service.radio";
     private static final String PREFS = "radio_repair";
     private static final int MAX_PER_DAY = 3;
+    /** Crash continuo: almeno tanti crash dei promemoria in questo intervallo. */
+    static final int LOOP_CRASHES = 3;
+    static final long LOOP_WINDOW_MS = 120_000;
+    /** Crash dei promemoria trovati nell'ultima lettura del buffer, negli ultimi LOOP_WINDOW_MS. */
+    private static volatile int recentCrashes;
 
     private RadioRepair() {
     }
@@ -35,6 +45,8 @@ public final class RadioRepair {
     /** Ultimo crash "promemoria DAB" trovato nel buffer crash (ms, anno corrente), 0 se nessuno. */
     static long lastAlarmCrash() {
         long last = 0;
+        int recent = 0;
+        long now = System.currentTimeMillis();
         try {
             Process p = Runtime.getRuntime().exec(new String[]{"logcat", "-d", "-b", "crash", "-v", "time", "-t", "600"});
             String stamp = null;
@@ -50,6 +62,7 @@ public final class RadioRepair {
                     } else if (radioBlock && stamp != null && l.contains("ProgramAlarm.setProgramReminder")) {
                         long t = parse(stamp);
                         if (t > last) last = t;
+                        if (t > 0 && now - t >= -60_000 && now - t <= LOOP_WINDOW_MS) recent++;
                         radioBlock = false;
                     }
                 }
@@ -58,6 +71,7 @@ public final class RadioRepair {
         } catch (Exception e) {
             Diag.error("radio.riparazione.log", e.toString());
         }
+        recentCrashes = recent;
         return last;
     }
 
@@ -133,16 +147,20 @@ public final class RadioRepair {
             Diag.put("radio.riparazione", "crash promemoria DAB " + clock(crash) + ": già " + count + " riparazioni oggi, mi fermo");
             return true;
         }
-        if (serviceRunning(ctx)) {
+        boolean loop = recentCrashes >= LOOP_CRASHES;
+        if (serviceRunning(ctx) && !loop) {
             Diag.put("radio.riparazione", "crash promemoria DAB " + clock(crash) + ": servizio radio in esecuzione, aspetto che si fermi");
             return true;
         }
+        if (loop) Diag.put("radio.riparazione.crashContinuo", recentCrashes + " crash in " + (LOOP_WINDOW_MS / 1000)
+                + " s: cancello i dati anche col servizio in esecuzione");
         String res = clear(ctx);
         boolean ok = res.startsWith("ok");
         if (ok) {
             sp.edit().putLong("at", now).putLong("day", count == 0 ? now : day).putInt("count", count + 1).apply();
         }
-        Diag.put("radio.riparazione", "crash promemoria DAB " + clock(crash) + " → dati del servizio radio cancellati: " + res);
+        Diag.put("radio.riparazione", "crash promemoria DAB " + clock(crash) + (loop ? " (crash continuo)" : "")
+                + " → dati del servizio radio cancellati: " + res);
         if (!ok) Diag.error("radio.riparazione", res);
         return !ok;
     }

@@ -274,6 +274,7 @@
     <string name="news9_3" formatted="false">Amazon Music nella musica online</string>
     <string name="news9_4" formatted="false">Percentuale batteria in grande (opzione) e temperatura più leggibile</string>
     <string name="news9_5" formatted="false">Disinstallazione del launcher dalle impostazioni</string>
+    <string name="news92_1" formatted="false">Radio sui firmware più vecchi (3A111): la riparazione automatica ora ferma anche i riavvii continui dell\'infotainment</string>
     <string name="btn_change" formatted="false">Cambia</string>
     <string name="btn_update" formatted="false">Aggiorna</string>
     <string name="btn_delete" formatted="false">Elimina</string>

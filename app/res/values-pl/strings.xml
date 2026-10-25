@@ -274,6 +274,7 @@
     <string name="news9_3" formatted="false">Amazon Music w muzyce online</string>
     <string name="news9_4" formatted="false">Duży procent baterii (opcja) i czytelniejsza temperatura</string>
     <string name="news9_5" formatted="false">Odinstalowanie launchera w ustawieniach</string>
+    <string name="news92_1" formatted="false">Starsze radio (3A111): automatyczna naprawa zatrzymuje teraz także ciągłe restarty systemu multimedialnego</string>
     <string name="btn_change" formatted="false">Zmień</string>
     <string name="btn_update" formatted="false">Aktualizuj</string>
     <string name="btn_delete" formatted="false">Usuń</string>

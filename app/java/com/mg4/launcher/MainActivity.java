@@ -317,16 +317,14 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
 
     // ---- popup "Novità" dopo un aggiornamento -------------------------------------------------
 
-    /** Una sola volta per versione, nella lingua scelta; non dopo la prima installazione. */
+    /**
+     * Una sola volta per versione (0.9.2: anche per le correzioni 0.9.x), nella lingua scelta; non dopo la prima
+     * installazione. Ogni versione ha le sue novità ({@link #newsFor}).
+     */
     private void showNewsIfUpdated() {
         String ver = updater.currentVersion();
-        // le novità sono della versione principale (0.8): le correzioni 0.8.x non le rimostrano
-        String major = ver.indexOf('.', ver.indexOf('.') + 1) > 0 ? ver.substring(0, ver.indexOf('.', ver.indexOf('.') + 1)) : ver;
         String seen = prefs.newsShownFor();
-        if (ver.equals(seen) || seen.startsWith(major + ".") || seen.equals(major)) {
-            prefs.setNewsShownFor(ver);
-            return;
-        }
+        if (ver.equals(seen)) return;
         boolean updated = false;
         try {
             android.content.pm.PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -335,13 +333,23 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         }
         prefs.setNewsShownFor(ver);
         if (!updated) return;
-        showNews(major);
+        showNews(ver);
+    }
+
+    /** Novità di ogni versione (testi in tutte le lingue in strings.xml). */
+    private static int[] newsFor(String ver) {
+        switch (ver) {
+            case "0.9.2":
+                return new int[]{R.string.news92_1};
+            default:   // 0.9 / 0.9.1
+                return new int[]{R.string.news9_1, R.string.news9_2, R.string.news9_3, R.string.news9_4, R.string.news9_5};
+        }
     }
 
     private void showNews(String ver) {
-        // 0.9: novità della 0.9
-        String[] items = {L.s(R.string.news9_1), L.s(R.string.news9_2), L.s(R.string.news9_3), L.s(R.string.news9_4),
-                L.s(R.string.news9_5)};
+        int[] ids = newsFor(ver);
+        String[] items = new String[ids.length];
+        for (int i = 0; i < ids.length; i++) items[i] = L.s(ids[i]);
         com.mg4.launcher.ui.Confirm.notice(root, theme, L.f(R.string.news_title, ver), L.s(R.string.news_sub), items,
                 L.s(R.string.btn_ok), null);
     }
