@@ -332,4 +332,5 @@
     <string name="news93_2" formatted="false">Temperatura exterior más fiable: ya no se muestran valores no válidos (como -40°)</string>
     <string name="news93_3" formatted="false">Temperatura interior oculta: el coche no la proporciona (mostraba la exterior); la estamos buscando en los registros</string>
     <string name="news93_4" formatted="false">Los dongles CarPlay/Android Auto que aparecen como iPhone ahora se reconocen y se reinician si no arrancan</string>
+    <string name="newsf_1" formatted="false">El ventilador en OFF ahora apaga de verdad el climatizador (antes volvía a 1)</string>
 </resources>

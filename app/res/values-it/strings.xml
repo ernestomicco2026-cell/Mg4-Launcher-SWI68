@@ -332,4 +332,5 @@
     <string name="news93_2" formatted="false">Temperatura esterna più affidabile: i valori non validi (come -40°) non si vedono più</string>
     <string name="news93_3" formatted="false">Temperatura interna nascosta: l\'auto non la fornisce (mostrava quella esterna); la stiamo cercando nei log</string>
     <string name="news93_4" formatted="false">I dongle CarPlay/Android Auto che si presentano come iPhone ora vengono riconosciuti e riavviati se non partono</string>
+    <string name="newsf_1" formatted="false">La ventola su OFF ora spegne davvero il clima (prima tornava a 1)</string>
 </resources>

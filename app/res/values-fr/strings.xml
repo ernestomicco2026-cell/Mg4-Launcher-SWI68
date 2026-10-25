@@ -332,4 +332,5 @@
     <string name="news93_2" formatted="false">Température extérieure plus fiable : les valeurs non valides (comme -40°) ne s\'affichent plus</string>
     <string name="news93_3" formatted="false">Température intérieure masquée : la voiture ne la fournit pas (elle affichait l\'extérieure) ; nous la cherchons dans les journaux</string>
     <string name="news93_4" formatted="false">Les dongles CarPlay/Android Auto qui se présentent comme un iPhone sont reconnus et redémarrés s\'ils ne démarrent pas</string>
+    <string name="newsf_1" formatted="false">La ventilation sur OFF éteint maintenant vraiment la climatisation (avant elle revenait à 1)</string>
 </resources>

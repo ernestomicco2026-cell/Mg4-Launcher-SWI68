@@ -332,4 +332,5 @@
     <string name="news93_2" formatted="false">Daha güvenilir dış sıcaklık: geçersiz değerler (ör. -40°) artık gösterilmiyor</string>
     <string name="news93_3" formatted="false">İç sıcaklık gizlendi: araç bunu sağlamıyor (dış sıcaklığı gösteriyordu); kayıtlarda arıyoruz</string>
     <string name="news93_4" formatted="false">iPhone olarak görünen CarPlay/Android Auto adaptörleri artık tanınıyor ve başlamazsa yeniden başlatılıyor</string>
+    <string name="newsf_1" formatted="false">Fan KAPALI konumunda artık klimayı gerçekten kapatıyor (önceden 1\'e dönüyordu)</string>
 </resources>

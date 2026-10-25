@@ -403,6 +403,13 @@ public final class VehicleClient {
         int l = level == FAN_AUTO || level == FAN_OFF ? level : Math.max(fanMin, Math.min(fanMax, level));
         heldFan = l;
         fanHoldUntil = android.os.SystemClock.uptimeMillis() + HOLD_MS;
+        // OFF: l'auto non accetta la ventola a 0 (la rimette a 1 dopo un attimo). Come l'app originale, la ventola resta
+        // da 1 in su e "OFF" vuol dire spegnere il clima.
+        if (l == FAN_OFF) {
+            Diag.put("clima.ventolaOff", "ventola OFF → spengo il clima");
+            setHvacPower(false);
+            return;
+        }
         pendingFan = l;
         sendSoon();
     }

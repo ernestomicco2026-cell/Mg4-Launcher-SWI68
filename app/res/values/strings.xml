@@ -332,4 +332,5 @@
     <string name="news93_2" formatted="false">More reliable outside temperature: invalid values (such as -40°) are no longer shown</string>
     <string name="news93_3" formatted="false">Inside temperature hidden: the car doesn\'t provide it (it showed the outside one); we\'re looking for it in the logs</string>
     <string name="news93_4" formatted="false">CarPlay/Android Auto dongles that show up as an iPhone are now recognised and restarted if they don\'t start</string>
+    <string name="newsf_1" formatted="false">Fan set to OFF now really turns the climate off (it used to come back to 1)</string>
 </resources>

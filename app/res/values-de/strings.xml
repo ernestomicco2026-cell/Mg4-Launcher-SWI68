@@ -332,4 +332,5 @@
     <string name="news93_2" formatted="false">Zuverlässigere Außentemperatur: ungültige Werte (wie -40°) werden nicht mehr angezeigt</string>
     <string name="news93_3" formatted="false">Innentemperatur ausgeblendet: Das Auto liefert sie nicht (es zeigte die Außentemperatur); wir suchen sie in den Logs</string>
     <string name="news93_4" formatted="false">CarPlay-/Android-Auto-Dongles, die sich als iPhone melden, werden jetzt erkannt und neu gestartet, wenn sie nicht starten</string>
+    <string name="newsf_1" formatted="false">Lüfter auf AUS schaltet die Klimaanlage jetzt wirklich aus (vorher sprang er auf 1 zurück)</string>
 </resources>

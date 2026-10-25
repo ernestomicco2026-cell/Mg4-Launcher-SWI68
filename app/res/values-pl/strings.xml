@@ -332,4 +332,5 @@
     <string name="news93_2" formatted="false">Bardziej wiarygodna temperatura zewnętrzna: nieprawidłowe wartości (np. -40°) nie są już pokazywane</string>
     <string name="news93_3" formatted="false">Temperatura wewnętrzna ukryta: auto jej nie podaje (pokazywała zewnętrzną); szukamy jej w logach</string>
     <string name="news93_4" formatted="false">Dongle CarPlay/Android Auto widoczne jako iPhone są teraz rozpoznawane i restartowane, gdy nie startują</string>
+    <string name="newsf_1" formatted="false">Wentylator na OFF teraz naprawdę wyłącza klimatyzację (wcześniej wracał do 1)</string>
 </resources>
