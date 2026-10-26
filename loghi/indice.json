@@ -40,6 +40,25 @@
    "alias": 0
   },
   {
+   "codice": "AR",
+   "nomi": {
+    "it": "Argentina",
+    "en": "Argentina",
+    "es": "Argentina",
+    "de": "Argentinien",
+    "pt": "Argentina",
+    "fr": "Argentine",
+    "tr": "Arjantin",
+    "pl": "Argentyna"
+   },
+   "file": "AR.zip",
+   "versione": 1,
+   "dimensione": 2690634,
+   "sha256": "c11d5c383c5beaf5a6be7c8a8e3db434ea906b2ba548b0d4992072650ea27fc2",
+   "loghi": 541,
+   "alias": 16
+  },
+  {
    "codice": "AT",
    "nomi": {
     "it": "Austria",
@@ -57,6 +76,25 @@
    "sha256": "0f1db15fadc5e33a4f3f71d2a1d68512b94046c80c934ec6e56599aa5b234071",
    "loghi": 71,
    "alias": 27
+  },
+  {
+   "codice": "AU",
+   "nomi": {
+    "it": "Australia",
+    "en": "Australia",
+    "es": "Australia",
+    "de": "Australien",
+    "pt": "Austrália",
+    "fr": "Australie",
+    "tr": "Avustralya",
+    "pl": "Australia"
+   },
+   "file": "AU.zip",
+   "versione": 1,
+   "dimensione": 4050757,
+   "sha256": "b824874b24ecbcbed4660c303c354bdacd8c5136408aabced0ea80e9892178cb",
+   "loghi": 534,
+   "alias": 122
   },
   {
    "codice": "AX",
@@ -135,6 +173,44 @@
    "alias": 8
   },
   {
+   "codice": "BO",
+   "nomi": {
+    "it": "Bolivia",
+    "en": "Bolivia",
+    "es": "Bolivia",
+    "de": "Bolivien",
+    "pt": "Bolívia",
+    "fr": "Bolivie",
+    "tr": "Bolivya",
+    "pl": "Boliwia"
+   },
+   "file": "BO.zip",
+   "versione": 1,
+   "dimensione": 204081,
+   "sha256": "ab9e305d2d12638513b99f17bee75cb4f4f0fc04b39c915d798361ff972568a3",
+   "loghi": 30,
+   "alias": 0
+  },
+  {
+   "codice": "BR",
+   "nomi": {
+    "it": "Brasile",
+    "en": "Brazil",
+    "es": "Brasil",
+    "de": "Brasilien",
+    "pt": "Brasil",
+    "fr": "Brésil",
+    "tr": "Brezilya",
+    "pl": "Brazylia"
+   },
+   "file": "BR.zip",
+   "versione": 1,
+   "dimensione": 1801286,
+   "sha256": "7f233c82d275502e751ef5340d20a62d88f6a36acb1067a39acea8f58bf69ea4",
+   "loghi": 263,
+   "alias": 22
+  },
+  {
    "codice": "BY",
    "nomi": {
     "it": "Bielorussia",
@@ -171,6 +247,44 @@
    "sha256": "4bdb57bb90f4cdac0596d880da3fb65832c9504461a08d4900ef598e64845391",
    "loghi": 98,
    "alias": 29
+  },
+  {
+   "codice": "CL",
+   "nomi": {
+    "it": "Cile",
+    "en": "Chile",
+    "es": "Chile",
+    "de": "Chile",
+    "pt": "Chile",
+    "fr": "Chili",
+    "tr": "Şili",
+    "pl": "Chile"
+   },
+   "file": "CL.zip",
+   "versione": 1,
+   "dimensione": 823095,
+   "sha256": "6bae10d24a66592eed34621ce1121c934f89c261b6deb958fa0b658d48a143fd",
+   "loghi": 126,
+   "alias": 13
+  },
+  {
+   "codice": "CO",
+   "nomi": {
+    "it": "Colombia",
+    "en": "Colombia",
+    "es": "Colombia",
+    "de": "Kolumbien",
+    "pt": "Colômbia",
+    "fr": "Colombie",
+    "tr": "Kolombiya",
+    "pl": "Kolumbia"
+   },
+   "file": "CO.zip",
+   "versione": 1,
+   "dimensione": 1490399,
+   "sha256": "a51824d44b6a914135eb9f118cf782e0efe925ba23c2caa5a315fe12ff9dfb15",
+   "loghi": 212,
+   "alias": 13
   },
   {
    "codice": "CY",
@@ -247,6 +361,25 @@
    "sha256": "3fafc52ef094b0e30ea3994ba22c996fa8093f291cb073dd6a86770bab4264d1",
    "loghi": 37,
    "alias": 23
+  },
+  {
+   "codice": "EC",
+   "nomi": {
+    "it": "Ecuador",
+    "en": "Ecuador",
+    "es": "Ecuador",
+    "de": "Ecuador",
+    "pt": "Equador",
+    "fr": "Équateur",
+    "tr": "Ekvador",
+    "pl": "Ekwador"
+   },
+   "file": "EC.zip",
+   "versione": 1,
+   "dimensione": 208734,
+   "sha256": "f26d89cf82fe11393f7090788f03e57b564620baec634e553212ccd46be79fdf",
+   "loghi": 31,
+   "alias": 8
   },
   {
    "codice": "EE",
@@ -399,6 +532,25 @@
    "sha256": "8b49af45ce21379dc86a2c5c4e903eb1fb00e3ba140eb01716d9d7803c042000",
    "loghi": 708,
    "alias": 154
+  },
+  {
+   "codice": "GY",
+   "nomi": {
+    "it": "Guyana",
+    "en": "Guyana",
+    "es": "Guyana",
+    "de": "Guyana",
+    "pt": "Guiana",
+    "fr": "Guyana",
+    "tr": "Guyana",
+    "pl": "Gujana"
+   },
+   "file": "GY.zip",
+   "versione": 1,
+   "dimensione": 23047,
+   "sha256": "513e700a2635f7a45ad5b8e9c36ae4f7937e7753d6ed356fa666c81493d12f23",
+   "loghi": 2,
+   "alias": 0
   },
   {
    "codice": "HR",
@@ -724,6 +876,25 @@
    "alias": 3
   },
   {
+   "codice": "PE",
+   "nomi": {
+    "it": "Perù",
+    "en": "Peru",
+    "es": "Perú",
+    "de": "Peru",
+    "pt": "Peru",
+    "fr": "Pérou",
+    "tr": "Peru",
+    "pl": "Peru"
+   },
+   "file": "PE.zip",
+   "versione": 1,
+   "dimensione": 838741,
+   "sha256": "445d797266e729732386decb4a40ac4d0f61c2205018f223e1c4b22fe79f8df2",
+   "loghi": 121,
+   "alias": 6
+  },
+  {
    "codice": "PL",
    "nomi": {
     "it": "Polonia",
@@ -760,6 +931,25 @@
    "sha256": "e6fe7f596fc3af42a0994ac9b7dcfaa7142a46472ff6273bfcc61224726ff3c1",
    "loghi": 128,
    "alias": 20
+  },
+  {
+   "codice": "PY",
+   "nomi": {
+    "it": "Paraguay",
+    "en": "Paraguay",
+    "es": "Paraguay",
+    "de": "Paraguay",
+    "pt": "Paraguai",
+    "fr": "Paraguay",
+    "tr": "Paraguay",
+    "pl": "Paragwaj"
+   },
+   "file": "PY.zip",
+   "versione": 1,
+   "dimensione": 145537,
+   "sha256": "3a8d165bf77961388b04bb87a1ee070be7928c561e34368f76f796668683a4f5",
+   "loghi": 18,
+   "alias": 1
   },
   {
    "codice": "RO",
@@ -895,6 +1085,25 @@
    "alias": 0
   },
   {
+   "codice": "SR",
+   "nomi": {
+    "it": "Suriname",
+    "en": "Suriname",
+    "es": "Surinam",
+    "de": "Suriname",
+    "pt": "Suriname",
+    "fr": "Suriname",
+    "tr": "Surinam",
+    "pl": "Surinam"
+   },
+   "file": "SR.zip",
+   "versione": 1,
+   "dimensione": 13865,
+   "sha256": "13900bdac14fbdce3af0c373e34a0381944cd44a5a46b9ad7502f24939c7fd5a",
+   "loghi": 2,
+   "alias": 0
+  },
+  {
    "codice": "TR",
    "nomi": {
     "it": "Turchia",
@@ -933,6 +1142,25 @@
    "alias": 1
   },
   {
+   "codice": "UY",
+   "nomi": {
+    "it": "Uruguay",
+    "en": "Uruguay",
+    "es": "Uruguay",
+    "de": "Uruguay",
+    "pt": "Uruguai",
+    "fr": "Uruguay",
+    "tr": "Uruguay",
+    "pl": "Urugwaj"
+   },
+   "file": "UY.zip",
+   "versione": 1,
+   "dimensione": 283269,
+   "sha256": "7af6726d9ae1c385235ff2ff1bd77b86967bb317fa9a65ebed2de9f5617aaca0",
+   "loghi": 48,
+   "alias": 1
+  },
+  {
    "codice": "VA",
    "nomi": {
     "it": "Città del Vaticano",
@@ -950,6 +1178,25 @@
    "sha256": "5c6a3740c0f31f969d9eb5474790b33f9007221f29d98c444a967a15e0689ede",
    "loghi": 4,
    "alias": 8
+  },
+  {
+   "codice": "VE",
+   "nomi": {
+    "it": "Venezuela",
+    "en": "Venezuela",
+    "es": "Venezuela",
+    "de": "Venezuela",
+    "pt": "Venezuela",
+    "fr": "Venezuela",
+    "tr": "Venezuela",
+    "pl": "Wenezuela"
+   },
+   "file": "VE.zip",
+   "versione": 1,
+   "dimensione": 754395,
+   "sha256": "5887781a1edb9da18d9b726c3232bd3d1c04f6794bb7fbf01bc876f39e47fd92",
+   "loghi": 85,
+   "alias": 1
   },
   {
    "codice": "XK",
