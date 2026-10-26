@@ -20,6 +20,8 @@
     <!-- avvio all'accensione e riconferma della home predefinita -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SET_PREFERRED_APPLICATIONS" />
+    <!-- avvio sicuro: disattiva solo la schermata della home MG (firma platform) -->
+    <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE" />
     <!-- attivazione permanente del servizio di accessibilità (concesso dalla firma platform) -->
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
     <!-- aggiornamento da GitHub senza conferma (permesso di sistema, concesso dalla firma platform) -->
@@ -53,6 +55,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:directBootAware="false"
             android:launchMode="singleTask"
             android:stateNotNeeded="true"
             android:clearTaskOnLaunch="true"
@@ -66,6 +69,23 @@
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- avvio sicuro: home dei primi secondi prima dello sblocco (priorità -1, sotto il launcher vero) -->
+        <activity
+            android:name=".BootSplashActivity"
+            android:directBootAware="true"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:exported="true">
+            <intent-filter android:priority="-1">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 

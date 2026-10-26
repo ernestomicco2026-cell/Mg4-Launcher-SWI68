@@ -60,7 +60,9 @@ public final class LogoPacks {
     /** Paesi disponibili (stesso elenco dei pacchetti; i nomi si prendono dal sistema nella lingua del launcher). */
     public static final String[] COUNTRIES = {"AD", "AL", "AT", "AX", "BA", "BE", "BG", "BY", "CH", "CY", "CZ", "DE", "DK",
             "EE", "ES", "FI", "FO", "FR", "GB", "GI", "GR", "HR", "HU", "IE", "IM", "IS", "IT", "LI", "LT", "LU", "LV", "MC",
-            "MD", "ME", "MK", "MT", "NL", "NO", "PL", "PT", "RO", "RS", "RU", "SE", "SI", "SK", "SM", "TR", "UA", "VA", "XK"};
+            "MD", "ME", "MK", "MT", "NL", "NO", "PL", "PT", "RO", "RS", "RU", "SE", "SI", "SK", "SM", "TR", "UA", "VA", "XK",
+            // 0.9.6: Australia e Sud America
+            "AU", "AR", "BO", "BR", "CL", "CO", "EC", "GY", "PY", "PE", "SR", "UY", "VE"};
 
     public interface Listener {
         void changed();
@@ -176,7 +178,26 @@ public final class LogoPacks {
                         "Asia/Novosibirsk", "Asia/Krasnoyarsk", "Asia/Irkutsk", "Asia/Vladivostok"},
                 {"SE", "Europe/Stockholm"}, {"SI", "Europe/Ljubljana"}, {"SK", "Europe/Bratislava"},
                 {"SM", "Europe/San_Marino"}, {"TR", "Europe/Istanbul", "Asia/Istanbul", "Turkey"},
-                {"UA", "Europe/Kiev", "Europe/Kyiv", "Europe/Uzhgorod", "Europe/Zaporozhye"}, {"VA", "Europe/Vatican"}};
+                {"UA", "Europe/Kiev", "Europe/Kyiv", "Europe/Uzhgorod", "Europe/Zaporozhye"}, {"VA", "Europe/Vatican"},
+                // 0.9.6: Australia e Sud America
+                {"AU", "Australia/Sydney", "Australia/Melbourne", "Australia/Brisbane", "Australia/Adelaide", "Australia/Perth",
+                        "Australia/Hobart", "Australia/Darwin", "Australia/Canberra", "Australia/ACT", "Australia/NSW",
+                        "Australia/Victoria", "Australia/Queensland", "Australia/West", "Australia/South", "Australia/North",
+                        "Australia/Tasmania", "Australia/Lord_Howe", "Australia/Broken_Hill", "Australia/Lindeman", "Australia/Eucla"},
+                {"AR", "America/Argentina/Buenos_Aires", "America/Buenos_Aires", "America/Argentina/Cordoba", "America/Cordoba",
+                        "America/Argentina/Mendoza", "America/Mendoza", "America/Argentina/Salta", "America/Argentina/Jujuy",
+                        "America/Argentina/Tucuman", "America/Argentina/Catamarca", "America/Argentina/La_Rioja",
+                        "America/Argentina/San_Juan", "America/Argentina/San_Luis", "America/Argentina/Rio_Gallegos",
+                        "America/Argentina/Ushuaia"},
+                {"BO", "America/La_Paz"},
+                {"BR", "America/Sao_Paulo", "Brazil/East", "America/Rio_Branco", "America/Manaus", "America/Belem",
+                        "America/Fortaleza", "America/Recife", "America/Bahia", "America/Cuiaba", "America/Campo_Grande",
+                        "America/Porto_Velho", "America/Boa_Vista", "America/Araguaina", "America/Maceio", "America/Santarem",
+                        "America/Noronha", "America/Eirunepe"},
+                {"CL", "America/Santiago", "Chile/Continental", "America/Punta_Arenas", "Pacific/Easter"},
+                {"CO", "America/Bogota"}, {"EC", "America/Guayaquil", "Pacific/Galapagos"}, {"GY", "America/Guyana"},
+                {"PY", "America/Asuncion"}, {"PE", "America/Lima"}, {"SR", "America/Paramaribo"},
+                {"UY", "America/Montevideo"}, {"VE", "America/Caracas"}};
         for (String[] r : tz) for (int i = 1; i < r.length; i++) TZ_COUNTRY.put(r[i], r[0]);
     }
 

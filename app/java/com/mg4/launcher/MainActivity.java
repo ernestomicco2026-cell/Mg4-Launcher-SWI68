@@ -139,8 +139,12 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         com.mg4.launcher.svc.HomeMode.diag(getApplicationContext());
         new Thread(() -> {
             com.mg4.launcher.svc.BootAccessibility.ensureEnabled(getApplicationContext());
-            com.mg4.launcher.svc.HomeDefault.ensure(getApplicationContext());
+            com.mg4.launcher.svc.HomeLock.apply(getApplicationContext(), "avvio launcher");
         }, "mg4-home").start();
+        com.mg4.launcher.svc.CrashGuard.install(this);
+        com.mg4.launcher.svc.BootAccessibility.watchList(this);
+        // 0.9.6: 10 minuti senza crash → il salvavita si azzera (l'avvio sicuro può ripartire alla prossima accensione)
+        root.postDelayed(() -> com.mg4.launcher.svc.CrashGuard.reset(getApplicationContext()), 10 * 60_000L);
 
         IntentFilter f = new IntentFilter();
         f.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -339,6 +343,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     /** Novità di ogni versione (testi in tutte le lingue in strings.xml). */
     private static int[] newsFor(String ver) {
         switch (ver) {
+            case "0.9.6":
+                return new int[]{R.string.newsh_1, R.string.newsh_2, R.string.newsh_3, R.string.newsh_4, R.string.newsh_5, R.string.newsh_6, R.string.newsh_7};
             case "0.9.5":
                 return new int[]{R.string.newsg_1, R.string.newsg_2, R.string.newsg_3, R.string.newsg_4, R.string.newsg_6};
             case "0.9.4":
@@ -392,6 +398,12 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
             goFullscreen();
             return;
         }
+        // avvio sicuro: tornati nel launcher dopo aver aperto apposta la home MG → la sua schermata si rispegne
+        new Thread(() -> {
+            Context app = getApplicationContext();
+            if (com.mg4.launcher.svc.HomeLock.option(app) && com.mg4.launcher.svc.HomeMode.active(app)
+                    && !com.mg4.launcher.svc.HomeLock.mgDisabled(app)) com.mg4.launcher.svc.HomeLock.apply(app, "ritorno nel launcher");
+        }, "mg4-homelock").start();
         askOfficina();
         goFullscreen();
     }
@@ -696,6 +708,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public void openOriginalHome() {
         try {
+            com.mg4.launcher.svc.HomeLock.release(this, "home MG aperta apposta");
             // aperta apposta: il controllo all'accensione per un po' non deve riportare il nostro launcher
             com.mg4.launcher.svc.BootWatcher.userOpenedOriginal(this);
             startActivity(new Intent(Intent.ACTION_MAIN)

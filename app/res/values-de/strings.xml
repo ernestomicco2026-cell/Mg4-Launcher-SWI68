@@ -347,4 +347,19 @@
     <string name="newsg_4" formatted="false">Innentemperatur entfernt: Das Auto sendet sie nicht an den Bildschirm (der scheinbare Innenwert war der Außenwert)</string>
     <string name="newsg_5" formatted="false">Außentemperatur: keine falschen 0° mehr, wenn das Auto noch keinen Wert hat</string>
     <string name="newsg_6" formatted="false">App-Seite: Unter Bearbeiten lassen sich jetzt auch die Fahrzeug-Apps ausblenden, nicht nur die installierten</string>
+    <string name="set_safe_start" formatted="false">Sicherer Start</string>
+    <string name="set_safe_start_sub" formatted="false">Der Launcher wird zur System-Startseite: Er startet immer beim Einschalten und mit der Home-Taste. Schalte es aus, wenn du einen anderen Launcher nutzt</string>
+    <string name="set_safe_start_tripped" formatted="false">Pausiert: Der Launcher wurde mehrmals hintereinander beendet und die MG-Startseite wieder aktiviert. Erneut einschalten, um es nochmal zu versuchen</string>
+    <string name="set_other_launchers" formatted="false">Anderer Launcher installiert</string>
+    <string name="set_other_launchers_sub">%s: Zwei Launcher konkurrieren um die Startseite, beim Einschalten kann der falsche starten. Deinstalliere einen oder schalte seine Startseiten-Ersetzung aus</string>
+    <string name="btn_logo_code" formatted="false">Code</string>
+    <string name="logos_code_title" formatted="false">Land der Logos</string>
+    <string name="logos_code_msg" formatted="false">Gib den zweistelligen Ländercode ein (z. B. AU, NZ, US, BR); mehrere Länder mit Komma trennen. Leer = automatisch</string>
+    <string name="newsh_1" formatted="false">Sicherer Start: Der Launcher wird zur System-Startseite und startet immer beim Einschalten und mit der Home-Taste (abschaltbar unter Einstellungen, System)</string>
+    <string name="newsh_2" formatted="false">Start korrigiert: Die absichtlich geöffnete MG-Startseite blockiert den nächsten Start nicht mehr; erscheint sie nicht, öffnet sich der Launcher trotzdem; Hinweis bei anderem Launcher</string>
+    <string name="newsh_3" formatted="false">Radiologos: Australien und Südamerika, das Land kann von Hand eingegeben werden (Taste Code)</string>
+    <string name="newsh_4" formatted="false">Sitzheizung im Komfort-Feld: 3 → 2 → 1 → aus wie die Einzeltasten, bei Rechtslenker ist der Fahrer rechts</string>
+    <string name="newsh_5" formatted="false">CarPlay / Android Auto: öffnet mit einem Tipp und hat ein eigenes Symbol in der Leiste, solange das Telefon verbunden ist</string>
+    <string name="newsh_6" formatted="false">Einstellungen: Leerraum zwischen Fahrzeugbereich und unterer Leiste entfernt</string>
+    <string name="newsh_7" formatted="false">Bei geöffnetem MG4 Clima schließt sich das System-Klimafeld jetzt selbst mit dem Systembefehl</string>
 </resources>

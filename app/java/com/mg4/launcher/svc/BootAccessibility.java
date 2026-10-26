@@ -22,6 +22,39 @@ public final class BootAccessibility extends AccessibilityService {
     private final Handler h = new Handler(Looper.getMainLooper());
 
     /** Attiva il servizio in modo permanente (WRITE_SECURE_SETTINGS, firma platform), senza toccare gli altri. */
+    // --- 0.9.6: se un'altra app riscrive l'elenco dei servizi di accessibilità e ci toglie, ci si rimette ---
+    private static volatile boolean watching;
+    private static final java.util.ArrayDeque<Long> readds = new java.util.ArrayDeque<>();
+
+    public static synchronized void watchList(Context ctx) {
+        if (watching) return;
+        watching = true;
+        Context c = ctx.getApplicationContext();
+        try {
+            c.getContentResolver().registerContentObserver(Settings.Secure.getUriFor(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES),
+                    false, new android.database.ContentObserver(new Handler(Looper.getMainLooper())) {
+                        @Override
+                        public void onChange(boolean selfChange) {
+                            if (!StartGuard.unlocked(c) || !HomeMode.active(c)) return;
+                            String me = new ComponentName(c, BootAccessibility.class).flattenToString();
+                            String cur = Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+                            if (cur != null && cur.toLowerCase().contains(me.toLowerCase())) return;
+                            long now = android.os.SystemClock.elapsedRealtime();
+                            while (!readds.isEmpty() && now - readds.peekFirst() > 10 * 60_000L) readds.removeFirst();
+                            if (readds.size() >= 5) {
+                                Diag.put("avvio.accessibilitaTolta", "tolta di nuovo da un'altra app: smetto per 10 minuti");
+                                return;
+                            }
+                            readds.addLast(now);
+                            Diag.put("avvio.accessibilitaTolta", "un'altra app l'aveva tolta (elenco: " + cur + "): rimessa");
+                            ensureEnabled(c);
+                        }
+                    });
+        } catch (Throwable e) {
+            Diag.put("avvio.accessibilitaTolta", "controllo non disponibile: " + e);
+        }
+    }
+
     public static void ensureEnabled(Context c) {
         try {
             String me = new ComponentName(c, BootAccessibility.class).flattenToString();
@@ -109,6 +142,7 @@ public final class BootAccessibility extends AccessibilityService {
 
     /** 0.8.7-beta: collegato prima dello sblocco → si parte all'arrivo di USER_UNLOCKED. */
     private boolean started, unlockRegistered;
+    private boolean hvacPanel;
     private final BroadcastReceiver unlock = new BroadcastReceiver() {
         @Override
         public void onReceive(Context c, Intent i) {
@@ -124,6 +158,10 @@ public final class BootAccessibility extends AccessibilityService {
             return;
         }
         StartGuard.markA11y();
+        hvacPanel = SysHvacPanel.supported(this);
+        if (hvacPanel) SysHvacPanel.bind(this);
+        CrashGuard.install(this);
+        watchList(this);
         if (!StartGuard.unlocked(this)) {
             Diag.put("avvio.accessibilita", "collegato prima dello sblocco: aspetto lo sblocco");
             try {
@@ -154,10 +192,15 @@ public final class BootAccessibility extends AccessibilityService {
         } catch (Throwable ignored) {
         }
         h.postDelayed(expiry, EXPIRY_CHECK_MS);
+        // 0.9.6: avvio sicuro riconfermato a ogni accensione; se la home MG non compare, si apre comunque il launcher
+        new Thread(() -> HomeLock.apply(this, "accensione"), "mg4-homelock").start();
+        h.postDelayed(() -> StartGuard.lateCheck(this), 8000);
+        h.postDelayed(() -> StartGuard.lateCheck(this), 20000);
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent e) {
+        if (hvacPanel) SysHvacPanel.onEvent(this, e);   // 0.9.6: pannello clima di sistema sopra MG4 Clima
         if (e == null || e.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || e.getPackageName() == null) return;
         if (!started || !StartGuard.a11yConnected) return;   // firmware sbagliato o utente non ancora sbloccato
         String pkg = e.getPackageName().toString();

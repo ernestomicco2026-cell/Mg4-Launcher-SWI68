@@ -347,4 +347,19 @@
     <string name="newsg_4" formatted="false">Usunięto temperaturę wewnętrzną: samochód nie przesyła jej na ekran (wartość, która wyglądała na wewnętrzną, była zewnętrzną)</string>
     <string name="newsg_5" formatted="false">Temperatura zewnętrzna: koniec z fałszywym 0°, gdy samochód nie ma jeszcze odczytu</string>
     <string name="newsg_6" formatted="false">Strona aplikacji: w Edycji można teraz ukryć także aplikacje samochodu, nie tylko zainstalowane</string>
+    <string name="set_safe_start" formatted="false">Pewny start</string>
+    <string name="set_safe_start_sub" formatted="false">Launcher staje się ekranem głównym systemu: zawsze uruchamia się po włączeniu auta i przyciskiem Home. Wyłącz, jeśli używasz innego launchera</string>
+    <string name="set_safe_start_tripped" formatted="false">Wstrzymano: launcher kilka razy z rzędu się zamknął i ekran główny MG został przywrócony. Włącz ponownie, aby spróbować jeszcze raz</string>
+    <string name="set_other_launchers" formatted="false">Zainstalowany inny launcher</string>
+    <string name="set_other_launchers_sub">%s: dwa launchery rywalizują o ekran główny i może uruchomić się niewłaściwy. Odinstaluj jeden lub wyłącz jego zastępowanie ekranu głównego</string>
+    <string name="btn_logo_code" formatted="false">Kod</string>
+    <string name="logos_code_title" formatted="false">Kraj logo</string>
+    <string name="logos_code_msg" formatted="false">Wpisz dwuliterowy kod kraju (np. AU, NZ, US, BR); kilka krajów oddziel przecinkiem. Puste = automatycznie</string>
+    <string name="newsh_1" formatted="false">Pewny start: launcher staje się ekranem głównym systemu i zawsze uruchamia się po włączeniu auta i przyciskiem Home (wyłączysz w Ustawieniach, System)</string>
+    <string name="newsh_2" formatted="false">Poprawiony start: celowe otwarcie ekranu MG nie blokuje już kolejnego startu; jeśli się nie pojawi, launcher i tak się otworzy; ostrzeżenie o innym launcherze</string>
+    <string name="newsh_3" formatted="false">Logo radiowe: Australia i Ameryka Południowa, kraj można wpisać ręcznie (przycisk Kod)</string>
+    <string name="newsh_4" formatted="false">Podgrzewane fotele w panelu Komfort: 3 → 2 → 1 → wył. jak pojedyncze przyciski, a przy kierownicy po prawej kierowca jest po prawej</string>
+    <string name="newsh_5" formatted="false">CarPlay / Android Auto: otwiera się jednym dotknięciem i ma własną ikonę na pasku, gdy telefon jest podłączony</string>
+    <string name="newsh_6" formatted="false">Ustawienia: usunięto puste miejsce między Panelem auta a Dolnym paskiem</string>
+    <string name="newsh_7" formatted="false">Przy otwartym MG4 Clima systemowy panel klimatyzacji zamyka się sam poleceniem systemu</string>
 </resources>

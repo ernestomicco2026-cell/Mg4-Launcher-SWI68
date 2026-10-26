@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.9.5](releases/MG4Launcher-0.9.5.apk)**
+**Ultima versione / Latest version: [0.9.6](releases/MG4Launcher-0.9.6.apk)**
 
 > 🌡️ **Nuovo: [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4)** — la schermata del clima in stile Tesla, per SWI68, SWI69, SWI132 e SWI133. Con MG4 Clima installato il tasto del clima del launcher apre direttamente quella.
 >
@@ -25,6 +25,9 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
+![MG4 Launcher 0.9.6 — home con l'icona di CarPlay / Android Auto nella barra (simulazione / mock-up)](docs/home-0.9.6.png)
+*Home 0.9.6: icona di CarPlay / Android Auto nella barra con il telefono collegato · 0.9.6 home: CarPlay / Android Auto icon in the bar with the phone connected (mock-up).*
+
 ![MG4 Launcher 0.9.5 — home con il gruppo Guida (simulazione / mock-up)](docs/home-0.9.5.png)
 *Home 0.9.5: nuovo pulsante Guida nella barra · 0.9.5 home: new Driving button in the bar (mock-up).*
 
@@ -187,7 +190,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.9.5.apk
+   adb install -r -f MG4Launcher-0.9.6.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -261,6 +264,21 @@ vuoi. Anche una stella al repository o una segnalazione di un problema sono un a
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.9.6
+- **Avvio sicuro**: il launcher diventa la home del sistema e parte sempre all'accensione e col tasto Home. Si disattiva
+  solo la schermata principale della home MG (il resto dell'app MG resta attivo), che torna da sola con l'officina,
+  l'interruttore spento, "Disinstalla", l'apertura apposta della home MG o se il launcher si chiude 3 volte in 3
+  minuti. Si spegne in Impostazioni › Sistema.
+- **Avvio più affidabile**: la home MG aperta apposta non blocca più l'accensione successiva; se la home MG non
+  compare il launcher si apre lo stesso; se un'altra app gli toglie l'accessibilità se la rimette; avviso se è
+  installato un altro launcher.
+- **Loghi radio**: Australia e Sud America (pacchetti scaricabili), e il paese si può scrivere a mano (pulsante Codice).
+- **Sedili riscaldati nel riquadro Comfort**: 3 → 2 → 1 → spento come i pulsanti singoli (prima "spento" non
+  restava); con la guida a destra il guidatore è a destra e ogni casella comanda il sedile che ha davanti.
+- **Pannello clima di sistema**: con MG4 Clima aperto si chiude da solo appena compare.
+- **CarPlay / Android Auto**: si apre con un solo tocco e ha la sua icona nella barra finché il telefono è collegato.
+- **Impostazioni**: tolto lo spazio vuoto tra Riquadro auto e Barra in basso.
 
 #### 0.9.5
 - **Gruppo Guida** nella barra (icona dell'auto tra le linee della corsia): LKA, One Pedal, **assistente di guida**
@@ -662,7 +680,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.9.5.apk
+   adb install -r -f MG4Launcher-0.9.6.apk
    ```
 3. Make it the default home:
    ```bash
@@ -736,6 +754,21 @@ minimum amount**, you can give whatever you like. A star on the repository or a 
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.9.6
+- **Reliable start**: the launcher becomes the system home and always starts when the car turns on and with the Home
+  button. Only the main screen of the MG home is turned off (the rest of the MG app keeps working); it comes back by
+  itself with workshop mode, the switch turned off, "Uninstall", opening the MG home on purpose, or if the launcher
+  closes 3 times in 3 minutes. It can be turned off in Settings › System.
+- **More reliable start**: opening the MG home on purpose no longer blocks the next start; if the MG home doesn't
+  show up the launcher opens anyway; if another app removes its accessibility service it puts it back; warning if
+  another launcher is installed.
+- **Radio logos**: Australia and South America (downloadable packs), and the country can be typed by hand (Code button).
+- **Heated seats in the Comfort panel**: 3 → 2 → 1 → off like the single buttons (before, "off" didn't stay);
+  with right-hand drive the driver is on the right and each tile controls the seat in front of it.
+- **System climate panel**: with MG4 Clima open it closes by itself as soon as it appears.
+- **CarPlay / Android Auto**: opens with a single tap and has its own icon in the bar while the phone is connected.
+- **Settings**: removed the blank space between Car panel and Bottom bar.
 
 #### 0.9.5
 - **Driving group** in the bar (car icon between the lane lines): LKA, One Pedal, **driving assistant** (Off / ACC / TJA)

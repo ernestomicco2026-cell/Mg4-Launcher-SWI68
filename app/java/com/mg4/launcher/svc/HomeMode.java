@@ -103,8 +103,12 @@ public final class HomeMode {
     /** Effetto dell'interruttore sulla home predefinita. */
     private static void apply(Context c, boolean on) {
         new Thread(() -> {
-            if (on) HomeDefault.ensure(c);
-            else HomeDefault.setMg(c);
+            if (on) {
+                HomeLock.apply(c, "interruttore acceso");
+            } else {
+                HomeLock.release(c, officina(c) ? "officina" : "interruttore spento");
+                HomeDefault.setMg(c);
+            }
             diag(c);
         }, "mg4-home").start();
     }
@@ -115,6 +119,7 @@ public final class HomeMode {
     }
 
     private static void openMg(Context c) {
+        HomeLock.release(c, "home MG aperta");
         try {
             c.startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME).setComponent(HomeDefault.MG)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));

@@ -347,4 +347,19 @@
     <string name="newsg_4" formatted="false">İç sıcaklık kaldırıldı: araç bunu ekrana göndermiyor (iç gibi görünen değer dış sıcaklıktı)</string>
     <string name="newsg_5" formatted="false">Dış sıcaklık: araç henüz değeri almadığında artık yanlış 0° yok</string>
     <string name="newsg_6" formatted="false">Uygulamalar sayfası: Düzenle\'de artık yalnızca yüklenenleri değil, araç uygulamalarını da gizleyebilirsiniz</string>
+    <string name="set_safe_start" formatted="false">Güvenli başlatma</string>
+    <string name="set_safe_start_sub" formatted="false">Launcher sistemin ana ekranı olur: araç açıldığında ve Ana ekran tuşuyla her zaman başlar. Başka bir launcher kullanıyorsan kapat</string>
+    <string name="set_safe_start_tripped" formatted="false">Duraklatıldı: launcher art arda birkaç kez kapandı ve MG ana ekranı yeniden etkinleştirildi. Tekrar denemek için yeniden aç</string>
+    <string name="set_other_launchers" formatted="false">Başka bir launcher yüklü</string>
+    <string name="set_other_launchers_sub">%s: iki launcher ana ekran için yarışıyor ve yanlış olan başlayabilir. Birini kaldır veya ana ekran değiştirmesini kapat</string>
+    <string name="btn_logo_code" formatted="false">Kod</string>
+    <string name="logos_code_title" formatted="false">Logo ülkesi</string>
+    <string name="logos_code_msg" formatted="false">İki harfli ülke kodunu yaz (ör. AU, NZ, US, BR); birden fazla ülkeyi virgülle ayır. Boş = otomatik</string>
+    <string name="newsh_1" formatted="false">Güvenli başlatma: launcher sistem ana ekranı olur, araç açıldığında ve Ana ekran tuşuyla her zaman başlar (Ayarlar, Sistem\'den kapatılabilir)</string>
+    <string name="newsh_2" formatted="false">Başlatma düzeltildi: MG ana ekranını bilerek açmak artık sonraki başlatmayı engellemiyor; görünmezse launcher yine açılır; başka launcher varsa uyarı</string>
+    <string name="newsh_3" formatted="false">Radyo logoları: Avustralya ve Güney Amerika, ülke elle de yazılabilir (Kod düğmesi)</string>
+    <string name="newsh_4" formatted="false">Konfor panelinde koltuk ısıtma: tek düğmeler gibi 3 → 2 → 1 → kapalı, sağdan direksiyonda sürücü sağda</string>
+    <string name="newsh_5" formatted="false">CarPlay / Android Auto: tek dokunuşla açılır ve telefon bağlıyken çubukta kendi simgesi olur</string>
+    <string name="newsh_6" formatted="false">Ayarlar: Araç paneli ile Alt çubuk arasındaki boşluk kaldırıldı</string>
+    <string name="newsh_7" formatted="false">MG4 Clima açıkken sistem klima paneli sistemin kendi komutuyla kendiliğinden kapanır</string>
 </resources>

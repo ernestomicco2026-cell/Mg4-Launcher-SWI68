@@ -37,6 +37,67 @@ public final class Confirm {
         root.addView(dim, new FrameLayout.LayoutParams(-1, -1));
     }
 
+    public interface OnText {
+        void text(String value);
+    }
+
+    /** Campo di testo (0.9.6: codice del paese dei loghi). La tastiera è quella del sistema. */
+    public static void input(FrameLayout root, Theme t, String title, String msg, String initial, String hint,
+                             String cancel, String ok, OnText onOk) {
+        Context c = root.getContext();
+        FrameLayout dim = new FrameLayout(c);
+        dim.setBackgroundColor(t.day ? 0x66000000 : 0xB3000000);
+        dim.setClickable(true);
+        LinearLayout card = Ui.column(c);
+        card.setBackground(Ui.round(t.panel, Ui.dp(c, 28)));
+        card.setPadding(Ui.dp(c, 40), Ui.dp(c, 34), Ui.dp(c, 40), Ui.dp(c, 30));
+        card.setClickable(true);
+        card.addView(Ui.text(c, title, 30, t.text, Ui.MEDIUM));
+        TextView m = Ui.text(c, msg, 20, t.sub, Ui.REGULAR);
+        m.setLineSpacing(0, 1.15f);
+        card.addView(m, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, Ui.dp(c, 16), 0, 0));
+        android.widget.EditText e = new android.widget.EditText(c);
+        e.setSingleLine(true);
+        e.setText(initial == null ? "" : initial);
+        e.setHint(hint);
+        e.setTextSize(26);
+        e.setTextColor(t.text);
+        e.setHintTextColor(t.sub);
+        e.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
+                | android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        e.setPadding(Ui.dp(c, 20), Ui.dp(c, 12), Ui.dp(c, 20), Ui.dp(c, 12));
+        e.setBackground(Ui.round(t.chip, Ui.dp(c, 16)));
+        e.setSelection(e.getText().length());
+        card.addView(e, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, Ui.dp(c, 22), 0, 0));
+        Runnable close = () -> {
+            try {
+                ((android.view.inputmethod.InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE))
+                        .hideSoftInputFromWindow(e.getWindowToken(), 0);
+            } catch (Throwable ignored) {
+            }
+            ((ViewGroup) dim.getParent()).removeView(dim);
+        };
+        LinearLayout btns = Ui.row(c);
+        btns.setGravity(Gravity.END);
+        btns.addView(button(c, t, cancel, false, v -> close.run()), Ui.lp(-2, Ui.tp(c, 60)));
+        btns.addView(button(c, t, ok, true, v -> {
+            close.run();
+            onOk.text(e.getText().toString());
+        }), Ui.margins(Ui.lp(-2, Ui.tp(c, 60)), Ui.dp(c, 12), 0, 0, 0));
+        card.addView(btns, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, Ui.dp(c, 28), 0, 0));
+        dim.addView(card, new FrameLayout.LayoutParams(Ui.dp(c, 980), -2, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
+        ((FrameLayout.LayoutParams) card.getLayoutParams()).topMargin = Ui.dp(c, 60);
+        root.addView(dim, new FrameLayout.LayoutParams(-1, -1));
+        e.requestFocus();
+        e.postDelayed(() -> {
+            try {
+                ((android.view.inputmethod.InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE))
+                        .showSoftInput(e, 0);
+            } catch (Throwable ignored) {
+            }
+        }, 200);
+    }
+
     public interface OnPick {
         void picked(int index);
     }

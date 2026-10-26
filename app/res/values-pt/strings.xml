@@ -347,4 +347,19 @@
     <string name="newsg_4" formatted="false">Removida a temperatura interior: o carro não a envia para o ecrã (o valor que parecia interior era o exterior)</string>
     <string name="newsg_5" formatted="false">Temperatura exterior: acabaram os 0° falsos quando o carro ainda não tem o valor</string>
     <string name="newsg_6" formatted="false">Página de apps: em Editar agora também se podem ocultar as apps do carro, não só as instaladas</string>
+    <string name="set_safe_start" formatted="false">Arranque seguro</string>
+    <string name="set_safe_start_sub" formatted="false">O launcher passa a ser o ecrã inicial do sistema: arranca sempre ao ligar e com o botão Home. Desliga-o se usares outro launcher</string>
+    <string name="set_safe_start_tripped" formatted="false">Em pausa: o launcher fechou várias vezes seguidas e o ecrã inicial MG foi reativado. Liga-o de novo para tentar outra vez</string>
+    <string name="set_other_launchers" formatted="false">Outro launcher instalado</string>
+    <string name="set_other_launchers_sub">%s: dois launchers disputam o ecrã inicial e pode arrancar o errado. Desinstala um ou desliga a substituição do ecrã inicial</string>
+    <string name="btn_logo_code" formatted="false">Código</string>
+    <string name="logos_code_title" formatted="false">País dos logótipos</string>
+    <string name="logos_code_msg" formatted="false">Escreve o código de duas letras do país (ex. AU, NZ, US, BR); separa vários países com uma vírgula. Vazio = automático</string>
+    <string name="newsh_1" formatted="false">Arranque seguro: o launcher passa a ser o ecrã inicial do sistema e arranca sempre ao ligar e com o botão Home (desliga-se em Definições, Sistema)</string>
+    <string name="newsh_2" formatted="false">Arranque corrigido: abrir o ecrã MG de propósito já não bloqueia o arranque seguinte; se não aparecer o launcher abre na mesma; aviso se houver outro launcher</string>
+    <string name="newsh_3" formatted="false">Logótipos de rádio: Austrália e América do Sul, e o país pode ser escrito à mão (botão Código)</string>
+    <string name="newsh_4" formatted="false">Bancos aquecidos no painel Conforto: 3 → 2 → 1 → desligado como os botões individuais, e com volante à direita o condutor está à direita</string>
+    <string name="newsh_5" formatted="false">CarPlay / Android Auto: abre com um só toque e tem o seu ícone na barra enquanto o telemóvel estiver ligado</string>
+    <string name="newsh_6" formatted="false">Definições: removido o espaço vazio entre Painel do carro e Barra inferior</string>
+    <string name="newsh_7" formatted="false">Com o MG4 Clima aberto, o painel de clima do sistema fecha-se sozinho com o comando do sistema</string>
 </resources>

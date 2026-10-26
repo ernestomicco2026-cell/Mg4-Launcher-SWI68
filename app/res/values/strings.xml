@@ -347,4 +347,19 @@
     <string name="newsg_4" formatted="false">Inside temperature removed: the car does not send it to the screen (the value that looked like inside was the outside one)</string>
     <string name="newsg_5" formatted="false">Outside temperature: no more false 0° when the car does not have the reading yet</string>
     <string name="newsg_6" formatted="false">Apps page: in Edit you can now hide the car apps too, not only the installed ones</string>
+    <string name="set_safe_start" formatted="false">Reliable start</string>
+    <string name="set_safe_start_sub" formatted="false">The launcher becomes the system home: it always starts when the car turns on and with the Home button. Turn it off if you use another launcher</string>
+    <string name="set_safe_start_tripped" formatted="false">Paused: the launcher closed several times in a row and the MG home was turned back on. Turn it on again to retry</string>
+    <string name="set_other_launchers" formatted="false">Another launcher installed</string>
+    <string name="set_other_launchers_sub">%s: two launchers compete for the home screen and the wrong one may start. Uninstall one or turn off its home replacement</string>
+    <string name="btn_logo_code" formatted="false">Code</string>
+    <string name="logos_code_title" formatted="false">Logo country</string>
+    <string name="logos_code_msg" formatted="false">Type the two-letter country code (e.g. AU, NZ, US, BR); separate several countries with a comma. Empty = automatic</string>
+    <string name="newsh_1" formatted="false">Reliable start: the launcher becomes the system home and always starts when the car turns on and with the Home button (can be turned off in Settings, System)</string>
+    <string name="newsh_2" formatted="false">Start fixes: opening the MG home on purpose no longer blocks the next start; if the MG home doesn\'t show the launcher opens anyway; warning if another launcher is installed</string>
+    <string name="newsh_3" formatted="false">Radio logos: Australia and South America, and the country can be typed by hand (Code button)</string>
+    <string name="newsh_4" formatted="false">Heated seats in the Comfort panel: 3 → 2 → 1 → off like the single buttons, and with right-hand drive the driver is on the right</string>
+    <string name="newsh_5" formatted="false">CarPlay / Android Auto: opens with a single tap and has its own icon in the bar while the phone is connected</string>
+    <string name="newsh_6" formatted="false">Settings: removed the blank space between Car panel and Bottom bar</string>
+    <string name="newsh_7" formatted="false">With MG4 Clima open, the system climate panel now closes by itself with the system\'s own command</string>
 </resources>

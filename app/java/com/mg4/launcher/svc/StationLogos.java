@@ -278,12 +278,16 @@ public final class StationLogos {
     private void lookup(String key, String name) {
         Bitmap found = null;
         try {
-            // stazioni del paese dei loghi (scelto a mano o automatico), le più ascoltate per prime
-            String country = L_country(packs);
-            String url = API + "?name=" + URLEncoder.encode(name, "UTF-8")
-                    + (country.isEmpty() ? "" : "&countrycode=" + country)
-                    + "&hidebroken=true&order=clickcount&reverse=true&limit=8";
-            JSONArray arr = new JSONArray(new String(fetch(url, 200_000), "UTF-8"));
+            // stazioni dei paesi dei loghi (scelti dall'elenco, scritti a mano o automatico), le più ascoltate per prime.
+            // 0.9.6: si provano tutti i paesi scelti, non solo il primo (es. "AU, NZ")
+            JSONArray arr = new JSONArray();
+            for (String country : L_countries(packs)) {
+                String url = API + "?name=" + URLEncoder.encode(name, "UTF-8")
+                        + (country.isEmpty() ? "" : "&countrycode=" + country)
+                        + "&hidebroken=true&order=clickcount&reverse=true&limit=8";
+                arr = new JSONArray(new String(fetch(url, 200_000), "UTF-8"));
+                if (arr.length() > 0) break;
+            }
             for (int i = 0; i < arr.length() && found == null; i++) {
                 JSONObject o = arr.getJSONObject(i);
                 String fav = o.optString("favicon", "");
@@ -325,6 +329,16 @@ public final class StationLogos {
         Diag.put("loghi.scaricati." + key, found != null ? "trovato e salvato" : "non trovato (riprovo tra 3 giorni)");
         Runnable r = onUpdate;
         if (found != null && r != null) r.run();
+    }
+
+    private static List<String> L_countries(LogoPacks packs) {
+        List<String> out = new java.util.ArrayList<>();
+        try {
+            for (String cc : packs.chosen()) if (cc != null && cc.length() == 2 && !out.contains(cc)) out.add(cc);
+        } catch (Throwable ignored) {
+        }
+        if (out.isEmpty()) out.add("");
+        return out;
     }
 
     private static String L_country(LogoPacks packs) {

@@ -49,7 +49,69 @@ public final class StartGuard {
 
     /** Da chiamare quando l'utente apre apposta la home MG: per un po' l'avvio non interviene. */
     public static void userOpenedOriginal(Context c) {
-        sp(c).edit().putLong("homeOriginaleFinoA", System.currentTimeMillis() + ORIGINAL_GRACE_MS).apply();
+        // 0.9.6: tempo dall'accensione + numero dell'accensione (l'orologio dell'auto all'avvio può essere indietro di ore e
+        // il permesso restava valido anche all'accensione successiva)
+        sp(c).edit().putLong("homeOriginaleFinoA", SystemClock.elapsedRealtime() + ORIGINAL_GRACE_MS)
+                .putInt("homeOriginaleAvvio", bootCount(c)).apply();
+    }
+
+    private static int bootCount(Context c) {
+        try {
+            return android.provider.Settings.Global.getInt(c.getContentResolver(), android.provider.Settings.Global.BOOT_COUNT, -1);
+        } catch (Throwable e) {
+            return -1;
+        }
+    }
+
+    /** Home MG aperta apposta da poco, in questa stessa accensione? */
+    private static boolean originalGrace(Context c) {
+        SharedPreferences s = sp(c);
+        return s.getInt("homeOriginaleAvvio", -2) == bootCount(c)
+                && SystemClock.elapsedRealtime() < s.getLong("homeOriginaleFinoA", 0);
+    }
+
+    // --- 0.9.6: altre home (un altro launcher, es. MG4Dash) trattate come la home MG all'accensione ---
+    private static final java.util.Map<String, Boolean> homeCache = new java.util.HashMap<>();
+
+    static boolean isHome(Context c, String pkg) {
+        if (BootWatcher.MG_HOME.equals(pkg)) return true;
+        if (pkg == null) return false;
+        Boolean v = homeCache.get(pkg);
+        if (v == null) {
+            v = HomeLock.isOtherHome(c, pkg);
+            homeCache.put(pkg, v);
+            if (v) Diag.put("avvio.altraHome", pkg + " (trattata come la home MG)");
+        }
+        return v;
+    }
+
+    /** App che all'accensione non si coprono: retrocamera, telefonate, CarPlay/Android Auto, navigatore. */
+    private static boolean keepInFront(String pkg) {
+        String p = pkg.toLowerCase(java.util.Locale.ROOT);
+        for (String k : new String[]{"aroundview", "avm", "rvc", "camera", "btcall", "phone", "dialer", "incall", "carplay",
+                "androidauto", "allgo", "telenav", "navi", "map", "waze"}) {
+            if (p.contains(k)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * 0.9.6: se dopo qualche secondo dall'accensione la home MG non è comparsa e davanti non c'è un'app da lasciare
+     * (es. la proiezione sul quadro), si apre comunque il launcher (una volta). Chiamato dal servizio di accessibilità.
+     */
+    public static synchronized void lateCheck(Context c) {
+        if (windowStart < 0 || !windowOpen() || mgInWindow || tOurs >= 0 && oursSince >= 0) return;
+        if (!HomeMode.active(c) || originalGrace(c)) return;
+        String top = topPackage(c);
+        if (top != null && (c.getPackageName().equals(top) || keepInFront(top))) {
+            Diag.put("avvio.homeAssente", "home MG non comparsa; davanti " + top + ": lasciata");
+            return;
+        }
+        if (restarts < MAX_RESTARTS) {
+            restarts++;
+            HomeMode.openOurs(c);
+            Diag.put("avvio.homeRipresa", "aperto il launcher: home MG non comparsa, davanti " + (top == null ? "nessuna app" : top));
+        }
     }
 
     private static SharedPreferences sp(Context c) {
@@ -120,14 +182,14 @@ public final class StartGuard {
             close("no (" + HomeMode.reason(c) + ")");
             return;
         }
-        if (BootWatcher.MG_HOME.equals(pkg)) {
+        if (isHome(c, pkg)) {
             oursSince = -1;
             if (!mgInWindow) {
                 mgInWindow = true;
                 // da qui bastano i tempi di prima: 60 s dall'inizio, ma almeno 30 s per verificare la riapertura
                 deadline = Math.max(windowStart + WINDOW_MS, now + AFTER_MG_MS);
             }
-            if (System.currentTimeMillis() < sp(c).getLong("homeOriginaleFinoA", 0)) {
+            if (originalGrace(c)) {
                 close("no (home MG aperta apposta)");
                 return;
             }

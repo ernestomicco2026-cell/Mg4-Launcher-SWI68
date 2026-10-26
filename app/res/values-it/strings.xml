@@ -347,4 +347,19 @@
     <string name="newsg_4" formatted="false">Tolta la temperatura interna: l\'auto non la manda allo schermo (il valore che sembrava interno era quello esterno)</string>
     <string name="newsg_5" formatted="false">Temperatura esterna: niente più 0° falso quando l\'auto non ha ancora il dato</string>
     <string name="newsg_6" formatted="false">Pagina App: in Modifica ora si possono nascondere anche le app dell\'auto, non solo quelle installate</string>
+    <string name="set_safe_start" formatted="false">Avvio sicuro</string>
+    <string name="set_safe_start_sub" formatted="false">Il launcher diventa la home di sistema: parte sempre all\'accensione e col tasto Home. Spegnilo se usi un altro launcher</string>
+    <string name="set_safe_start_tripped" formatted="false">Sospeso: il launcher si è chiuso più volte di seguito e la home MG è stata riattivata. Riaccendilo per riprovare</string>
+    <string name="set_other_launchers" formatted="false">Altro launcher installato</string>
+    <string name="set_other_launchers_sub">%s: due launcher si contendono la home e all\'accensione può partire quello sbagliato. Disinstallane uno o disattiva la sua sostituzione della home</string>
+    <string name="btn_logo_code" formatted="false">Codice</string>
+    <string name="logos_code_title" formatted="false">Paese dei loghi</string>
+    <string name="logos_code_msg" formatted="false">Scrivi il codice di due lettere del paese (es. AU, NZ, US, BR); per più paesi separali con una virgola. Vuoto = automatico</string>
+    <string name="newsh_1" formatted="false">Avvio sicuro: il launcher diventa la home di sistema e parte sempre all\'accensione e col tasto Home (si spegne nelle impostazioni, Sistema)</string>
+    <string name="newsh_2" formatted="false">Avvio corretto: la home MG aperta apposta non blocca più l\'accensione dopo; se la home MG non compare il launcher si apre lo stesso; avviso se c\'è un altro launcher</string>
+    <string name="newsh_3" formatted="false">Loghi radio: Australia e Sud America, e il paese si può scrivere a mano (pulsante Codice)</string>
+    <string name="newsh_4" formatted="false">Sedili riscaldati nel riquadro Comfort: 3 → 2 → 1 → spento come i pulsanti singoli, e con la guida a destra il guidatore è a destra</string>
+    <string name="newsh_5" formatted="false">CarPlay / Android Auto: si apre con un solo tocco e ha la sua icona nella barra finché il telefono è collegato</string>
+    <string name="newsh_6" formatted="false">Impostazioni: tolto lo spazio vuoto tra Riquadro auto e Barra in basso</string>
+    <string name="newsh_7" formatted="false">Con MG4 Clima aperto il pannello clima di sistema si chiude da solo con il comando del sistema</string>
 </resources>

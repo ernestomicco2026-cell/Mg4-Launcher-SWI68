@@ -383,7 +383,7 @@ public final class SettingsView extends FrameLayout {
                     }), false));
         }
         // temperatura interna (tolta nella 0.9.5): l'auto non la manda allo schermo, si spiega perché
-        card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_none), new View(c), false));
+        card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_none), spacer0(c), false));
         card.addView(row(c, L.s(R.string.set_charge_buttons), L.s(R.string.set_charge_buttons_sub),
                 toggle(c, prefs.chargeButtons(), on -> {
                     prefs.setChargeButtons(on);
@@ -433,7 +433,7 @@ public final class SettingsView extends FrameLayout {
         for (String cc : chosen) names.append(names.length() == 0 ? "" : ", ").append(com.mg4.launcher.svc.LogoPacks.countryName(cc));
         boolean auto = com.mg4.launcher.svc.LogoPacks.AUTO.equals(lp.choice());
         String sub = auto ? L.f(R.string.logos_auto_sub, names) : names.toString();
-        card.addView(row(c, L.s(R.string.set_logos_country), sub, button(c, L.s(R.string.btn_change), v -> pickLogoCountries(lp)), false));
+        card.addView(row(c, L.s(R.string.set_logos_country), sub, logoButtons(c, lp), false));
 
         // stato dei pacchetti dei paesi scelti (e di quelli installati da chiavetta)
         java.util.Map<String, com.mg4.launcher.svc.LogoPacks.Pack> inst = lp.installed();
@@ -475,6 +475,25 @@ public final class SettingsView extends FrameLayout {
         }
         card.addView(row(c, L.s(R.string.set_logos_state), st.toString(), btns, true));
         col.addView(card, topFull(14));
+    }
+
+    /** "Cambia" (elenco dei paesi) e, dalla 0.9.6, "Codice" per scrivere a mano un paese qualsiasi (es. US, NZ). */
+    private LinearLayout logoButtons(Context c, com.mg4.launcher.svc.LogoPacks lp) {
+        LinearLayout b = Ui.row(c);
+        b.addView(button(c, L.s(R.string.btn_change), v -> pickLogoCountries(lp)));
+        b.addView(button(c, L.s(R.string.btn_logo_code), v -> {
+            String cur = com.mg4.launcher.svc.LogoPacks.AUTO.equals(lp.choice()) ? "" : lp.choice();
+            Confirm.input(this, t, L.s(R.string.logos_code_title), L.s(R.string.logos_code_msg), cur, "AU, NZ",
+                    L.s(R.string.btn_cancel), L.s(R.string.btn_ok), text -> {
+                        StringBuilder v2 = new StringBuilder();
+                        for (String p : text.toUpperCase(java.util.Locale.ROOT).split("[^A-Z]+")) {
+                            if (p.length() == 2 && v2.indexOf(p) < 0) v2.append(v2.length() == 0 ? "" : ",").append(p);
+                        }
+                        lp.setChoice(v2.length() == 0 ? com.mg4.launcher.svc.LogoPacks.AUTO : v2.toString());
+                        showSection(SEC_HOME);
+                    });
+        }), Ui.margins(Ui.lp(-2, tp(60)), dp(12), 0, 0, 0));
+        return b;
     }
 
     private void pickLogoCountries(com.mg4.launcher.svc.LogoPacks lp) {
@@ -614,6 +633,22 @@ public final class SettingsView extends FrameLayout {
                 showSection(SEC_SYSTEM);   // finché non si conferma l'interruttore resta acceso
             }
         }), false));
+        // 0.9.6: avvio sicuro (la schermata della home MG si disattiva, come fa MG4Dash) e avviso altri launcher
+        if (com.mg4.launcher.svc.HomeLock.mgExists(app)) {
+            String safeSub = com.mg4.launcher.svc.CrashGuard.tripped(app) ? L.s(R.string.set_safe_start_tripped)
+                    : L.s(R.string.set_safe_start_sub);
+            hc.addView(row(c, L.s(R.string.set_safe_start), safeSub, toggle(c, com.mg4.launcher.svc.HomeLock.option(app), on -> {
+                if (on) com.mg4.launcher.svc.CrashGuard.reset(app);
+                com.mg4.launcher.svc.HomeLock.setOption(app, on);
+                postDelayed(() -> showSection(SEC_SYSTEM), 400);
+            }), false));
+        }
+        java.util.List<String> others = com.mg4.launcher.svc.HomeLock.otherLaunchers(app);
+        if (!others.isEmpty()) {
+            TextView warn = Ui.text(c, "⚠", 26, 0xFFFFB020, Ui.MEDIUM);
+            hc.addView(row(c, L.s(R.string.set_other_launchers), L.f(R.string.set_other_launchers_sub, android.text.TextUtils.join(", ", others)),
+                    warn, false));
+        }
         LinearLayout oc = Ui.row(c);
         if (officina) {
             oc.addView(button(c, L.s(R.string.btn_deactivate), v -> {
@@ -825,6 +860,13 @@ public final class SettingsView extends FrameLayout {
     }
 
     /** Riga grande: titolo + spiegazione a sinistra, comando a destra; separatore sotto se non è l'ultima. */
+    /** Vista vuota a larghezza zero, per le righe solo informative (senza misure prendeva tutta la riga). */
+    private static View spacer0(Context c) {
+        View v = new View(c);
+        v.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        return v;
+    }
+
     private LinearLayout row(Context c, String title, String sub, View right, boolean last) {
         LinearLayout r = Ui.row(c);
         r.setMinimumHeight(tp(96));

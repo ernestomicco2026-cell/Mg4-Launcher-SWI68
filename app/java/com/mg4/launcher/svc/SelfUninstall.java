@@ -29,7 +29,8 @@ public final class SelfUninstall {
     public static void run(Context c, Result result) {
         Context app = c.getApplicationContext();
         Diag.put("disinstalla", "richiesta");
-        // 1) home MG originale come predefinita
+        // 1) home MG originale come predefinita (prima si riattiva la sua schermata, se l'avvio sicuro l'aveva spenta)
+        HomeLock.release(app, "disinstalla");
         try {
             HomeDefault.setMg(app);
         } catch (Throwable e) {

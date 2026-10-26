@@ -38,6 +38,7 @@ public final class BootWatcher extends BroadcastReceiver {
         Diag.put("avvio.boot", "ricevuto alle " + time + " (" + (locked ? "locked" : "normale") + ")"
                 + " · " + (SystemClock.elapsedRealtime() / 1000) + " s dall'accensione");
         StartGuard.markBoot();
+        CrashGuard.install(c);
         BootAccessibility.ensureEnabled(c);
         // 0.8.7-beta: prima dello sblocco le impostazioni non sono leggibili; il lavoro si fa con BOOT_COMPLETED
         if (!StartGuard.unlocked(c)) {

@@ -128,7 +128,7 @@ public final class HomeView extends LinearLayout {
     private FrameLayout climaGroup, comfortGroup;
     private LinearLayout climaDots, comfortDots;
     /** Gruppo Guida (0.9.5): LKA, One Pedal, assistente ACC/TJA e pedale del freno in un solo pulsante. */
-    private FrameLayout guidaGroup;
+    private FrameLayout guidaGroup, projBtn;
     private LinearLayout guidaDots;
     private int recircIcon;
     private View barView;
@@ -556,6 +556,11 @@ public final class HomeView extends LinearLayout {
         tabMap = addTab(c, tabs, L.s(R.string.tab_map), TAB_MAP);
         tabMedia = addTab(c, tabs, L.s(R.string.tab_media), TAB_MEDIA);
         tabPhone = addTab(c, tabs, "CarPlay", TAB_PHONE);
+        // 0.9.6: un solo tocco apre CarPlay / Android Auto (prima il primo tocco mostrava solo la scheda)
+        tabPhone.setOnClickListener(v -> {
+            selectTab(TAB_PHONE, true);
+            media.openProjection();
+        });
         tabPhone.setVisibility(GONE);
         // indicatori Bluetooth / Wi-Fi / 4G a sinistra delle schede
         LinearLayout topRight = Ui.row(c);
@@ -1288,6 +1293,10 @@ public final class HomeView extends LinearLayout {
         boolean phone = m.deviceType != 0;
         if (phone != navWithPhone) buildNavWith(getContext(), phone);
         tabPhone.setVisibility(phone ? VISIBLE : GONE);
+        if (projBtn != null) {
+            projBtn.setVisibility(phone ? VISIBLE : GONE);
+            projBtn.setContentDescription(m.deviceType == MediaClient.DEV_AAUTO ? "Android Auto" : "CarPlay");
+        }
         tabPhone.setText(m.deviceType == MediaClient.DEV_AAUTO ? "Android Auto" : "CarPlay");
         if (!phone && tab == TAB_PHONE) selectTab(TAB_MEDIA, false);
         if (phone) {
@@ -1507,6 +1516,13 @@ public final class HomeView extends LinearLayout {
         bar.addView(Ui.divider(c, t.track, big ? 72 : 48));
 
         // scorciatoie; con la barra grande restano telefono e 360° (Radio è nel pannello Media, le Impostazioni tra le app)
+        // 0.9.6: CarPlay / Android Auto nella barra, solo con il telefono collegato
+        int pj = bs(64, BIG_SHORTCUT);
+        projBtn = barIcon(c, R.drawable.ic_projection, t.text, 0, pj, bs(30, BIG_ICON - 2), big ? 22 : 18 * Ui.K, "CarPlay / Android Auto",
+                v -> media.openProjection());
+        projBtn.setLayoutParams(Ui.margins(Ui.lp(pj, pj), dp(6), 0, 0, 0));
+        projBtn.setVisibility(GONE);
+        bar.addView(projBtn);
         bar.addView(shortcut(c, R.drawable.ic_phone, L.s(R.string.app_phone), "com.saicmotor.hmi.btcall", "com.saicmotor.hmi.btcall.BtCallActivity"));
         if (!big) bar.addView(shortcut(c, R.drawable.ic_radio, L.s(R.string.src_radio), "com.saicmotor.hmi.radio", "com.saicmotor.hmi.radio.app.RadioHomeActivity"));
         bar.addView(shortcut(c, 0, L.s(R.string.app_camera), "com.saicmotor.hmi.aroundview", "com.saicmotor.hmi.aroundview.AVMActivity"));
@@ -1739,7 +1755,8 @@ public final class HomeView extends LinearLayout {
         f.setOnClickListener(v -> openGroup(clima ? CLIMA : COMFORT));
         f.setOnLongClickListener(v -> {
             if (clima) vehicle.toggleAc();
-            else vehicle.stepSeat(true);
+            else if (rhd) vehicle.pressSeatRight();   // pressione lunga: sedile del guidatore
+            else vehicle.pressSeatLeft();
             return true;
         });
         return f;
@@ -1965,9 +1982,14 @@ public final class HomeView extends LinearLayout {
                 addTile(c, "auto", "AUTO", 0, L.s(R.string.tile_auto), v -> vehicle.toggleAuto());
                 if (s.loopMode >= 0) addTile(c, "recirc", null, recircRes(s.loopMode), L.s(R.string.tile_recirc), v -> vehicle.toggleRecirc());
             } else {
-                if (s.seatLeft >= 0) addTile(c, "seatL", null, R.drawable.ic_seat_heat, L.s(R.string.tile_seat_driver), v -> vehicle.stepSeat(true));
+                // 0.9.6: caselle nell'ordine fisico dei sedili (sinistro, volante, destro). Con la guida a destra il guidatore
+                // è sul sedile destro: cambiano le etichette, non i comandi (ogni casella comanda il sedile che ha davanti).
+                // Stesso comando dei pulsanti singoli: 3 → 2 → 1 → spento (prima l'"off" del riquadro non restava).
+                if (s.seatLeft >= 0) addTile(c, "seatL", null, R.drawable.ic_seat_heat,
+                        L.s(rhd ? R.string.tile_seat_passenger : R.string.tile_seat_driver), v -> vehicle.pressSeatLeft());
                 if (s.wheelHeat >= 0) addTile(c, "wheel", null, R.drawable.ic_wheel_heat, L.s(R.string.tile_wheel), v -> vehicle.toggleWheelHeat());
-                if (s.seatRight >= 0) addTile(c, "seatR", null, R.drawable.ic_seat_heat, L.s(R.string.tile_seat_passenger), v -> vehicle.stepSeat(false));
+                if (s.seatRight >= 0) addTile(c, "seatR", null, R.drawable.ic_seat_heat,
+                        L.s(rhd ? R.string.tile_seat_driver : R.string.tile_seat_passenger), v -> vehicle.pressSeatRight());
             }
         }
 

@@ -347,4 +347,19 @@
     <string name="newsg_4" formatted="false">Température intérieure retirée : la voiture ne l\'envoie pas à l\'écran (la valeur qui semblait intérieure était l\'extérieure)</string>
     <string name="newsg_5" formatted="false">Température extérieure : plus de faux 0° quand la voiture n\'a pas encore la valeur</string>
     <string name="newsg_6" formatted="false">Page Apps : en Modifier, on peut maintenant masquer aussi les applis du véhicule, pas seulement celles installées</string>
+    <string name="set_safe_start" formatted="false">Démarrage fiable</string>
+    <string name="set_safe_start_sub" formatted="false">Le launcher devient l\'accueil du système : il démarre toujours à l\'allumage et avec le bouton Accueil. Désactive-le si tu utilises un autre launcher</string>
+    <string name="set_safe_start_tripped" formatted="false">En pause : le launcher s\'est fermé plusieurs fois de suite et l\'accueil MG a été réactivé. Réactive-le pour réessayer</string>
+    <string name="set_other_launchers" formatted="false">Autre launcher installé</string>
+    <string name="set_other_launchers_sub">%s : deux launchers se disputent l\'accueil et le mauvais peut démarrer. Désinstalle-en un ou désactive son remplacement de l\'accueil</string>
+    <string name="btn_logo_code" formatted="false">Code</string>
+    <string name="logos_code_title" formatted="false">Pays des logos</string>
+    <string name="logos_code_msg" formatted="false">Saisis le code du pays à deux lettres (ex. AU, NZ, US, BR) ; sépare plusieurs pays par une virgule. Vide = automatique</string>
+    <string name="newsh_1" formatted="false">Démarrage fiable : le launcher devient l\'accueil du système et démarre toujours à l\'allumage et avec le bouton Accueil (désactivable dans Réglages, Système)</string>
+    <string name="newsh_2" formatted="false">Démarrage corrigé : ouvrir l\'accueil MG exprès ne bloque plus le démarrage suivant ; s\'il n\'apparaît pas, le launcher s\'ouvre quand même ; alerte si un autre launcher est installé</string>
+    <string name="newsh_3" formatted="false">Logos radio : Australie et Amérique du Sud, et le pays peut être saisi à la main (bouton Code)</string>
+    <string name="newsh_4" formatted="false">Sièges chauffants dans le panneau Confort : 3 → 2 → 1 → arrêt comme les boutons seuls, et en conduite à droite le conducteur est à droite</string>
+    <string name="newsh_5" formatted="false">CarPlay / Android Auto : s\'ouvre d\'un seul toucher et a son icône dans la barre tant que le téléphone est connecté</string>
+    <string name="newsh_6" formatted="false">Réglages : supprimé l\'espace vide entre Panneau véhicule et Barre du bas</string>
+    <string name="newsh_7" formatted="false">Avec MG4 Clima ouvert, le panneau climat du système se ferme tout seul avec la commande du système</string>
 </resources>
