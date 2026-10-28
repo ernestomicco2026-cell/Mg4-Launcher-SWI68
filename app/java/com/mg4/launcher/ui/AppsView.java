@@ -38,6 +38,7 @@ public final class AppsView extends LinearLayout {
     private final AppCatalog catalog;
     private final Host host;
     private final Prefs prefs;
+    private final float k;   // scala della schermata App (dimensioneApp)
     private final LinearLayout content;
     private final TextView editBtn;
     private boolean editing;
@@ -49,6 +50,7 @@ public final class AppsView extends LinearLayout {
         this.catalog = catalog;
         this.host = host;
         this.prefs = prefs;
+        this.k = prefs.appsScaleFactor();
         setOrientation(VERTICAL);
         setBackgroundColor(t.bg);
         int pad = dp(20);
@@ -138,7 +140,7 @@ public final class AppsView extends LinearLayout {
         for (int i = 0; i < apps.size(); i++) {
             if (i % COLUMNS == 0) {
                 row = Ui.row(c);
-                content.addView(row, new LayoutParams(-1, dp(124)));
+                content.addView(row, new LayoutParams(-1, dp(124 * k)));
             }
             row.addView(tile(c, apps.get(i), editable), Ui.lpWeight(0, -1, 1));
         }
@@ -172,15 +174,15 @@ public final class AppsView extends LinearLayout {
         FrameLayout box = new FrameLayout(c);
         int boxBg = t.chip;
         int fg = t.text;
-        box.setBackground(Ui.round(boxBg, dp(22)));
+        box.setBackground(Ui.round(boxBg, dp(22 * k)));
         ImageView iv = new ImageView(c);
         iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
         if (app.iconRes != 0) {
             iv.setImageResource(app.iconRes);
             iv.setColorFilter(fg);
-            box.addView(iv, new FrameLayout.LayoutParams(dp(34), dp(34), Gravity.CENTER));
+            box.addView(iv, new FrameLayout.LayoutParams(dp(34 * k), dp(34 * k), Gravity.CENTER));
         } else {
-            box.addView(iv, new FrameLayout.LayoutParams(dp(40), dp(40), Gravity.CENTER));
+            box.addView(iv, new FrameLayout.LayoutParams(dp(40 * k), dp(40 * k), Gravity.CENTER));
             // icona ridisegnata in background (può richiedere qualche millisecondo per app)
             new Thread(() -> {
                 Drawable d = catalog.originalIcon(app);
@@ -190,7 +192,7 @@ public final class AppsView extends LinearLayout {
                     iv.setImageBitmap(b);
                     if (!glyph) {
                         box.setBackground(null);
-                        iv.setLayoutParams(new FrameLayout.LayoutParams(dp(72), dp(72), Gravity.CENTER));
+                        iv.setLayoutParams(new FrameLayout.LayoutParams(dp(72 * k), dp(72 * k), Gravity.CENTER));
                     }
                 });
             }, "mg4-icon").start();
@@ -200,17 +202,17 @@ public final class AppsView extends LinearLayout {
             FrameLayout badge = new FrameLayout(c);
             badge.setBackground(Ui.round(isHidden ? t.track : t.accent, dp(14)));
             ImageView bi = Ui.icon(c, isHidden ? R.drawable.ic_close : R.drawable.ic_check, isHidden ? t.text : t.onAccent, 18);
-            badge.addView(bi, new FrameLayout.LayoutParams(dp(18), dp(18), Gravity.CENTER));
-            FrameLayout.LayoutParams blp = new FrameLayout.LayoutParams(dp(28), dp(28), Gravity.TOP | Gravity.END);
+            badge.addView(bi, new FrameLayout.LayoutParams(dp(18 * k), dp(18 * k), Gravity.CENTER));
+            FrameLayout.LayoutParams blp = new FrameLayout.LayoutParams(dp(28 * k), dp(28 * k), Gravity.TOP | Gravity.END);
             FrameLayout wrap = new FrameLayout(c);
-            wrap.addView(box, new FrameLayout.LayoutParams(dp(72), dp(72), Gravity.CENTER));
+            wrap.addView(box, new FrameLayout.LayoutParams(dp(72 * k), dp(72 * k), Gravity.CENTER));
             wrap.addView(badge, blp);
             if (isHidden) box.setAlpha(0.35f);
-            col.addView(wrap, new LayoutParams(dp(88), dp(80)));
+            col.addView(wrap, new LayoutParams(dp(88 * k), dp(80 * k)));
         } else {
-            col.addView(box, new LayoutParams(dp(72), dp(72)));
+            col.addView(box, new LayoutParams(dp(72 * k), dp(72 * k)));
         }
-        TextView label = Ui.oneLine(Ui.text(c, app.label, 16, isHidden ? t.sub : t.text, Ui.MEDIUM));
+        TextView label = Ui.oneLine(Ui.text(c, app.label, 16 * k, isHidden ? t.sub : t.text, Ui.MEDIUM));
         label.setGravity(Gravity.CENTER);
         col.addView(label, Ui.margins(new LayoutParams(-1, -2), dp(4), dp(10), dp(4), 0));
         return col;

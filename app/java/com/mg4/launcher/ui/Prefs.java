@@ -175,6 +175,21 @@ public final class Prefs {
         sp.edit().putInt("dimensioneComandi", i).apply();
     }
 
+    /** Dimensione della schermata App (icone e testo): 0 Normale, 1 Grande, 2 Molto grande (1.x). */
+    public static final float[] APPS_SCALES = {1f, 1.25f, 1.5f};
+
+    public int appsScale() {
+        return Math.max(0, Math.min(2, sp.getInt("dimensioneApp", 0)));
+    }
+
+    public void setAppsScale(int i) {
+        sp.edit().putInt("dimensioneApp", i).apply();
+    }
+
+    public float appsScaleFactor() {
+        return APPS_SCALES[appsScale()];
+    }
+
     public float uiScaleFactor() {
         return UI_SCALES[uiScale()];
     }

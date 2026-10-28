@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Radice USERTrust RSA (Sectigo), aggiunta per le connessioni HTTPS delle catene Sectigo (1.x). -->
+<network-security-config>
+    <base-config>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="@raw/usertrust_rsa" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

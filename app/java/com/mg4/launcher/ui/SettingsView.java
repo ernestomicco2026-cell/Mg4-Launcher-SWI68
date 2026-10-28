@@ -557,6 +557,19 @@ public final class SettingsView extends FrameLayout {
         }
         col.addView(f, topFull(14));
 
+        col.addView(label(c, L.s(R.string.set_apps_size)), top(28));
+        int[] appNames = {R.string.ui_size_normal, R.string.ui_size_large, R.string.ui_size_xlarge};
+        Flow fa = new Flow(c);
+        for (int i = 0; i < appNames.length; i++) {
+            final int idx = i;
+            fa.addView(choice(c, L.s(appNames[i]), prefs.appsScale() == i, v -> {
+                if (prefs.appsScale() == idx) return;
+                prefs.setAppsScale(idx);
+                host.settingsChanged(true);   // ricostruisce la schermata App con la nuova dimensione
+            }));
+        }
+        col.addView(fa, topFull(14));
+
         col.addView(label(c, L.s(R.string.set_ui_size)), top(28));
         int[] names = {R.string.ui_size_normal, R.string.ui_size_large, R.string.ui_size_xlarge};
         f = new Flow(c);

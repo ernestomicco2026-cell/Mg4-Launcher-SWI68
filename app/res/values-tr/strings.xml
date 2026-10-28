@@ -362,4 +362,8 @@
     <string name="newsh_5" formatted="false">CarPlay / Android Auto: tek dokunuşla açılır ve telefon bağlıyken çubukta kendi simgesi olur</string>
     <string name="newsh_6" formatted="false">Ayarlar: Araç paneli ile Alt çubuk arasındaki boşluk kaldırıldı</string>
     <string name="newsh_7" formatted="false">MG4 Clima açıkken sistem klima paneli sistemin kendi komutuyla kendiliğinden kapanır</string>
+    <string name="set_apps_size" formatted="false">UYGULAMA BOYUTU</string>
+    <string name="news_v097_1" formatted="false">Uygulama ekranı için ayrı boyut: ayarlardan seçilir (daha büyük simge ve metin)</string>
+    <string name="news_v097_2" formatted="false">Dongle: günlük artık sıfırlamadan sonra dongle\'ın tekrar görünüp görünmediğini kaydeder</string>
+    <string name="news_v097_3" formatted="false">Sectigo/USERTrust güvenlik sertifikaları eklendi</string>
 </resources>

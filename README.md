@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.9.6](releases/MG4Launcher-0.9.6.apk)**
+**Ultima versione / Latest version: [0.9.7](releases/MG4Launcher-0.9.7.apk)**
 
 > 🌡️ **Nuovo: [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4)** — la schermata del clima in stile Tesla, per SWI68, SWI69, SWI132 e SWI133. Con MG4 Clima installato il tasto del clima del launcher apre direttamente quella.
 >
@@ -190,7 +190,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.9.6.apk
+   adb install -r -f MG4Launcher-0.9.7.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -680,7 +680,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.9.6.apk
+   adb install -r -f MG4Launcher-0.9.7.apk
    ```
 3. Make it the default home:
    ```bash

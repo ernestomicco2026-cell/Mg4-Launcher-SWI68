@@ -1,6 +1,6 @@
 {
-  "version": "0.9.6",
-  "apk": "releases/MG4Launcher-0.9.6.apk",
-  "size": 635781,
-  "notes": "Avvio sicuro: il launcher diventa la home del sistema e parte sempre all'accensione; avvio più affidabile; loghi di Australia e Sud America e paese scritto a mano; CarPlay/Android Auto con un tocco e icona nella barra; sedili dal riquadro Comfort corretti; pannello clima di sistema chiuso sopra MG4 Clima."
+  "version": "0.9.7",
+  "apk": "releases/MG4Launcher-0.9.7.apk",
+  "size": 640029,
+  "notes": "Dimensione separata per la schermata App (icone e testo più grandi). Il log del dongle registra se ricompare dopo il reset. Certificati di sicurezza Sectigo/USERTrust aggiunti."
 }

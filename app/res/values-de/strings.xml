@@ -362,4 +362,8 @@
     <string name="newsh_5" formatted="false">CarPlay / Android Auto: öffnet mit einem Tipp und hat ein eigenes Symbol in der Leiste, solange das Telefon verbunden ist</string>
     <string name="newsh_6" formatted="false">Einstellungen: Leerraum zwischen Fahrzeugbereich und unterer Leiste entfernt</string>
     <string name="newsh_7" formatted="false">Bei geöffnetem MG4 Clima schließt sich das System-Klimafeld jetzt selbst mit dem Systembefehl</string>
+    <string name="set_apps_size" formatted="false">APP-GRÖSSE</string>
+    <string name="news_v097_1" formatted="false">Eigene Größe für den App-Bildschirm: einstellbar in den Einstellungen (größere Symbole und Text)</string>
+    <string name="news_v097_2" formatted="false">Dongle: Das Protokoll zeigt jetzt, ob der Dongle nach dem Zurücksetzen wieder erscheint</string>
+    <string name="news_v097_3" formatted="false">Sicherheitszertifikate Sectigo/USERTrust hinzugefügt</string>
 </resources>
