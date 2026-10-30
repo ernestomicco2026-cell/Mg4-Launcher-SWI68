@@ -111,7 +111,7 @@ public final class HomeLock {
 
     /** true se pkg è un'altra home (MG o un altro launcher): all'accensione si sostituisce come la home MG. */
     public static boolean isOtherHome(Context c, String pkg) {
-        if (pkg == null || pkg.equals(c.getPackageName())) return false;
+        if (pkg == null || pkg.equals(c.getPackageName()) || HomeDefault.isProvision(pkg)) return false;   // prima configurazione Android: non è la home MG
         if (HomeDefault.MG.getPackageName().equals(pkg)) return true;
         try {
             Intent home = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME).setPackage(pkg);

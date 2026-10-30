@@ -88,6 +88,7 @@ public final class LogUploader {
             Diag.put("log.invio", "non configurato in questa versione");
             return;
         }
+        if (notCar()) return;
         bg.postDelayed(periodic, FIRST_DELAY_MS);
     }
 
@@ -116,8 +117,26 @@ public final class LogUploader {
         return d;
     }
 
+    private Boolean notCar;
+
+    /** Telefono, emulatore o firmware non riconosciuto: nessun log (e la coda si svuota). */
+    private boolean notCar() {
+        if (notCar == null) {
+            String why = Firmware.notACar(ctx);
+            notCar = why != null;
+            if (notCar) {
+                status = "disattivato";
+                Diag.put("log.invio", "disattivato: " + why);
+                File[] q = queueDir().listFiles();
+                if (q != null) for (File f : q) //noinspection ResultOfMethodCallIgnored
+                    f.delete();
+            }
+        }
+        return notCar;
+    }
+
     private void uploadOnce() {
-        if (!configured() || !enabled()) return;
+        if (!configured() || !enabled() || notCar()) return;
         String day = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(new Date());
         String time = new SimpleDateFormat("HH-mm-ss", Locale.ROOT).format(new Date());
         String text = Diag.buildLog(ctx);
@@ -137,7 +156,7 @@ public final class LogUploader {
             flushQueue();
         } catch (Exception e) {
             status = "errore " + e.getMessage();
-            Diag.put("log.invio", "non riuscito (" + e.getMessage() + "), in coda");
+            Diag.put("log.invio", "non riuscito (" + Diag.netError(e) + "), in coda");
             enqueue(path, data);
         }
     }

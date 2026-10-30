@@ -28,6 +28,28 @@ public final class Firmware {
         return kind(c) != SWI68;
     }
 
+    /**
+     * Telefono o emulatore invece dell'infotainment: restituisce il motivo, oppure null se è un'auto (anche con il
+     * firmware dell'altra versione). Su questi dispositivi il launcher non invia log.
+     */
+    public static String notACar(Context c) {
+        String fp = lower(android.os.Build.FINGERPRINT), hw = lower(android.os.Build.HARDWARE), prod = lower(android.os.Build.PRODUCT),
+                model = lower(android.os.Build.MODEL), brand = lower(android.os.Build.BRAND), man = lower(android.os.Build.MANUFACTURER);
+        String dev = android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL;
+        if (fp.startsWith("generic") || fp.contains("emulator") || fp.contains("sdk_gphone") || hw.contains("goldfish")
+                || hw.contains("ranchu") || prod.contains("sdk") || prod.contains("emulator") || model.contains("android sdk built for")
+                || model.startsWith("generic") || model.contains("emulator"))
+            return "emulatore (" + dev + ")";
+        if (kind(c) == OTHER) return "firmware non riconosciuto, nessuna app MG (" + dev + ")";
+        for (String b : new String[]{"google", "oneplus", "samsung", "xiaomi", "redmi", "huawei", "oppo", "motorola", "sony", "nothing"})
+            if (brand.equals(b) || man.equals(b)) return "telefono (" + dev + ")";
+        return null;
+    }
+
+    private static String lower(String s) {
+        return s == null ? "" : s.toLowerCase(java.util.Locale.ROOT);
+    }
+
     public static synchronized int kind(Context c) {
         if (kind != null) return kind;
         PackageManager pm = c.getPackageManager();

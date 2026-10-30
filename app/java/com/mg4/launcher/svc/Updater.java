@@ -128,7 +128,7 @@ public final class Updater {
                 Diag.put("aggiornamenti.auto", "ultima " + r.tag + (r.newer ? " (nuova)" : ""));
                 if (r.newer && r.apkUrl != null) main.post(() -> cb.found(r));
             } catch (Exception e) {
-                Diag.put("aggiornamenti.auto", "non riuscito: " + e.getClass().getSimpleName());
+                Diag.put("aggiornamenti.auto", "non riuscito: " + e.getClass().getSimpleName() + " (" + Diag.netError(e) + ")");
             }
         });
     }
@@ -142,7 +142,7 @@ public final class Updater {
                 Diag.put("aggiornamenti.controllo", "ultima " + r.tag + (r.newer ? " (nuova)" : ""));
                 main.post(() -> cb.found(r));
             } catch (Exception e) {
-                Diag.put("aggiornamenti.controllo", "non riuscito: " + e.getClass().getSimpleName());
+                Diag.put("aggiornamenti.controllo", "non riuscito: " + e.getClass().getSimpleName() + " (" + Diag.netError(e) + ")");
             }
         });
     }

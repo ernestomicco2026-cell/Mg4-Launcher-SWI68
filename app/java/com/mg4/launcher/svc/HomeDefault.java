@@ -20,6 +20,37 @@ public final class HomeDefault {
 
     private HomeDefault() {}
 
+    /** Procedura di prima configurazione di Android: su alcune auto resta come home, ma non è la home MG. */
+    public static final String PROVISION = "com.android.provision";
+
+    public static boolean isProvision(String pkg) {
+        return PROVISION.equals(pkg);
+    }
+
+    /** Stato della prima configurazione, per il log: "user_setup_complete=0, device_provisioned=1". */
+    public static String provisionState(Context c) {
+        String usc, dp;
+        try {
+            usc = String.valueOf(android.provider.Settings.Secure.getInt(c.getContentResolver(), "user_setup_complete", -1));
+        } catch (Throwable e) {
+            usc = "?";
+        }
+        try {
+            dp = String.valueOf(android.provider.Settings.Global.getInt(c.getContentResolver(), android.provider.Settings.Global.DEVICE_PROVISIONED, -1));
+        } catch (Throwable e) {
+            dp = "?";
+        }
+        return "user_setup_complete=" + usc + ", device_provisioned=" + dp;
+    }
+
+    /** Se la home risolta è la prima configurazione di Android, lo scrive nel log (una volta per valore). */
+    private static String noteProvision(Context c, String pkg) {
+        if (!isProvision(pkg)) return "";
+        String st = provisionState(c);
+        Diag.put("avvio.homePrimaConfigurazione", "la home risulta " + PROVISION + " (prima configurazione di Android, non la home MG) · " + st);
+        return " (prima configurazione di Android, non la home MG · " + st + ")";
+    }
+
     public static ComponentName ours(Context c) {
         return new ComponentName(c.getPackageName(), "com.mg4.launcher.MainActivity");
     }
@@ -46,6 +77,7 @@ public final class HomeDefault {
             ResolveInfo cur = pm.resolveActivity(home, PackageManager.MATCH_DEFAULT_ONLY);
             String curPkg = cur != null && cur.activityInfo != null ? cur.activityInfo.packageName : "";
             if (target.getPackageName().equals(curPkg)) return "ok";
+            noteProvision(c, curPkg);
             List<ResolveInfo> all = pm.queryIntentActivities(home, 0);
             List<ComponentName> set = new ArrayList<>();
             int bestMatch = 0;
@@ -62,8 +94,10 @@ public final class HomeDefault {
                     .invoke(pm, f, match, set.toArray(new ComponentName[0]), target);
             ResolveInfo now = pm.resolveActivity(home, PackageManager.MATCH_DEFAULT_ONLY);
             boolean ok = now != null && now.activityInfo != null && target.getPackageName().equals(now.activityInfo.packageName);
-            return ok ? "ripristinata (era " + (curPkg.isEmpty() ? "nessuna" : curPkg) + ")"
-                    : "errore: ancora " + (now != null && now.activityInfo != null ? now.activityInfo.packageName : "nessuna");
+            String nowPkg = now != null && now.activityInfo != null ? now.activityInfo.packageName : "nessuna";
+            return ok ? "ripristinata (era " + (curPkg.isEmpty() ? "nessuna" : curPkg) + noteProvision(c, curPkg) + ")"
+                    : isProvision(nowPkg) ? "non cambiata: davanti c'è " + nowPkg + noteProvision(c, nowPkg)
+                    : "errore: ancora " + nowPkg;
         } catch (Throwable e) {
             Throwable t = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
             return "errore: " + t;

@@ -366,4 +366,7 @@
     <string name="news_v097_1" formatted="false">Taille séparée pour l\'écran des applis : à régler dans les réglages (icônes et texte plus grands)</string>
     <string name="news_v097_2" formatted="false">Dongle : le journal indique maintenant si le dongle réapparaît après la réinitialisation</string>
     <string name="news_v097_3" formatted="false">Certificats de sécurité Sectigo/USERTrust ajoutés</string>
+    <string name="news_v098_1" formatted="false">Redémarrage du dongle : les téléphones branchés par câble (iPhone, Android Auto) ne sont plus réinitialisés, seulement les vrais dongles sans fil</string>
+    <string name="news_v098_2" formatted="false">Autorisation de vitesse accordée automatiquement et nouveaux certificats racine Sectigo/USERTrust pour logos, mises à jour et journaux</string>
+    <string name="news_v098_3" formatted="false">Configuration initiale d\'Android reconnue comme accueil (ce n\'est pas l\'accueil MG) ; aucun journal depuis les téléphones et émulateurs</string>
 </resources>

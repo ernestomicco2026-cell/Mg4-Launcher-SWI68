@@ -366,4 +366,7 @@
     <string name="news_v097_1" formatted="false">Osobny rozmiar ekranu aplikacji: ustawiasz go w ustawieniach (większe ikony i tekst)</string>
     <string name="news_v097_2" formatted="false">Dongle: dziennik zapisuje teraz, czy dongle pojawia się ponownie po resecie</string>
     <string name="news_v097_3" formatted="false">Dodano certyfikaty bezpieczeństwa Sectigo/USERTrust</string>
+    <string name="news_v098_1" formatted="false">Restart dongla: telefony podłączone kablem (iPhone, Android Auto) nie są już resetowane, tylko prawdziwe dongle bezprzewodowe</string>
+    <string name="news_v098_2" formatted="false">Uprawnienie do prędkości nadawane automatycznie i nowe certyfikaty główne Sectigo/USERTrust dla logo, aktualizacji i dzienników</string>
+    <string name="news_v098_3" formatted="false">Pierwsza konfiguracja Androida rozpoznana jako ekran główny (to nie ekran MG); brak dzienników z telefonów i emulatorów</string>
 </resources>

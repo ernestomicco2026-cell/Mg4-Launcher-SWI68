@@ -309,7 +309,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         try {
             Intent home = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME);
             for (android.content.pm.ResolveInfo ri : getPackageManager().queryIntentActivities(home, 0)) {
-                if (ri.activityInfo == null || getPackageName().equals(ri.activityInfo.packageName)) continue;
+                if (ri.activityInfo == null || getPackageName().equals(ri.activityInfo.packageName)
+                        || com.mg4.launcher.svc.HomeDefault.isProvision(ri.activityInfo.packageName)) continue;
                 startActivity(new Intent(home).setComponent(new ComponentName(ri.activityInfo.packageName, ri.activityInfo.name))
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 return;
@@ -343,6 +344,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     /** Novità di ogni versione (testi in tutte le lingue in strings.xml). */
     private static int[] newsFor(String ver) {
         switch (ver) {
+            case "0.9.8":
+                return new int[]{R.string.news_v098_1, R.string.news_v098_2, R.string.news_v098_3};
             case "0.9.7":
                 return new int[]{R.string.news_v097_1, R.string.news_v097_2, R.string.news_v097_3};
             case "0.9.6":

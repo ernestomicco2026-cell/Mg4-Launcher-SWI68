@@ -62,6 +62,25 @@ public final class Diag {
         while (ERRORS.size() > 40) ERRORS.removeFirst();
     }
 
+    /**
+     * Errore di rete per il log: messaggio con la causa più interna (es. "Unacceptable certificate … ← motivo") e, per gli
+     * errori dei certificati, l'orologio dell'auto se è indietro (con la data sbagliata nessun certificato risulta valido).
+     */
+    public static String netError(Throwable e) {
+        StringBuilder sb = new StringBuilder(String.valueOf(e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage()));
+        Throwable c = e.getCause();
+        for (int i = 0; c != null && i < 4; i++, c = c.getCause()) {
+            String m = c.getMessage() == null ? c.getClass().getSimpleName() : c.getMessage();
+            if (sb.indexOf(m) < 0) sb.append(" ← ").append(m);
+        }
+        boolean cert = false;
+        for (Throwable t = e; t != null; t = t.getCause())
+            if (t instanceof javax.net.ssl.SSLException || t instanceof java.security.cert.CertificateException) cert = true;
+        if (cert && System.currentTimeMillis() < 1735689600000L)   // prima del 2025
+            sb.append(" · orologio dell'auto al ").append(new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY).format(new Date()));
+        return sb.toString();
+    }
+
     /** Eccezione con le prime righe dello stack, per il log. */
     public static String trace(Throwable t) {
         StringWriter sw = new StringWriter();

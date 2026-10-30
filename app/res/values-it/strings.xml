@@ -366,4 +366,7 @@
     <string name="news_v097_1" formatted="false">Dimensione separata per la schermata App: si sceglie nelle impostazioni (icone e testo più grandi)</string>
     <string name="news_v097_2" formatted="false">Dongle: il log registra ora se il dongle ricompare dopo il reset</string>
     <string name="news_v097_3" formatted="false">Aggiunti i certificati di sicurezza Sectigo/USERTrust</string>
+    <string name="news_v098_1" formatted="false">Riavvio del dongle: i telefoni collegati col cavo (iPhone, Android Auto) non vengono più resettati, solo i dongle wireless veri</string>
+    <string name="news_v098_2" formatted="false">Permesso della velocità concesso in automatico e nuovi certificati radice Sectigo/USERTrust per loghi, aggiornamenti e log</string>
+    <string name="news_v098_3" formatted="false">Riconosciuta come home la prima configurazione di Android (non è la home MG); niente log da telefoni ed emulatori</string>
 </resources>

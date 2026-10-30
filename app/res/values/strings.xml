@@ -366,4 +366,7 @@
     <string name="news_v097_1" formatted="false">Separate size for the App screen: choose it in settings (larger icons and text)</string>
     <string name="news_v097_2" formatted="false">Dongle: the log now records whether the dongle reappears after the reset</string>
     <string name="news_v097_3" formatted="false">Sectigo/USERTrust security certificates added</string>
+    <string name="news_v098_1" formatted="false">Dongle restart: phones connected with a cable (iPhone, Android Auto) are no longer reset, only real wireless dongles</string>
+    <string name="news_v098_2" formatted="false">Speed permission granted automatically, and new Sectigo/USERTrust root certificates for logos, updates and logs</string>
+    <string name="news_v098_3" formatted="false">Android first-time setup recognized as home (not the MG home); no logs sent from phones and emulators</string>
 </resources>

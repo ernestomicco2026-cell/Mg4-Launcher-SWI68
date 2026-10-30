@@ -33,14 +33,50 @@ public final class CarProps {
     private String lastError = "";
     /** Proprietà che l'auto rifiuta (IllegalArgumentException): non si rileggono più. */
     private final java.util.Set<Integer> unsupported = java.util.Collections.synchronizedSet(new java.util.HashSet<>());
+    /** Proprietà negate per un permesso che l'auto non concede (SecurityException): non si rileggono più. */
+    private final java.util.Set<Integer> denied = java.util.Collections.synchronizedSet(new java.util.HashSet<>());
+
+    /** Velocità del veicolo (FLOAT, m/s) e permesso che la protegge. */
+    public static final int PERF_VEHICLE_SPEED = 291504647;
+    public static final String PERM_CAR_SPEED = "android.car.permission.CAR_SPEED";
 
     public CarProps(Context c) {
         ctx = c.getApplicationContext();
     }
 
+    /**
+     * Permesso del CarService (es. CAR_SPEED): sull'auto è un permesso "a richiesta", che il launcher si concede da solo
+     * grazie alla firma platform (GRANT_RUNTIME_PERMISSIONS). Restituisce true se alla fine è concesso.
+     */
+    public boolean ensurePermission(String perm) {
+        String name = perm.substring(perm.lastIndexOf('.') + 1);
+        if (ctx.checkSelfPermission(perm) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            Diag.put("auto.permesso." + name, "concesso");
+            return true;
+        }
+        String why;
+        try {
+            android.content.pm.PackageManager pm = ctx.getPackageManager();
+            pm.getClass().getMethod("grantRuntimePermission", String.class, String.class, android.os.UserHandle.class)
+                    .invoke(pm, ctx.getPackageName(), perm, android.os.Process.myUserHandle());
+            why = "";
+        } catch (Throwable e) {
+            Throwable c = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
+            why = c.getClass().getSimpleName() + (c.getMessage() == null ? "" : ": " + c.getMessage());
+        }
+        boolean ok = ctx.checkSelfPermission(perm) == android.content.pm.PackageManager.PERMISSION_GRANTED;
+        Diag.put("auto.permesso." + name, ok ? "concesso ora" : "non concesso dall'auto" + (why.isEmpty() ? "" : " (" + why + ")"));
+        return ok;
+    }
+
     /** Si collega al CarService (va chiamato da un thread in background). */
     public synchronized void connect() {
         if (car != null) return;
+        // velocità (assistente di guida e pedale solo ad auto ferma): senza permesso non si prova nemmeno a leggerla
+        if (!ensurePermission(PERM_CAR_SPEED)) {
+            denied.add(PERF_VEHICLE_SPEED);
+            Diag.put("auto.velocità", "non letta: l'auto non concede il permesso CAR_SPEED (scritto una sola volta)");
+        }
         try {
             Class<?> carCls = Class.forName("android.car.Car");
             ServiceConnection conn = new ServiceConnection() {
@@ -130,7 +166,7 @@ public final class CarProps {
 
     /** Decimale o NaN se non leggibile. Dopo il primo rifiuto dell'auto la proprietà non si rilegge più. */
     public float getFloat(int prop) {
-        if (unsupported.contains(prop)) return Float.NaN;
+        if (unsupported.contains(prop) || denied.contains(prop)) return Float.NaN;
         try {
             Object p = pm();
             if (p == null) return Float.NaN;
@@ -138,6 +174,12 @@ public final class CarProps {
             return (Float) m.invoke(p, prop, area(prop));
         } catch (Throwable e) {
             Throwable c = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
+            if (c instanceof SecurityException) {
+                // permesso negato dall'auto (es. CAR_SPEED): una sola riga nel log, poi la proprietà non si rilegge più
+                denied.add(prop);
+                Diag.put("auto.permessoNegato." + Integer.toHexString(prop), "non letta più in questa sessione (" + c.getMessage() + ")");
+                return Float.NaN;
+            }
             if (c instanceof IllegalArgumentException) {
                 unsupported.add(prop);
                 Diag.put("auto.proprietàNonSupportata." + Integer.toHexString(prop), "non disponibile su questa auto (" + c.getClass().getSimpleName() + ")");

@@ -366,4 +366,7 @@
     <string name="news_v097_1" formatted="false">Tamaño propio para la pantalla de apps: elígelo en ajustes (iconos y texto más grandes)</string>
     <string name="news_v097_2" formatted="false">Dongle: el registro indica ahora si el dongle vuelve a aparecer tras el reinicio</string>
     <string name="news_v097_3" formatted="false">Añadidos los certificados de seguridad Sectigo/USERTrust</string>
+    <string name="news_v098_1" formatted="false">Reinicio del dongle: los teléfonos conectados por cable (iPhone, Android Auto) ya no se reinician, solo los dongles inalámbricos reales</string>
+    <string name="news_v098_2" formatted="false">Permiso de velocidad concedido automáticamente y nuevos certificados raíz Sectigo/USERTrust para logos, actualizaciones y registros</string>
+    <string name="news_v098_3" formatted="false">Reconocida como inicio la configuración inicial de Android (no es el inicio MG); sin registros desde teléfonos y emuladores</string>
 </resources>

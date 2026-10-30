@@ -568,7 +568,7 @@ public final class VehicleClient {
     public static float speedKmh() {
         CarProps p = shared;
         if (p == null) return Float.NaN;
-        float v = p.getFloat(291504647);   // PERF_VEHICLE_SPEED, m/s
+        float v = p.getFloat(CarProps.PERF_VEHICLE_SPEED);   // m/s; NaN se l'auto non concede CAR_SPEED (letta una volta sola)
         return Float.isNaN(v) ? Float.NaN : Math.abs(v) * 3.6f;
     }
 

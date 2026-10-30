@@ -366,4 +366,7 @@
     <string name="news_v097_1" formatted="false">Uygulama ekranı için ayrı boyut: ayarlardan seçilir (daha büyük simge ve metin)</string>
     <string name="news_v097_2" formatted="false">Dongle: günlük artık sıfırlamadan sonra dongle\'ın tekrar görünüp görünmediğini kaydeder</string>
     <string name="news_v097_3" formatted="false">Sectigo/USERTrust güvenlik sertifikaları eklendi</string>
+    <string name="news_v098_1" formatted="false">Dongle yeniden başlatma: kabloyla bağlı telefonlar (iPhone, Android Auto) artık sıfırlanmaz, yalnızca gerçek kablosuz dongle\'lar</string>
+    <string name="news_v098_2" formatted="false">Hız izni otomatik olarak verilir; logolar, güncellemeler ve günlükler için yeni Sectigo/USERTrust kök sertifikaları</string>
+    <string name="news_v098_3" formatted="false">Android ilk kurulumu ana ekran olarak tanınır (MG ana ekranı değildir); telefonlardan ve emülatörlerden günlük gönderilmez</string>
 </resources>

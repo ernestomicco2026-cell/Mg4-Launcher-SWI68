@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Radice USERTrust RSA (Sectigo), aggiunta per le connessioni HTTPS delle catene Sectigo (1.x). -->
+<!--
+  Certificati radice per le connessioni HTTPS (loghi radio, aggiornamenti, invio log), insieme a quelli di sistema.
+  Android 9 dell'auto non conosce le radici Sectigo più recenti: GitHub usa catene Sectigo (es. "Sectigo Public Server
+  Authentication CA DV E36", che porta alla radice E46 o, con la firma incrociata, a USERTrust ECC).
+  Radici dal Mozilla CA store: USERTrust RSA e ECC, Sectigo Public Server Authentication Root R46 ed E46.
+-->
 <network-security-config>
     <base-config>
         <trust-anchors>
             <certificates src="system" />
             <certificates src="@raw/usertrust_rsa" />
+            <certificates src="@raw/usertrust_ecc" />
+            <certificates src="@raw/sectigo_root_r46" />
+            <certificates src="@raw/sectigo_root_e46" />
         </trust-anchors>
     </base-config>
 </network-security-config>

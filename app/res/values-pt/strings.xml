@@ -366,4 +366,7 @@
     <string name="news_v097_1" formatted="false">Tamanho próprio para o ecrã das apps: escolhe nas definições (ícones e texto maiores)</string>
     <string name="news_v097_2" formatted="false">Dongle: o registo indica agora se o dongle reaparece após a reposição</string>
     <string name="news_v097_3" formatted="false">Certificados de segurança Sectigo/USERTrust adicionados</string>
+    <string name="news_v098_1" formatted="false">Reinício do dongle: os telemóveis ligados por cabo (iPhone, Android Auto) já não são reiniciados, só os dongles sem fios verdadeiros</string>
+    <string name="news_v098_2" formatted="false">Permissão da velocidade concedida automaticamente e novos certificados raiz Sectigo/USERTrust para logótipos, atualizações e registos</string>
+    <string name="news_v098_3" formatted="false">Configuração inicial do Android reconhecida como início (não é o início MG); sem registos a partir de telemóveis e emuladores</string>
 </resources>

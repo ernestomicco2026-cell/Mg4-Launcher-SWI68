@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.9.7](releases/MG4Launcher-0.9.7.apk)**
+**Ultima versione / Latest version: [0.9.8](releases/MG4Launcher-0.9.8.apk)**
 
 > 🌡️ **Nuovo: [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4)** — la schermata del clima in stile Tesla, per SWI68, SWI69, SWI132 e SWI133. Con MG4 Clima installato il tasto del clima del launcher apre direttamente quella.
 >
@@ -190,7 +190,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.9.7.apk
+   adb install -r -f MG4Launcher-0.9.8.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -266,6 +266,24 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Versioni
+
+#### 0.9.8
+- **Riavvio del dongle CarPlay/AA**: non resetta più i telefoni collegati col cavo (iPhone, Android Auto). Interviene
+  solo sui dongle wireless riconosciuti dal nome (es. smartlinkBox, OKBox, AAWireless, SmartBox, AutoKit) o già visti
+  in una sessione con il nome del dongle; i dongle CarPlay che si presentano come iPhone vengono riconosciuti dopo la
+  prima sessione. Con un telefono collegato la porta USB non si tocca. Nel log c'è il motivo di ogni esclusione.
+- **Velocità**: il launcher si concede il permesso della velocità; se l'auto non lo concede non la rilegge più e lo
+  scrive una sola volta nel log.
+- **Certificati**: aggiunte le radici USERTrust ECC e Sectigo R46/E46 (oltre a USERTrust RSA) per loghi, aggiornamenti
+  e invio dei log; nel log c'è la causa precisa degli errori di connessione.
+- **Prima configurazione di Android**: se la home risulta la procedura di prima configurazione, il launcher la
+  riconosce, scrive nel log lo stato della configurazione e non la tratta come la home MG.
+- **Log**: nessun invio da telefoni, emulatori o firmware non riconosciuti.
+
+#### 0.9.7
+- **Schermata App**: dimensione separata per icone e testo (più grandi), da scegliere nelle impostazioni.
+- **Dongle**: il log registra se il dongle ricompare dopo il reset.
+- **Certificati**: aggiunta la radice di sicurezza USERTrust RSA (Sectigo) per le connessioni a GitHub.
 
 #### 0.9.6
 - **Avvio sicuro**: il launcher diventa la home del sistema e parte sempre all'accensione e col tasto Home. Si disattiva
@@ -682,7 +700,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.9.7.apk
+   adb install -r -f MG4Launcher-0.9.8.apk
    ```
 3. Make it the default home:
    ```bash
@@ -758,6 +776,24 @@ Even just **€2** is a great help to keep developing and testing new versions i
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Changelog
+
+#### 0.9.8
+- **CarPlay/AA dongle restart**: phones connected with a cable (iPhone, Android Auto) are no longer reset. It only acts
+  on wireless dongles recognized by name (e.g. smartlinkBox, OKBox, AAWireless, SmartBox, AutoKit) or already seen in a
+  session with the dongle's name; CarPlay dongles that show up as an iPhone are recognized after the first session.
+  With a phone connected the USB port is left alone. The log shows why each device was excluded.
+- **Speed**: the launcher grants itself the speed permission; if the car doesn't allow it, speed is no longer read
+  and this is written to the log only once.
+- **Certificates**: added the USERTrust ECC and Sectigo R46/E46 roots (besides USERTrust RSA) for logos, updates and
+  log upload; the log shows the exact cause of connection errors.
+- **Android first-time setup**: if the home turns out to be Android's first-time setup, the launcher recognizes it,
+  writes the setup state to the log and doesn't treat it as the MG home.
+- **Logs**: nothing is sent from phones, emulators or unrecognized firmware.
+
+#### 0.9.7
+- **App screen**: separate size for icons and text (larger), chosen in settings.
+- **Dongle**: the log records whether the dongle reappears after the reset.
+- **Certificates**: added the USERTrust RSA (Sectigo) security root for connections to GitHub.
 
 #### 0.9.6
 - **Reliable start**: the launcher becomes the system home and always starts when the car turns on and with the Home

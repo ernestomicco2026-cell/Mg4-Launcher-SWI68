@@ -366,4 +366,7 @@
     <string name="news_v097_1" formatted="false">Eigene Größe für den App-Bildschirm: einstellbar in den Einstellungen (größere Symbole und Text)</string>
     <string name="news_v097_2" formatted="false">Dongle: Das Protokoll zeigt jetzt, ob der Dongle nach dem Zurücksetzen wieder erscheint</string>
     <string name="news_v097_3" formatted="false">Sicherheitszertifikate Sectigo/USERTrust hinzugefügt</string>
+    <string name="news_v098_1" formatted="false">Dongle-Neustart: per Kabel verbundene Telefone (iPhone, Android Auto) werden nicht mehr zurückgesetzt, nur echte kabellose Dongles</string>
+    <string name="news_v098_2" formatted="false">Geschwindigkeitsberechtigung automatisch erteilt und neue Sectigo/USERTrust-Stammzertifikate für Logos, Updates und Protokolle</string>
+    <string name="news_v098_3" formatted="false">Android-Ersteinrichtung als Startbildschirm erkannt (nicht der MG-Startbildschirm); keine Protokolle von Telefonen und Emulatoren</string>
 </resources>
