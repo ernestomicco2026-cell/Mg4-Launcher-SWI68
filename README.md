@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-<a href="releases/MG4Launcher-1.0.0.apk"><img alt="Scarica / Download 1.0.0" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.0-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
+<a href="releases/MG4Launcher-1.0.1.apk"><img alt="Scarica / Download 1.0.1" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.1-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
 <a href="https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT"><img alt="Sostieni il progetto con PayPal · Support the project with PayPal" src="https://img.shields.io/badge/Sostieni%20%2F%20Support-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white"></a>
 </p>
 
@@ -150,7 +150,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-1.0.0.apk
+   adb install -r -f MG4Launcher-1.0.1.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -226,6 +226,9 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Versioni
+
+#### 1.0.1
+- Il menu delle impostazioni scorre di nuovo e la sezione aggiornamenti è sempre raggiungibile
 
 #### 1.0.0
 - **Tasto Home touch dello schermo**: ora torna sempre al launcher, anche da Impostazioni auto o da un'altra app,
@@ -683,7 +686,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-1.0.0.apk
+   adb install -r -f MG4Launcher-1.0.1.apk
    ```
 3. Make it the default home:
    ```bash
@@ -759,6 +762,9 @@ Even just **€2** is a great help to keep developing and testing new versions i
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Changelog
+
+#### 1.0.1
+- The settings menu scrolls again and the updates section is always reachable
 
 #### 1.0.0
 - **Touchscreen Home button**: now always returns to the launcher, even from car Settings or another app, without

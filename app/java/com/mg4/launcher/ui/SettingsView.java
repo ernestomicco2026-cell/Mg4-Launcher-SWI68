@@ -78,7 +78,13 @@ public final class SettingsView extends FrameLayout {
     private final Handler main = new Handler(Looper.getMainLooper());
     private final boolean rhd, sysIndicator;
 
+    // 1.0.1: le voci del menu stanno in un ScrollView; l'altezza di ogni voce si adatta allo spazio (tra MIN e MAX),
+    // il riquadro aggiornamenti (footer) resta fisso in basso, fuori dallo scorrimento.
+    private static final int ITEM_MAX_DP = 76, ITEM_MIN_DP = 60, ITEM_GAP_DP = 6, ITEM_SUB_MIN_DP = 68;
     private final LinearLayout menuItems;
+    private final ScrollView menuScroll;
+    private int itemDp = ITEM_MAX_DP;
+    private boolean revealPending = true;
     private final FrameLayout footer;
     private final LinearLayout content;
     private boolean diagOpen;
@@ -111,15 +117,27 @@ public final class SettingsView extends FrameLayout {
         // --- menu delle sezioni ---
         LinearLayout menu = Ui.column(c);
         menu.setBackgroundColor(t.day ? 0xFFF6F7F9 : 0xFF111317);
-        menu.setPadding(dp(24), dp(30), dp(24), dp(24));
+        menu.setPadding(dp(24), dp(24), dp(24), dp(20));
         TextView title = Ui.text(c, L.s(R.string.set_menu_title), 32, t.text, Ui.MEDIUM);
-        title.setPadding(dp(12) + (sysIndicator && !rhd ? dp(SYSTEM_LIGHT_INSET) : 0), 0, dp(12), dp(26));
+        title.setPadding(dp(12) + (sysIndicator && !rhd ? dp(SYSTEM_LIGHT_INSET) : 0), 0, dp(12), dp(18));
         menu.addView(title);
         menuItems = Ui.column(c);
-        menu.addView(menuItems);
-        menu.addView(new View(c), Ui.lpWeight(-1, 0, 1));
+        menuScroll = new ScrollView(c);
+        menuScroll.setVerticalScrollBarEnabled(false);
+        menuScroll.setOverScrollMode(OVER_SCROLL_NEVER);
+        menuScroll.addView(menuItems, new FrameLayout.LayoutParams(-1, -2));
+        menu.addView(menuScroll, Ui.lpWeight(-1, 0, 1));
+        // appena si conosce lo spazio, si adatta l'altezza delle voci e si mostra quella selezionata
+        menuScroll.addOnLayoutChangeListener((v, left, topY, right, bottomY, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (bottomY - topY <= 0) return;
+            fitMenu();
+            if (revealPending) {
+                revealPending = false;
+                menuScroll.post(this::revealSelected);
+            }
+        });
         footer = new FrameLayout(c);
-        menu.addView(footer, new LinearLayout.LayoutParams(-1, -2));
+        menu.addView(footer, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, dp(8), 0, 0));
 
         View sep = new View(c);
         sep.setBackgroundColor(t.track);
@@ -181,23 +199,54 @@ public final class SettingsView extends FrameLayout {
             if (on) {
                 View bar = new View(c);
                 bar.setBackground(Ui.round(t.text, dp(3)));
-                item.addView(bar, new LayoutParams(dp(5), dp(44), Gravity.CENTER_VERTICAL | (rhd ? Gravity.RIGHT : Gravity.LEFT)));
+                item.addView(bar, new LayoutParams(dp(5), dp(Math.max(28, itemDp - 32)), Gravity.CENTER_VERTICAL | (rhd ? Gravity.RIGHT : Gravity.LEFT)));
             }
             LinearLayout r = Ui.row(c);
             r.setPadding(dp(20), 0, dp(20), 0);
+            // 1.0.1: voci più compatte (riquadro icona 44 dp, o 40 se lo spazio è poco)
+            int boxDp = itemDp >= ITEM_SUB_MIN_DP ? 44 : 40;
             FrameLayout box = new FrameLayout(c);
-            box.setBackground(Ui.round(on ? t.text : t.chip, dp(16)));
-            box.addView(Ui.icon(c, SEC_ICON[i], on ? t.panel : t.text, 28), new LayoutParams(dp(28), dp(28), Gravity.CENTER));
-            r.addView(box, Ui.lp(dp(52), dp(52)));
+            box.setBackground(Ui.round(on ? t.text : t.chip, dp(14)));
+            box.addView(Ui.icon(c, SEC_ICON[i], on ? t.panel : t.text, 26), new LayoutParams(dp(26), dp(26), Gravity.CENTER));
+            r.addView(box, Ui.lp(dp(boxDp), dp(boxDp)));
             LinearLayout tx = Ui.column(c);
             tx.addView(Ui.oneLine(Ui.text(c, L.s(SEC_NAME[i]), 23, t.text, on ? Ui.MEDIUM : Ui.REGULAR)));
-            TextView sub = Ui.oneLine(Ui.text(c, L.s(SEC_SUB[i]), 15, t.sub, Ui.REGULAR));
-            tx.addView(sub, Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(4), 0, 0));
-            r.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(18), 0, 0, 0));
+            // il sottotitolo si nasconde quando lo spazio non basta
+            if (itemDp >= ITEM_SUB_MIN_DP) {
+                TextView sub = Ui.oneLine(Ui.text(c, L.s(SEC_SUB[i]), 15, t.sub, Ui.REGULAR));
+                tx.addView(sub, Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(3), 0, 0));
+            }
+            r.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(16), 0, 0, 0));
             item.addView(r, new LayoutParams(-1, -1));
             item.setContentDescription(L.s(SEC_NAME[i]));
-            menuItems.addView(item, Ui.margins(new LinearLayout.LayoutParams(-1, dp(92)), 0, 0, 0, dp(8)));
+            menuItems.addView(item, Ui.margins(new LinearLayout.LayoutParams(-1, dp(itemDp)), 0, 0, 0, i == SEC_NAME.length - 1 ? 0 : dp(ITEM_GAP_DP)));
         }
+    }
+
+    /**
+     * Adatta l'altezza delle voci allo spazio che resta sopra il riquadro aggiornamenti: se le 7 sezioni ci stanno
+     * tutte si vedono senza scorrere; altrimenti restano ad altezza minima e il menu scorre.
+     */
+    private void fitMenu() {
+        int avail = menuScroll.getHeight();
+        int n = SEC_NAME.length;
+        float perDp = (avail / (float) dp(1) - (n - 1) * ITEM_GAP_DP) / n;
+        int want = Math.max(ITEM_MIN_DP, Math.min(ITEM_MAX_DP, (int) perDp));
+        if (want == itemDp) return;
+        itemDp = want;
+        menuScroll.post(() -> {
+            buildMenu();
+            menuScroll.post(this::revealSelected);
+        });
+    }
+
+    /** Fa scorrere il menu quanto basta perché la sezione selezionata sia tutta visibile. */
+    private void revealSelected() {
+        View it = menuItems.getChildAt(section);
+        if (it == null) return;
+        int vh = menuScroll.getHeight(), sy = menuScroll.getScrollY(), pad = dp(8);
+        if (it.getTop() < sy) menuScroll.scrollTo(0, Math.max(0, it.getTop() - pad));
+        else if (it.getBottom() > sy + vh) menuScroll.scrollTo(0, it.getBottom() - vh + pad);
     }
 
     /** Riquadro in fondo al menu: versione installata, oppure nuova versione con "Installa". */

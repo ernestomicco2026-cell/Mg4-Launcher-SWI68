@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "apk": "releases/MG4Launcher-1.0.0.apk",
+  "version": "1.0.1",
+  "apk": "releases/MG4Launcher-1.0.1.apk",
   "size": 694785,
-  "notes": "Il tasto Home touch torna sempre al launcher. Nuovo pulsante Sblocca presa di ricarica. Icone ufficiali del clima (A/C, AUTO, ricircolo, sedili e volante riscaldati) con colore e sfondo secondo lo stato, e riquadro Sbrinamento parabrezza. Impostazioni riorganizzate, unità distanza, tasto 360 configurabile, cartella loghi personali, navigatore predefinito."
+  "notes": "Il menu delle impostazioni scorre di nuovo e la sezione aggiornamenti è sempre raggiungibile."
 }

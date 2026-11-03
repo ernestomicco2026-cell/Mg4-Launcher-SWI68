@@ -122,21 +122,50 @@ public final class Confirm {
             m.setLineSpacing(0, 1.15f);
             card.addView(m, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, Ui.dp(c, 16), 0, 0));
         }
-        LinearLayout opts = Ui.row(c);
-        for (int i = 0; i < options.length; i++) {
-            final int idx = i;
-            boolean on = i == selected;
-            TextView b = Ui.text(c, options[i], Ui.ts(24), on ? t.panel : t.text, Ui.MEDIUM);
-            b.setGravity(Gravity.CENTER);
-            b.setBackground(on ? Ui.round(t.text, Ui.tp(c, 18)) : Ui.pressable(c, t.chip, 18 * Ui.K, t));
-            b.setClickable(true);
-            b.setOnClickListener(v -> {
-                ((ViewGroup) dim.getParent()).removeView(dim);
-                if (idx != selected) onPick.picked(idx);
-            });
-            opts.addView(b, Ui.margins(Ui.lpWeight(0, Ui.tp(c, 84), 1), i == 0 ? 0 : Ui.dp(c, 12), 0, 0, 0));
+        if (options.length <= PICK_ROW_MAX) {
+            // pochi valori: un pulsante per valore sulla stessa riga (com'era)
+            LinearLayout opts = Ui.row(c);
+            for (int i = 0; i < options.length; i++) {
+                final int idx = i;
+                boolean on = i == selected;
+                TextView b = Ui.text(c, options[i], Ui.ts(24), on ? t.panel : t.text, Ui.MEDIUM);
+                b.setGravity(Gravity.CENTER);
+                b.setBackground(on ? Ui.round(t.text, Ui.tp(c, 18)) : Ui.pressable(c, t.chip, 18 * Ui.K, t));
+                b.setClickable(true);
+                b.setOnClickListener(v -> {
+                    ((ViewGroup) dim.getParent()).removeView(dim);
+                    if (idx != selected) onPick.picked(idx);
+                });
+                opts.addView(b, Ui.margins(Ui.lpWeight(0, Ui.tp(c, 84), 1), i == 0 ? 0 : Ui.dp(c, 12), 0, 0, 0));
+            }
+            card.addView(opts, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, Ui.dp(c, 26), 0, 0));
+        } else {
+            // 1.0.1: tanti valori (es. elenco app per il tasto 360): elenco verticale che scorre
+            LinearLayout list = Ui.column(c);
+            View[] selView = new View[1];
+            for (int i = 0; i < options.length; i++) {
+                final int idx = i;
+                boolean on = i == selected;
+                TextView b = Ui.oneLine(Ui.text(c, options[i], Ui.ts(22), on ? t.panel : t.text, Ui.MEDIUM));
+                b.setGravity(Gravity.CENTER_VERTICAL);
+                b.setPadding(Ui.dp(c, 24), 0, Ui.dp(c, 24), 0);
+                b.setBackground(on ? Ui.round(t.text, Ui.tp(c, 16)) : Ui.pressable(c, t.chip, 16 * Ui.K, t));
+                b.setClickable(true);
+                b.setOnClickListener(v -> {
+                    ((ViewGroup) dim.getParent()).removeView(dim);
+                    if (idx != selected) onPick.picked(idx);
+                });
+                if (on) selView[0] = b;
+                list.addView(b, Ui.margins(new LinearLayout.LayoutParams(-1, Ui.tp(c, 64)), 0, i == 0 ? 0 : Ui.dp(c, 8), 0, 0));
+            }
+            android.widget.ScrollView sv = new android.widget.ScrollView(c);
+            sv.setVerticalScrollBarEnabled(false);
+            sv.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            sv.addView(list, new FrameLayout.LayoutParams(-1, -2));
+            card.addView(sv, Ui.margins(new LinearLayout.LayoutParams(-1, listMaxHeight(c, msg != null && !msg.isEmpty(), 420)),
+                    0, Ui.dp(c, 22), 0, 0));
+            if (selView[0] != null) sv.post(() -> sv.scrollTo(0, Math.max(0, selView[0].getTop() - Ui.dp(c, 8))));
         }
-        card.addView(opts, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, Ui.dp(c, 26), 0, 0));
         LinearLayout btns = Ui.row(c);
         btns.setGravity(Gravity.END);
         btns.addView(button(c, t, cancel, false, v -> ((ViewGroup) dim.getParent()).removeView(dim)), Ui.lp(-2, Ui.tp(c, 60)));
@@ -209,7 +238,7 @@ public final class Confirm {
         android.widget.ScrollView sv = new android.widget.ScrollView(c);
         sv.setVerticalScrollBarEnabled(false);
         sv.addView(grid);
-        card.addView(sv, Ui.margins(new LinearLayout.LayoutParams(-1, Ui.dp(c, 420)), 0, Ui.dp(c, 22), 0, 0));
+        card.addView(sv, Ui.margins(new LinearLayout.LayoutParams(-1, listMaxHeight(c, msg != null && !msg.isEmpty(), 420)), 0, Ui.dp(c, 22), 0, 0));
         LinearLayout btns = Ui.row(c);
         btns.setGravity(Gravity.END);
         btns.addView(button(c, t, cancel, false, v -> ((ViewGroup) dim.getParent()).removeView(dim)), Ui.lp(-2, Ui.tp(c, 60)));
@@ -266,6 +295,16 @@ public final class Confirm {
         lp.bottomMargin = Ui.dp(c, 30);
         dim.addView(card, lp);
         root.addView(dim, new FrameLayout.LayoutParams(-1, -1));
+    }
+
+    /** Fino a quanti valori restano sulla stessa riga nel popup di scelta; oltre, elenco che scorre. */
+    private static final int PICK_ROW_MAX = 4;
+
+    /** Altezza dell'elenco scorrevole di un popup: quella voluta (dp), ma mai oltre lo spazio che resta sullo schermo. */
+    private static int listMaxHeight(Context c, boolean hasMsg, int wantDp) {
+        int screen = c.getResources().getDisplayMetrics().heightPixels;
+        int fixed = Ui.dp(c, 34 + 30 + 40 + 22 + 24 + 40) + Ui.tp(c, 60) + (hasMsg ? Ui.dp(c, 70) : 0);
+        return Math.max(Ui.dp(c, 140), Math.min(Ui.dp(c, wantDp), screen - fixed));
     }
 
     private static TextView button(Context c, Theme t, String text, boolean primary, View.OnClickListener l) {
