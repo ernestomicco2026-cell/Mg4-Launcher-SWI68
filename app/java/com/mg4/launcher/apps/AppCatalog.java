@@ -328,9 +328,10 @@ public final class AppCatalog {
         spm = pm;
         Intent mg4 = climaOverride(pkg);
         if (mg4 != null) return mg4;
-        Intent exact = new Intent(Intent.ACTION_MAIN).setComponent(new ComponentName(pkg, cls));
+        // 1.0.0: cls null = attività principale del pacchetto (tasto 360 su un'app scelta dall'utente)
+        Intent exact = cls == null ? null : new Intent(Intent.ACTION_MAIN).setComponent(new ComponentName(pkg, cls));
         try {
-            if (cls != null && pm.resolveActivity(exact, 0) != null) return exact;
+            if (exact != null && pm.resolveActivity(exact, 0) != null) return exact;
         } catch (Exception ignored) {
         }
         Intent li = null;
@@ -339,7 +340,7 @@ public final class AppCatalog {
         } catch (Exception ignored) {
         }
         String key = pkg + "/" + cls;
-        if (missingLogged.add(key)) {
+        if ((cls != null || li == null) && missingLogged.add(key)) {
             Diag.put("app.mancante." + pkg.substring(pkg.lastIndexOf('.') + 1),
                     (cls == null ? "" : cls.substring(cls.lastIndexOf('.') + 1) + " assente · ") + (li != null ? "si apre l'app principale" : "app non presente: pulsante disattivato"));
         }

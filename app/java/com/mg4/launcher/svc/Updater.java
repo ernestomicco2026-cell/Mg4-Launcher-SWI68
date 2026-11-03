@@ -107,7 +107,7 @@ public final class Updater {
                 status(e.getMessage(), null, false);
             } catch (Exception e) {
                 status(L.f(R.string.upd_no_connection, e.getClass().getSimpleName()), null, false);
-                Diag.error("aggiornamenti", e.toString());
+                if (!Offline.failed("aggiornamenti", e)) Diag.error("aggiornamenti", e.toString());
             }
         });
     }
@@ -122,13 +122,19 @@ public final class Updater {
      */
     public void checkQuiet(String repo, String token, Found cb) {
         if (busy) return;
+        if (!Offline.canTry()) {
+            Diag.put("aggiornamenti.auto", "offline: rimandato");
+            return;
+        }
         bg.post(() -> {
             try {
                 Release r = latest(repo, token);
+                Offline.ok();
                 Diag.put("aggiornamenti.auto", "ultima " + r.tag + (r.newer ? " (nuova)" : ""));
                 if (r.newer && r.apkUrl != null) main.post(() -> cb.found(r));
             } catch (Exception e) {
-                Diag.put("aggiornamenti.auto", "non riuscito: " + e.getClass().getSimpleName() + " (" + Diag.netError(e) + ")");
+                if (Offline.failed("aggiornamenti", e)) Diag.put("aggiornamenti.auto", "offline: rimandato");
+                else Diag.put("aggiornamenti.auto", "non riuscito: " + e.getClass().getSimpleName() + " (" + Diag.netError(e) + ")");
             }
         });
     }
@@ -136,13 +142,19 @@ public final class Updater {
     /** Controllo silenzioso per le impostazioni: restituisce sempre l'ultima release trovata (anche se non è nuova). */
     public void checkSilent(String repo, String token, Found cb) {
         if (busy) return;
+        if (!Offline.canTry()) {
+            Diag.put("aggiornamenti.controllo", "offline: rimandato");
+            return;
+        }
         bg.post(() -> {
             try {
                 Release r = latest(repo, token);
+                Offline.ok();
                 Diag.put("aggiornamenti.controllo", "ultima " + r.tag + (r.newer ? " (nuova)" : ""));
                 main.post(() -> cb.found(r));
             } catch (Exception e) {
-                Diag.put("aggiornamenti.controllo", "non riuscito: " + e.getClass().getSimpleName() + " (" + Diag.netError(e) + ")");
+                if (Offline.failed("aggiornamenti", e)) Diag.put("aggiornamenti.controllo", "offline: rimandato");
+                else Diag.put("aggiornamenti.controllo", "non riuscito: " + e.getClass().getSimpleName() + " (" + Diag.netError(e) + ")");
             }
         });
     }

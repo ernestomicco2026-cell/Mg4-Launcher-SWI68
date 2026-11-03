@@ -1,6 +1,6 @@
 {
-  "version": "0.9.8",
-  "apk": "releases/MG4Launcher-0.9.8.apk",
-  "size": 652536,
-  "notes": "Il riavvio del dongle CarPlay/AA non resetta più i telefoni col cavo, solo i dongle wireless veri. Permesso della velocità, nuovi certificati Sectigo/USERTrust, prima configurazione di Android riconosciuta, niente log da telefoni ed emulatori."
+  "version": "1.0.0",
+  "apk": "releases/MG4Launcher-1.0.0.apk",
+  "size": 694785,
+  "notes": "Il tasto Home touch torna sempre al launcher. Nuovo pulsante Sblocca presa di ricarica. Icone ufficiali del clima (A/C, AUTO, ricircolo, sedili e volante riscaldati) con colore e sfondo secondo lo stato, e riquadro Sbrinamento parabrezza. Impostazioni riorganizzate, unità distanza, tasto 360 configurabile, cartella loghi personali, navigatore predefinito."
 }

@@ -82,6 +82,15 @@ public final class CarFeatures {
         Diag.put("auto.config.spiaLuci", (on ? "sì" : "no") + " · rearfog " + rear + "/" + rearNew + " · frontfog " + front + "/"
                 + frontNew + " · hiboard " + hbRear + "/" + hbFront);
         indicator = on;
+        // 1.0.0 (punto 12, solo verifica): sulla SWI68 il pulsante fendinebbia di sistema vive nella StatusBar
+        // standard di Android (com.android.systemui.saicmotor.statusbar.StatusBar, verificato nel codice della
+        // SystemUI) - la stessa finestra che i nostri flag SYSTEM_UI_FLAG_FULLSCREEN/HIDE_NAVIGATION nascondono per
+        // avere lo schermo intero. È per questo che da noi non si vede, mentre su SWI69/SWI132 (SystemUI diversa)
+        // resta visibile: lì il pulsante sta quasi certamente in una finestra separata, che quei flag non toccano.
+        // Il fornitore di configurazione non esiste su questa firmware, quindi "no" qui sopra non vuol dire che
+        // l'auto non abbia il fendinebbia.
+        Diag.put("luci.pulsanteSistema", "nascosto dallo schermo intero (vive nella StatusBar di Android, come gli altri "
+                + "pulsanti di sistema) · fornitore di configurazione " + (hasFeatureProvider(c) ? "presente" : "assente su questa firmware"));
         return on;
     }
 

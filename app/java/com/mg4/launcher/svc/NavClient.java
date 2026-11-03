@@ -265,7 +265,9 @@ public final class NavClient {
                 Diag.put("nav.segnali", "isMapNavigating " + mapNav + " · statoGuida " + status
                         + " · rim. " + s.remainMeters + " m / " + s.remainSeconds + " s");
                 Diag.put("nav.prossimaManovra", s.turnMeters + " m · icona " + s.turnIcon + " · " + s.turnText);
-                Diag.put("nav.unitaDistanza", Rpc.callInt(b, GS, DIST_UNIT));
+                int unit = Rpc.callInt(b, GS, DIST_UNIT);
+                com.mg4.launcher.ui.Units.navUnit = unit;   // 1.0.0: serve per le miglia
+                Diag.put("nav.unitaDistanza", unit);
                 Diag.put("nav.via", s.road);
                 Diag.put("nav.app", s.mapPackage);
                 Diag.put("nav.appAttiva", Rpc.callBool(b, GS, NAV_ACTIVE));

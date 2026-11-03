@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 1.0.0: tasto 360 della barra, videocamera semplice (corpo + obiettivo a cono), proposta G -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp" android:height="24dp"
     android:viewportWidth="48" android:viewportHeight="48">
-    <path android:pathData="M33.97 17.73A16.2 16.2 0 1 1 14.03 17.73M9.03 17.73L14.03 17.73L12.82 22.59" android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round"/>
-    <path android:pathData="M21 22.5h6a3.5 3.5 0 0 1 3.5 3.5v10.5a3.5 3.5 0 0 1-3.5 3.5h-6a3.5 3.5 0 0 1-3.5-3.5V26A3.5 3.5 0 0 1 21 22.5zM20.2 28Q24 26.4 27.8 28V34.4Q24 35.7 20.2 34.4ZM17.5 28.5h-2.2M30.5 28.5h2.2" android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="2.6" android:strokeLineCap="round" android:strokeLineJoin="round"/>
-    <path android:pathData="M14.7 8.7A2.3 2 0 1 1 16.6 11.3A2.5 2.2 0 1 1 14.5 14.3M24.7 7.9Q20.7 8.8 20.8 13.1M20.8 13.1a2.3 2.3 0 1 0 4.6 0a2.3 2.3 0 1 0-4.6 0M26.9 11.4a2.4 4 0 1 0 4.8 0a2.4 4 0 1 0-4.8 0M33.8 8.7a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0-2.4 0" android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="2.2" android:strokeLineCap="round" android:strokeLineJoin="round"/>
+    <path android:pathData="M7 15h22a3.5 3.5 0 0 1 3.5 3.5v10a3.5 3.5 0 0 1-3.5 3.5H7a3.5 3.5 0 0 1-3.5-3.5v-10A3.5 3.5 0 0 1 7 15zM29 20.5L39.5 15v19L29 27.5"
+        android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="2.8" android:strokeLineCap="round" android:strokeLineJoin="round"/>
 </vector>

@@ -28,9 +28,9 @@
     <string name="log_upload_off" formatted="false">Invio dei log disattivato</string>
     <string name="log_upload_nokey" formatted="false">Invio dei log non disponibile in questa versione</string>
     <string name="sec_car" formatted="false">AUTO</string>
-    <string name="sec_car_sub" formatted="false">Colore, cerchi, tetto</string>
+    <string name="sec_car_sub" formatted="false">Colore, cerchi, tetto, lato guida</string>
     <string name="sec_home" formatted="false">Home</string>
-    <string name="sec_home_sub" formatted="false">Batteria, pneumatici, temperature</string>
+    <string name="sec_home_sub" formatted="false">Data, batteria, distanza, pneumatici</string>
     <string name="sec_look" formatted="false">Aspetto</string>
     <string name="sec_look_sub" formatted="false">Tema, dimensione, lingua</string>
     <string name="sec_drive" formatted="false">Guida</string>
@@ -369,4 +369,37 @@
     <string name="news_v098_1" formatted="false">Riavvio del dongle: i telefoni collegati col cavo (iPhone, Android Auto) non vengono più resettati, solo i dongle wireless veri</string>
     <string name="news_v098_2" formatted="false">Permesso della velocità concesso in automatico e nuovi certificati radice Sectigo/USERTrust per loghi, aggiornamenti e log</string>
     <string name="news_v098_3" formatted="false">Riconosciuta come home la prima configurazione di Android (non è la home MG); niente log da telefoni ed emulatori</string>
+    <string name="tap_to_open" formatted="false">Tocca per aprire</string>
+    <string name="sec_bar" formatted="false">Barra e pulsanti</string>
+    <string name="sec_bar_sub" formatted="false">Barra, pulsanti raggruppati, tasto 360</string>
+    <string name="sec_logos" formatted="false">Radio e loghi</string>
+    <string name="sec_logos_sub" formatted="false">Paese dei loghi, pacchetti, cartella personale</string>
+    <string name="sec_launch" formatted="false">Avvio e app</string>
+    <string name="sec_launch_sub" formatted="false">Avvio sicuro, altri launcher, dongle</string>
+    <string name="set_dist_unit" formatted="false">Unità distanza</string>
+    <string name="set_dist_unit_sub" formatted="false">Come mostrare l\'autonomia e le distanze: automatica (come il quadro), km o miglia</string>
+    <string name="set_cam360" formatted="false">Il tasto 360 apre</string>
+    <string name="set_cam360_sub" formatted="false">Cosa succede toccando il tasto della telecamera 360 nella barra</string>
+    <string name="cam360_original" formatted="false">360 originale</string>
+    <string name="cam360_mg4" formatted="false">MG4 360</string>
+    <string name="cam360_app" formatted="false">Un\'altra app</string>
+    <string name="cam360_hidden" formatted="false">Nascosto</string>
+    <string name="cam360_pick_app" formatted="false">Scegli l\'app</string>
+    <string name="set_logos_usb" formatted="false">Cartella loghi personali</string>
+    <string name="set_logos_usb_sub" formatted="false">Metti MG4Launcher/loghi/&lt;codice paese&gt;.zip su una chiavetta USB: si installa da solo, senza internet</string>
+    <string name="set_nav_default" formatted="false">Navigatore predefinito</string>
+    <string name="set_nav_default_sub" formatted="false">Cosa apre il riquadro mappa quando tocchi \"Vai\"; con CarPlay/Android Auto collegato compare anche come scelta</string>
+    <string name="nav_default_mg" formatted="false">Navigatore MG</string>
+    <string name="nav_default_phone" formatted="false">CarPlay / Android Auto</string>
+    <string name="cb_unlock" formatted="false">Sblocca presa</string>
+    <string name="cb_unlock_title" formatted="false">Sbloccare la presa di ricarica?</string>
+    <string name="cb_unlock_msg" formatted="false">Il comando va all\'auto come dal pulsante della pagina Gestione ricarica.</string>
+    <string name="cb_unlock_wait" formatted="false">L\'auto non ha ancora mandato lo stato della presa: riprova tra poco.</string>
+    <string name="cb_unlock_locked" formatted="false">Bloccata</string>
+    <string name="cb_unlock_unlocked" formatted="false">Sbloccata</string>
+    <string name="tile_defrost_front" formatted="false">Sbrinamento parabrezza</string>
+    <string name="news_v100_1" formatted="false">Il tasto Home dello schermo torna sempre al launcher, anche da Impostazioni auto o da un\'altra app</string>
+    <string name="news_v100_2" formatted="false">Nuovo pulsante \"Sblocca presa\" nella barra di ricarica, con conferma prima di inviarlo</string>
+    <string name="news_v100_3" formatted="false">Nuove icone ufficiali per il clima (A/C, AUTO, ricircolo, sedili e volante riscaldati) con colore e sfondo secondo lo stato, e il riquadro Sbrinamento parabrezza</string>
+    <string name="news_v100_4" formatted="false">Impostazioni riorganizzate, unità distanza, tasto 360 configurabile, cartella loghi personali e navigatore predefinito</string>
 </resources>

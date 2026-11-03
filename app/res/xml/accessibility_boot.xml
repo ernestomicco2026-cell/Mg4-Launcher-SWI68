@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- cambi di finestra (quale app è in primo piano) e, dalla 0.9.6, l'elenco delle finestre per riconoscere il pannello clima di sistema; nessun contenuto letto, nessun gesto -->
+<!-- cambi di finestra (quale app è in primo piano), elenco delle finestre per il pannello clima di sistema e, dalla
+     1.0.0, il tocco sulla casetta del dock di sistema (punto 1): nessun contenuto letto oltre a questo, nessun gesto -->
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accessibilityEventTypes="typeWindowStateChanged|typeWindowsChanged"
+    android:accessibilityEventTypes="typeWindowStateChanged|typeWindowsChanged|typeViewClicked"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows"
     android:canRetrieveWindowContent="true"

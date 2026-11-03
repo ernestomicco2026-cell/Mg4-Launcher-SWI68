@@ -28,9 +28,9 @@
     <string name="log_upload_off" formatted="false">Envio de registos desativado</string>
     <string name="log_upload_nokey" formatted="false">Envio de registos indisponível nesta versão</string>
     <string name="sec_car" formatted="false">CARRO</string>
-    <string name="sec_car_sub" formatted="false">Cor, jantes, tejadilho</string>
+    <string name="sec_car_sub" formatted="false">Cor, jantes, tejadilho, lado de condução</string>
     <string name="sec_home" formatted="false">Início</string>
-    <string name="sec_home_sub" formatted="false">Bateria, pneus, temperaturas</string>
+    <string name="sec_home_sub" formatted="false">Data, bateria, distância, pneus</string>
     <string name="sec_look" formatted="false">Aspeto</string>
     <string name="sec_look_sub" formatted="false">Tema, tamanho, idioma</string>
     <string name="sec_drive" formatted="false">Condução</string>
@@ -369,4 +369,37 @@
     <string name="news_v098_1" formatted="false">Reinício do dongle: os telemóveis ligados por cabo (iPhone, Android Auto) já não são reiniciados, só os dongles sem fios verdadeiros</string>
     <string name="news_v098_2" formatted="false">Permissão da velocidade concedida automaticamente e novos certificados raiz Sectigo/USERTrust para logótipos, atualizações e registos</string>
     <string name="news_v098_3" formatted="false">Configuração inicial do Android reconhecida como início (não é o início MG); sem registos a partir de telemóveis e emuladores</string>
+    <string name="tap_to_open" formatted="false">Toca para abrir</string>
+    <string name="sec_bar" formatted="false">Barra e botões</string>
+    <string name="sec_bar_sub" formatted="false">Barra, botões agrupados, botão 360</string>
+    <string name="sec_logos" formatted="false">Rádio e logótipos</string>
+    <string name="sec_logos_sub" formatted="false">País dos logótipos, pacotes, pasta pessoal</string>
+    <string name="sec_launch" formatted="false">Início e apps</string>
+    <string name="sec_launch_sub" formatted="false">Início seguro, outros launchers, dongle</string>
+    <string name="set_dist_unit" formatted="false">Unidade de distância</string>
+    <string name="set_dist_unit_sub" formatted="false">Como mostrar a autonomia e as distâncias: automática (como o quadro), km ou milhas</string>
+    <string name="set_cam360" formatted="false">O botão 360 abre</string>
+    <string name="set_cam360_sub" formatted="false">O que acontece ao tocar no botão da câmara 360 na barra</string>
+    <string name="cam360_original" formatted="false">360 original</string>
+    <string name="cam360_mg4" formatted="false">MG4 360</string>
+    <string name="cam360_app" formatted="false">Outra app</string>
+    <string name="cam360_hidden" formatted="false">Oculto</string>
+    <string name="cam360_pick_app" formatted="false">Escolhe a app</string>
+    <string name="set_logos_usb" formatted="false">Pasta de logótipos pessoais</string>
+    <string name="set_logos_usb_sub" formatted="false">Põe MG4Launcher/loghi/&lt;código do país&gt;.zip numa pen USB: instala-se por si só, sem internet</string>
+    <string name="set_nav_default" formatted="false">Navegador predefinido</string>
+    <string name="set_nav_default_sub" formatted="false">O que o painel do mapa abre ao tocar em \"Ir\"; com CarPlay/Android Auto ligado também aparece como opção</string>
+    <string name="nav_default_mg" formatted="false">Navegador MG</string>
+    <string name="nav_default_phone" formatted="false">CarPlay / Android Auto</string>
+    <string name="cb_unlock" formatted="false">Desbloquear tomada</string>
+    <string name="cb_unlock_title" formatted="false">Desbloquear a tomada de carregamento?</string>
+    <string name="cb_unlock_msg" formatted="false">O comando vai para o carro como a partir do botão da página Gestão de carregamento.</string>
+    <string name="cb_unlock_wait" formatted="false">O carro ainda não enviou o estado da tomada: tenta novamente dentro de pouco.</string>
+    <string name="cb_unlock_locked" formatted="false">Bloqueada</string>
+    <string name="cb_unlock_unlocked" formatted="false">Desbloqueada</string>
+    <string name="tile_defrost_front" formatted="false">Desembaciamento frontal</string>
+    <string name="news_v100_1" formatted="false">O botão Home do ecrã volta sempre ao launcher, mesmo a partir das Definições do carro ou de outra app</string>
+    <string name="news_v100_2" formatted="false">Novo botão \"Desbloquear tomada\" na barra de carregamento, com confirmação antes de o enviar</string>
+    <string name="news_v100_3" formatted="false">Novos ícones oficiais do clima (A/C, AUTO, recirculação, bancos e volante aquecidos) com cor e fundo segundo o estado, e o painel de desembaciamento frontal</string>
+    <string name="news_v100_4" formatted="false">Definições reorganizadas, unidade de distância, botão 360 configurável, pasta de logótipos pessoais e navegador predefinido</string>
 </resources>

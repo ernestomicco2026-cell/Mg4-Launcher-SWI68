@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MG4 Clima 1.4.0 · colori dei pulsanti del clima, tema NOTTE. -->
+<resources>
+    <color name="clima_acceso">#FF4FB3FF</color>
+    <color name="clima_acceso_sfondo">#FF13324D</color>
+    <color name="clima_spento">#FF9AA5B5</color>
+    <color name="clima_spento_sfondo">#FF1A202B</color>
+    <color name="clima_non_disponibile">#669AA5B5</color>
+    <color name="clima_caldo">#FFFF7A3D</color>
+    <color name="clima_caldo_sfondo">#FF2E241F</color>
+    <color name="clima_scritta_accesa">#FFF2F5FA</color>
+</resources>

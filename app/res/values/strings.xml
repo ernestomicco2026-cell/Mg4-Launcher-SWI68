@@ -28,9 +28,9 @@
     <string name="log_upload_off" formatted="false">Log upload turned off</string>
     <string name="log_upload_nokey" formatted="false">Log upload not available in this version</string>
     <string name="sec_car" formatted="false">CAR</string>
-    <string name="sec_car_sub" formatted="false">Colour, wheels, roof</string>
+    <string name="sec_car_sub" formatted="false">Colour, wheels, roof, driving side</string>
     <string name="sec_home" formatted="false">Home</string>
-    <string name="sec_home_sub" formatted="false">Battery, tyres, temperatures</string>
+    <string name="sec_home_sub" formatted="false">Date, battery, distance, tyres</string>
     <string name="sec_look" formatted="false">Appearance</string>
     <string name="sec_look_sub" formatted="false">Theme, size, language</string>
     <string name="sec_drive" formatted="false">Driving</string>
@@ -369,4 +369,37 @@
     <string name="news_v098_1" formatted="false">Dongle restart: phones connected with a cable (iPhone, Android Auto) are no longer reset, only real wireless dongles</string>
     <string name="news_v098_2" formatted="false">Speed permission granted automatically, and new Sectigo/USERTrust root certificates for logos, updates and logs</string>
     <string name="news_v098_3" formatted="false">Android first-time setup recognized as home (not the MG home); no logs sent from phones and emulators</string>
+    <string name="tap_to_open" formatted="false">Tap to open</string>
+    <string name="sec_bar" formatted="false">Bar and buttons</string>
+    <string name="sec_bar_sub" formatted="false">Bar, grouped buttons, 360 button</string>
+    <string name="sec_logos" formatted="false">Radio and logos</string>
+    <string name="sec_logos_sub" formatted="false">Logo country, packs, personal folder</string>
+    <string name="sec_launch" formatted="false">Startup and apps</string>
+    <string name="sec_launch_sub" formatted="false">Safe start, other launchers, dongle</string>
+    <string name="set_dist_unit" formatted="false">Distance unit</string>
+    <string name="set_dist_unit_sub" formatted="false">How to show range and distances: automatic (like the instrument cluster), km or miles</string>
+    <string name="set_cam360" formatted="false">The 360 button opens</string>
+    <string name="set_cam360_sub" formatted="false">What happens when you tap the 360 camera button in the bar</string>
+    <string name="cam360_original" formatted="false">Original 360</string>
+    <string name="cam360_mg4" formatted="false">MG4 360</string>
+    <string name="cam360_app" formatted="false">Another app</string>
+    <string name="cam360_hidden" formatted="false">Hidden</string>
+    <string name="cam360_pick_app" formatted="false">Choose the app</string>
+    <string name="set_logos_usb" formatted="false">Personal logos folder</string>
+    <string name="set_logos_usb_sub" formatted="false">Put MG4Launcher/loghi/&lt;country code&gt;.zip on a USB stick: it installs by itself, without internet</string>
+    <string name="set_nav_default" formatted="false">Default navigator</string>
+    <string name="set_nav_default_sub" formatted="false">What the map panel opens when you tap \"Go\"; with CarPlay/Android Auto connected it also appears as a choice</string>
+    <string name="nav_default_mg" formatted="false">MG navigator</string>
+    <string name="nav_default_phone" formatted="false">CarPlay / Android Auto</string>
+    <string name="cb_unlock" formatted="false">Unlock socket</string>
+    <string name="cb_unlock_title" formatted="false">Unlock the charging socket?</string>
+    <string name="cb_unlock_msg" formatted="false">The command goes to the car as from the button on the Charge management page.</string>
+    <string name="cb_unlock_wait" formatted="false">The car hasn\'t sent the socket status yet: try again shortly.</string>
+    <string name="cb_unlock_locked" formatted="false">Locked</string>
+    <string name="cb_unlock_unlocked" formatted="false">Unlocked</string>
+    <string name="tile_defrost_front" formatted="false">Front defrost</string>
+    <string name="news_v100_1" formatted="false">The screen\'s Home button now always returns to the launcher, even from car Settings or another app</string>
+    <string name="news_v100_2" formatted="false">New \"Unlock socket\" button on the charging bar, with confirmation before sending it</string>
+    <string name="news_v100_3" formatted="false">New official climate icons (A/C, AUTO, recirculation, heated seats and steering wheel) with color and background by state, and a Front defrost tile</string>
+    <string name="news_v100_4" formatted="false">Reorganized settings, distance unit, configurable 360 button, personal logos folder and default navigator</string>
 </resources>

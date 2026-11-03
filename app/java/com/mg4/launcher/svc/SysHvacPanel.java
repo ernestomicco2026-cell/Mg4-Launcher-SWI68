@@ -80,6 +80,41 @@ public final class SysHvacPanel {
         }
     }
 
+    /**
+     * 1.0.0: openHvac() (codice 1), per le auto senza app clima ("mancano: hvac"): il tasto clima apre il pannello del
+     * sistema. True se il comando è partito; se il servizio non è ancora collegato lo collega e riprova una volta.
+     */
+    public static boolean open(Context c) {
+        IBinder b = page;
+        if (b == null) {
+            bind(c);
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                if (page != null) transactOpen(page);
+            }, 600);
+            return true;
+        }
+        return transactOpen(b);
+    }
+
+    private static boolean transactOpen(IBinder b) {
+        Parcel d = Parcel.obtain(), r = Parcel.obtain();
+        try {
+            String desc = b.getInterfaceDescriptor();
+            d.writeInterfaceToken(desc == null || desc.isEmpty() ? DESCRIPTOR : desc);
+            b.transact(OPEN_HVAC, d, r, 0);
+            r.readException();
+            Diag.put("clima.tasto", "pannello clima di sistema aperto");
+            return true;
+        } catch (Throwable e) {
+            page = null;
+            Diag.put("clima.tasto", "apertura del pannello di sistema non riuscita: " + e);
+            return false;
+        } finally {
+            d.recycle();
+            r.recycle();
+        }
+    }
+
     /** closeHvac(): true se il comando è partito. */
     public static boolean close(Context c) {
         IBinder b = page;

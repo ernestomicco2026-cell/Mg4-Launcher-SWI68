@@ -305,6 +305,31 @@ public final class Prefs {
         sp.edit().putInt("premiHomeSecondi", s).apply();
     }
 
+    // --- 1.0.0 ---
+
+    /** Unità delle distanze: "auto" (come il quadro), "km", "mi". */
+    public static final String DIST_AUTO = "auto", DIST_KM = "km", DIST_MI = "mi";
+
+    public String distUnit() {
+        String v = sp.getString("unitaDistanza", DIST_AUTO);
+        return DIST_KM.equals(v) || DIST_MI.equals(v) ? v : DIST_AUTO;
+    }
+
+    public void setDistUnit(String v) {
+        sp.edit().putString("unitaDistanza", v).apply();
+    }
+
+    /** Tasto 360 della barra: "" predefinito, "orig", "mg4", "app:<pacchetto>", "nascosto". */
+    public static final String CAM_ORIGINAL = "orig", CAM_MG4 = "mg4", CAM_APP = "app:", CAM_HIDDEN = "nascosto";
+
+    public String cam360() {
+        return sp.getString("tasto360", "");
+    }
+
+    public void setCam360(String v) {
+        sp.edit().putString("tasto360", v == null ? "" : v).apply();
+    }
+
     /** Ultima versione per cui è stato mostrato il popup "Novità". */
     public String newsShownFor() {
         return sp.getString("novitaVersione", "");

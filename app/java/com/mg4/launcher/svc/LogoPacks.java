@@ -149,7 +149,7 @@ public final class LogoPacks {
     // ---- paese automatico ------------------------------------------------------------------
     //
     // Il firmware MG usa regioni della lingua che non corrispondono al paese (auto italiane "it-CH", francesi "fr-BE"),
-    // quindi l'ordine è: fuso orario del sistema → lingua del launcher → regione della lingua di sistema.
+    // e il fuso orario non è affidabile: dalla 1.0.0 l'ordine è RDS/DAB → lingua e regione d'accordo → fuso → regione.
     // Le stazioni DAB (identificativo del servizio: paese RDS nei 4 bit alti, ECC se presente) confermano la scelta,
     // oppure la correggono quando il fuso non indica un paese dei pacchetti.
 
@@ -321,7 +321,7 @@ public final class LogoPacks {
         return a;
     }
 
-    /** Scelta: fuso → lingua del launcher → regione; RDS conferma, o corregge quando il fuso non indica il paese. */
+    /** Scelta (1.0.0): RDS/DAB → lingua e regione d'accordo → fuso → regione da sola (→ lingua → IT). */
     static AutoInfo resolve(String launcherLang, char digit, String exact, int services) {
         AutoInfo a = new AutoInfo();
         try {
@@ -350,41 +350,45 @@ public final class LogoPacks {
         a.rdsExact = exact;
         a.rdsServices = services;
 
-        if (known(a.tzCountry)) {
+        // 1.0.0: il fuso orario delle auto non è affidabile (auto italiane o spagnole con Europe/London o Europe/Paris).
+        // Ordine: 1) RDS/DAB  2) lingua e regione d'accordo (es. it + IT)  3) fuso  4) regione da sola.
+        // (La lingua da sola resta come ultima riserva prima del predefinito.)
+        // L'inglese (en-GB) è la lingua di partenza del firmware anche fuori dal Regno Unito (Australia, Germania,
+        // Francia nei log): "en + GB" non dice nulla sul paese e non conta come accordo.
+        String agree = known(a.langCountry) && a.langCountry.equals(a.regionCountry) && !"en".equals(a.lang)
+                ? a.langCountry : null;
+        if (digit != 0) {
+            List<String> cand = exact != null ? java.util.Collections.singletonList(exact) : rdsCandidates(digit);
+            String pick = null;
+            if (cand.size() == 1) pick = cand.get(0);
+            else {
+                // stessa cifra RDS per più paesi: decide l'altra fonte che RDS conferma, nello stesso ordine
+                for (String s : new String[]{agree, a.tzCountry, a.regionCountry, a.langCountry})
+                    if (s != null && cand.contains(s)) { pick = s; break; }
+            }
+            if (known(pick)) {
+                a.country = pick;
+                a.reason = "RDS";
+                a.rdsNote = exact != null ? "ECC esatto" : cand.size() == 1 ? "cifra RDS" : "cifra RDS confermata da un'altra fonte";
+                return a;
+            }
+            a.rdsNote = "RDS ambiguo (" + String.join("/", cand) + ")";
+        }
+        if (agree != null) {
+            a.country = agree;
+            a.reason = "lingua e regione";
+        } else if (known(a.tzCountry)) {
             a.country = a.tzCountry;
             a.reason = "fuso";
-        } else if (known(a.langCountry)) {
-            a.country = a.langCountry;
-            a.reason = "lingua";
         } else if (a.regionCountry != null) {
             a.country = a.regionCountry;
             a.reason = "regione";
+        } else if (known(a.langCountry)) {
+            a.country = a.langCountry;
+            a.reason = "lingua";
         } else {
             a.country = "IT";
             a.reason = "predefinito";
-        }
-        if (digit == 0) return a;
-
-        List<String> cand = exact != null ? java.util.Collections.singletonList(exact) : rdsCandidates(digit);
-        if (cand.contains(a.country) || rdsDigit(a.country) == digit && exact == null) {
-            a.rdsNote = "confermato da RDS";
-            return a;
-        }
-        if ("fuso".equals(a.reason)) {
-            // il fuso è un dato del paese: un RDS diverso di solito vuol dire che l'auto è all'estero
-            a.rdsNote = "RDS diverso (all'estero?), resta il fuso";
-            return a;
-        }
-        // fuso assente: si corregge con RDS, preferendo il paese di un'altra fonte che RDS conferma
-        String pick = null;
-        for (String s : new String[]{a.langCountry, a.regionCountry}) if (s != null && cand.contains(s)) { pick = s; break; }
-        if (pick == null && cand.size() == 1) pick = cand.get(0);
-        if (pick != null) {
-            a.rdsNote = "corretto da RDS (era " + a.country + ")";
-            a.country = pick;
-            a.reason = "RDS";
-        } else {
-            a.rdsNote = "RDS ambiguo, resta " + a.reason;
         }
         return a;
     }
@@ -585,7 +589,7 @@ public final class LogoPacks {
 
     private void check(boolean force) {
         if (busy) return;
-        if (!online()) {
+        if (!online() || (!force && !Offline.canTry())) {
             setStatus("offline");
             return;
         }
@@ -632,10 +636,17 @@ public final class LogoPacks {
             migrate083();
             setStatus("ok");
             nextTry = 0;
+            Offline.ok();
         } catch (Exception e) {
             nextTry = System.currentTimeMillis() + RETRY_MS;
-            Diag.error("loghi.download", e.toString());
-            setStatus("error");
+            if (Offline.failed("pacchetti loghi", e)) {
+                // 1.0.0: senza rete una riga sola (rete.offline), non un errore per tentativo
+                nextTry = Math.max(System.currentTimeMillis() + Offline.waitMs(), System.currentTimeMillis() + 60_000L);
+                setStatus("offline");
+            } else {
+                Diag.error("loghi.download", e.toString());
+                setStatus("error");
+            }
         } finally {
             busy = false;
             loadAll();

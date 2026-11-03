@@ -407,6 +407,10 @@ def main():
         sys.exit("voci senza 7 traduzioni: %s" % bad)
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from i18n_pl import PL
+    from i18n_new import NEW   # testi dalla 0.9.7 in poi, già con il polacco
+    for k, v in NEW.items():
+        S[k] = tuple(v[:BASE])
+        PL[k] = v[BASE]
     missing = [k for k in S if k not in PL]
     if missing:
         print("polacco: %d voci in inglese (%s)" % (len(missing), ", ".join(missing[:8])))

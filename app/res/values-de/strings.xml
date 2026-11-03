@@ -28,9 +28,9 @@
     <string name="log_upload_off" formatted="false">Log-Upload ausgeschaltet</string>
     <string name="log_upload_nokey" formatted="false">Log-Upload in dieser Version nicht verfügbar</string>
     <string name="sec_car" formatted="false">FAHRZEUG</string>
-    <string name="sec_car_sub" formatted="false">Farbe, Felgen, Dach</string>
+    <string name="sec_car_sub" formatted="false">Farbe, Felgen, Dach, Lenkradseite</string>
     <string name="sec_home" formatted="false">Startseite</string>
-    <string name="sec_home_sub" formatted="false">Batterie, Reifen, Temperaturen</string>
+    <string name="sec_home_sub" formatted="false">Datum, Batterie, Distanz, Reifen</string>
     <string name="sec_look" formatted="false">Darstellung</string>
     <string name="sec_look_sub" formatted="false">Design, Größe, Sprache</string>
     <string name="sec_drive" formatted="false">Fahren</string>
@@ -369,4 +369,37 @@
     <string name="news_v098_1" formatted="false">Dongle-Neustart: per Kabel verbundene Telefone (iPhone, Android Auto) werden nicht mehr zurückgesetzt, nur echte kabellose Dongles</string>
     <string name="news_v098_2" formatted="false">Geschwindigkeitsberechtigung automatisch erteilt und neue Sectigo/USERTrust-Stammzertifikate für Logos, Updates und Protokolle</string>
     <string name="news_v098_3" formatted="false">Android-Ersteinrichtung als Startbildschirm erkannt (nicht der MG-Startbildschirm); keine Protokolle von Telefonen und Emulatoren</string>
+    <string name="tap_to_open" formatted="false">Zum Öffnen tippen</string>
+    <string name="sec_bar" formatted="false">Leiste und Tasten</string>
+    <string name="sec_bar_sub" formatted="false">Leiste, gruppierte Tasten, 360-Taste</string>
+    <string name="sec_logos" formatted="false">Radio und Logos</string>
+    <string name="sec_logos_sub" formatted="false">Logo-Land, Pakete, persönlicher Ordner</string>
+    <string name="sec_launch" formatted="false">Start und Apps</string>
+    <string name="sec_launch_sub" formatted="false">Sicherer Start, andere Launcher, Dongle</string>
+    <string name="set_dist_unit" formatted="false">Distanzeinheit</string>
+    <string name="set_dist_unit_sub" formatted="false">Wie Reichweite und Distanzen angezeigt werden: automatisch (wie das Kombiinstrument), km oder Meilen</string>
+    <string name="set_cam360" formatted="false">Die 360-Taste öffnet</string>
+    <string name="set_cam360_sub" formatted="false">Was passiert, wenn man die 360-Kamera-Taste in der Leiste berührt</string>
+    <string name="cam360_original" formatted="false">Original 360</string>
+    <string name="cam360_mg4" formatted="false">MG4 360</string>
+    <string name="cam360_app" formatted="false">Andere App</string>
+    <string name="cam360_hidden" formatted="false">Ausgeblendet</string>
+    <string name="cam360_pick_app" formatted="false">Wähle die App</string>
+    <string name="set_logos_usb" formatted="false">Persönlicher Logo-Ordner</string>
+    <string name="set_logos_usb_sub" formatted="false">Lege MG4Launcher/loghi/&lt;Ländercode&gt;.zip auf einen USB-Stick: es installiert sich selbst, ohne Internet</string>
+    <string name="set_nav_default" formatted="false">Standard-Navigator</string>
+    <string name="set_nav_default_sub" formatted="false">Was das Kartenfeld beim Tippen auf „Los\" öffnet; bei verbundenem CarPlay/Android Auto erscheint es ebenfalls als Option</string>
+    <string name="nav_default_mg" formatted="false">MG-Navigator</string>
+    <string name="nav_default_phone" formatted="false">CarPlay / Android Auto</string>
+    <string name="cb_unlock" formatted="false">Steckdose entsperren</string>
+    <string name="cb_unlock_title" formatted="false">Ladesteckdose entsperren?</string>
+    <string name="cb_unlock_msg" formatted="false">Der Befehl geht an das Auto wie über die Taste der Seite Ladeverwaltung.</string>
+    <string name="cb_unlock_wait" formatted="false">Das Auto hat den Steckdosenstatus noch nicht gesendet: versuche es gleich noch einmal.</string>
+    <string name="cb_unlock_locked" formatted="false">Verriegelt</string>
+    <string name="cb_unlock_unlocked" formatted="false">Entriegelt</string>
+    <string name="tile_defrost_front" formatted="false">Frontscheibenheizung</string>
+    <string name="news_v100_1" formatted="false">Die Home-Taste des Bildschirms kehrt jetzt immer zum Launcher zurück, auch aus den Fahrzeugeinstellungen oder einer anderen App</string>
+    <string name="news_v100_2" formatted="false">Neue Taste \"Steckdose entsperren\" in der Ladeleiste, mit Bestätigung vor dem Senden</string>
+    <string name="news_v100_3" formatted="false">Neue offizielle Klima-Symbole (A/C, AUTO, Umluft, Sitz- und Lenkradheizung) mit Farbe und Hintergrund je Zustand, sowie die Frontscheibenheizung-Kachel</string>
+    <string name="news_v100_4" formatted="false">Neu organisierte Einstellungen, Distanzeinheit, konfigurierbare 360-Taste, persönlicher Logo-Ordner und Standard-Navigator</string>
 </resources>

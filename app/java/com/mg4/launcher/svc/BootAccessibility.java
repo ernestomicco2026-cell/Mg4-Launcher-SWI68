@@ -201,7 +201,12 @@ public final class BootAccessibility extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent e) {
         if (hvacPanel) SysHvacPanel.onEvent(this, e);   // 0.9.6: pannello clima di sistema sopra MG4 Clima
-        if (e == null || e.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || e.getPackageName() == null) return;
+        if (e == null || e.getPackageName() == null) return;
+        if (e.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
+            onSystemUiClick(e);
+            return;
+        }
+        if (e.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return;
         if (!started || !StartGuard.a11yConnected) return;   // firmware sbagliato o utente non ancora sbloccato
         String pkg = e.getPackageName().toString();
         StartGuard.onForeground(this, pkg);
@@ -209,6 +214,45 @@ public final class BootAccessibility extends AccessibilityService {
         if (getPackageName().equals(pkg) && StartGuard.windowOpen()) {
             h.postDelayed(() -> StartGuard.onForeground(this, StartGuard.topPackage(this)), 5200);
         }
+    }
+
+    // ---- tasto Home del dock di sistema (0.9.9... 1.0.0, punto 1) -------------------------------
+    //
+    // Verificato nella SystemUI SWI68 (com.android.systemui.saicmotor.dock.DockBar.bindHomeButton): la casetta
+    // del dock di sistema (visibile sopra qualunque app, anche dentro le impostazioni dell'auto) lancia un Intent
+    // con il componente esplicito com.saicmotor.hmi.launcher/.ui.MainActivity, cioè la home MG - non chiede "qual è
+    // la home predefinita". Con l'avvio sicuro quella home è disattivata, quindi il tocco non fa nulla. Non si può
+    // correggere la SystemUI (app di sistema), quindi si riconosce il tocco (testo della voce "Home" del dock,
+    // preso dalle risorse della SystemUI così vale in ogni lingua dell'auto) e, se dopo un attimo il launcher non è
+    // ancora comparso, si preme Home da soli con il servizio di accessibilità.
+    private static final String SYSTEMUI_PKG = "com.android.systemui";
+    private String dockHomeLabel;
+    private boolean dockHomeLabelTried;
+
+    private String dockHomeLabel() {
+        if (dockHomeLabelTried) return dockHomeLabel;
+        dockHomeLabelTried = true;
+        try {
+            android.content.res.Resources r = getPackageManager().getResourcesForApplication(SYSTEMUI_PKG);
+            int id = r.getIdentifier("dock_home_name", "string", SYSTEMUI_PKG);
+            if (id != 0) dockHomeLabel = r.getString(id);
+        } catch (Throwable ignored) {
+        }
+        return dockHomeLabel;
+    }
+
+    private void onSystemUiClick(AccessibilityEvent e) {
+        if (!started || !StartGuard.a11yConnected) return;
+        if (!SYSTEMUI_PKG.equals(e.getPackageName().toString())) return;
+        String label = dockHomeLabel();
+        if (label == null || e.getText() == null || e.getText().isEmpty() || !label.contentEquals(e.getText().get(0))) return;
+        if (getPackageName().equals(StartGuard.topPackage(this))) return;   // siamo già davanti, niente da fare
+        h.postDelayed(() -> {
+            if (getPackageName().equals(StartGuard.topPackage(this))) return;
+            boolean ok = performGlobalAction(GLOBAL_ACTION_HOME);
+            Diag.put("home.tastoTouch", "casetta del dock toccata, l'avvio diretto alla home MG non è arrivato · Home "
+                    + (ok ? "premuto" : "non riuscito"));
+        }, 400);
     }
 
     @Override

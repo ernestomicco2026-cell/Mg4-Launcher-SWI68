@@ -238,7 +238,7 @@ public final class StationLogos {
         File none = new File(dir, key + ".none");
         boolean recentMiss = none.exists() && System.currentTimeMillis() - none.lastModified() < RETRY_MS;
         String nm = clean(name);
-        if (!recentMiss && nm.length() >= 2 && !nm.matches("[0-9.,\\s]+( FM| MHz)?") && now >= offlineUntil && online() && pending.add(key)) {
+        if (!recentMiss && nm.length() >= 2 && !nm.matches("[0-9.,\\s]+( FM| MHz)?") && now >= offlineUntil && Offline.canTry() && online() && pending.add(key)) {
             bg.post(() -> lookup(key, nm));
         }
         return null;
@@ -304,11 +304,14 @@ public final class StationLogos {
             synchronized (this) {
                 pending.remove(key);
                 offlineUntil = SystemClock.uptimeMillis() + offlineStep;
-                Diag.put("loghi.rete", "non raggiungibile (" + e.getClass().getSimpleName() + "): pausa " + offlineStep / 60_000 + " min");
+                // 1.0.0: la pausa e la riga della diagnostica sono quelle comuni (rete.offline)
+                if (!Offline.failed("loghi stazioni", e))
+                    Diag.put("loghi.rete", "non raggiungibile (" + e.getClass().getSimpleName() + "): pausa " + offlineStep / 60_000 + " min");
                 offlineStep = Math.min(OFFLINE_MAX_MS, offlineStep * 2);
             }
             return;
         }
+        Offline.ok();
         synchronized (this) {
             offlineStep = OFFLINE_MIN_MS;
             pending.remove(key);

@@ -28,9 +28,9 @@
     <string name="log_upload_off" formatted="false">Envoi des journaux désactivé</string>
     <string name="log_upload_nokey" formatted="false">Envoi des journaux indisponible dans cette version</string>
     <string name="sec_car" formatted="false">VOITURE</string>
-    <string name="sec_car_sub" formatted="false">Couleur, jantes, toit</string>
+    <string name="sec_car_sub" formatted="false">Couleur, jantes, toit, côté de conduite</string>
     <string name="sec_home" formatted="false">Accueil</string>
-    <string name="sec_home_sub" formatted="false">Batterie, pneus, températures</string>
+    <string name="sec_home_sub" formatted="false">Date, batterie, distance, pneus</string>
     <string name="sec_look" formatted="false">Apparence</string>
     <string name="sec_look_sub" formatted="false">Thème, taille, langue</string>
     <string name="sec_drive" formatted="false">Conduite</string>
@@ -369,4 +369,37 @@
     <string name="news_v098_1" formatted="false">Redémarrage du dongle : les téléphones branchés par câble (iPhone, Android Auto) ne sont plus réinitialisés, seulement les vrais dongles sans fil</string>
     <string name="news_v098_2" formatted="false">Autorisation de vitesse accordée automatiquement et nouveaux certificats racine Sectigo/USERTrust pour logos, mises à jour et journaux</string>
     <string name="news_v098_3" formatted="false">Configuration initiale d\'Android reconnue comme accueil (ce n\'est pas l\'accueil MG) ; aucun journal depuis les téléphones et émulateurs</string>
+    <string name="tap_to_open" formatted="false">Touchez pour ouvrir</string>
+    <string name="sec_bar" formatted="false">Barre et boutons</string>
+    <string name="sec_bar_sub" formatted="false">Barre, boutons groupés, bouton 360</string>
+    <string name="sec_logos" formatted="false">Radio et logos</string>
+    <string name="sec_logos_sub" formatted="false">Pays des logos, paquets, dossier personnel</string>
+    <string name="sec_launch" formatted="false">Démarrage et applis</string>
+    <string name="sec_launch_sub" formatted="false">Démarrage sécurisé, autres launchers, dongle</string>
+    <string name="set_dist_unit" formatted="false">Unité de distance</string>
+    <string name="set_dist_unit_sub" formatted="false">Comment afficher l\'autonomie et les distances : automatique (comme le combiné), km ou miles</string>
+    <string name="set_cam360" formatted="false">Le bouton 360 ouvre</string>
+    <string name="set_cam360_sub" formatted="false">Ce qui se passe en touchant le bouton caméra 360 dans la barre</string>
+    <string name="cam360_original" formatted="false">360 d\'origine</string>
+    <string name="cam360_mg4" formatted="false">MG4 360</string>
+    <string name="cam360_app" formatted="false">Une autre application</string>
+    <string name="cam360_hidden" formatted="false">Masqué</string>
+    <string name="cam360_pick_app" formatted="false">Choisis l\'application</string>
+    <string name="set_logos_usb" formatted="false">Dossier de logos personnels</string>
+    <string name="set_logos_usb_sub" formatted="false">Mets MG4Launcher/loghi/&lt;code pays&gt;.zip sur une clé USB : il s\'installe seul, sans internet</string>
+    <string name="set_nav_default" formatted="false">Navigateur par défaut</string>
+    <string name="set_nav_default_sub" formatted="false">Ce que le panneau carte ouvre en touchant « Aller » ; avec CarPlay/Android Auto connecté, il apparaît aussi comme choix</string>
+    <string name="nav_default_mg" formatted="false">Navigateur MG</string>
+    <string name="nav_default_phone" formatted="false">CarPlay / Android Auto</string>
+    <string name="cb_unlock" formatted="false">Déverrouiller la prise</string>
+    <string name="cb_unlock_title" formatted="false">Déverrouiller la prise de recharge ?</string>
+    <string name="cb_unlock_msg" formatted="false">La commande est envoyée à la voiture comme depuis le bouton de la page Gestion de la recharge.</string>
+    <string name="cb_unlock_wait" formatted="false">La voiture n\'a pas encore envoyé l\'état de la prise : réessaie dans un instant.</string>
+    <string name="cb_unlock_locked" formatted="false">Verrouillée</string>
+    <string name="cb_unlock_unlocked" formatted="false">Déverrouillée</string>
+    <string name="tile_defrost_front" formatted="false">Désembuage avant</string>
+    <string name="news_v100_1" formatted="false">Le bouton Accueil de l\'écran revient toujours au launcher, même depuis les réglages de la voiture ou une autre appli</string>
+    <string name="news_v100_2" formatted="false">Nouveau bouton « Déverrouiller la prise » dans la barre de recharge, avec confirmation avant envoi</string>
+    <string name="news_v100_3" formatted="false">Nouvelles icônes officielles du climat (A/C, AUTO, recyclage, sièges et volant chauffants) avec couleur et fond selon l\'état, et le panneau Désembuage avant</string>
+    <string name="news_v100_4" formatted="false">Réglages réorganisés, unité de distance, bouton 360 configurable, dossier de logos personnels et navigateur par défaut</string>
 </resources>

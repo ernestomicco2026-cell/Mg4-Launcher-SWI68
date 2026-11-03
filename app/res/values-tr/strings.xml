@@ -28,9 +28,9 @@
     <string name="log_upload_off" formatted="false">Günlük gönderimi kapalı</string>
     <string name="log_upload_nokey" formatted="false">Bu sürümde günlük gönderimi yok</string>
     <string name="sec_car" formatted="false">ARAÇ</string>
-    <string name="sec_car_sub" formatted="false">Renk, jantlar, tavan</string>
+    <string name="sec_car_sub" formatted="false">Renk, jantlar, tavan, sürüş yönü</string>
     <string name="sec_home" formatted="false">Ana ekran</string>
-    <string name="sec_home_sub" formatted="false">Batarya, lastikler, sıcaklıklar</string>
+    <string name="sec_home_sub" formatted="false">Tarih, batarya, mesafe, lastikler</string>
     <string name="sec_look" formatted="false">Görünüm</string>
     <string name="sec_look_sub" formatted="false">Tema, boyut, dil</string>
     <string name="sec_drive" formatted="false">Sürüş</string>
@@ -369,4 +369,37 @@
     <string name="news_v098_1" formatted="false">Dongle yeniden başlatma: kabloyla bağlı telefonlar (iPhone, Android Auto) artık sıfırlanmaz, yalnızca gerçek kablosuz dongle\'lar</string>
     <string name="news_v098_2" formatted="false">Hız izni otomatik olarak verilir; logolar, güncellemeler ve günlükler için yeni Sectigo/USERTrust kök sertifikaları</string>
     <string name="news_v098_3" formatted="false">Android ilk kurulumu ana ekran olarak tanınır (MG ana ekranı değildir); telefonlardan ve emülatörlerden günlük gönderilmez</string>
+    <string name="tap_to_open" formatted="false">Açmak için dokun</string>
+    <string name="sec_bar" formatted="false">Çubuk ve düğmeler</string>
+    <string name="sec_bar_sub" formatted="false">Çubuk, gruplu düğmeler, 360 düğmesi</string>
+    <string name="sec_logos" formatted="false">Radyo ve logolar</string>
+    <string name="sec_logos_sub" formatted="false">Logo ülkesi, paketler, kişisel klasör</string>
+    <string name="sec_launch" formatted="false">Başlangıç ve uygulamalar</string>
+    <string name="sec_launch_sub" formatted="false">Güvenli başlangıç, diğer launcher\'lar, dongle</string>
+    <string name="set_dist_unit" formatted="false">Mesafe birimi</string>
+    <string name="set_dist_unit_sub" formatted="false">Menzil ve mesafelerin nasıl gösterileceği: otomatik (gösterge paneli gibi), km veya mil</string>
+    <string name="set_cam360" formatted="false">360 düğmesi şunu açar</string>
+    <string name="set_cam360_sub" formatted="false">Çubuktaki 360 kamera düğmesine dokunulduğunda ne olur</string>
+    <string name="cam360_original" formatted="false">Orijinal 360</string>
+    <string name="cam360_mg4" formatted="false">MG4 360</string>
+    <string name="cam360_app" formatted="false">Başka bir uygulama</string>
+    <string name="cam360_hidden" formatted="false">Gizli</string>
+    <string name="cam360_pick_app" formatted="false">Uygulamayı seç</string>
+    <string name="set_logos_usb" formatted="false">Kişisel logo klasörü</string>
+    <string name="set_logos_usb_sub" formatted="false">MG4Launcher/loghi/&lt;ülke kodu&gt;.zip dosyasını bir USB belleğe koy: internet olmadan kendiliğinden kurulur</string>
+    <string name="set_nav_default" formatted="false">Varsayılan navigasyon</string>
+    <string name="set_nav_default_sub" formatted="false">\"Git\"e dokunduğunda harita paneli neyi açar; CarPlay/Android Auto bağlıyken bir seçenek olarak da görünür</string>
+    <string name="nav_default_mg" formatted="false">MG navigasyon</string>
+    <string name="nav_default_phone" formatted="false">CarPlay / Android Auto</string>
+    <string name="cb_unlock" formatted="false">Soketi kilidini aç</string>
+    <string name="cb_unlock_title" formatted="false">Şarj soketinin kilidi açılsın mı?</string>
+    <string name="cb_unlock_msg" formatted="false">Komut, Şarj yönetimi sayfasındaki düğme gibi araca gönderilir.</string>
+    <string name="cb_unlock_wait" formatted="false">Araç henüz soket durumunu göndermedi: kısa süre sonra tekrar dene.</string>
+    <string name="cb_unlock_locked" formatted="false">Kilitli</string>
+    <string name="cb_unlock_unlocked" formatted="false">Kilidi açık</string>
+    <string name="tile_defrost_front" formatted="false">Ön buğu giderme</string>
+    <string name="news_v100_1" formatted="false">Ekrandaki Ana Sayfa düğmesi artık her zaman başlatıcıya döner, araç Ayarlarından veya başka bir uygulamadan bile</string>
+    <string name="news_v100_2" formatted="false">Şarj çubuğunda yeni \"Soketi kilidini aç\" düğmesi, göndermeden önce onay ister</string>
+    <string name="news_v100_3" formatted="false">Klima için yeni resmi simgeler (A/C, AUTO, resirkülasyon, koltuk ve direksiyon ısıtma), duruma göre renk ve arka planla, ve Ön buğu giderme kutusu</string>
+    <string name="news_v100_4" formatted="false">Yeniden düzenlenmiş ayarlar, mesafe birimi, yapılandırılabilir 360 düğmesi, kişisel logo klasörü ve varsayılan navigasyon</string>
 </resources>

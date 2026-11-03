@@ -36,6 +36,9 @@ public final class VehicleClient {
     private static final int CHG_GET_CURRENT_LIMIT = 11, CHG_SET_CURRENT_LIMIT = 12;   // 1..4 = 6 A, 8 A, 16 A, Max (0 = non disponibile)
     private static final int CHG_SET_LIMIT_SOC = 14;                                    // 1..7 = 40..100 %
     private static final int CHG_GET_CONTROL = 17, CHG_SET_CONTROL = 18;                // 1 avvia, 2 ferma, 3 in preparazione
+    // 1.0.0 (punto 6): blocco/sblocco della presa di ricarica, verificato nell'app originale (vehiclesettings
+    // eh32_eu_P): ChargeManagementViewModel.chargingLockButtonClick → setChargingLockSwitch(1 blocca / 2 sblocca).
+    private static final int CHG_GET_LOCK = 15, CHG_SET_LOCK = 16;                      // 1 bloccata, 2 sbloccata, 0 non letta
     private static final int CHG_PREDICT_DISCHARGE_TIME = 41;                           // minuti di scarica rimasti (V2L)
     private static final int CHG_DISCHARGE_LIMIT = 43;                                  // limite di scarica: (codice + 1) × 10 %
     private static final int CHG_GET_DISCHARGE_CONTROL = 46, CHG_SET_DISCHARGE_CONTROL = 47;   // 1 avvia, 2 ferma, 3 in preparazione
@@ -107,6 +110,7 @@ public final class VehicleClient {
         public boolean bmsAvailable;
         public int distUnit = -1;         // 0 km, 1 miglia (dal quadro)
         public int dischargeStatus = -1;
+        public int chargeLock = -1;       // 1.0.0 (punto 6): 1 bloccata, 2 sbloccata, 0/-1 non letta
         public int loopMode = -1;         // ricircolo: 0 interno, 1 esterno, 2 auto, -1 non supportato
         public int acTemp = -1;           // °C, 17 = LO, 33 = HI
         public int hvacPower = -1;
@@ -263,8 +267,9 @@ public final class VehicleClient {
                         if (isDischarging(s.chargingStatus)) s.dischargeMinutes = Rpc.callInt(c, CHG, CHG_PREDICT_DISCHARGE_TIME);
                         if (distUnit < 0) distUnit = Rpc.callInt(c, CHG, CHG_DIST_UNIT);
                         s.distUnit = distUnit;
+                        s.chargeLock = Rpc.callInt(c, CHG, CHG_GET_LOCK);
                         Diag.put("ricarica.comandi", "corrente " + cur + " · avvia/ferma " + s.chargeControl + " · V2L " + s.dischargeControl
-                                + " · limite V2L " + dl + " · unità quadro " + distUnit);
+                                + " · limite V2L " + dl + " · unità quadro " + distUnit + " · blocco presa " + s.chargeLock);
                     } catch (Exception e) {
                         Diag.error("ricarica.comandi", e.toString());
                     }
@@ -886,6 +891,27 @@ public final class VehicleClient {
                 Diag.put("ricarica.ultimoComando", what + " · inviato");
             } catch (Exception e) {
                 Diag.error(what, e.toString());
+            }
+            poll();
+        });
+    }
+
+    /**
+     * 1.0.0 (punto 6): sblocca la presa di ricarica. Stesso comando del pulsante dell'app originale
+     * (setChargingLockSwitch(2)); l'app originale lo abilita solo quando ha già letto un valore valido
+     * dall'auto (stato ≠ 0): facciamo lo stesso, il resto lo decide il veicolo.
+     */
+    public void unlockChargingSocket() {
+        if (bg == null) return;
+        hold(CHG_GET_LOCK, 2);
+        bg.post(() -> {
+            try {
+                IBinder c = sub("vehiclecharging");
+                if (c == null) throw new RemoteException("servizio ricarica non collegato");
+                Rpc.call(c, CHG, CHG_SET_LOCK, p -> p.writeInt(2));
+                Diag.put("ricarica.sbloccaPresa", "inviato alle " + new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.ROOT).format(new java.util.Date()));
+            } catch (Exception e) {
+                Diag.error("ricarica.sbloccaPresa", e.toString());
             }
             poll();
         });

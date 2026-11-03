@@ -148,15 +148,24 @@ public final class LogUploader {
         }
         if (data.length > MAX_BYTES) data = Arrays.copyOfRange(data, data.length - MAX_BYTES, data.length);
         String path = FOLDER + "/" + installId() + "/" + day + "/" + time + ".txt";
+        if (!Offline.canTry()) {
+            // 1.0.0: senza rete il log va in coda senza tentare (pausa comune crescente, vedi rete.offline)
+            status = "offline";
+            Diag.put("log.invio", "offline: in coda");
+            enqueue(path, data);
+            return;
+        }
         try {
             put(path, data);
+            Offline.ok();
             String hhmm = new SimpleDateFormat("HH:mm", Locale.ROOT).format(new Date());
             status = "ok " + hhmm;
             Diag.put("log.invio", "inviato alle " + hhmm + " → " + path);
             flushQueue();
         } catch (Exception e) {
             status = "errore " + e.getMessage();
-            Diag.put("log.invio", "non riuscito (" + Diag.netError(e) + "), in coda");
+            if (Offline.failed("log", e)) Diag.put("log.invio", "offline: in coda");
+            else Diag.put("log.invio", "non riuscito (" + Diag.netError(e) + "), in coda");
             enqueue(path, data);
         }
     }

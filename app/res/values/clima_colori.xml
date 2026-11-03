@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MG4 Clima 1.4.0 · colori dei pulsanti del clima, tema GIORNO (values-night = tema notte). Le icone sono bianche:
+     il colore si dà con il tint (setColorFilter SRC_IN / setTint). -->
+<resources>
+    <color name="clima_acceso">#FF0B6BCB</color>              <!-- icona + bordo, stato acceso -->
+    <color name="clima_acceso_sfondo">#FFDCEBFA</color>       <!-- sfondo del pulsante acceso -->
+    <color name="clima_spento">#FF555C66</color>              <!-- icona e scritta, stato spento -->
+    <color name="clima_spento_sfondo">#FFF1F3F5</color>       <!-- sfondo del pulsante spento / non disponibile -->
+    <color name="clima_non_disponibile">#66555C66</color>     <!-- icona e scritta, non disponibile (spento al 40%) -->
+    <color name="clima_caldo">#FFE1621F</color>               <!-- riscaldamenti accesi: icona + bordo -->
+    <color name="clima_caldo_sfondo">#FFFFF1EA</color>
+    <color name="clima_scritta_accesa">#FF111318</color>      <!-- scritta sotto l'icona, stato acceso (grassetto) -->
+</resources>

@@ -59,14 +59,14 @@ public final class HomeView extends LinearLayout {
 
     // pannello auto
     private TextView clockTv, dateTv;
-    private TextView acBtn, autoBtn;
+    private FrameLayout acBtn, autoBtn;
     private FrameLayout frontFogBtn, rearFogBtn, recircBtn;
     private TextView rangeTv, rangeUnitTv, socTv, statusTv;
     private ImageView statusIcon;
     // pulsanti di ricarica (opzione)
     private LinearLayout chargeRow;
-    private View limitBtn, currentBtn, startBtn;
-    private TextView limitVal, currentVal, startLabel, startVal;
+    private View limitBtn, currentBtn, startBtn, unlockBtn;
+    private TextView limitVal, currentVal, startLabel, startVal, unlockVal;
     private VehicleClient.State lastVehicle = new VehicleClient.State();
     private Bars.Progress battery;
     private CarView car;
@@ -298,9 +298,12 @@ public final class HomeView extends LinearLayout {
             limitVal = (TextView) ((ViewGroup) limitBtn).getChildAt(1);
             currentBtn = chargeButton(c, chargeRow, L.s(R.string.cb_current), true, v -> pickCurrent());
             currentVal = (TextView) ((ViewGroup) currentBtn).getChildAt(1);
-            startBtn = chargeButton(c, chargeRow, L.s(R.string.cb_charge), false, v -> startStop());
+            startBtn = chargeButton(c, chargeRow, L.s(R.string.cb_charge), true, v -> startStop());
             startLabel = (TextView) ((ViewGroup) startBtn).getChildAt(0);
             startVal = (TextView) ((ViewGroup) startBtn).getChildAt(1);
+            // 1.0.0 (punto 6): sblocca presa - sempre visibile, non è un interruttore del clima
+            unlockBtn = chargeButton(c, chargeRow, L.s(R.string.cb_unlock), false, v -> unlockSocket());
+            unlockVal = (TextView) ((ViewGroup) unlockBtn).getChildAt(1);
             p.addView(chargeRow, new LayoutParams(-1, -2));
             styleChargeButtons(new VehicleClient.State());
         }
@@ -357,6 +360,19 @@ public final class HomeView extends LinearLayout {
         startBtn.setBackground(Ui.pressable(getContext(), can && running ? t.text : t.chip, 14, t));
         startLabel.setTextColor(can && running ? t.panel : t.sub);
         startVal.setTextColor(can && running ? t.panel : t.text);
+        // 1.0.0 (punto 6): sblocca presa - sempre cliccabile (spiega il motivo se non si può), mai disattivato
+        unlockVal.setText(s.chargeLock == 1 ? L.s(R.string.cb_unlock_locked) : s.chargeLock == 2 ? L.s(R.string.cb_unlock_unlocked) : "—");
+    }
+
+    /** 1.0.0 (punto 6): sblocca la presa di ricarica, con conferma; spiega il motivo se lo stato non è ancora noto. */
+    private void unlockSocket() {
+        VehicleClient.State s = lastVehicle;
+        if (s == null || !s.connected || s.chargeLock <= 0) {
+            Confirm.notice(host.overlay(), t, L.s(R.string.cb_unlock_title), "", new String[]{L.s(R.string.cb_unlock_wait)}, L.s(R.string.btn_ok), null);
+            return;
+        }
+        Confirm.show(host.overlay(), t, L.s(R.string.cb_unlock_title), L.s(R.string.cb_unlock_msg),
+                L.s(R.string.btn_cancel), L.s(R.string.cb_unlock), () -> vehicle.unlockChargingSocket());
     }
 
     private void pickLimit() {
@@ -411,8 +427,10 @@ public final class HomeView extends LinearLayout {
             return;
         }
         lastVehicle = s;
-        String km = s.rangeKm > 0 && s.rangeKm < 2000 ? String.valueOf(s.rangeKm) : "—";
-        String unit = s.distUnit == 1 ? "mi" : "km";
+        // 1.0.0: l'autonomia arriva sempre in km; in miglia si converte (prima cambiava solo la scritta)
+        boolean mi = Units.miles(prefs, s.distUnit);
+        String km = s.rangeKm > 0 && s.rangeKm < 2000 ? String.valueOf(Units.range(s.rangeKm, mi)) : "—";
+        String unit = mi ? "mi" : "km";
         boolean socOk = s.soc >= 0 && s.soc <= 100;
         String soc = prefs.socDecimals() ? String.format(L.locale(), "%.1f", s.soc) : String.valueOf(Math.round(s.soc));
         if (prefs.socBig()) {
@@ -454,15 +472,15 @@ public final class HomeView extends LinearLayout {
         }
         fanMin = s.fanMin;
         fanMax = s.fanMax;
-        styleToggle(acBtn, s.acOn);
-        styleToggle(autoBtn, s.autoOn);
+        styleClima(acBtn, s.acOn < 0 ? 3 : s.acOn == 1 ? 1 : 0);
+        styleClima(autoBtn, s.autoOn < 0 ? 3 : s.autoOn == 1 ? 1 : 0);
         styleHeat(seatLeftBtn, s.seatLeft);
         styleHeat(seatRightBtn, s.seatRight);
-        styleToggle(wheelBtn, s.wheelHeat, 0xFFFF7A3D);
+        styleClima(wheelBtn, s.wheelHeat < 0 ? 3 : s.wheelHeat > 0 ? 2 : 0);
         frontFogBtn.setVisibility(s.hasFrontFog ? VISIBLE : GONE);
         // ricircolo: si nasconde se l'auto non lo supporta (lettura -1)
         recircBtn.setVisibility(s.loopMode >= 0 ? VISIBLE : GONE);
-        styleToggle(recircBtn, s.loopMode < 0 ? -1 : s.loopMode == 0 ? 1 : 0);
+        styleClima(recircBtn, s.loopMode < 0 ? 3 : ClimaIcone.ricircoloAcceso(s.loopMode) ? 1 : 0);
         setRecircIcon(s.loopMode);
         styleToggle(frontFogBtn, s.frontFog, 0xFF34C77B);
         styleToggle(rearFogBtn, s.rearFog, 0xFFFFB020);
@@ -842,9 +860,9 @@ public final class HomeView extends LinearLayout {
         wasNavigating = guiding;
     }
 
-    private static String km(int meters) {
-        if (meters < 1000) return meters + " m";
-        return String.format(L.locale(), meters < 10000 ? "%.1f km" : "%.0f km", meters / 1000f);
+    /** Distanza del navigatore nell'unità mostrata (1.0.0: anche in miglia). */
+    private String km(int meters) {
+        return Units.distance(meters, Units.miles(prefs, lastVehicle.distUnit));
     }
 
     // ---- media -------------------------------------------------------------------------------
@@ -1329,14 +1347,15 @@ public final class HomeView extends LinearLayout {
         phoneSub = Ui.text(c, "", 20, t.sub, Ui.REGULAR);
         phoneSub.setGravity(Gravity.CENTER);
         col.addView(phoneSub, Ui.margins(new LayoutParams(-2, -2), 0, dp(12), 0, 0));
-        TextView open = Ui.text(c, L.s(R.string.open), ts(20), t.onAccent, Ui.MEDIUM);
+        // 1.0.0 (issue #17): pulsante molto più grande ("Tocca per aprire") e tutta la scheda toccabile, per la guida
+        TextView open = Ui.text(c, L.s(R.string.tap_to_open), ts(26), t.onAccent, Ui.MEDIUM);
         open.setGravity(Gravity.CENTER);
-        open.setPadding(tp(40), 0, tp(40), 0);
-        open.setMinHeight(tp(60));
-        open.setBackground(Ui.pressable(c, t.accent, 30 * Ui.K, t));
+        open.setPadding(tp(56), 0, tp(56), 0);
+        open.setMinWidth(dp(420));
+        open.setBackground(Ui.pressable(c, t.accent, 46 * Ui.K, t));
         open.setClickable(true);
         open.setOnClickListener(v -> media.openProjection());
-        col.addView(open, Ui.margins(new LayoutParams(-2, tp(60)), 0, dp(26), 0, 0));
+        col.addView(open, Ui.margins(new LayoutParams(-2, tp(92)), 0, dp(26), 0, 0));
 
         // navigazione di CarPlay / Android Auto in corso: prossima manovra
         phoneNav = Ui.row(c);
@@ -1361,6 +1380,13 @@ public final class HomeView extends LinearLayout {
         FrameLayout f = new FrameLayout(c);
         f.addView(col, new FrameLayout.LayoutParams(-1, -1));
         f.addView(shortcutHint(c, L.s(R.string.phone_shortcut_hint)), hintLp());
+        // tutta la scheda apre CarPlay / Android Auto (la riga della navigazione resta col suo comando)
+        f.setClickable(true);
+        f.setForeground(new android.graphics.drawable.RippleDrawable(
+                android.content.res.ColorStateList.valueOf(t.day ? 0x22000000 : 0x33FFFFFF), null,
+                Ui.round(0xFFFFFFFF, dp(24))));
+        f.setContentDescription(L.s(R.string.tap_to_open));
+        f.setOnClickListener(v -> media.openProjection());
         return f;
     }
 
@@ -1422,7 +1448,7 @@ public final class HomeView extends LinearLayout {
         fanGroup.addView(barIcon(c, R.drawable.ic_chev_left, t.text, 0, arrow, arrowIcon, rad, L.s(R.string.fan_down), v -> changeFan(-1)));
         LinearLayout fanBox = Ui.row(c);
         fanBox.setGravity(Gravity.CENTER);
-        ImageView fanIc = Ui.icon(c, R.drawable.ic_fan, t.accent, 30);
+        ImageView fanIc = Ui.icon(c, R.drawable.clima_ventola, t.accent, 30);
         fanBox.addView(fanIc, new LayoutParams(bs(30, 40), bs(30, 40)));
         fanTv = Ui.text(c, "—", bt(34, 46), t.text, Ui.REGULAR);
         fanTv.setGravity(Gravity.CENTER);
@@ -1431,7 +1457,17 @@ public final class HomeView extends LinearLayout {
         fanBox.setClickable(true);
         fanBox.setContentDescription(L.s(R.string.climate));
         fanBox.setBackground(Ui.pressable(c, 0, 16, t));
-        fanBox.setOnClickListener(v -> host.launch("com.saicmotor.hmi.hvac", "com.saicmotor.hmi.hvac.HvacActivity"));
+        // 1.0.0: app Clima (o MG4 Clima); se l'auto non ha l'app clima, il pannello clima di sistema; altrimenti spento
+        boolean hvacApp = host.canLaunch("com.saicmotor.hmi.hvac", "com.saicmotor.hmi.hvac.HvacActivity");
+        boolean sysPanel = !hvacApp && com.mg4.launcher.svc.SysHvacPanel.supported(c);
+        com.mg4.launcher.svc.Diag.put("clima.tastoApre", hvacApp ? "app Clima (o MG4 Clima se installata)"
+                : sysPanel ? "pannello clima di sistema (app clima assente)" : "niente: app clima e pannello assenti, tasto spento");
+        if (hvacApp) fanBox.setOnClickListener(v -> host.launch("com.saicmotor.hmi.hvac", "com.saicmotor.hmi.hvac.HvacActivity"));
+        else if (sysPanel) fanBox.setOnClickListener(v -> com.mg4.launcher.svc.SysHvacPanel.open(getContext()));
+        else {
+            fanBox.setClickable(false);
+            fanIc.setAlpha(0.35f);
+        }
         fanBox.setOnLongClickListener(v -> {
             vehicle.setHvacPower(vehicle.last().hvacPower != 1);
             return true;
@@ -1441,13 +1477,14 @@ public final class HomeView extends LinearLayout {
         bar.addView(fanGroup, Ui.margins(new LayoutParams(-2, btn), dp(10), 0, 0, 0));
 
         // A/C, AUTO e ricircolo (lo sbrinamento ha il tasto fisico); riscaldamento: sedile sinistro, volante, sedile destro
-        acBtn = toggleText(c, "A/C", L.s(R.string.ac_desc), v -> vehicle.toggleAc());
-        autoBtn = toggleText(c, "AUTO", L.s(R.string.auto_desc), v -> vehicle.toggleAuto());
-        recircBtn = toggleIcon(c, R.drawable.ic_recirc, L.s(R.string.recirc_desc), v -> vehicle.toggleRecirc());
+        // 1.0.0 (punto 10): icone ufficiali MG4 Clima 1.4.0, colore+sfondo secondo lo stato (non solo il testo)
+        acBtn = climaBtn(c, R.drawable.clima_ac, bs(44, 64), L.s(R.string.ac_desc), v -> vehicle.toggleAc());
+        autoBtn = climaBtn(c, R.drawable.clima_auto, bs(44, 64), L.s(R.string.auto_desc), v -> vehicle.toggleAuto());
+        recircBtn = climaBtn(c, R.drawable.clima_ricircolo_interno, bs(32, BIG_ICON), L.s(R.string.recirc_desc), v -> vehicle.toggleRecirc());
         recircBtn.setVisibility(GONE);   // compare quando l'auto dice di supportarlo
-        seatLeftBtn = heatButton(c, R.drawable.ic_seat_heat, false, L.s(R.string.seat_left), v -> vehicle.pressSeatLeft());
-        wheelBtn = toggleIcon(c, R.drawable.ic_wheel_heat, L.s(R.string.wheel_heat), v -> vehicle.toggleWheelHeat());
-        seatRightBtn = heatButton(c, R.drawable.ic_seat_heat, true, L.s(R.string.seat_right), v -> vehicle.pressSeatRight());
+        seatLeftBtn = heatButton(c, R.drawable.clima_sedile_riscaldato, false, L.s(R.string.seat_left), v -> vehicle.pressSeatLeft());
+        wheelBtn = climaBtn(c, R.drawable.clima_volante_riscaldato, bs(32, BIG_ICON), L.s(R.string.wheel_heat), v -> vehicle.toggleWheelHeat());
+        seatRightBtn = heatButton(c, R.drawable.clima_sedile_riscaldato, true, L.s(R.string.seat_right), v -> vehicle.pressSeatRight());
         grouped = prefs.groupedButtons();
         if (grouped) {
             // un pulsante per gruppo: il tocco apre il riquadro sopra la barra, la pressione lunga fa il comando principale
@@ -1525,7 +1562,10 @@ public final class HomeView extends LinearLayout {
         bar.addView(projBtn);
         bar.addView(shortcut(c, R.drawable.ic_phone, L.s(R.string.app_phone), "com.saicmotor.hmi.btcall", "com.saicmotor.hmi.btcall.BtCallActivity"));
         if (!big) bar.addView(shortcut(c, R.drawable.ic_radio, L.s(R.string.src_radio), "com.saicmotor.hmi.radio", "com.saicmotor.hmi.radio.app.RadioHomeActivity"));
-        bar.addView(shortcut(c, 0, L.s(R.string.app_camera), "com.saicmotor.hmi.aroundview", "com.saicmotor.hmi.aroundview.AVMActivity"));
+        // 1.0.0: il tasto 360 apre la 360 originale, MG4 360, un'altra app scelta, oppure è nascosto
+        Cam360.Target cam = Cam360.resolve(c, prefs);
+        if (cam.kind != Cam360.HIDDEN)
+            bar.addView(shortcut(c, R.drawable.ic_cam360, cam.label.isEmpty() ? L.s(R.string.app_camera) : cam.label, cam.pkg, cam.cls));
         if (!big) bar.addView(shortcut(c, R.drawable.ic_gear, L.s(R.string.app_settings), "com.saicmotor.hmi.systemsettings", "com.saicmotor.hmi.systemsettings.SettingsActivity"));
         // le app si aprono scorrendo la home verso sinistra: niente pulsante dedicato
         if (rhd) mirrorRow(bar);
@@ -1624,28 +1664,24 @@ public final class HomeView extends LinearLayout {
         return f;
     }
 
-    /** Livello 0..3: tacche arancioni accese, icona arancione se acceso; -1 = non disponibile (attenuato). */
+    /** Livello 0..3 (sedili riscaldati): tacche e icona colorate come "caldo" (MG4 Clima 1.4.0) se accese. */
     private void styleHeat(FrameLayout f, int level) {
         Integer prev = (Integer) f.getTag();
         if (prev != null && prev == level) return;
         f.setTag(level);
-        f.setAlpha(level < 0 ? 0.45f : 1f);
-        f.setBackground(Ui.pressable(getContext(), t.chip, big ? 24 : 20 * Ui.K, t));
-        int heat = 0xFFFF7A3D;
-        ((ImageView) f.getChildAt(0)).setColorFilter(level > 0 ? heat : t.text);
+        f.setAlpha(1f);
+        int state = level < 0 ? 3 : level > 0 ? 2 : 0;
+        int fg = climaFg(state);
+        float rad = big ? 24 : 20 * Ui.K;
+        android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
+        g.setColor(climaBg(state));
+        g.setCornerRadius(dp(rad));
+        if (state == 2) g.setStroke(dp(big ? 3 : 2), fg);
+        f.setBackground(new android.graphics.drawable.RippleDrawable(
+                android.content.res.ColorStateList.valueOf(t.day ? 0x22000000 : 0x33FFFFFF), g, null));
+        ((ImageView) f.getChildAt(0)).setColorFilter(fg, android.graphics.PorterDuff.Mode.SRC_IN);
         LinearLayout dots = (LinearLayout) f.getChildAt(1);
-        for (int i = 0; i < 3; i++) dots.getChildAt(i).setBackground(Ui.round(i < level ? heat : t.track, dp(3)));
-    }
-
-    /** Pulsante a commutazione con testo (A/C, AUTO): acceso = colori invertiti. */
-    private TextView toggleText(Context c, String label, String desc, View.OnClickListener l) {
-        TextView b = Ui.text(c, label, label.length() > 3 ? bt(17, 24) : bt(20, 28), t.text, Ui.MEDIUM);
-        b.setGravity(Gravity.CENTER);
-        b.setContentDescription(desc);
-        b.setClickable(true);
-        b.setOnClickListener(l);
-        styleToggle(b, -1);
-        return b;
+        for (int i = 0; i < 3; i++) dots.getChildAt(i).setBackground(Ui.round(i < level ? fg : t.track, dp(3)));
     }
 
     private FrameLayout toggleIcon(Context c, int icon, String desc, View.OnClickListener l) {
@@ -1657,6 +1693,59 @@ public final class HomeView extends LinearLayout {
     /** state: 1 acceso, 0 spento, -1 sconosciuto/non disponibile (attenuato). onColor = colore dell'icona da acceso. */
     private void styleToggle(View v, int state) {
         styleToggle(v, state, 0);
+    }
+
+    // ---- MG4 Clima 1.4.0 (punto 10): icone e colori ufficiali del pacchetto clima -------------
+
+    /** Colore icona/testo per stato: 0 spento, 1 acceso (blu), 2 caldo (riscaldamenti, arancio), 3 non disponibile. */
+    private int climaFg(int state) {
+        switch (state) {
+            case 1: return getContext().getColor(R.color.clima_acceso);
+            case 2: return getContext().getColor(R.color.clima_caldo);
+            case 3: return getContext().getColor(R.color.clima_non_disponibile);
+            default: return getContext().getColor(R.color.clima_spento);
+        }
+    }
+
+    /** Colore di sfondo per stato (vedi climaFg). */
+    private int climaBg(int state) {
+        switch (state) {
+            case 1: return getContext().getColor(R.color.clima_acceso_sfondo);
+            case 2: return getContext().getColor(R.color.clima_caldo_sfondo);
+            default: return getContext().getColor(R.color.clima_spento_sfondo);
+        }
+    }
+
+    /** Pulsante-icona del clima (bottone della barra): sfondo e icona colorati secondo lo stato, bordo se acceso/caldo. */
+    private FrameLayout climaBtn(Context c, int icon, int iconSize, String desc, View.OnClickListener l) {
+        FrameLayout f = new FrameLayout(c);
+        f.setContentDescription(desc);
+        ImageView iv = new ImageView(c);
+        iv.setImageResource(icon);
+        iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        f.addView(iv, new FrameLayout.LayoutParams(iconSize, iconSize, Gravity.CENTER));
+        f.setClickable(true);
+        f.setOnClickListener(l);
+        styleClima(f, 3);
+        return f;
+    }
+
+    /** Colora un pulsante-icona del clima secondo lo stato (0 spento, 1 acceso, 2 caldo, 3 non disponibile). */
+    private void styleClima(View v, int state) {
+        Integer prev = (Integer) v.getTag();
+        if (prev != null && prev == state) return;
+        v.setTag(state);
+        v.setAlpha(1f);
+        float rad = big ? 24 : 20 * Ui.K;
+        int bg = climaBg(state), fg = climaFg(state);
+        android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
+        g.setColor(bg);
+        g.setCornerRadius(dp(rad));
+        if (state == 1 || state == 2) g.setStroke(dp(big ? 3 : 2), fg);
+        v.setBackground(new android.graphics.drawable.RippleDrawable(
+                android.content.res.ColorStateList.valueOf(t.day ? 0x22000000 : 0x33FFFFFF), g, null));
+        ImageView iv = v instanceof FrameLayout ? (ImageView) ((FrameLayout) v).getChildAt(0) : null;
+        if (iv != null) iv.setColorFilter(fg, android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     private void styleToggle(View v, int state, int onColor) {
@@ -1731,10 +1820,10 @@ public final class HomeView extends LinearLayout {
         int ic = bs(22, 32);
         if (clima) {
             content.addView(Ui.text(c, "A/C", bt(15, 21), t.text, Ui.MEDIUM));
-            content.addView(Ui.icon(c, R.drawable.ic_recirc, t.text, 22), Ui.margins(new LayoutParams(ic, ic), bs(5, 7), 0, 0, 0));
+            content.addView(Ui.icon(c, R.drawable.clima_ricircolo_interno, t.text, 22), Ui.margins(new LayoutParams(ic, ic), bs(5, 7), 0, 0, 0));
         } else {
-            content.addView(Ui.icon(c, R.drawable.ic_seat_heat, t.text, 22), new LayoutParams(ic, ic));
-            content.addView(Ui.icon(c, R.drawable.ic_wheel_heat, t.text, 22), Ui.margins(new LayoutParams(ic, ic), bs(10, 14), 0, 0, 0));
+            content.addView(Ui.icon(c, R.drawable.clima_sedile_riscaldato, t.text, 22), new LayoutParams(ic, ic));
+            content.addView(Ui.icon(c, R.drawable.clima_volante_riscaldato, t.text, 22), Ui.margins(new LayoutParams(ic, ic), bs(10, 14), 0, 0, 0));
         }
         FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER);
         cl.bottomMargin = bs(8, 12);
@@ -1783,7 +1872,7 @@ public final class HomeView extends LinearLayout {
 
     /** Icona del ricircolo come l'app clima originale: interno, aria esterna o automatico. */
     static int recircRes(int loopMode) {
-        return loopMode == 1 ? R.drawable.ic_recirc_out : loopMode == 2 ? R.drawable.ic_recirc_auto : R.drawable.ic_recirc;
+        return ClimaIcone.ricircolo(loopMode);
     }
 
     private void setRecircIcon(int loopMode) {
@@ -1858,6 +1947,13 @@ public final class HomeView extends LinearLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (popup != null) popup.close();
+    }
+
+    /** 1.0.0: chiude il riquadro Clima/Comfort/Guida, se aperto (tasto Home). True se c'era. */
+    public boolean closePopup() {
+        if (popup == null) return false;
+        popup.close();
+        return true;
     }
 
     private void openGroup(int kind) {
@@ -1978,17 +2074,23 @@ public final class HomeView extends LinearLayout {
                 if (s.accTja >= 0) addTile(c, "acc", accName(s.accTja), 0, L.s(R.string.tile_acc), v -> guidaTap(false));
                 if (s.pedal >= 0) addTile(c, "pedal", null, R.drawable.ic_pedal, L.s(R.string.tile_pedal), v -> guidaTap(true));
             } else if (clima) {
-                addTile(c, "ac", "A/C", 0, L.s(R.string.ac_desc), v -> vehicle.toggleAc());
-                addTile(c, "auto", "AUTO", 0, L.s(R.string.tile_auto), v -> vehicle.toggleAuto());
+                // 1.0.0 (punto 10): icone ufficiali MG4 Clima 1.4.0 al posto del testo
+                addTile(c, "ac", null, R.drawable.clima_ac, L.s(R.string.ac_desc), v -> vehicle.toggleAc());
+                addTile(c, "auto", null, R.drawable.clima_auto, L.s(R.string.tile_auto), v -> vehicle.toggleAuto());
                 if (s.loopMode >= 0) addTile(c, "recirc", null, recircRes(s.loopMode), L.s(R.string.tile_recirc), v -> vehicle.toggleRecirc());
+                // sbrinamento anteriore: comando verificato (vedi VehicleClient.toggleFrontDefrost); il lunotto resta
+                // sul tasto fisico, perché il comando software non è stato verificato sugli originali
+                if (s.defrostOn >= 0) addTile(c, "defrostF", null, R.drawable.clima_sbrinamento_anteriore,
+                        L.s(R.string.tile_defrost_front), v -> vehicle.toggleFrontDefrost());
             } else {
                 // 0.9.6: caselle nell'ordine fisico dei sedili (sinistro, volante, destro). Con la guida a destra il guidatore
                 // è sul sedile destro: cambiano le etichette, non i comandi (ogni casella comanda il sedile che ha davanti).
                 // Stesso comando dei pulsanti singoli: 3 → 2 → 1 → spento (prima l'"off" del riquadro non restava).
-                if (s.seatLeft >= 0) addTile(c, "seatL", null, R.drawable.ic_seat_heat,
+                // 1.0.0 (punto 10): icone ufficiali MG4 Clima 1.4.0; il sedile destro va specchiato (fisicamente a destra)
+                if (s.seatLeft >= 0) addTile(c, "seatL", null, R.drawable.clima_sedile_riscaldato,
                         L.s(rhd ? R.string.tile_seat_passenger : R.string.tile_seat_driver), v -> vehicle.pressSeatLeft());
-                if (s.wheelHeat >= 0) addTile(c, "wheel", null, R.drawable.ic_wheel_heat, L.s(R.string.tile_wheel), v -> vehicle.toggleWheelHeat());
-                if (s.seatRight >= 0) addTile(c, "seatR", null, R.drawable.ic_seat_heat,
+                if (s.wheelHeat >= 0) addTile(c, "wheel", null, R.drawable.clima_volante_riscaldato, L.s(R.string.tile_wheel), v -> vehicle.toggleWheelHeat());
+                if (s.seatRight >= 0) addTile(c, "seatR", null, R.drawable.clima_sedile_riscaldato,
                         L.s(rhd ? R.string.tile_seat_driver : R.string.tile_seat_passenger), v -> vehicle.pressSeatRight());
             }
         }
@@ -2015,6 +2117,7 @@ public final class HomeView extends LinearLayout {
             } else {
                 ImageView iv = Ui.icon(c, icon, t.text, 48);
                 iv.setPadding(dp(4), dp(4), dp(4), dp(4));
+                if (id.equals("seatR")) iv.setScaleX(-1f);   // sedile destro: icona specchiata (lato fisico)
                 main = iv;
                 col.addView(iv, new LayoutParams(mh, mh));
             }
@@ -2049,6 +2152,7 @@ public final class HomeView extends LinearLayout {
                     case "ac": state = s.acOn; break;
                     case "auto": state = s.autoOn; break;
                     case "recirc": state = s.loopMode < 0 ? -1 : s.loopMode == 0 ? 1 : 0; break;
+                    case "defrostF": state = s.defrostOn; break;
                     case "lka": state = s.lka; break;
                     case "opd": state = s.opd; break;
                     case "acc": state = s.accTja < 0 ? -1 : s.accTja == 4 ? 0 : 1; break;
@@ -2059,7 +2163,6 @@ public final class HomeView extends LinearLayout {
                         state = level < 0 ? -1 : level > 0 ? 1 : 0;
                 }
                 boolean on = state == 1;
-                v.setAlpha(state < 0 ? 0.45f : 1f);
                 float rad = dp(big ? 24 : 20 * Ui.K);
                 TextView nm = (TextView) tag[2], st = (TextView) tag[3];
                 String stateText = state < 0 ? "—" : (id.equals("seatL") || id.equals("seatR")) && on ? L.f(R.string.tile_level, level)
@@ -2074,10 +2177,11 @@ public final class HomeView extends LinearLayout {
                 }
                 if (state >= 0 && id.equals("pedal")) stateText = pedalName(s.pedal);
                 st.setText(stateText);
-                android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
-                g.setCornerRadius(rad);
-                if (clima) {
-                    // accesa = casella bianca con testo scuro, come il pulsante A/C
+                if (guida) {
+                    // guida (LKA/OPD/ACC/pedale): grafica originale invariata, non è clima (punto 10 non la tocca)
+                    v.setAlpha(state < 0 ? 0.45f : 1f);
+                    android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
+                    g.setCornerRadius(rad);
                     g.setColor(on ? t.text : t.chip);
                     int fg = on ? t.panel : t.text;
                     if (tag[1] instanceof TextView) ((TextView) tag[1]).setTextColor(fg);
@@ -2088,20 +2192,31 @@ public final class HomeView extends LinearLayout {
                     for (int i = 0; i < notches.getChildCount(); i++) {
                         notches.getChildAt(i).setBackground(Ui.round(i < level ? t.text : t.track, dp(3)));
                     }
+                    v.setBackground(new android.graphics.drawable.RippleDrawable(
+                            android.content.res.ColorStateList.valueOf(t.day ? 0x22000000 : 0x33FFFFFF), g, null));
                 } else {
-                    // accesa = sfondo caldo, bordo arancione, icona e stato arancioni, tacche del livello
-                    g.setColor(on ? (t.day ? 0xFFFFF1EA : 0xFF2E241F) : t.chip);
-                    if (on) g.setStroke(dp(2), HEAT);
-                    ((ImageView) tag[1]).setColorFilter(on ? HEAT : t.text);
+                    // Clima (ac/auto/recirc/sbrinamento) e Comfort (sedili/volante): colori ufficiali MG4 Clima 1.4.0.
+                    // Clima = acceso (blu); Comfort = caldo (arancio) quando il riscaldamento è a un livello > 0.
+                    // "caldo" (arancio): riscaldamenti e sbrinamento; "acceso" (blu): A/C, AUTO, ricircolo
+                    boolean heatTile = id.equals("seatL") || id.equals("seatR") || id.equals("wheel") || id.equals("defrostF");
+                    int cs = state < 0 ? 3 : !on ? 0 : heatTile ? 2 : 1;
+                    int fg = climaFg(cs);
+                    v.setAlpha(1f);
+                    android.graphics.drawable.GradientDrawable g = new android.graphics.drawable.GradientDrawable();
+                    g.setCornerRadius(rad);
+                    g.setColor(climaBg(cs));
+                    if (cs == 1 || cs == 2) g.setStroke(dp(3), fg);
+                    if (tag[1] instanceof TextView) ((TextView) tag[1]).setTextColor(fg);
+                    else ((ImageView) tag[1]).setColorFilter(fg, android.graphics.PorterDuff.Mode.SRC_IN);
                     nm.setTextColor(t.text);
-                    st.setTextColor(on ? HEAT : t.sub);
+                    st.setTextColor(fg);
                     LinearLayout notches = (LinearLayout) tag[4];
                     for (int i = 0; i < notches.getChildCount(); i++) {
-                        notches.getChildAt(i).setBackground(Ui.round(i < level ? HEAT : t.track, dp(3)));
+                        notches.getChildAt(i).setBackground(Ui.round(i < level ? fg : t.track, dp(3)));
                     }
+                    v.setBackground(new android.graphics.drawable.RippleDrawable(
+                            android.content.res.ColorStateList.valueOf(t.day ? 0x22000000 : 0x33FFFFFF), g, null));
                 }
-                v.setBackground(new android.graphics.drawable.RippleDrawable(
-                        android.content.res.ColorStateList.valueOf(t.day ? 0x22000000 : 0x33FFFFFF), g, null));
             }
         }
 

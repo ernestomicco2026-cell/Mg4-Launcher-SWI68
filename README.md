@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-<a href="releases/MG4Launcher-0.9.8.apk"><img alt="Scarica / Download 0.9.8" src="https://img.shields.io/badge/Scarica%20%2F%20Download-0.9.8-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
+<a href="releases/MG4Launcher-1.0.0.apk"><img alt="Scarica / Download 1.0.0" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.0-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
 <a href="https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT"><img alt="Sostieni il progetto con PayPal · Support the project with PayPal" src="https://img.shields.io/badge/Sostieni%20%2F%20Support-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white"></a>
 </p>
 
@@ -150,7 +150,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.9.8.apk
+   adb install -r -f MG4Launcher-1.0.0.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -226,6 +226,18 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Versioni
+
+#### 1.0.0
+- **Tasto Home touch dello schermo**: ora torna sempre al launcher, anche da Impostazioni auto o da un'altra app,
+  senza riattivare la home MG.
+- **Sblocca presa di ricarica**: nuovo pulsante sempre visibile nella barra di ricarica, con conferma prima
+  dell'invio; spiega da solo se lo stato della presa non è ancora noto.
+- **Icone del clima**: barra in basso e riquadri Clima/Comfort usano ora le icone ufficiali di MG4 Clima (A/C, AUTO,
+  ricircolo, sedili e volante riscaldati), con colore e sfondo evidenziati secondo lo stato (acceso, caldo, spento,
+  non disponibile), giorno e notte. Aggiunto il riquadro **Sbrinamento parabrezza** nel gruppo Clima.
+- **Impostazioni riorganizzate** (sezioni Barra e pulsanti, Radio e loghi, Avvio e app), **unità distanza**
+  configurabile, **tasto 360** che si può scegliere cosa apre, **cartella loghi personali** da USB e
+  **navigatore predefinito** per il riquadro mappa.
 
 #### 0.9.8
 - **Riavvio del dongle CarPlay/AA**: non resetta più i telefoni collegati col cavo (iPhone, Android Auto). Interviene
@@ -671,7 +683,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.9.8.apk
+   adb install -r -f MG4Launcher-1.0.0.apk
    ```
 3. Make it the default home:
    ```bash
@@ -747,6 +759,18 @@ Even just **€2** is a great help to keep developing and testing new versions i
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Changelog
+
+#### 1.0.0
+- **Touchscreen Home button**: now always returns to the launcher, even from car Settings or another app, without
+  re-enabling the MG home.
+- **Unlock charging socket**: new always-visible button on the charging bar, with confirmation before sending it;
+  it explains itself if the socket status isn't known yet.
+- **Climate icons**: the bottom bar and the Climate/Comfort panels now use the official MG4 Clima icons (A/C, AUTO,
+  recirculation, heated seats and steering wheel), with color and highlighted background by state (on, warm, off,
+  unavailable), day and night. Added a **Front defrost** tile to the Climate group.
+- **Reorganized settings** (Bar and buttons, Radio and logos, Startup and apps sections), configurable
+  **distance unit**, a **360 button** you can choose what it opens, a **personal logos folder** from USB, and a
+  **default navigator** for the map panel.
 
 #### 0.9.8
 - **CarPlay/AA dongle restart**: phones connected with a cable (iPhone, Android Auto) are no longer reset. It only acts
