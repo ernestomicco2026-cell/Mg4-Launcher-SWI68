@@ -44,6 +44,20 @@
 </tr>
 </table>
 
+<table>
+<tr>
+<td width="50%" valign="top"><img src="screenshots/impostazioni-menu-normale.png" alt="Impostazioni: menu con tutte le 7 sezioni (simulazione)" width="100%"><br>
+<sub><b>Impostazioni</b>, interfaccia normale: le 7 sezioni stanno tutte nel menu, con il riquadro aggiornamenti sempre in basso · <i><b>Settings</b>, normal size: all 7 sections fit in the menu, with the updates box always at the bottom</i></sub></td>
+<td width="50%" valign="top"><img src="screenshots/impostazioni-menu-grande.png" alt="Impostazioni: interfaccia più grande (simulazione)" width="100%"><br>
+<sub><b>Impostazioni</b>, comandi molto grandi · <i><b>Settings</b>, extra-large controls</i></sub></td>
+</tr>
+<tr>
+<td width="50%" valign="top"><img src="screenshots/impostazioni-menu-guida-destra.png" alt="Impostazioni: guida a destra (simulazione)" width="100%"><br>
+<sub><b>Impostazioni</b>, guida a destra: menu a destra, spazio per la spia luci di sistema · <i><b>Settings</b>, right-hand drive: menu on the right, room for the system light indicator</i></sub></td>
+<td></td>
+</tr>
+</table>
+
 <sub>Simulazioni della grafica: valori, stazioni e loghi sono di esempio · Design mock-ups: values, stations and logos are examples.</sub>
 
 > 🌡️ **Nuovo: [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4)** — la schermata del clima in stile Tesla, per SWI68, SWI69, SWI132 e SWI133. Con MG4 Clima installato il tasto del clima del launcher apre direttamente quella.
