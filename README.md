@@ -175,15 +175,30 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
 
 ### Installazione
 
-Solo per infotainment **SWI68 SAIC 1.0+**. Serve un computer con [adb](https://developer.android.com/tools/releases/platform-tools) collegato all'auto.
-Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la permette.
+Solo per infotainment **SWI68 SAIC 1.0+**. Scarica l'APK dalla cartella [`releases/`](releases/).
+Si installa come una normale app: non serve per forza un computer. Ci sono due modi: da chiavetta USB, con il file manager dell'auto, oppure con adb da computer.
 
-1. Scarica l'APK dalla cartella [`releases/`](releases/).
-2. Installa:
+#### Metodo 1 — Da chiavetta USB (senza computer)
+
+1. Copia `MG4Launcher-1.0.1.apk` su una chiavetta USB formattata **FAT32** o **exFAT**.
+2. Inserisci la chiavetta nell'auto, apri il file manager e tocca l'APK.
+3. Se Android avvisa che non può installare app da questa fonte: tocca **Impostazioni**, attiva
+   **Consenti da questa fonte** per il file manager e torna indietro.
+4. Tocca **Installa**.
+5. Premi il tasto **Home**: Android chiede quale home usare. Scegli **MG4 Launcher** e poi **Sempre**.
+
+Se l'installazione dà errore, usa il metodo 2 (e, se puoi, segnala il messaggio d'errore).
+
+#### Metodo 2 — Con adb da computer
+
+Serve un computer con [adb](https://developer.android.com/tools/releases/platform-tools) collegato all'auto.
+Il firmware MG può bloccare l'installazione normale delle app: l'opzione `-f` la permette.
+
+1. Installa:
    ```bash
    adb install -r -f MG4Launcher-1.0.1.apk
    ```
-3. Rendilo la home predefinita:
+2. Rendilo la home predefinita:
    ```bash
    adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity
    ```
@@ -711,15 +726,30 @@ It replaces the original home screen, keeping its features, with a new, clean de
 
 ### Installation
 
-Only for **SWI68 SAIC 1.0+** infotainment. You need a computer with [adb](https://developer.android.com/tools/releases/platform-tools) connected to the car.
-The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
+Only for **SWI68 SAIC 1.0+** infotainment. Download the APK from the [`releases/`](releases/) folder.
+It installs like a normal app, so a computer isn't required. There are two ways: from a USB stick, with the car's file manager, or with adb from a computer.
 
-1. Download the APK from the [`releases/`](releases/) folder.
-2. Install it:
+#### Method 1 — From a USB stick (no computer)
+
+1. Copy `MG4Launcher-1.0.1.apk` to a USB stick formatted as **FAT32** or **exFAT**.
+2. Plug it into the car, open the file manager and tap the APK.
+3. If Android says it cannot install apps from this source: tap **Settings**, enable
+   **Allow from this source** for the file manager and go back.
+4. Tap **Install**.
+5. Press the **Home** button: Android asks which home app to use. Pick **MG4 Launcher**, then **Always**.
+
+If the install fails, use method 2 (and, if you can, report the error message).
+
+#### Method 2 — With adb from a computer
+
+You need a computer with [adb](https://developer.android.com/tools/releases/platform-tools) connected to the car.
+The MG firmware may block normal app installs; the `-f` option allows it.
+
+1. Install it:
    ```bash
    adb install -r -f MG4Launcher-1.0.1.apk
    ```
-3. Make it the default home:
+2. Make it the default home:
    ```bash
    adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity
    ```
