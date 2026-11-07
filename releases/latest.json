@@ -1,6 +1,6 @@
 {
-  "version": "1.0.1",
-  "apk": "releases/MG4Launcher-1.0.1.apk",
-  "size": 694785,
-  "notes": "Il menu delle impostazioni scorre di nuovo e la sezione aggiornamenti è sempre raggiungibile."
+  "version": "1.0.2",
+  "apk": "releases/MG4Launcher-1.0.2.apk",
+  "size": 743937,
+  "notes": "Tema giorno/notte più affidabile, ritorno a CarPlay/Android Auto dopo la retromarcia, radio e Bluetooth più affidabili all'accensione, FM/DAB sotto la Radio, ricarica programmata, aggiornamenti e avvisi automatici."
 }

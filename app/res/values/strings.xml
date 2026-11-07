@@ -54,7 +54,7 @@
     <string name="set_diag_sub" formatted="false">Values read from the car and recent errors</string>
     <string name="set_diag_title" formatted="false">Car services diagnostics</string>
     <string name="set_home_card" formatted="false">CAR PANEL</string>
-    <string name="set_inside_sub" formatted="false">Below the outside one · «— °» if the car does not provide it</string>
+    <string name="set_inside_sub" formatted="false">Below the outside one; shows -- if the car doesn\'t provide it</string>
     <string name="set_language" formatted="false">LANGUAGE</string>
     <string name="set_menu_title" formatted="false">Settings</string>
     <string name="set_open_original" formatted="false">Open the original MG home</string>
@@ -402,4 +402,33 @@
     <string name="news_v100_2" formatted="false">New \"Unlock socket\" button on the charging bar, with confirmation before sending it</string>
     <string name="news_v100_3" formatted="false">New official climate icons (A/C, AUTO, recirculation, heated seats and steering wheel) with color and background by state, and a Front defrost tile</string>
     <string name="news_v100_4" formatted="false">Reorganized settings, distance unit, configurable 360 button, personal logos folder and default navigator</string>
+    <string name="notice_title" formatted="false">Notice</string>
+    <string name="cb_reserve" formatted="false">Scheduled</string>
+    <string name="cb_reserve_off" formatted="false">Off</string>
+    <string name="cb_reserve_enable" formatted="false">Turn on scheduled charging</string>
+    <string name="cb_reserve_disable" formatted="false">Turn off scheduled charging</string>
+    <string name="cb_reserve_start">Start: %1$s</string>
+    <string name="cb_reserve_end">End: %1$s</string>
+    <string name="cb_reserve_title" formatted="false">Scheduled charging</string>
+    <string name="cb_reserve_msg" formatted="false">With the cable plugged in, the car charges only in the chosen time window, as on the Charge management page.</string>
+    <string name="cb_reserve_pick_start" formatted="false">Start time</string>
+    <string name="cb_reserve_pick_end" formatted="false">End time</string>
+    <string name="set_retro_label" formatted="false">REVERSE GEAR</string>
+    <string name="set_retro_return" formatted="false">After reversing, go back to the previous app</string>
+    <string name="set_retro_return_sub" formatted="false">Reopens CarPlay, Android Auto or the navigator that was open before the camera</string>
+    <string name="set_charge_limit" formatted="false">Charge limit</string>
+    <string name="set_charge_limit_sub" formatted="false">On the battery bar and among the charging buttons; in automatic mode only if the car supports the command</string>
+    <string name="limit_auto" formatted="false">Automatic</string>
+    <string name="limit_show" formatted="false">Show</string>
+    <string name="limit_hide" formatted="false">Hide</string>
+    <string name="set_top_button" formatted="false">Top-right button</string>
+    <string name="set_top_button_sub" formatted="false">In the Map/Media panel. With \"None\" the media sources always keep their label</string>
+    <string name="top_app" formatted="false">An app…</string>
+    <string name="top_none" formatted="false">None</string>
+    <string name="top_pick_app" formatted="false">App for the top-right button</string>
+    <string name="news_v102_1" formatted="false">More reliable day/night theme on every car: system, headlights or sunrise and sunset, with a one-minute wait before switching (no flashing in tunnels)</string>
+    <string name="news_v102_2" formatted="false">After reversing you go back to CarPlay, Android Auto or the navigator by yourself</string>
+    <string name="news_v102_3" formatted="false">More reliable radio and Bluetooth: the last source resumes at start-up, Bluetooth controls and cover art in the media card</string>
+    <string name="news_v102_4" formatted="false">Look: FM/DAB under Radio, bigger tyre pressure, \"360°\" label, headlights on the car, compact outside temperature, charge limit and scheduled charging if the car supports them</string>
+    <string name="news_v102_5" formatted="false">The launcher checks for updates by itself and can show important notices; the Update button also works from the home screen</string>
 </resources>

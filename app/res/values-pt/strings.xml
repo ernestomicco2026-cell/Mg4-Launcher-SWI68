@@ -54,7 +54,7 @@
     <string name="set_diag_sub" formatted="false">Valores lidos do carro e erros recentes</string>
     <string name="set_diag_title" formatted="false">Diagnóstico dos serviços do carro</string>
     <string name="set_home_card" formatted="false">PAINEL DO CARRO</string>
-    <string name="set_inside_sub" formatted="false">Abaixo da exterior · «— °» se o carro não a fornecer</string>
+    <string name="set_inside_sub" formatted="false">Por baixo da exterior; se o carro não a fornecer, aparece --</string>
     <string name="set_language" formatted="false">IDIOMA</string>
     <string name="set_menu_title" formatted="false">Definições</string>
     <string name="set_open_original" formatted="false">Abrir o ecrã inicial original MG</string>
@@ -402,4 +402,33 @@
     <string name="news_v100_2" formatted="false">Novo botão \"Desbloquear tomada\" na barra de carregamento, com confirmação antes de o enviar</string>
     <string name="news_v100_3" formatted="false">Novos ícones oficiais do clima (A/C, AUTO, recirculação, bancos e volante aquecidos) com cor e fundo segundo o estado, e o painel de desembaciamento frontal</string>
     <string name="news_v100_4" formatted="false">Definições reorganizadas, unidade de distância, botão 360 configurável, pasta de logótipos pessoais e navegador predefinido</string>
+    <string name="notice_title" formatted="false">Aviso</string>
+    <string name="cb_reserve" formatted="false">Programado</string>
+    <string name="cb_reserve_off" formatted="false">Desligado</string>
+    <string name="cb_reserve_enable" formatted="false">Ativar o carregamento programado</string>
+    <string name="cb_reserve_disable" formatted="false">Desativar o carregamento programado</string>
+    <string name="cb_reserve_start">Início: %1$s</string>
+    <string name="cb_reserve_end">Fim: %1$s</string>
+    <string name="cb_reserve_title" formatted="false">Carregamento programado</string>
+    <string name="cb_reserve_msg" formatted="false">Com o cabo ligado, o carro carrega só no horário escolhido, como na página Gestão do carregamento.</string>
+    <string name="cb_reserve_pick_start" formatted="false">Hora de início</string>
+    <string name="cb_reserve_pick_end" formatted="false">Hora de fim</string>
+    <string name="set_retro_label" formatted="false">MARCHA-ATRÁS</string>
+    <string name="set_retro_return" formatted="false">Depois da marcha-atrás, voltar à app anterior</string>
+    <string name="set_retro_return_sub" formatted="false">Reabre o CarPlay, o Android Auto ou o navegador que estavam abertos antes da câmara</string>
+    <string name="set_charge_limit" formatted="false">Limite de carregamento</string>
+    <string name="set_charge_limit_sub" formatted="false">Na barra da bateria e nos botões de carregamento; em automático só se o carro suportar o comando</string>
+    <string name="limit_auto" formatted="false">Automático</string>
+    <string name="limit_show" formatted="false">Mostrar</string>
+    <string name="limit_hide" formatted="false">Ocultar</string>
+    <string name="set_top_button" formatted="false">Botão no canto superior direito</string>
+    <string name="set_top_button_sub" formatted="false">No painel Mapa/Multimédia. Com \"Nenhum\" as fontes multimédia mantêm sempre o nome</string>
+    <string name="top_app" formatted="false">Uma app…</string>
+    <string name="top_none" formatted="false">Nenhum</string>
+    <string name="top_pick_app" formatted="false">App do botão no canto superior direito</string>
+    <string name="news_v102_1" formatted="false">Tema dia/noite mais fiável em todos os carros: sistema, faróis ou nascer e pôr do sol, com um minuto de espera antes de mudar (sem piscar nos túneis)</string>
+    <string name="news_v102_2" formatted="false">Depois da marcha-atrás volta-se sozinho ao CarPlay, Android Auto ou ao navegador</string>
+    <string name="news_v102_3" formatted="false">Rádio e Bluetooth mais fiáveis: ao ligar retoma a última fonte, comandos e capa Bluetooth no cartão multimédia</string>
+    <string name="news_v102_4" formatted="false">Visual: FM/DAB por baixo do Rádio, pressão dos pneus maior, texto \"360°\", faróis acesos no carro, temperatura exterior compacta, limite e carregamento programado se o carro os suportar</string>
+    <string name="news_v102_5" formatted="false">O launcher procura atualizações sozinho e pode mostrar avisos importantes; o botão Atualizar funciona também a partir do início</string>
 </resources>

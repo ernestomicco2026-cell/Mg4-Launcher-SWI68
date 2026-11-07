@@ -112,7 +112,7 @@ public final class CarProps {
     }
 
     /** Area da usare per una proprietà (0 per le globali, la prima area configurata per le altre). */
-    private int area(int prop) {
+    private synchronized int area(int prop) {
         if (!areasRead) {
             areasRead = true;
             try {
@@ -247,6 +247,78 @@ public final class CarProps {
                     .append(" (").append(r[0]).append('…').append(r[1]).append(')').append(outsideLike ? " =est" : "");
         }
         return n + " letture · " + (all.length() == 0 ? "nessun valore da temperatura" : all);
+    }
+
+    // ---- 1.0.2: proprietà standard di Android Automotive per luci e giorno/notte --------------------
+    /** NIGHT_MODE (BOOLEAN): il sistema dice che è notte. */
+    public static final int NIGHT_MODE = 287310855;
+    /** HEADLIGHTS_STATE (INT32): 0 spenti, 1 accesi, 2 luci diurne. */
+    public static final int HEADLIGHTS_STATE = 289410560;
+    /** HEADLIGHTS_SWITCH (INT32): posizione della leva, 0 spenti, 1 accesi, 2 diurne, 3 automatico. */
+    public static final int HEADLIGHTS_SWITCH = 289410576;
+    /** DISPLAY_BRIGHTNESS (INT32). */
+    public static final int DISPLAY_BRIGHTNESS = 289409539;
+
+    /** True se la proprietà è nell'elenco dell'auto (letto una volta). */
+    public synchronized boolean has(int prop) {
+        try {
+            area(prop);
+        } catch (Throwable ignored) {
+        }
+        return areasRead && areas.containsKey(prop);
+    }
+
+    /** Booleano come 1/0, Integer.MIN_VALUE se non c'è o non si legge (nessun errore nella diagnostica). */
+    public int getBoolQuiet(int prop) {
+        if (unsupported.contains(prop) || denied.contains(prop)) return Integer.MIN_VALUE;
+        try {
+            Object p = pm();
+            if (p == null || !has(prop)) return Integer.MIN_VALUE;
+            Method m = p.getClass().getMethod("getBooleanProperty", int.class, int.class);
+            return ((Boolean) m.invoke(p, prop, area(prop))) ? 1 : 0;
+        } catch (Throwable e) {
+            Throwable c = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
+            if (c instanceof SecurityException) denied.add(prop);
+            else if (c instanceof IllegalArgumentException) unsupported.add(prop);
+            return Integer.MIN_VALUE;
+        }
+    }
+
+    /** Intero senza errori nella diagnostica; ricorda i rifiuti dell'auto. */
+    public int getIntSafe(int prop) {
+        if (unsupported.contains(prop) || denied.contains(prop)) return Integer.MIN_VALUE;
+        try {
+            Object p = pm();
+            if (p == null || !has(prop)) return Integer.MIN_VALUE;
+            Method m = p.getClass().getMethod("getIntProperty", int.class, int.class);
+            return (Integer) m.invoke(p, prop, area(prop));
+        } catch (Throwable e) {
+            Throwable c = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
+            if (c instanceof SecurityException) denied.add(prop);
+            else if (c instanceof IllegalArgumentException) unsupported.add(prop);
+            return Integer.MIN_VALUE;
+        }
+    }
+
+    /** Valore decimale per ogni area della proprietà (area → valore), vuoto se non c'è. Nessun errore nel log. */
+    public synchronized Map<Integer, Float> floatsAllAreas(int prop) {
+        Map<Integer, Float> out = new java.util.LinkedHashMap<>();
+        if (unsupported.contains(prop) || denied.contains(prop)) return out;
+        try {
+            Object p = pm();
+            if (p == null || !has(prop)) return out;
+            Method m = p.getClass().getMethod("getFloatProperty", int.class, int.class);
+            int[] as = allAreas.get(prop);
+            if (as == null) as = new int[]{0};
+            for (int a : as) {
+                try {
+                    out.put(a, (Float) m.invoke(p, prop, a));
+                } catch (Throwable ignored) {
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        return out;
     }
 
     /** False se la proprietà non è nell'elenco dell'auto o è stata rifiutata; null se non si sa ancora. */

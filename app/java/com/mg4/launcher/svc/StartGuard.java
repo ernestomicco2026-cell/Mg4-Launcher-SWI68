@@ -193,6 +193,10 @@ public final class StartGuard {
                 close("no (home MG aperta apposta)");
                 return;
             }
+            if (RetroReturn.suppressHome()) {
+                Diag.put("avvio.homeRipresa", "fermo: ritorno all'app di prima dopo la retromarcia (" + windowWhy + ")");
+                return;
+            }
             if (restarts < MAX_RESTARTS) {
                 restarts++;
                 HomeMode.openOurs(c);

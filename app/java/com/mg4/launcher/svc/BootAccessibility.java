@@ -209,6 +209,7 @@ public final class BootAccessibility extends AccessibilityService {
         if (e.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return;
         if (!started || !StartGuard.a11yConnected) return;   // firmware sbagliato o utente non ancora sbloccato
         String pkg = e.getPackageName().toString();
+        RetroReturn.onForeground(this, pkg);   // 1.0.2: prima di StartGuard, che altrimenti riaprirebbe il launcher
         StartGuard.onForeground(this, pkg);
         // il nostro launcher deve restare in primo piano 5 s: si ricontrolla senza aspettare un altro evento
         if (getPackageName().equals(pkg) && StartGuard.windowOpen()) {
@@ -246,6 +247,7 @@ public final class BootAccessibility extends AccessibilityService {
         if (!SYSTEMUI_PKG.equals(e.getPackageName().toString())) return;
         String label = dockHomeLabel();
         if (label == null || e.getText() == null || e.getText().isEmpty() || !label.contentEquals(e.getText().get(0))) return;
+        RetroReturn.userPressedHome("casetta del dock");
         if (getPackageName().equals(StartGuard.topPackage(this))) return;   // siamo già davanti, niente da fare
         h.postDelayed(() -> {
             if (getPackageName().equals(StartGuard.topPackage(this))) return;

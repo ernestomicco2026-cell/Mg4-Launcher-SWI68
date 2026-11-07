@@ -54,7 +54,7 @@
     <string name="set_diag_sub" formatted="false">Valori letti dall\'auto ed errori recenti</string>
     <string name="set_diag_title" formatted="false">Diagnostica servizi auto</string>
     <string name="set_home_card" formatted="false">RIQUADRO AUTO</string>
-    <string name="set_inside_sub" formatted="false">Sotto quella esterna · «— °» se l\'auto non la fornisce</string>
+    <string name="set_inside_sub" formatted="false">Sotto quella esterna; se l\'auto non la fornisce si vede --</string>
     <string name="set_language" formatted="false">LINGUA</string>
     <string name="set_menu_title" formatted="false">Impostazioni</string>
     <string name="set_open_original" formatted="false">Apri la home originale MG</string>
@@ -402,4 +402,33 @@
     <string name="news_v100_2" formatted="false">Nuovo pulsante \"Sblocca presa\" nella barra di ricarica, con conferma prima di inviarlo</string>
     <string name="news_v100_3" formatted="false">Nuove icone ufficiali per il clima (A/C, AUTO, ricircolo, sedili e volante riscaldati) con colore e sfondo secondo lo stato, e il riquadro Sbrinamento parabrezza</string>
     <string name="news_v100_4" formatted="false">Impostazioni riorganizzate, unità distanza, tasto 360 configurabile, cartella loghi personali e navigatore predefinito</string>
+    <string name="notice_title" formatted="false">Avviso</string>
+    <string name="cb_reserve" formatted="false">Programmata</string>
+    <string name="cb_reserve_off" formatted="false">Spenta</string>
+    <string name="cb_reserve_enable" formatted="false">Attiva la ricarica programmata</string>
+    <string name="cb_reserve_disable" formatted="false">Disattiva la ricarica programmata</string>
+    <string name="cb_reserve_start">Inizio: %1$s</string>
+    <string name="cb_reserve_end">Fine: %1$s</string>
+    <string name="cb_reserve_title" formatted="false">Ricarica programmata</string>
+    <string name="cb_reserve_msg" formatted="false">Con il cavo collegato l\'auto carica solo nella fascia oraria scelta, come nella pagina Gestione ricarica.</string>
+    <string name="cb_reserve_pick_start" formatted="false">Ora di inizio</string>
+    <string name="cb_reserve_pick_end" formatted="false">Ora di fine</string>
+    <string name="set_retro_label" formatted="false">RETROMARCIA</string>
+    <string name="set_retro_return" formatted="false">Dopo la retromarcia torna all\'app di prima</string>
+    <string name="set_retro_return_sub" formatted="false">Riapre CarPlay, Android Auto o il navigatore che erano aperti prima della telecamera</string>
+    <string name="set_charge_limit" formatted="false">Limite di ricarica</string>
+    <string name="set_charge_limit_sub" formatted="false">Sulla barra della batteria e tra i pulsanti di ricarica; in automatico solo se l\'auto supporta il comando</string>
+    <string name="limit_auto" formatted="false">Automatico</string>
+    <string name="limit_show" formatted="false">Mostra</string>
+    <string name="limit_hide" formatted="false">Nascondi</string>
+    <string name="set_top_button" formatted="false">Pulsante in alto a destra</string>
+    <string name="set_top_button_sub" formatted="false">Nel riquadro Mappa/Media. Con \"Nessuno\" le sorgenti media restano sempre con la loro scritta</string>
+    <string name="top_app" formatted="false">Un\'app…</string>
+    <string name="top_none" formatted="false">Nessuno</string>
+    <string name="top_pick_app" formatted="false">App del pulsante in alto a destra</string>
+    <string name="news_v102_1" formatted="false">Tema giorno/notte più affidabile su tutte le auto: sistema, fari o alba e tramonto, con un minuto di attesa prima di cambiare (in galleria non lampeggia)</string>
+    <string name="news_v102_2" formatted="false">Dopo la retromarcia si torna da soli a CarPlay, Android Auto o al navigatore</string>
+    <string name="news_v102_3" formatted="false">Radio e Bluetooth più affidabili: all\'accensione riparte l\'ultima sorgente, comandi e copertina Bluetooth nella card media</string>
+    <string name="news_v102_4" formatted="false">Grafica: FM/DAB sotto la Radio, pressione gomme più grande, scritta \"360°\", fari accesi sull\'auto, temperatura esterna compatta, limite e ricarica programmata se l\'auto li supporta</string>
+    <string name="news_v102_5" formatted="false">Il launcher controlla da solo gli aggiornamenti e può mostrare avvisi importanti; il pulsante Aggiorna funziona anche dalla home</string>
 </resources>

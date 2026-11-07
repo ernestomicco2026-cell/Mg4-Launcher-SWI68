@@ -7,7 +7,6 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 
 /**
  * Pagine affiancate a scorrimento orizzontale (Home ↔ App). Il trascinamento verticale resta ai figli
@@ -78,17 +77,67 @@ public final class Pager extends ViewGroup {
         if (!animate || getWidth() == 0) {
             offset = target;
             apply();
+            if (!dragging) layers(false);
         } else {
+            // 1.0.2 (issue SWI69 #2): animazione più fluida. Le pagine diventano "livelli hardware" (disegnati una volta in
+            // una texture e solo spostati durante lo scorrimento) e la pagina App si ricarica a fine animazione, non
+            // all'inizio (prima il ricaricamento cadeva sui primi fotogrammi e dava lo scatto). Durata corta e morbida:
+            // con 2 GB di RAM due texture 1920×720 sono circa 11 MB e si liberano subito dopo.
+            float dist = Math.abs(target - offset);
+            long dur = Math.max(180, Math.min(320, Math.round(320 * dist / Math.max(1f, getWidth()))));
             anim = ValueAnimator.ofFloat(offset, target);
-            anim.setDuration(260);
-            anim.setInterpolator(new DecelerateInterpolator(1.6f));
+            anim.setDuration(dur);
+            anim.setInterpolator(new android.view.animation.PathInterpolator(0.2f, 0f, 0f, 1f));
             anim.addUpdateListener(a -> {
                 offset = (float) a.getAnimatedValue();
                 apply();
             });
+            final int newPage = p;
+            anim.addListener(new android.animation.AnimatorListenerAdapter() {
+                private boolean cancelled;
+
+                @Override
+                public void onAnimationStart(android.animation.Animator a) {
+                    layers(true);
+                }
+
+                @Override
+                public void onAnimationCancel(android.animation.Animator a) {
+                    cancelled = true;
+                }
+
+                @Override
+                public void onAnimationEnd(android.animation.Animator a) {
+                    if (!dragging) layers(false);
+                    // notifica anche se un trascinamento aveva interrotto l'animazione che cambiava pagina
+                    if (!cancelled && page == newPage && newPage != notified && listener != null) {
+                        notified = newPage;
+                        listener.onPageChanged(newPage);
+                    }
+                }
+            });
             anim.start();
+            return;
         }
-        if (changedPage && listener != null) listener.onPageChanged(p);
+        if (p != notified && listener != null) {
+            notified = p;
+            listener.onPageChanged(p);
+        }
+    }
+
+    /** Ultima pagina notificata al listener. */
+    private int notified;
+
+    /** Livelli hardware sulle pagine durante animazione e trascinamento. */
+    private void layers(boolean on) {
+        for (int i = 0; i < getChildCount(); i++) {
+            View v = getChildAt(i);
+            int type = on ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE;
+            if (v.getLayerType() != type) {
+                v.setLayerType(type, null);
+                if (on) v.buildLayer();
+            }
+        }
     }
 
     @Override
@@ -109,6 +158,7 @@ public final class Pager extends ViewGroup {
                 float dx = e.getX() - downX, dy = e.getY() - downY;
                 if (!dragging && Math.abs(dx) > slop && Math.abs(dx) > Math.abs(dy) * 1.5f) {
                     dragging = true;
+                    layers(true);
                     lastX = e.getX();
                     getParent().requestDisallowInterceptTouchEvent(true);
                 }

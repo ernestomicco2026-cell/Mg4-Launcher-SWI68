@@ -54,7 +54,7 @@
     <string name="set_diag_sub" formatted="false">Valeurs lues dans la voiture et erreurs récentes</string>
     <string name="set_diag_title" formatted="false">Diagnostic des services du véhicule</string>
     <string name="set_home_card" formatted="false">PANNEAU VOITURE</string>
-    <string name="set_inside_sub" formatted="false">Sous la température extérieure · « — ° » si la voiture ne la fournit pas</string>
+    <string name="set_inside_sub" formatted="false">Sous la température extérieure ; si la voiture ne la fournit pas, -- s\'affiche</string>
     <string name="set_language" formatted="false">LANGUE</string>
     <string name="set_menu_title" formatted="false">Réglages</string>
     <string name="set_open_original" formatted="false">Ouvrir l\'accueil MG d\'origine</string>
@@ -402,4 +402,33 @@
     <string name="news_v100_2" formatted="false">Nouveau bouton « Déverrouiller la prise » dans la barre de recharge, avec confirmation avant envoi</string>
     <string name="news_v100_3" formatted="false">Nouvelles icônes officielles du climat (A/C, AUTO, recyclage, sièges et volant chauffants) avec couleur et fond selon l\'état, et le panneau Désembuage avant</string>
     <string name="news_v100_4" formatted="false">Réglages réorganisés, unité de distance, bouton 360 configurable, dossier de logos personnels et navigateur par défaut</string>
+    <string name="notice_title" formatted="false">Avis</string>
+    <string name="cb_reserve" formatted="false">Programmée</string>
+    <string name="cb_reserve_off" formatted="false">Désactivée</string>
+    <string name="cb_reserve_enable" formatted="false">Activer la charge programmée</string>
+    <string name="cb_reserve_disable" formatted="false">Désactiver la charge programmée</string>
+    <string name="cb_reserve_start">Début : %1$s</string>
+    <string name="cb_reserve_end">Fin : %1$s</string>
+    <string name="cb_reserve_title" formatted="false">Charge programmée</string>
+    <string name="cb_reserve_msg" formatted="false">Câble branché, la voiture ne charge que dans la plage horaire choisie, comme sur la page Gestion de la charge.</string>
+    <string name="cb_reserve_pick_start" formatted="false">Heure de début</string>
+    <string name="cb_reserve_pick_end" formatted="false">Heure de fin</string>
+    <string name="set_retro_label" formatted="false">MARCHE ARRIÈRE</string>
+    <string name="set_retro_return" formatted="false">Après la marche arrière, revenir à l\'appli précédente</string>
+    <string name="set_retro_return_sub" formatted="false">Rouvre CarPlay, Android Auto ou le navigateur ouverts avant la caméra</string>
+    <string name="set_charge_limit" formatted="false">Limite de charge</string>
+    <string name="set_charge_limit_sub" formatted="false">Sur la barre de batterie et parmi les boutons de charge ; en automatique seulement si la voiture prend en charge la commande</string>
+    <string name="limit_auto" formatted="false">Automatique</string>
+    <string name="limit_show" formatted="false">Afficher</string>
+    <string name="limit_hide" formatted="false">Masquer</string>
+    <string name="set_top_button" formatted="false">Bouton en haut à droite</string>
+    <string name="set_top_button_sub" formatted="false">Dans le panneau Carte/Médias. Avec « Aucun », les sources médias gardent toujours leur nom</string>
+    <string name="top_app" formatted="false">Une appli…</string>
+    <string name="top_none" formatted="false">Aucun</string>
+    <string name="top_pick_app" formatted="false">Appli du bouton en haut à droite</string>
+    <string name="news_v102_1" formatted="false">Thème jour/nuit plus fiable sur toutes les voitures : système, phares ou lever et coucher du soleil, avec une minute d\'attente avant de changer (pas de clignotement dans les tunnels)</string>
+    <string name="news_v102_2" formatted="false">Après la marche arrière, retour automatique à CarPlay, Android Auto ou au navigateur</string>
+    <string name="news_v102_3" formatted="false">Radio et Bluetooth plus fiables : la dernière source reprend au démarrage, commandes et pochette Bluetooth dans la carte médias</string>
+    <string name="news_v102_4" formatted="false">Affichage : FM/DAB sous Radio, pression des pneus plus grande, texte « 360° », phares allumés sur la voiture, température extérieure compacte, limite et charge programmée si la voiture les prend en charge</string>
+    <string name="news_v102_5" formatted="false">Le launcher vérifie seul les mises à jour et peut afficher des avis importants ; le bouton Mettre à jour fonctionne aussi depuis l\'accueil</string>
 </resources>

@@ -37,6 +37,41 @@ public final class Confirm {
         root.addView(dim, new FrameLayout.LayoutParams(-1, -1));
     }
 
+    /**
+     * 1.0.2: come show, ma con un'azione anche sul primo pulsante (es. avvisi da remoto: "OK" conferma la lettura).
+     * second = null: un solo pulsante.
+     */
+    public static void show2(FrameLayout root, Theme t, String title, String msg, String first, Runnable onFirst,
+                             String second, Runnable onSecond) {
+        Context c = root.getContext();
+        FrameLayout dim = new FrameLayout(c);
+        dim.setBackgroundColor(t.day ? 0x66000000 : 0xB3000000);
+        dim.setClickable(true);
+        LinearLayout card = Ui.column(c);
+        card.setBackground(Ui.round(t.panel, Ui.dp(c, 28)));
+        card.setPadding(Ui.dp(c, 40), Ui.dp(c, 34), Ui.dp(c, 40), Ui.dp(c, 30));
+        card.setClickable(true);
+        card.addView(Ui.text(c, title, 30, t.text, Ui.MEDIUM));
+        TextView m = Ui.text(c, msg, 20, t.sub, Ui.REGULAR);
+        m.setLineSpacing(0, 1.15f);
+        card.addView(m, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, Ui.dp(c, 16), 0, 0));
+        LinearLayout btns = Ui.row(c);
+        btns.setGravity(Gravity.END);
+        btns.addView(button(c, t, first, second == null, v -> {
+            if (dim.getParent() != null) ((ViewGroup) dim.getParent()).removeView(dim);
+            if (onFirst != null) onFirst.run();
+        }), Ui.lp(-2, Ui.tp(c, 60)));
+        if (second != null) {
+            btns.addView(button(c, t, second, true, v -> {
+                if (dim.getParent() != null) ((ViewGroup) dim.getParent()).removeView(dim);
+                if (onSecond != null) onSecond.run();
+            }), Ui.margins(Ui.lp(-2, Ui.tp(c, 60)), Ui.dp(c, 12), 0, 0, 0));
+        }
+        card.addView(btns, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, Ui.dp(c, 28), 0, 0));
+        dim.addView(card, new FrameLayout.LayoutParams(Ui.dp(c, 980), -2, Gravity.CENTER));
+        root.addView(dim, new FrameLayout.LayoutParams(-1, -1));
+    }
+
     public interface OnText {
         void text(String value);
     }

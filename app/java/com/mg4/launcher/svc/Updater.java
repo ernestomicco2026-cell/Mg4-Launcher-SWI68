@@ -465,6 +465,205 @@ public final class Updater {
         return bo.toString("UTF-8");
     }
 
+    // =========================================================================================
+    // 1.0.2 (punto 10): controllo automatico, aggiornamento forzato ("minima") e avvisi da remoto.
+    // Solo indirizzi HTTPS del proprio repository su raw.githubusercontent.com, nessun altro.
+    // =========================================================================================
+
+    public static final String OWN_RAW = "https://raw.githubusercontent.com/" + com.mg4.launcher.ui.Prefs.DEFAULT_REPO + "/main/";
+    private static final int MAX_FORCED_TRIES = 3;
+
+    /** Risultato del controllo da remoto. */
+    public static final class Remote {
+        public Release release;               // null se latest.json non si legge
+        public String minima = "";
+        /** La versione installata è più vecchia di "minima" (e c'è un APK più nuovo da installare). */
+        public boolean belowMinima;
+        public JSONArray notices;             // null se avvisi.json manca o non si legge
+        public String error = "";
+    }
+
+    public interface RemoteCb {
+        void done(Remote r);
+    }
+
+    private String lastRemote = "mai";
+
+    /** Controllo da remoto in background (latest.json e avvisi.json); cb sul thread principale, solo se qualcosa si è letto. */
+    public void checkRemote(RemoteCb cb) {
+        if (!Offline.canTry()) {
+            remoteDiag(null, "offline: rimandato");
+            return;
+        }
+        bg.post(() -> {
+            Remote out = new Remote();
+            try {
+                JSONObject o = new JSONObject(get(OWN_RAW + "releases/latest.json"));
+                Release r = new Release();
+                r.tag = o.optString("version", "");
+                r.name = "MG4 Launcher " + r.tag;
+                r.notes = o.optString("notes", "");
+                String apk = o.optString("apk", "");
+                // solo un percorso dentro il proprio repository
+                if (!apk.isEmpty() && !apk.contains("://") && !apk.contains("..") && apk.toLowerCase().endsWith(".apk")) {
+                    r.apkUrl = OWN_RAW + (apk.startsWith("/") ? apk.substring(1) : apk);
+                    r.apkName = apk.substring(apk.lastIndexOf('/') + 1);
+                    r.apkSize = o.optLong("size");
+                }
+                r.newer = compare(r.tag, currentVersion()) > 0;
+                out.release = r;
+                out.minima = o.optString("minima", "").trim();
+                out.belowMinima = !out.minima.isEmpty() && compare(currentVersion(), out.minima) < 0 && r.newer && r.apkUrl != null;
+                Offline.ok();
+            } catch (Exception e) {
+                out.error = e.getClass().getSimpleName() + (e.getMessage() == null ? "" : ": " + e.getMessage());
+                if (Offline.failed("aggiornamenti", e)) out.error = "offline";
+            }
+            try {
+                JSONObject a = new JSONObject(get(OWN_RAW + "releases/avvisi.json"));
+                out.notices = a.optJSONArray("avvisi");
+            } catch (Exception e) {
+                out.notices = null;   // file assente o non leggibile: nessun avviso, nessun errore mostrato
+                Diag.put("avvisi.lettura", "avvisi.json non letto (" + e.getClass().getSimpleName() + ")");
+            }
+            lastRemote = new java.text.SimpleDateFormat("dd/MM HH:mm", java.util.Locale.ITALY).format(new java.util.Date());
+            remoteDiag(out, out.release == null ? "non riuscito: " + out.error
+                    : out.release.newer ? "versione nuova " + out.release.tag : "aggiornato");
+            main.post(() -> cb.done(out));
+        });
+    }
+
+    private String lastResult = "—";
+
+    /** aggiornamento.stato: ultimo controllo, versione trovata, "minima", esito, tentativi. */
+    public void remoteDiag(Remote r, String result) {
+        if (result != null) lastResult = result;
+        String found = r == null || r.release == null ? "—" : r.release.tag;
+        String minima = r == null || r.minima.isEmpty() ? "—" : r.minima;
+        int tries = r == null || r.release == null ? 0 : forcedTries(r.release.tag);
+        Diag.put("aggiornamento.stato", "installata " + currentVersion() + " · ultimo controllo " + lastRemote + " · trovata " + found
+                + " · minima " + minima + " · esito " + lastResult + " · tentativi forzati " + tries + "/" + MAX_FORCED_TRIES);
+    }
+
+    private android.content.SharedPreferences sp() {
+        return ctx.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE);
+    }
+
+    public int forcedTries(String version) {
+        return sp().getInt("aggForzatoTentativi:" + version, 0);
+    }
+
+    /** Si può ancora tentare l'installazione forzata di questa versione (al massimo 3 volte)? */
+    public boolean canForce(String version) {
+        return forcedTries(version) < MAX_FORCED_TRIES;
+    }
+
+    /**
+     * Installa una release letta da remoto (raw del proprio repository). Prima di installare controlla che sia un APK,
+     * che la dimensione corrisponda a "size" e che sia firmato con la stessa chiave del launcher installato.
+     * forced = true: aggiornamento forzato (conta i tentativi, al massimo 3 per versione).
+     */
+    public void installRemote(Release r, boolean forced) {
+        if (busy || r == null || r.apkUrl == null || !r.apkUrl.startsWith(OWN_RAW)) return;
+        if (HomeMode.officina(ctx)) return;
+        if (forced && !canForce(r.tag)) {
+            remoteDiag(null, "aggiornamento forzato fermo: già " + MAX_FORCED_TRIES + " tentativi falliti per " + r.tag);
+            return;
+        }
+        String kind = forced ? "forzato" : "dalla home";
+        status(L.f(R.string.upd_downloading, r.apkName), r, true);
+        bg.post(() -> {
+            byte[] apk;
+            try {
+                apk = download(r.apkUrl, r, "", "application/octet-stream");
+            } catch (Exception e) {
+                status(L.f(R.string.upd_download_failed, describe(e)), r, false);
+                remoteDiag(null, "aggiornamento " + kind + ": download non riuscito (" + describe(e) + ")");
+                return;
+            }
+            if (!isApk(apk)) {
+                status(L.f(R.string.upd_invalid_apk, apk.length), r, false);
+                remoteDiag(null, "aggiornamento " + kind + ": file non valido (" + apk.length + " byte)");
+                return;
+            }
+            if (r.apkSize > 0 && apk.length != r.apkSize) {
+                status(L.f(R.string.upd_invalid_apk, apk.length), r, false);
+                remoteDiag(null, "aggiornamento " + kind + ": dimensione " + apk.length + " diversa da size " + r.apkSize + ": non installato");
+                return;
+            }
+            String sig = sameSigner(apk);
+            if (sig != null) {
+                status(L.s(R.string.upd_wrong_package), r, false);
+                remoteDiag(null, "aggiornamento " + kind + ": " + sig + ": non installato");
+                return;
+            }
+            String version = checkPackage(apk);
+            if (version == null) {
+                status(L.s(R.string.upd_wrong_package), r, false);
+                remoteDiag(null, "aggiornamento " + kind + ": pacchetto diverso: non installato");
+                return;
+            }
+            // il tentativo forzato si conta solo con un APK valido in mano (senza rete non si consuma)
+            if (forced) sp().edit().putInt("aggForzatoTentativi:" + r.tag, forcedTries(r.tag) + 1).apply();
+            status(L.f(R.string.upd_installing, version), r, true);
+            remoteDiag(null, "aggiornamento " + kind + ": installazione di " + version + " avviata");
+            try {
+                installApk(apk);
+            } catch (Exception e) {
+                status(L.f(R.string.upd_install_failed, describe(e)), r, false);
+                remoteDiag(null, "aggiornamento " + kind + ": installazione non riuscita (" + describe(e) + ")");
+            }
+        });
+    }
+
+    /** null se l'APK è firmato con la stessa chiave del launcher installato, altrimenti il motivo. */
+    @SuppressWarnings("deprecation")
+    private String sameSigner(byte[] apk) {
+        File f = new File(ctx.getCacheDir(), "update-sig.apk");
+        try {
+            try (OutputStream os = new FileOutputStream(f)) {
+                os.write(apk);
+            }
+            PackageManager pm = ctx.getPackageManager();
+            PackageInfo a = pm.getPackageArchiveInfo(f.getPath(), PackageManager.GET_SIGNATURES);
+            PackageInfo me = pm.getPackageInfo(ctx.getPackageName(), PackageManager.GET_SIGNATURES);
+            if (a == null || a.signatures == null || a.signatures.length == 0) return "firma dell'APK non leggibile";
+            if (!ctx.getPackageName().equals(a.packageName)) return "pacchetto diverso (" + a.packageName + ")";
+            java.util.Set<String> x = new java.util.HashSet<>(), y = new java.util.HashSet<>();
+            for (android.content.pm.Signature s : a.signatures) x.add(s.toCharsString());
+            for (android.content.pm.Signature s : me.signatures) y.add(s.toCharsString());
+            return x.equals(y) ? null : "firma diversa da quella del launcher installato";
+        } catch (Exception e) {
+            return "controllo della firma non riuscito (" + e.getClass().getSimpleName() + ")";
+        } finally {
+            f.delete();
+        }
+    }
+
+    /** GET di un file piccolo (JSON) dal proprio repository. */
+    private static String get(String url) throws IOException {
+        if (!url.startsWith(OWN_RAW)) throw new IOException("indirizzo non ammesso");
+        HttpURLConnection c = open(url, "", "application/json");
+        c.setInstanceFollowRedirects(false);
+        int code = c.getResponseCode();
+        if (code != 200) {
+            c.disconnect();
+            throw new HttpError("HTTP " + code);
+        }
+        try (InputStream in = c.getInputStream()) {
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            byte[] b = new byte[8192];
+            int n;
+            while ((n = in.read(b)) > 0) {
+                bo.write(b, 0, n);
+                if (bo.size() > 256 * 1024) throw new IOException("file troppo grande");
+            }
+            return bo.toString("UTF-8");
+        } finally {
+            c.disconnect();
+        }
+    }
+
     /** Confronta versioni tipo "v0.3.0" e "0.2.0" numero per numero. */
     static int compare(String a, String b) {
         int[] x = nums(a), y = nums(b);

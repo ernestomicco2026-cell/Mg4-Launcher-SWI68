@@ -467,8 +467,22 @@ public final class SettingsView extends FrameLayout {
                         showSection(SEC_HOME);
                     }), false));
         }
-        // temperatura interna (tolta nella 0.9.5): l'auto non la manda allo schermo, si spiega perché
-        card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_none), spacer0(c), true));
+        // 1.0.2 (issue #8): temperatura interna come opzione; "--" se l'auto non la fornisce, mai l'esterna
+        card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_sub),
+                toggle(c, prefs.showInsideTemp(), on -> {
+                    prefs.setShowInsideTemp(on);
+                    host.settingsChanged(true);
+                }), false));
+        // 1.0.2 (issue SWI69 #2): limite di ricarica Automatico (solo se l'auto lo supporta) / Mostra / Nascondi
+        String[] limVals = {Prefs.LIMIT_AUTO, Prefs.LIMIT_SHOW, Prefs.LIMIT_HIDE};
+        String[] limNames = {L.s(R.string.limit_auto), L.s(R.string.limit_show), L.s(R.string.limit_hide)};
+        int limSel = java.util.Arrays.asList(limVals).indexOf(prefs.chargeLimitMode());
+        card.addView(row(c, L.s(R.string.set_charge_limit), L.s(R.string.set_charge_limit_sub),
+                choices(c, limNames, limSel, i -> {
+                    prefs.setChargeLimitMode(limVals[i]);
+                    host.settingsChanged(false);
+                    showSection(SEC_HOME);
+                }), true));
         col.addView(card, topFull(14));
 
         // 1.0.0 (punto 11): riquadro mappa/media/CarPlay/AA - il navigatore che si apre dal riquadro di casa
@@ -484,8 +498,48 @@ public final class SettingsView extends FrameLayout {
                     prefs.setNavApp(navVals[i]);
                     host.settingsChanged(false);
                     showSection(SEC_HOME);
-                }), true));
+                }), false));
+        // 1.0.2 (issue #23): pulsante in alto a destra del riquadro: CarPlay/Android Auto (come prima), un'app, nessuno
+        String top = prefs.topButton();
+        boolean topApp = top.startsWith(Prefs.TOP_APP);
+        String topAppLabel = topApp ? Cam360.label(c, top.substring(Prefs.TOP_APP.length())) : L.s(R.string.top_app);
+        String[] topNames = {"CarPlay / Android Auto", topAppLabel, L.s(R.string.top_none)};
+        int topSel = Prefs.TOP_NONE.equals(top) ? 2 : topApp ? 1 : 0;
+        LinearLayout topRow = Ui.row(c);
+        for (int i = 0; i < topNames.length; i++) {
+            final int idx = i;
+            boolean on = i == topSel;
+            TextView ch = choice(c, topNames[i], on, v -> {
+                if (idx == 1) { pickTopApp(c); return; }   // apre sempre l'elenco, anche se già scelto
+                if (idx == topSel) return;
+                prefs.setTopButton(idx == 0 ? Prefs.TOP_PROJECTION : Prefs.TOP_NONE);
+                host.settingsChanged(true);
+                showSection(SEC_HOME);
+            });
+            ch.setPadding(tp(20), 0, tp(20), 0);
+            if (!on) ch.setBackground(Ui.pressable(c, t.panel, 16 * Ui.K, t));
+            topRow.addView(ch, Ui.margins(new LinearLayout.LayoutParams(-2, tp(60)), i == 0 ? 0 : dp(8), 0, 0, 0));
+        }
+        card.addView(row(c, L.s(R.string.set_top_button), L.s(R.string.set_top_button_sub), topRow, true));
         col.addView(card, topFull(14));
+    }
+
+    /** Elenco delle app installate per il pulsante in alto a destra. */
+    private void pickTopApp(Context c) {
+        java.util.List<com.mg4.launcher.apps.AppCatalog.App> apps = host.allLaunchableApps();
+        String[] names = new String[apps.size()];
+        for (int i = 0; i < apps.size(); i++) names[i] = apps.get(i).label;
+        String cur = prefs.topButton();
+        int sel = -1;
+        if (cur.startsWith(Prefs.TOP_APP)) {
+            String pkg = cur.substring(Prefs.TOP_APP.length());
+            for (int i = 0; i < apps.size(); i++) if (apps.get(i).packageName.equals(pkg)) sel = i;
+        }
+        Confirm.pick(this, t, L.s(R.string.top_pick_app), "", names, sel, L.s(R.string.btn_cancel), i -> {
+            prefs.setTopButton(Prefs.TOP_APP + apps.get(i).packageName);
+            host.settingsChanged(true);
+            showSection(SEC_HOME);
+        });
     }
 
     private void buildBar(Context c, LinearLayout col) {
@@ -840,6 +894,13 @@ public final class SettingsView extends FrameLayout {
         oac.addView(row(c, L.s(R.string.set_open_original), L.s(R.string.set_original_sub),
                 button(c, L.s(R.string.btn_open), v -> host.openOriginalHome()), true));
         col.addView(oac, topFull(14));
+
+        // 1.0.2 (punto 5): dopo la retromarcia si torna all'app di prima (CarPlay, Android Auto, navigatore...)
+        col.addView(label(c, L.s(R.string.set_retro_label)), top(30));
+        LinearLayout rc = card(c);
+        rc.addView(row(c, L.s(R.string.set_retro_return), L.s(R.string.set_retro_return_sub),
+                toggle(c, prefs.retroReturn(), on -> prefs.setRetroReturn(on)), true));
+        col.addView(rc, topFull(14));
 
         // CarPlay / Android Auto: riavvio del dongle wireless che non si collega
         com.mg4.launcher.svc.DongleWatch dw = com.mg4.launcher.svc.DongleWatch.peek();

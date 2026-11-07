@@ -54,7 +54,7 @@
     <string name="set_diag_sub" formatted="false">Wartości odczytane z samochodu i ostatnie błędy</string>
     <string name="set_diag_title" formatted="false">Diagnostyka usług samochodu</string>
     <string name="set_home_card" formatted="false">PANEL SAMOCHODU</string>
-    <string name="set_inside_sub" formatted="false">Pod zewnętrzną · «— °», jeśli samochód jej nie podaje</string>
+    <string name="set_inside_sub" formatted="false">Pod zewnętrzną; jeśli auto jej nie podaje, widać --</string>
     <string name="set_language" formatted="false">JĘZYK</string>
     <string name="set_menu_title" formatted="false">Ustawienia</string>
     <string name="set_open_original" formatted="false">Otwórz oryginalny ekran MG</string>
@@ -402,4 +402,33 @@
     <string name="news_v100_2" formatted="false">Nowy przycisk \"Odblokuj gniazdo\" na pasku ładowania, z potwierdzeniem przed wysłaniem</string>
     <string name="news_v100_3" formatted="false">Nowe oficjalne ikony klimatyzacji (A/C, AUTO, recyrkulacja, ogrzewane fotele i kierownica) z kolorem i tłem według stanu, oraz kafelek odmrażania przedniej szyby</string>
     <string name="news_v100_4" formatted="false">Przeorganizowane ustawienia, jednostka odległości, konfigurowalny przycisk 360, folder osobistych logo i domyślna nawigacja</string>
+    <string name="notice_title" formatted="false">Komunikat</string>
+    <string name="cb_reserve" formatted="false">Harmonogram</string>
+    <string name="cb_reserve_off" formatted="false">Wył.</string>
+    <string name="cb_reserve_enable" formatted="false">Włącz ładowanie według harmonogramu</string>
+    <string name="cb_reserve_disable" formatted="false">Wyłącz ładowanie według harmonogramu</string>
+    <string name="cb_reserve_start">Początek: %1$s</string>
+    <string name="cb_reserve_end">Koniec: %1$s</string>
+    <string name="cb_reserve_title" formatted="false">Ładowanie według harmonogramu</string>
+    <string name="cb_reserve_msg" formatted="false">Po podłączeniu kabla auto ładuje się tylko w wybranych godzinach, jak na stronie Zarządzanie ładowaniem.</string>
+    <string name="cb_reserve_pick_start" formatted="false">Godzina rozpoczęcia</string>
+    <string name="cb_reserve_pick_end" formatted="false">Godzina zakończenia</string>
+    <string name="set_retro_label" formatted="false">BIEG WSTECZNY</string>
+    <string name="set_retro_return" formatted="false">Po cofaniu wróć do poprzedniej aplikacji</string>
+    <string name="set_retro_return_sub" formatted="false">Otwiera ponownie CarPlay, Android Auto lub nawigację otwarte przed kamerą</string>
+    <string name="set_charge_limit" formatted="false">Limit ładowania</string>
+    <string name="set_charge_limit_sub" formatted="false">Na pasku baterii i wśród przycisków ładowania; w trybie automatycznym tylko, jeśli auto obsługuje to polecenie</string>
+    <string name="limit_auto" formatted="false">Automatycznie</string>
+    <string name="limit_show" formatted="false">Pokaż</string>
+    <string name="limit_hide" formatted="false">Ukryj</string>
+    <string name="set_top_button" formatted="false">Przycisk w prawym górnym rogu</string>
+    <string name="set_top_button_sub" formatted="false">W panelu Mapa/Multimedia. Przy „Brak” źródła multimediów zawsze mają podpis</string>
+    <string name="top_app" formatted="false">Aplikacja…</string>
+    <string name="top_none" formatted="false">Brak</string>
+    <string name="top_pick_app" formatted="false">Aplikacja przycisku w prawym górnym rogu</string>
+    <string name="news_v102_1" formatted="false">Bardziej niezawodny motyw dzień/noc w każdym aucie: system, światła lub wschód i zachód słońca, z minutą oczekiwania przed zmianą (bez migania w tunelach)</string>
+    <string name="news_v102_2" formatted="false">Po cofaniu automatyczny powrót do CarPlay, Android Auto lub nawigacji</string>
+    <string name="news_v102_3" formatted="false">Bardziej niezawodne radio i Bluetooth: po uruchomieniu wraca ostatnie źródło, sterowanie i okładka Bluetooth w karcie multimediów</string>
+    <string name="news_v102_4" formatted="false">Wygląd: FM/DAB pod Radiem, większe ciśnienie opon, napis „360°”, światła na aucie, zwięzła temperatura zewnętrzna, limit i harmonogram ładowania, jeśli auto je obsługuje</string>
+    <string name="news_v102_5" formatted="false">Launcher sam sprawdza aktualizacje i może pokazywać ważne komunikaty; przycisk Aktualizuj działa też na ekranie głównym</string>
 </resources>

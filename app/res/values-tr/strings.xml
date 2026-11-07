@@ -54,7 +54,7 @@
     <string name="set_diag_sub" formatted="false">Araçtan okunan değerler ve son hatalar</string>
     <string name="set_diag_title" formatted="false">Araç servisleri tanılaması</string>
     <string name="set_home_card" formatted="false">ARAÇ PANELİ</string>
-    <string name="set_inside_sub" formatted="false">Dış sıcaklığın altında · araç vermezse «— °»</string>
+    <string name="set_inside_sub" formatted="false">Dış sıcaklığın altında; araç vermiyorsa -- görünür</string>
     <string name="set_language" formatted="false">DİL</string>
     <string name="set_menu_title" formatted="false">Ayarlar</string>
     <string name="set_open_original" formatted="false">Orijinal MG ana ekranını aç</string>
@@ -402,4 +402,33 @@
     <string name="news_v100_2" formatted="false">Şarj çubuğunda yeni \"Soketi kilidini aç\" düğmesi, göndermeden önce onay ister</string>
     <string name="news_v100_3" formatted="false">Klima için yeni resmi simgeler (A/C, AUTO, resirkülasyon, koltuk ve direksiyon ısıtma), duruma göre renk ve arka planla, ve Ön buğu giderme kutusu</string>
     <string name="news_v100_4" formatted="false">Yeniden düzenlenmiş ayarlar, mesafe birimi, yapılandırılabilir 360 düğmesi, kişisel logo klasörü ve varsayılan navigasyon</string>
+    <string name="notice_title" formatted="false">Duyuru</string>
+    <string name="cb_reserve" formatted="false">Zamanlı</string>
+    <string name="cb_reserve_off" formatted="false">Kapalı</string>
+    <string name="cb_reserve_enable" formatted="false">Zamanlı şarjı aç</string>
+    <string name="cb_reserve_disable" formatted="false">Zamanlı şarjı kapat</string>
+    <string name="cb_reserve_start">Başlangıç: %1$s</string>
+    <string name="cb_reserve_end">Bitiş: %1$s</string>
+    <string name="cb_reserve_title" formatted="false">Zamanlı şarj</string>
+    <string name="cb_reserve_msg" formatted="false">Kablo takılıyken araç yalnızca seçilen saat aralığında şarj olur (Şarj yönetimi sayfasındaki gibi).</string>
+    <string name="cb_reserve_pick_start" formatted="false">Başlangıç saati</string>
+    <string name="cb_reserve_pick_end" formatted="false">Bitiş saati</string>
+    <string name="set_retro_label" formatted="false">GERİ VİTES</string>
+    <string name="set_retro_return" formatted="false">Geri vitesten sonra önceki uygulamaya dön</string>
+    <string name="set_retro_return_sub" formatted="false">Kameradan önce açık olan CarPlay, Android Auto veya navigasyonu yeniden açar</string>
+    <string name="set_charge_limit" formatted="false">Şarj sınırı</string>
+    <string name="set_charge_limit_sub" formatted="false">Batarya çubuğunda ve şarj düğmelerinde; otomatikte yalnızca araç komutu destekliyorsa</string>
+    <string name="limit_auto" formatted="false">Otomatik</string>
+    <string name="limit_show" formatted="false">Göster</string>
+    <string name="limit_hide" formatted="false">Gizle</string>
+    <string name="set_top_button" formatted="false">Sağ üst düğme</string>
+    <string name="set_top_button_sub" formatted="false">Harita/Medya panelinde. \"Hiçbiri\" seçilince medya kaynakları adlarıyla görünür</string>
+    <string name="top_app" formatted="false">Bir uygulama…</string>
+    <string name="top_none" formatted="false">Hiçbiri</string>
+    <string name="top_pick_app" formatted="false">Sağ üst düğmenin uygulaması</string>
+    <string name="news_v102_1" formatted="false">Her araçta daha güvenilir gündüz/gece teması: sistem, farlar veya gün doğumu ve batımı; değişmeden önce bir dakika bekler (tünelde yanıp sönmez)</string>
+    <string name="news_v102_2" formatted="false">Geri vitesten sonra otomatik olarak CarPlay, Android Auto veya navigasyona dönülür</string>
+    <string name="news_v102_3" formatted="false">Daha güvenilir radyo ve Bluetooth: açılışta son kaynak devam eder, medya kartında Bluetooth kontrolleri ve kapak</string>
+    <string name="news_v102_4" formatted="false">Görünüm: Radyo altında FM/DAB, daha büyük lastik basıncı, \"360°\" yazısı, araçta yanan farlar, kompakt dış sıcaklık, araç destekliyorsa şarj sınırı ve zamanlı şarj</string>
+    <string name="news_v102_5" formatted="false">Launcher güncellemeleri kendisi denetler ve önemli duyurular gösterebilir; Güncelle düğmesi ana ekranda da çalışır</string>
 </resources>

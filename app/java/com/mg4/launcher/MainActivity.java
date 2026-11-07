@@ -161,10 +161,47 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         tf.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         registerReceiver(clockTick, tf);
         root.postDelayed(saveDiag, 15000);
-        // primo controllo aggiornamenti dopo l'avvio, quando la radio ha finito di caricare
-        root.postDelayed(autoCheck, 90_000);
+        // 1.0.2 (punto 10): primo controllo aggiornamenti e avvisi 2 minuti dopo l'avvio (sistema stabile), poi ogni 6 ore
+        root.postDelayed(autoCheck, FIRST_CHECK_MS);
         root.postDelayed(this::logoPacksTick, 20_000);
+        // 1.0.2: accensione = avvio del launcher o risveglio dello schermo (l'auto si sospende e riprende, MtkPowerManager)
+        IntentFilter sf = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        sf.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(screenOn, sf);
+        com.mg4.launcher.svc.RetroReturn.setMedia(media);
+        // ripresa della sorgente solo se il launcher parte con l'auto (non dopo un aggiornamento o un riavvio a metà viaggio)
+        if (android.os.SystemClock.elapsedRealtime() < 4 * 60_000L) media.onPowerOn("avvio del launcher all'accensione");
+        // 1.0.2 (punto 1): tema automatico con catena di fonti e 60 s di conferma
+        com.mg4.launcher.svc.DayNight.get(this).start(day -> {
+            if (!Prefs.THEME_AUTO.equals(prefs.themeMode()) || theme == null || theme.day == day) return;
+            com.mg4.launcher.svc.Diag.put("tema.ricostruito", (day ? "giorno" : "notte") + " (cambio confermato)");
+            IconStyler.clearCache();
+            boolean wasSettings = settings != null;
+            build();
+            if (wasSettings) openSettings();
+        });
     }
+
+    /** Risveglio dello schermo = accensione dell'auto: sorgente audio, aggiornamenti e avvisi importanti. */
+    private long screenOffAt = -1;
+
+    private final BroadcastReceiver screenOn = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context c, Intent i) {
+            if (Intent.ACTION_SCREEN_OFF.equals(i.getAction())) {
+                screenOffAt = android.os.SystemClock.elapsedRealtime();
+                return;
+            }
+            // accensione vera solo dopo almeno 2 minuti di schermo spento (non il tasto "schermo spento" del momento)
+            long off = screenOffAt < 0 ? 0 : android.os.SystemClock.elapsedRealtime() - screenOffAt;
+            screenOffAt = -1;
+            if (off < 2 * 60_000L) return;
+            if (media != null) media.onPowerOn("risveglio dello schermo dopo " + (off / 60_000) + " min");
+            com.mg4.launcher.svc.Notices.newPowerOn();
+            root.removeCallbacks(autoCheck);
+            root.postDelayed(autoCheck, FIRST_CHECK_MS);
+        }
+    };
 
     // ---- modalità officina: aperto il launcher durante l'officina, si chiede se disattivarla ----------
 
@@ -189,25 +226,101 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
                 }));
     }
 
-    // ---- popup discreto per i nuovi aggiornamenti ----------------------------------------------
+    // ---- 1.0.2 (punto 10): aggiornamenti e avvisi da remoto ------------------------------------------
 
-    private static final long CHECK_EVERY = 6 * 60 * 60 * 1000L;   // ogni 6 ore
-    private static final long POPUP_SHOW = 20_000;                  // poi si nasconde da solo
+    private static final long FIRST_CHECK_MS = 2 * 60_000L;           // dopo l'accensione, a sistema stabile
+    private static final long CHECK_EVERY = 6 * 60 * 60 * 1000L;      // poi ogni 6 ore
+    private static final long POPUP_SHOW = 20_000;                    // poi l'avviso si nasconde da solo
+    private static final long FORCE_RETRY_MS = 60_000, FORCE_WAIT_MAX_MS = 30 * 60_000L;
     private View updPopup;
+    private long forceWaitSince;
 
     private final Runnable autoCheck = new Runnable() {
         @Override
         public void run() {
-            if (prefs.updatePopup() && !com.mg4.launcher.svc.HomeMode.officina(getApplicationContext())) updater.checkQuiet(prefs.updateRepo(), prefs.githubToken(), r -> showUpdatePopup(r));
+            root.removeCallbacks(this);
+            if (!com.mg4.launcher.svc.HomeMode.officina(getApplicationContext())) updater.checkRemote(MainActivity.this::onRemote);
             root.postDelayed(this, CHECK_EVERY);
         }
     };
 
+    private void onRemote(Updater.Remote r) {
+        if (isFinishing() || root == null) return;
+        // avvisi da remoto (uno alla volta)
+        java.util.List<com.mg4.launcher.svc.Notices.Notice> list = com.mg4.launcher.svc.Notices.pending(this, r.notices,
+                updater.currentVersion(), L.resolve(prefs.language()));
+        showNotices(list, 0, r.release);
+        Updater.Release rel = r.release;
+        if (rel == null || rel.apkUrl == null || !rel.newer) return;
+        root.removeCallbacks(forceRetry);
+        if (r.belowMinima) {
+            forceWaitSince = android.os.SystemClock.elapsedRealtime();
+            forceRemote = r;
+            tryForced(r);
+        }
+        showUpdatePopup(rel, r.belowMinima);
+    }
+
+    /** Aggiornamento forzato ("minima"): solo ad auto ferma; se velocità non leggibile non si forza (resta l'avviso). */
+    private void tryForced(Updater.Remote r) {
+        Updater.Release rel = r.release;
+        if (!updater.canForce(rel.tag)) {
+            updater.remoteDiag(r, "sotto la minima " + r.minima + " ma già 3 tentativi falliti per " + rel.tag + ": fermo");
+            return;
+        }
+        Boolean stopped = com.mg4.launcher.svc.VehicleClient.surelyStopped();
+        String motion = com.mg4.launcher.svc.VehicleClient.motionDescription();
+        if (stopped == null) {
+            updater.remoteDiag(r, "sotto la minima " + r.minima + ": velocità e marcia non leggibili (" + motion + "), non forzato: solo avviso");
+            return;
+        }
+        if (!stopped) {
+            if (android.os.SystemClock.elapsedRealtime() - forceWaitSince > FORCE_WAIT_MAX_MS) {
+                updater.remoteDiag(r, "sotto la minima " + r.minima + ": auto in movimento da 30 min, riprovo al prossimo controllo");
+                return;
+            }
+            updater.remoteDiag(r, "sotto la minima " + r.minima + ": auto non ferma da 2 minuti (" + motion + "), aspetto");
+            root.removeCallbacks(forceRetry);
+            root.postDelayed(forceRetry, FORCE_RETRY_MS);
+            return;
+        }
+        if (updater.isBusy()) return;
+        updater.remoteDiag(r, "sotto la minima " + r.minima + ": auto ferma (" + motion + "), installo " + rel.tag);
+        updater.installRemote(rel, true);
+    }
+
+    private Updater.Remote forceRemote;
+    private final Runnable forceRetry = () -> {
+        if (forceRemote != null && !isFinishing()) tryForced(forceRemote);
+    };
+
+    private void showNotices(java.util.List<com.mg4.launcher.svc.Notices.Notice> list, int i, Updater.Release rel) {
+        if (i >= list.size() || isFinishing()) return;
+        com.mg4.launcher.svc.Notices.Notice n = list.get(i);
+        com.mg4.launcher.svc.Notices.markShown(this, n);
+        boolean upd = n.updateButton && rel != null && rel.newer && rel.apkUrl != null;
+        com.mg4.launcher.ui.Confirm.show2(root, theme, L.s(R.string.notice_title), n.text, L.s(R.string.btn_ok), () -> {
+            com.mg4.launcher.svc.Notices.markConfirmed(this, n);
+            showNotices(list, i + 1, rel);
+        }, upd ? L.s(R.string.upd_now) : null, () -> {
+            com.mg4.launcher.svc.Notices.markConfirmed(this, n);
+            startRemoteInstall(rel);
+        });
+    }
+
+    /** 1.0.2 (punto 10d): il pulsante Aggiorna funziona anche fuori dalle impostazioni (menu con un problema). */
+    private void startRemoteInstall(Updater.Release r) {
+        if (r == null) return;
+        android.widget.Toast.makeText(this, L.f(R.string.upd_downloading, r.apkName), android.widget.Toast.LENGTH_LONG).show();
+        updater.installRemote(r, false);
+    }
+
     private final Runnable hidePopup = () -> hideUpdatePopup();
 
-    private void showUpdatePopup(Updater.Release r) {
-        if (r == null || updPopup != null || !prefs.updatePopup()) return;
-        if (r.tag.equals(prefs.dismissedUpdate()) || updater.isBusy()) return;
+    private void showUpdatePopup(Updater.Release r, boolean important) {
+        if (r == null || updPopup != null) return;
+        if (!important && (!prefs.updatePopup() || r.tag.equals(prefs.dismissedUpdate()))) return;
+        if (updater.isBusy()) return;
         Theme t = theme;
         LinearLayout card = Ui.row(this);
         card.setGravity(Gravity.CENTER_VERTICAL);
@@ -224,15 +337,12 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         card.addView(txt, Ui.margins(Ui.lp(-2, -2), 0, 0, dp(28), 0));
 
         card.addView(popupButton(L.s(R.string.upd_later), t.chip, t.text, v -> {
-            prefs.setDismissedUpdate(r.tag);
+            if (!important) prefs.setDismissedUpdate(r.tag);
             hideUpdatePopup();
         }), Ui.margins(Ui.lp(-2, dp(48)), 0, 0, dp(10), 0));
         card.addView(popupButton(L.s(R.string.upd_now), t.accent, t.onAccent, v -> {
             hideUpdatePopup();
-            SettingsView.openAt(SettingsView.SEC_SYSTEM);
-            closeSettings();
-            openSettings();
-            updater.install(r, prefs.githubToken());
+            startRemoteInstall(r);
         }), Ui.lp(-2, dp(48)));
 
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.CENTER_HORIZONTAL);
@@ -344,6 +454,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     /** Novità di ogni versione (testi in tutte le lingue in strings.xml). */
     private static int[] newsFor(String ver) {
         switch (ver) {
+            case "1.0.2":
+                return new int[]{R.string.news_v102_1, R.string.news_v102_2, R.string.news_v102_3, R.string.news_v102_4, R.string.news_v102_5};
             case "1.0.0":
                 return new int[]{R.string.news_v100_1, R.string.news_v100_2, R.string.news_v100_3, R.string.news_v100_4};
             case "0.9.8":
@@ -411,6 +523,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     protected void onResume() {
         super.onResume();
         inFront = true;
+        com.mg4.launcher.svc.RetroReturn.noteLauncherShown("ritorno nello stack (la telecamera era sopra il launcher)");
         if (wrongFirmware) {
             goFullscreen();
             return;
@@ -494,12 +607,18 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         if (wrongFirmware) return;
         root.removeCallbacks(autoCheck);
         root.removeCallbacks(hidePopup);
+        root.removeCallbacks(forceRetry);
         vehicle.stop();
         conn.stop();
         try {
             unregisterReceiver(clockTick);
         } catch (Exception ignored) {
         }
+        try {
+            unregisterReceiver(screenOn);
+        } catch (Exception ignored) {
+        }
+        com.mg4.launcher.svc.DayNight.get(this).stop();
         media.stop();
         nav.stop();
         try {
@@ -515,6 +634,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         // tasto Home: torna sempre alla schermata principale
         // 1.0.0 (issue #19): con il launcher già davanti chiude anche ogni popup aperto (Clima, Comfort, Guida,
         // conferme, elenchi, avvisi)
+        com.mg4.launcher.svc.RetroReturn.noteLauncherShown("intent HOME del sistema");
         if (inFront) closePopups("tasto Home");
         closeSettings();
         closeApps();
@@ -558,10 +678,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         }
         if (cfg.uiMode != lastUiMode) {
             lastUiMode = cfg.uiMode;
-            if (Prefs.THEME_AUTO.equals(prefs.themeMode())) {
-                IconStyler.clearCache();
-                build();
-            }
+            // 1.0.2: il cambio si applica dopo 60 s di conferma (DayNight richiama la ricostruzione)
+            com.mg4.launcher.svc.DayNight.get(this).onConfigurationChanged();
         }
     }
 

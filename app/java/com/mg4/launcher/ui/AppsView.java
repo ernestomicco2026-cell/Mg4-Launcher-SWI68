@@ -149,6 +149,13 @@ public final class AppsView extends LinearLayout {
         }
     }
 
+    /** App della telecamera 360: quella originale e MG4 360 (com.mg4.* con "360" nel nome o nell'etichetta). */
+    private static boolean is360(AppCatalog.App app) {
+        String p = app.packageName == null ? "" : app.packageName;
+        if (Cam360.ORIG_PKG.equals(p)) return true;
+        return p.startsWith("com.mg4.") && (p.contains("360") || String.valueOf(app.label).contains("360"));
+    }
+
     private View tile(Context c, AppCatalog.App app, Set<String> editable) {
         LinearLayout col = Ui.column(c);
         col.setGravity(Gravity.CENTER);
@@ -177,7 +184,13 @@ public final class AppsView extends LinearLayout {
         box.setBackground(Ui.round(boxBg, dp(22 * k)));
         ImageView iv = new ImageView(c);
         iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        if (app.iconRes != 0) {
+        if (is360(app)) {
+            // 1.0.2 (issue #23): telecamera 360 = scritta "360°" grande, nello stile delle altre icone (Video USB resta play)
+            TextView tx = Ui.text(c, "360°", 26 * k, fg, Ui.MEDIUM);
+            tx.setGravity(Gravity.CENTER);
+            tx.setLetterSpacing(-0.03f);
+            box.addView(tx, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+        } else if (app.iconRes != 0) {
             iv.setImageResource(app.iconRes);
             iv.setColorFilter(fg);
             box.addView(iv, new FrameLayout.LayoutParams(dp(34 * k), dp(34 * k), Gravity.CENTER));

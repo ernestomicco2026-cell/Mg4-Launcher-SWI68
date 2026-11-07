@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-<a href="releases/MG4Launcher-1.0.1.apk"><img alt="Scarica / Download 1.0.1" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.1-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
+<a href="releases/MG4Launcher-1.0.2.apk"><img alt="Scarica / Download 1.0.2" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.2-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
 <a href="https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT"><img alt="Sostieni il progetto con PayPal · Support the project with PayPal" src="https://img.shields.io/badge/Sostieni%20%2F%20Support-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white"></a>
 </p>
 
@@ -47,6 +47,12 @@
 ## Schermate / Screenshots
 
 <table>
+<tr>
+<td width="50%" valign="top"><img src="docs/home-1.0.2-giorno-bluetooth.png" alt="Home di giorno con il Bluetooth: copertina, comandi e sorgenti con la scritta (simulazione)" width="100%"><br>
+<sub>Tema <b>giorno</b>, sorgente <b>Bluetooth</b> con copertina; pulsante in alto a destra su "Nessuno": le sorgenti tengono la scritta · <i><b>Day</b> theme, <b>Bluetooth</b> source with cover art; top-right button set to "None": sources keep their label</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.2-ricarica.png" alt="Pulsanti di ricarica con limite e ricarica programmata (simulazione)" width="100%"><br>
+<sub><b>Pulsanti di ricarica</b> con limite e <b>ricarica programmata</b> (si vedono solo se l'auto li supporta) · <i><b>Charging buttons</b> with limit and <b>scheduled charging</b> (shown only if the car supports them)</i></sub></td>
+</tr>
 <tr>
 <td width="50%" valign="top"><img src="screenshots/guida.png" alt="Gruppo Guida: corsia, One Pedal, assistente, pedale del freno" width="100%"><br>
 <sub>Gruppo <b>Guida</b>: corsia, One Pedal, assistente, pedale del freno · <i><b>Driving</b> group: lane, One Pedal, assistant, brake pedal</i></sub></td>
@@ -218,7 +224,13 @@ launcher la aspetta (fino a 3 minuti) e torna davanti. A ogni avvio riconferma a
 
 ### Aggiornamenti
 
-Impostazioni del launcher → **Aggiornamenti** → **Controlla aggiornamenti**.
+Dalla 1.0.2 il launcher controlla da solo gli aggiornamenti: due minuti dopo l'accensione e poi ogni 6 ore.
+Se c'è una versione nuova compare in alto un avviso con il pulsante **Aggiorna**, che funziona anche senza aprire le
+impostazioni. Il launcher può mostrare anche **avvisi importanti** (per esempio quando una versione ha un problema e
+conviene aggiornare subito); se una versione va aggiornata per forza, il launcher la installa da solo, ma solo ad auto
+ferma e solo se l'APK è firmato con la stessa chiave.
+
+Si può controllare anche a mano: impostazioni del launcher → **Aggiornamenti** → **Controlla aggiornamenti**.
 Se c'è una versione più nuova compare **Scarica e installa**: il launcher la installa da solo e si riavvia.
 Gli aggiornamenti si possono installare anche da computer, con lo stesso comando dell'installazione.
 
@@ -272,6 +284,29 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Versioni
+
+#### 1.0.2
+- **Tema giorno/notte** più affidabile e uguale su tutte le versioni: segue il sistema quando è affidabile,
+  altrimenti i fari, altrimenti alba e tramonto calcolati senza internet. Prima di cambiare aspetta un minuto, così in
+  galleria non lampeggia. La scelta manuale Giorno/Notte resta e ha la precedenza.
+- **Dopo la retromarcia** si torna da soli all'app di prima (CarPlay, Android Auto anche da box o dongle, navigatore).
+  Si può spegnere nelle impostazioni (Avvio e app).
+- **Radio**: se all'accensione il servizio radio non è ancora pronto il launcher riprova da solo, senza errori.
+  Passando alla radio dal Bluetooth la radio ora suona davvero, anche con il tasto Play.
+- **Sorgente all'accensione**: riparte l'ultima sorgente usata davvero (Bluetooth, radio, USB, CarPlay/AA); se non è
+  disponibile, la radio. Il passaggio al Bluetooth è più affidabile e la card media mostra comandi, titolo, artista e
+  copertina quando il telefono li manda.
+- **Temperatura interna** di nuovo come opzione: se l'auto non la fornisce si vede "--", mai la temperatura esterna.
+- **Grafica**: la scelta FM/DAB è sotto il pulsante Radio, collegata con una linea; pressione delle gomme più grande e
+  senza scritte; tasto e icona della telecamera 360 con la scritta "360°" (Video USB ha la sua icona); fari accesi
+  sull'auto disegnata quando l'auto ha le luci accese; temperatura esterna compatta a sinistra; animazione più fluida
+  verso la schermata App.
+- **Pulsante in alto a destra** del riquadro configurabile: CarPlay/Android Auto (come prima), un'app a scelta oppure
+  nessuno.
+- **Limite di ricarica** in automatico solo se l'auto supporta il comando, con la scelta Automatico / Mostra / Nascondi;
+  **ricarica programmata** tra i pulsanti di ricarica, sulle auto che la supportano.
+- **Aggiornamenti e avvisi da remoto**: controllo automatico all'accensione e ogni 6 ore, pulsante Aggiorna anche dalla
+  home, avvisi importanti e aggiornamento forzato solo ad auto ferma.
 
 #### 1.0.1
 - Il menu delle impostazioni scorre di nuovo e la sezione aggiornamenti è sempre raggiungibile
@@ -769,7 +804,13 @@ default home.
 
 ### Updates
 
-Launcher settings → **Aggiornamenti** (Updates) → **Controlla aggiornamenti** (Check for updates).
+Since 1.0.2 the launcher checks for updates by itself: two minutes after start-up and then every 6 hours. When a new
+version is out, a notice with an **Update** button appears at the top, and it works without opening the settings. The
+launcher can also show **important notices** (for example when a version has a problem and it's better to update right
+away); if a version must be updated, the launcher installs it by itself, but only with the car stopped and only if the
+APK is signed with the same key.
+
+You can also check by hand: launcher settings → **Aggiornamenti** (Updates) → **Controlla aggiornamenti** (Check for updates).
 If a newer version exists, **Scarica e installa** (Download and install) appears: the launcher installs it and restarts.
 Updates can also be installed from a computer with the installation command.
 
@@ -823,6 +864,28 @@ Even just **€2** is a great help to keep developing and testing new versions i
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Changelog
+
+#### 1.0.2
+- **Day/night theme** more reliable and the same on every version: it follows the system when it's reliable,
+  otherwise the headlights, otherwise sunrise and sunset worked out offline. It waits one minute before switching, so
+  it doesn't flash in tunnels. The manual Day/Night choice stays and takes priority.
+- **After reversing** you go back to the previous app by yourself (CarPlay, Android Auto also through a box or dongle,
+  navigator). It can be turned off in the settings (Startup and apps).
+- **Radio**: if the radio service isn't ready at start-up the launcher retries by itself, with no errors. Switching
+  from Bluetooth to radio now really plays the radio, also with the Play button.
+- **Source at start-up**: the last source actually used comes back (Bluetooth, radio, USB, CarPlay/AA); if it isn't
+  available, the radio. Switching to Bluetooth is more reliable and the media card shows controls, title, artist and
+  cover art when the phone sends them.
+- **Inside temperature** is back as an option: if the car doesn't provide it you see "--", never the outside
+  temperature.
+- **Look**: the FM/DAB choice sits under the Radio button, linked by a line; bigger tyre pressure without labels;
+  the 360 camera button and icon now read "360°" (USB video has its own icon); headlights lit on the drawn car when the
+  car's lights are on; compact outside temperature on the left; smoother animation to the Apps screen.
+- **Top-right button** of the panel can be set: CarPlay/Android Auto (as before), an app of your choice, or none.
+- **Charge limit** shown automatically only if the car supports the command, with an Automatic / Show / Hide choice;
+  **scheduled charging** among the charging buttons, on cars that support it.
+- **Remote updates and notices**: automatic check at start-up and every 6 hours, Update button also from the home
+  screen, important notices and forced update only with the car stopped.
 
 #### 1.0.1
 - The settings menu scrolls again and the updates section is always reachable

@@ -330,6 +330,46 @@ public final class Prefs {
         sp.edit().putString("tasto360", v == null ? "" : v).apply();
     }
 
+    // --- 1.0.2 ---
+
+    /** Dopo la retromarcia si riapre l'app che era davanti (CarPlay, Android Auto, navigatore...). Attivo di default. */
+    public boolean retroReturn() {
+        return sp.getBoolean("retroRitorno", true);
+    }
+
+    public void setRetroReturn(boolean b) {
+        sp.edit().putBoolean("retroRitorno", b).apply();
+    }
+
+    /** Limite di ricarica: "auto" (solo se l'auto lo supporta), "mostra", "nascondi". */
+    public static final String LIMIT_AUTO = "auto", LIMIT_SHOW = "mostra", LIMIT_HIDE = "nascondi";
+
+    public String chargeLimitMode() {
+        String v = sp.getString("limiteRicarica", LIMIT_AUTO);
+        return LIMIT_SHOW.equals(v) || LIMIT_HIDE.equals(v) ? v : LIMIT_AUTO;
+    }
+
+    public void setChargeLimitMode(String v) {
+        sp.edit().putString("limiteRicarica", v).apply();
+    }
+
+    /** Pulsante in alto a destra del riquadro: "proiezione" (CarPlay/Android Auto, di default), "app:<pacchetto>", "nessuno". */
+    public static final String TOP_PROJECTION = "proiezione", TOP_APP = "app:", TOP_NONE = "nessuno";
+
+    public String topButton() {
+        String v = sp.getString("pulsanteAltoDestra", TOP_PROJECTION);
+        return TOP_NONE.equals(v) || v.startsWith(TOP_APP) ? v : TOP_PROJECTION;
+    }
+
+    public void setTopButton(String v) {
+        sp.edit().putString("pulsanteAltoDestra", v == null ? TOP_PROJECTION : v).apply();
+    }
+
+    /** Accesso diretto alle impostazioni (per i servizi in svc/ che salvano il proprio stato). */
+    public SharedPreferences raw() {
+        return sp;
+    }
+
     /** Ultima versione per cui è stato mostrato il popup "Novità". */
     public String newsShownFor() {
         return sp.getString("novitaVersione", "");

@@ -54,7 +54,7 @@
     <string name="set_diag_sub" formatted="false">Valores leídos del coche y errores recientes</string>
     <string name="set_diag_title" formatted="false">Diagnóstico de servicios del coche</string>
     <string name="set_home_card" formatted="false">PANEL DEL COCHE</string>
-    <string name="set_inside_sub" formatted="false">Debajo de la exterior · «— °» si el coche no la proporciona</string>
+    <string name="set_inside_sub" formatted="false">Debajo de la exterior; si el coche no la da, se ve --</string>
     <string name="set_language" formatted="false">IDIOMA</string>
     <string name="set_menu_title" formatted="false">Ajustes</string>
     <string name="set_open_original" formatted="false">Abrir la pantalla de inicio original de MG</string>
@@ -402,4 +402,33 @@
     <string name="news_v100_2" formatted="false">Nuevo botón \"Desbloquear toma\" en la barra de carga, con confirmación antes de enviarlo</string>
     <string name="news_v100_3" formatted="false">Nuevos iconos oficiales del clima (A/C, AUTO, recirculación, asientos y volante calefactados) con color y fondo según el estado, y el panel de desempañado delantero</string>
     <string name="news_v100_4" formatted="false">Ajustes reorganizados, unidad de distancia, botón 360 configurable, carpeta de logotipos personales y navegador predeterminado</string>
+    <string name="notice_title" formatted="false">Aviso</string>
+    <string name="cb_reserve" formatted="false">Programada</string>
+    <string name="cb_reserve_off" formatted="false">Desactivada</string>
+    <string name="cb_reserve_enable" formatted="false">Activar la carga programada</string>
+    <string name="cb_reserve_disable" formatted="false">Desactivar la carga programada</string>
+    <string name="cb_reserve_start">Inicio: %1$s</string>
+    <string name="cb_reserve_end">Fin: %1$s</string>
+    <string name="cb_reserve_title" formatted="false">Carga programada</string>
+    <string name="cb_reserve_msg" formatted="false">Con el cable conectado, el coche carga solo en la franja horaria elegida, como en la página Gestión de carga.</string>
+    <string name="cb_reserve_pick_start" formatted="false">Hora de inicio</string>
+    <string name="cb_reserve_pick_end" formatted="false">Hora de fin</string>
+    <string name="set_retro_label" formatted="false">MARCHA ATRÁS</string>
+    <string name="set_retro_return" formatted="false">Tras la marcha atrás, volver a la app anterior</string>
+    <string name="set_retro_return_sub" formatted="false">Vuelve a abrir CarPlay, Android Auto o el navegador que estaban abiertos antes de la cámara</string>
+    <string name="set_charge_limit" formatted="false">Límite de carga</string>
+    <string name="set_charge_limit_sub" formatted="false">En la barra de la batería y entre los botones de carga; en automático solo si el coche admite el comando</string>
+    <string name="limit_auto" formatted="false">Automático</string>
+    <string name="limit_show" formatted="false">Mostrar</string>
+    <string name="limit_hide" formatted="false">Ocultar</string>
+    <string name="set_top_button" formatted="false">Botón superior derecho</string>
+    <string name="set_top_button_sub" formatted="false">En el panel Mapa/Multimedia. Con \"Ninguno\" las fuentes multimedia mantienen siempre su nombre</string>
+    <string name="top_app" formatted="false">Una app…</string>
+    <string name="top_none" formatted="false">Ninguno</string>
+    <string name="top_pick_app" formatted="false">App del botón superior derecho</string>
+    <string name="news_v102_1" formatted="false">Tema día/noche más fiable en todos los coches: sistema, faros o amanecer y atardecer, con un minuto de espera antes de cambiar (no parpadea en los túneles)</string>
+    <string name="news_v102_2" formatted="false">Tras la marcha atrás se vuelve solo a CarPlay, Android Auto o al navegador</string>
+    <string name="news_v102_3" formatted="false">Radio y Bluetooth más fiables: al arrancar vuelve la última fuente, controles y carátula Bluetooth en la tarjeta multimedia</string>
+    <string name="news_v102_4" formatted="false">Diseño: FM/DAB bajo la Radio, presión de neumáticos más grande, texto \"360°\", faros encendidos en el coche, temperatura exterior compacta, límite y carga programada si el coche los admite</string>
+    <string name="news_v102_5" formatted="false">El launcher busca actualizaciones solo y puede mostrar avisos importantes; el botón Actualizar funciona también desde el inicio</string>
 </resources>

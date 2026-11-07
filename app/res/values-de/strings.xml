@@ -54,7 +54,7 @@
     <string name="set_diag_sub" formatted="false">Vom Auto gelesene Werte und letzte Fehler</string>
     <string name="set_diag_title" formatted="false">Diagnose der Fahrzeugdienste</string>
     <string name="set_home_card" formatted="false">FAHRZEUGBEREICH</string>
-    <string name="set_inside_sub" formatted="false">Unter der Außentemperatur · „— °“, wenn das Auto sie nicht liefert</string>
+    <string name="set_inside_sub" formatted="false">Unter der Außentemperatur; liefert das Auto sie nicht, steht dort --</string>
     <string name="set_language" formatted="false">SPRACHE</string>
     <string name="set_menu_title" formatted="false">Einstellungen</string>
     <string name="set_open_original" formatted="false">Original-MG-Startbildschirm öffnen</string>
@@ -402,4 +402,33 @@
     <string name="news_v100_2" formatted="false">Neue Taste \"Steckdose entsperren\" in der Ladeleiste, mit Bestätigung vor dem Senden</string>
     <string name="news_v100_3" formatted="false">Neue offizielle Klima-Symbole (A/C, AUTO, Umluft, Sitz- und Lenkradheizung) mit Farbe und Hintergrund je Zustand, sowie die Frontscheibenheizung-Kachel</string>
     <string name="news_v100_4" formatted="false">Neu organisierte Einstellungen, Distanzeinheit, konfigurierbare 360-Taste, persönlicher Logo-Ordner und Standard-Navigator</string>
+    <string name="notice_title" formatted="false">Hinweis</string>
+    <string name="cb_reserve" formatted="false">Geplant</string>
+    <string name="cb_reserve_off" formatted="false">Aus</string>
+    <string name="cb_reserve_enable" formatted="false">Geplantes Laden einschalten</string>
+    <string name="cb_reserve_disable" formatted="false">Geplantes Laden ausschalten</string>
+    <string name="cb_reserve_start">Beginn: %1$s</string>
+    <string name="cb_reserve_end">Ende: %1$s</string>
+    <string name="cb_reserve_title" formatted="false">Geplantes Laden</string>
+    <string name="cb_reserve_msg" formatted="false">Mit eingestecktem Kabel lädt das Auto nur im gewählten Zeitfenster, wie auf der Seite Lademanagement.</string>
+    <string name="cb_reserve_pick_start" formatted="false">Startzeit</string>
+    <string name="cb_reserve_pick_end" formatted="false">Endzeit</string>
+    <string name="set_retro_label" formatted="false">RÜCKWÄRTSGANG</string>
+    <string name="set_retro_return" formatted="false">Nach dem Rückwärtsfahren zur vorherigen App zurück</string>
+    <string name="set_retro_return_sub" formatted="false">Öffnet CarPlay, Android Auto oder die Navigation erneut, die vor der Kamera offen waren</string>
+    <string name="set_charge_limit" formatted="false">Ladelimit</string>
+    <string name="set_charge_limit_sub" formatted="false">Auf der Batterieleiste und bei den Ladetasten; automatisch nur, wenn das Auto den Befehl unterstützt</string>
+    <string name="limit_auto" formatted="false">Automatisch</string>
+    <string name="limit_show" formatted="false">Anzeigen</string>
+    <string name="limit_hide" formatted="false">Ausblenden</string>
+    <string name="set_top_button" formatted="false">Taste oben rechts</string>
+    <string name="set_top_button_sub" formatted="false">Im Feld Karte/Medien. Mit „Keine“ behalten die Medienquellen immer ihre Beschriftung</string>
+    <string name="top_app" formatted="false">Eine App…</string>
+    <string name="top_none" formatted="false">Keine</string>
+    <string name="top_pick_app" formatted="false">App für die Taste oben rechts</string>
+    <string name="news_v102_1" formatted="false">Zuverlässigeres Tag/Nacht-Design auf jedem Auto: System, Scheinwerfer oder Sonnenauf- und -untergang, mit einer Minute Wartezeit vor dem Wechsel (kein Flackern im Tunnel)</string>
+    <string name="news_v102_2" formatted="false">Nach dem Rückwärtsfahren geht es automatisch zurück zu CarPlay, Android Auto oder zur Navigation</string>
+    <string name="news_v102_3" formatted="false">Zuverlässigeres Radio und Bluetooth: beim Start läuft die letzte Quelle weiter, Bluetooth-Steuerung und Cover in der Medienkarte</string>
+    <string name="news_v102_4" formatted="false">Optik: FM/DAB unter Radio, größerer Reifendruck, Schriftzug „360°“, Licht am Auto, kompakte Außentemperatur, Ladelimit und geplantes Laden, wenn das Auto sie unterstützt</string>
+    <string name="news_v102_5" formatted="false">Der Launcher sucht selbst nach Updates und kann wichtige Hinweise zeigen; die Taste Aktualisieren funktioniert auch auf der Startseite</string>
 </resources>
