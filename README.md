@@ -1,20 +1,3 @@
-> [!WARNING]
-> 🇮🇹 **Hai la 1.0.0? Aggiorna a mano alla 1.0.1.** Nella 1.0.0 il menu delle impostazioni non scorre e il tasto Aggiorna non si raggiunge: scarica [l'APK 1.0.1](releases/MG4Launcher-1.0.1.apk) e installalo come la prima volta.
->
-> 🇬🇧 **Running 1.0.0? Update manually to 1.0.1.** In 1.0.0 the settings menu doesn't scroll and the Update button can't be reached: download [the 1.0.1 APK](releases/MG4Launcher-1.0.1.apk) and install it like the first time.
->
-> 🇪🇸 **¿Tienes la 1.0.0? Actualiza a mano a la 1.0.1.** En la 1.0.0 el menú de ajustes no se desplaza y no se llega al botón Actualizar: descarga [el APK 1.0.1](releases/MG4Launcher-1.0.1.apk) e instálalo como la primera vez.
->
-> 🇩🇪 **Version 1.0.0 installiert? Bitte manuell auf 1.0.1 aktualisieren.** In 1.0.0 lässt sich das Einstellungsmenü nicht scrollen und die Schaltfläche „Aktualisieren“ ist nicht erreichbar: [APK 1.0.1](releases/MG4Launcher-1.0.1.apk) herunterladen und wie beim ersten Mal installieren.
->
-> 🇫🇷 **Vous avez la 1.0.0 ? Mettez à jour manuellement vers la 1.0.1.** Dans la 1.0.0, le menu des réglages ne défile pas et le bouton Mettre à jour est inaccessible : téléchargez [l'APK 1.0.1](releases/MG4Launcher-1.0.1.apk) et installez-le comme la première fois.
->
-> 🇵🇱 **Masz wersję 1.0.0? Zaktualizuj ręcznie do 1.0.1.** W wersji 1.0.0 menu ustawień się nie przewija i nie da się dojść do przycisku Aktualizuj: pobierz [APK 1.0.1](releases/MG4Launcher-1.0.1.apk) i zainstaluj jak za pierwszym razem.
->
-> 🇹🇷 **1.0.0 sürümünü mü kullanıyorsunuz? 1.0.1 sürümüne elle güncelleyin.** 1.0.0 sürümünde ayarlar menüsü kaymıyor ve Güncelle düğmesine ulaşılamıyor: [1.0.1 APK'sını](releases/MG4Launcher-1.0.1.apk) indirin ve ilk seferdeki gibi kurun.
->
-> 🇵🇹 **Tem a 1.0.0? Atualize manualmente para a 1.0.1.** Na 1.0.0 o menu das definições não desliza e não se chega ao botão Atualizar: descarregue [o APK 1.0.1](releases/MG4Launcher-1.0.1.apk) e instale-o como da primeira vez.
-
 # MG4 Launcher — SWI68 SAIC 1.0+
 
 <p align="center"><img src="screenshots/home.png" alt="Home di MG4 Launcher SWI68 SAIC 1.0+ (simulazione) · MG4 Launcher SWI68 SAIC 1.0+ home (mock-up)" width="100%"></p>
