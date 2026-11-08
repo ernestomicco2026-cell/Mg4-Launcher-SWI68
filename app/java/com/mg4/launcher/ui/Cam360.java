@@ -64,6 +64,14 @@ public final class Cam360 {
         }
     }
 
+    static boolean launchable(Context c, String pkg) {
+        try {
+            return c.getPackageManager().getLaunchIntentForPackage(pkg) != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     static String label(Context c, String pkg) {
         try {
             PackageManager pm = c.getPackageManager();
@@ -90,10 +98,11 @@ public final class Cam360 {
             }
         } else if (v.startsWith(Prefs.CAM_APP)) {
             String pkg = v.substring(Prefs.CAM_APP.length());
-            if (installed(c, pkg)) t = new Target(APP, pkg, null, label(c, pkg));
+            // 1.0.3: se l'app scelta non c'è più (o non si può aprire) torna il tasto predefinito, senza crash
+            if (!pkg.isEmpty() && installed(c, pkg) && launchable(c, pkg)) t = new Target(APP, pkg, null, label(c, pkg));
             else {
                 t = def(orig);
-                note = " (" + pkg + " non installata: predefinito)";
+                note = " (" + (pkg.isEmpty() ? "app vuota" : pkg) + " non installata o non apribile: predefinito)";
             }
         } else if (Prefs.CAM_ORIGINAL.equals(v)) {
             t = orig ? new Target(ORIGINAL, ORIG_PKG, ORIG_CLS, "") : def(false);

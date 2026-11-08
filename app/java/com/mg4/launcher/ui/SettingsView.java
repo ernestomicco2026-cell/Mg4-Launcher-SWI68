@@ -467,12 +467,20 @@ public final class SettingsView extends FrameLayout {
                         showSection(SEC_HOME);
                     }), false));
         }
-        // 1.0.2 (issue #8): temperatura interna come opzione; "--" se l'auto non la fornisce, mai l'esterna
-        card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_sub),
-                toggle(c, prefs.showInsideTemp(), on -> {
-                    prefs.setShowInsideTemp(on);
-                    host.settingsChanged(true);
-                }), false));
+        // 1.0.2 (issue #8): temperatura interna come opzione, mai l'esterna.
+        // 1.0.3: Automatico / Mostra / Nascondi; se l'auto non ha la proprietà la riga non si vede proprio
+        // (se era su "Mostra" la riga resta, così si può sempre passare a Nascondi)
+        if (!prefs.insideTempMissing() || Prefs.LIMIT_SHOW.equals(prefs.insideTempMode())) {
+            String[] inVals = {Prefs.LIMIT_AUTO, Prefs.LIMIT_SHOW, Prefs.LIMIT_HIDE};
+            String[] inNames = {L.s(R.string.limit_auto), L.s(R.string.limit_show), L.s(R.string.limit_hide)};
+            int inSel = java.util.Arrays.asList(inVals).indexOf(prefs.insideTempMode());
+            card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_sub),
+                    choices(c, inNames, inSel, i -> {
+                        prefs.setInsideTempMode(inVals[i]);
+                        host.settingsChanged(true);
+                        showSection(SEC_HOME);
+                    }), false));
+        }
         // 1.0.2 (issue SWI69 #2): limite di ricarica Automatico (solo se l'auto lo supporta) / Mostra / Nascondi
         String[] limVals = {Prefs.LIMIT_AUTO, Prefs.LIMIT_SHOW, Prefs.LIMIT_HIDE};
         String[] limNames = {L.s(R.string.limit_auto), L.s(R.string.limit_show), L.s(R.string.limit_hide)};
@@ -497,6 +505,15 @@ public final class SettingsView extends FrameLayout {
                 choices(c, navNames, navSel, i -> {
                     prefs.setNavApp(navVals[i]);
                     host.settingsChanged(false);
+                    showSection(SEC_HOME);
+                }), false));
+        // 1.0.3 (issue #25): ordine dei comandi in alto nel riquadro: sorgenti poi Mappa/Media (attuale) o il contrario
+        String[] ordNames = {L.s(R.string.top_order_current), L.s(R.string.top_order_swapped)};
+        card.addView(row(c, L.s(R.string.set_top_order), L.s(R.string.set_top_order_sub),
+                choices(c, ordNames, prefs.topSwapped() ? 1 : 0, i -> {
+                    if ((i == 1) == prefs.topSwapped()) return;
+                    prefs.setTopSwapped(i == 1);
+                    host.settingsChanged(true);
                     showSection(SEC_HOME);
                 }), false));
         // 1.0.2 (issue #23): pulsante in alto a destra del riquadro: CarPlay/Android Auto (come prima), un'app, nessuno
@@ -570,6 +587,27 @@ public final class SettingsView extends FrameLayout {
                     prefs.setChargeButtons(on);
                     host.settingsChanged(true);
                 }), false));
+        // 1.0.3 (punto 7): riquadro accanto al clima: Media (come prima) / Preferiti telefono / Scorciatoie app
+        String tile = prefs.tileMode();
+        String[] tileNames = {L.s(R.string.tile_media), L.s(R.string.tile_phone), L.s(R.string.tile_apps)};
+        int tileSel = Prefs.TILE_PHONE.equals(tile) ? 1 : Prefs.TILE_APPS.equals(tile) ? 2 : 0;
+        LinearLayout tileRow = Ui.row(c);
+        for (int i = 0; i < tileNames.length; i++) {
+            final int idx = i;
+            boolean on = i == tileSel;
+            TextView ch = choice(c, tileNames[i], on, v -> {
+                if (idx == 1) { pickTileContacts(c); return; }   // apre sempre la scelta, anche se già selezionato
+                if (idx == 2) { pickTileApps(c); return; }
+                if (idx == tileSel) return;
+                prefs.setTileMode(Prefs.TILE_MEDIA);
+                host.settingsChanged(true);
+                showSection(SEC_BAR);
+            });
+            ch.setPadding(tp(20), 0, tp(20), 0);
+            if (!on) ch.setBackground(Ui.pressable(c, t.panel, 16 * Ui.K, t));
+            tileRow.addView(ch, Ui.margins(new LinearLayout.LayoutParams(-2, tp(60)), i == 0 ? 0 : dp(8), 0, 0, 0));
+        }
+        card.addView(row(c, L.s(R.string.set_tile), L.s(R.string.set_tile_sub), tileRow, false));
         // 1.0.0 (punto 8): cosa apre il tasto 360
         String cam = prefs.cam360();
         boolean camApp = cam.startsWith(Prefs.CAM_APP);
@@ -593,6 +631,71 @@ public final class SettingsView extends FrameLayout {
         }
         card.addView(row(c, L.s(R.string.set_cam360), L.s(R.string.set_cam360_sub), camRow, true));
         col.addView(card, topFull(14));
+    }
+
+    /**
+     * 1.0.3: preferiti del telefono (al massimo 6) dalla rubrica del telefono Bluetooth collegato. La rubrica si legge
+     * fuori dal thread principale; i preferiti già scelti restano anche se il telefono ora non è collegato.
+     */
+    private void pickTileContacts(Context c) {
+        com.mg4.launcher.svc.PhoneClient pc = com.mg4.launcher.svc.PhoneClient.get(c);
+        pc.start(null);
+        new Thread(() -> {
+            java.util.List<com.mg4.launcher.svc.PhoneClient.Contact> book = pc.contacts();
+            post(() -> {
+                pc.stop(null);
+                if (!isAttachedToWindow()) return;
+                java.util.List<String[]> cur = prefs.tileContacts();
+                // elenco: rubrica + i preferiti già scelti che non ci sono (telefono non collegato)
+                java.util.List<String[]> all = new java.util.ArrayList<>();
+                java.util.Set<String> keys = new java.util.HashSet<>();
+                for (com.mg4.launcher.svc.PhoneClient.Contact k : book) if (keys.add(k.name + "|" + k.number)) all.add(new String[]{k.name, k.number});
+                for (String[] f : cur) if (keys.add(f[0] + "|" + f[1])) all.add(0, f);
+                if (all.isEmpty()) {
+                    prefs.setTileMode(Prefs.TILE_PHONE);
+                    host.settingsChanged(true);
+                    showSection(SEC_BAR);
+                    android.widget.Toast.makeText(c, L.s(R.string.tile_no_contacts), android.widget.Toast.LENGTH_LONG).show();
+                    return;
+                }
+                String[] names = new String[all.size()];
+                for (int i = 0; i < all.size(); i++) {
+                    String num = all.get(i)[1];
+                    // con più numeri per la stessa persona si vedono le ultime 3 cifre
+                    names[i] = all.get(i)[0] + (num.length() > 3 ? "  ·" + num.substring(num.length() - 3) : "");
+                }
+                java.util.List<Integer> preset = new java.util.ArrayList<>();
+                for (String[] f : cur) for (int i = 0; i < all.size(); i++) if (all.get(i)[0].equals(f[0]) && all.get(i)[1].equals(f[1])) preset.add(i);
+                Confirm.pickMany(this, t, L.s(R.string.tile_pick_contacts), L.s(R.string.tile_pick_contacts_sub), names, preset, Prefs.TILE_MAX,
+                        L.s(R.string.btn_cancel), L.s(R.string.btn_save), chosen -> {
+                            java.util.List<String[]> out = new java.util.ArrayList<>();
+                            for (int i : chosen) out.add(all.get(i));
+                            prefs.setTileContacts(out);
+                            prefs.setTileMode(Prefs.TILE_PHONE);
+                            com.mg4.launcher.svc.Diag.put("home.riquadro", "Preferiti telefono · " + out.size() + " preferiti scelti");
+                            host.settingsChanged(true);
+                            showSection(SEC_BAR);
+                        });
+            });
+        }, "mg4-rubrica").start();
+    }
+
+    /** 1.0.3: scorciatoie alle app per il riquadro (al massimo 6), nell'ordine in cui si toccano. */
+    private void pickTileApps(Context c) {
+        java.util.List<com.mg4.launcher.apps.AppCatalog.App> apps = host.allLaunchableApps();
+        String[] names = new String[apps.size()];
+        for (int i = 0; i < apps.size(); i++) names[i] = apps.get(i).label;
+        java.util.List<Integer> preset = new java.util.ArrayList<>();
+        for (String pkg : prefs.tileApps()) for (int i = 0; i < apps.size(); i++) if (apps.get(i).packageName.equals(pkg)) { preset.add(i); break; }
+        Confirm.pickMany(this, t, L.s(R.string.tile_pick_apps), L.s(R.string.tile_pick_apps_sub), names, preset, Prefs.TILE_MAX,
+                L.s(R.string.btn_cancel), L.s(R.string.btn_save), chosen -> {
+                    java.util.List<String> out = new java.util.ArrayList<>();
+                    for (int i : chosen) if (!out.contains(apps.get(i).packageName)) out.add(apps.get(i).packageName);
+                    prefs.setTileApps(out);
+                    prefs.setTileMode(Prefs.TILE_APPS);
+                    host.settingsChanged(true);
+                    showSection(SEC_BAR);
+                });
     }
 
     /** Elenco delle app installate (escluso noi) per scegliere "un'altra app" per il tasto 360. */
@@ -974,6 +1077,12 @@ public final class SettingsView extends FrameLayout {
             showSection(SEC_SYSTEM);
         });
         card.addView(dr);
+        col.addView(card, topFull(14));
+
+        // 1.0.3 (punto 8): Controllo funzioni, in sola lettura
+        card = card(c);
+        View chkBtn = button(c, L.s(R.string.check_start), v -> CheckPanel.show(this, t));
+        card.addView(row(c, L.s(R.string.check_title), L.s(R.string.check_sub), chkBtn, true));
         col.addView(card, topFull(14));
 
         // 0.8.6-beta: disinstallazione dall'auto (rimette la home MG e toglie il launcher)

@@ -126,7 +126,9 @@ public final class CarProps {
                         allAreas.put(id, ids != null && ids.length > 0 ? ids : new int[]{0});
                     }
                     Diag.put("auto.proprietà", cfgs.size() + " disponibili; TPMS " + (areas.containsKey(TIRE_FL) ? "sì" : "no")
-                            + ", temp. interna " + (areas.containsKey(HVAC_TEMPERATURE_CURRENT) || areas.containsKey(HVAC_AMBIENT_TEMPERATURE) ? "sì" : "no"));
+                            // 1.0.3: "ambient" è la temperatura esterna, non conta come interna
+                            + ", temp. interna " + (areas.containsKey(HVAC_TEMPERATURE_CURRENT) ? "sì"
+                            : areas.containsKey(HVAC_AMBIENT_TEMPERATURE) ? "no (solo ambient = esterna)" : "no"));
                 }
             } catch (Throwable e) {
                 areasRead = false;

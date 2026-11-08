@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- indicatori Bluetooth e Wi-Fi in alto a destra -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!-- 1.0.3: rubrica del telefono Bluetooth per i "Preferiti telefono" del riquadro in basso -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- CarService: pressione pneumatici (TPMS) e temperatura interna -->
     <uses-permission android:name="android.car.permission.CAR_TIRES" />

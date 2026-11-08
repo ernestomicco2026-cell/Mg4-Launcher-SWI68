@@ -573,6 +573,12 @@ public final class VehicleClient {
             ok = true;
             why = "ok";
         }
+        // 1.0.3: proprietà assente su questa auto (elenco già letto) → l'opzione si nasconde da sola
+        if (props.ready()) {
+            boolean missing = !props.has(CarProps.HVAC_TEMPERATURE_CURRENT);
+            android.content.SharedPreferences sp = ctx.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE);
+            if (sp.getBoolean("tempInternaAssente", false) != missing) sp.edit().putBoolean("tempInternaAssente", missing).apply();
+        }
         insideCache = ok ? best : Float.NaN;
         insideSrc = ok ? "HVAC_TEMPERATURE_CURRENT area " + bestArea : "";
         StringBuilder a = new StringBuilder();

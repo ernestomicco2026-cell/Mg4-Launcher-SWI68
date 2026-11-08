@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-<a href="releases/MG4Launcher-1.0.2.apk"><img alt="Scarica / Download 1.0.2" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.2-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
+<a href="releases/MG4Launcher-1.0.3.apk"><img alt="Scarica / Download 1.0.3" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.3-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
 <a href="https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT"><img alt="Sostieni il progetto con PayPal · Support the project with PayPal" src="https://img.shields.io/badge/Sostieni%20%2F%20Support-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white"></a>
 </p>
 
@@ -50,8 +50,14 @@
 <tr>
 <td width="50%" valign="top"><img src="docs/home-1.0.2-giorno-bluetooth.png" alt="Home di giorno con il Bluetooth: copertina, comandi e sorgenti con la scritta (simulazione)" width="100%"><br>
 <sub>Tema <b>giorno</b>, sorgente <b>Bluetooth</b> con copertina; pulsante in alto a destra su "Nessuno": le sorgenti tengono la scritta · <i><b>Day</b> theme, <b>Bluetooth</b> source with cover art; top-right button set to "None": sources keep their label</i></sub></td>
-<td width="50%" valign="top"><img src="docs/home-1.0.2-ricarica.png" alt="Pulsanti di ricarica con limite e ricarica programmata (simulazione)" width="100%"><br>
+<td width="50%" valign="top"><img src="docs/home-1.0.3-ricarica.png" alt="Pulsanti di ricarica con limite e ricarica programmata (simulazione)" width="100%"><br>
 <sub><b>Pulsanti di ricarica</b> con limite e <b>ricarica programmata</b> (si vedono solo se l'auto li supporta) · <i><b>Charging buttons</b> with limit and <b>scheduled charging</b> (shown only if the car supports them)</i></sub></td>
+</tr>
+<tr>
+<td width="50%" valign="top"><img src="docs/home-1.0.3-ordine-scambiato.png" alt="Ordine in alto scambiato: Mappa/Media, poi le sorgenti (simulazione)" width="100%"><br>
+<sub>Opzione <b>Ordine in alto</b>: Mappa/Media prima delle sorgenti, comodo con la mano destra · <i><b>Order at the top</b> option: Map/Media before the sources, handy with your right hand</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.3-giorno.png" alt="Home di giorno con la radio e FM/DAB accanto ai comandi (simulazione)" width="100%"><br>
+<sub>Tema <b>giorno</b> con la radio: <b>FM/DAB</b> accanto ai comandi · <i><b>Day</b> theme with the radio: <b>FM/DAB</b> next to the controls</i></sub></td>
 </tr>
 <tr>
 <td width="50%" valign="top"><img src="screenshots/guida.png" alt="Gruppo Guida: corsia, One Pedal, assistente, pedale del freno" width="100%"><br>
@@ -284,6 +290,25 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Versioni
+
+#### 1.0.3
+- **Tema giorno/notte**: sulle auto dove il sistema resta sempre su "notte" il launcher se ne accorge (uiMode che non
+  cambia da 12 ore di accensione e contraddice il sole) e segue i fari e l'alba/tramonto. Niente più tema notte in
+  pieno giorno. La scelta manuale Giorno/Notte ha sempre la precedenza.
+- **FM/DAB** di nuovo accanto ai comandi della radio, come fino alla 1.0.1, e più grande.
+- **Ordine dei comandi in alto** nel riquadro destro, nuova opzione in Impostazioni → Home: "Sorgenti, poi Mappa/Media"
+  (come prima) oppure "Mappa/Media, poi Sorgenti", comodo per chi usa lo schermo con la mano destra.
+- **Riquadro accanto al clima** configurabile (Barra e pulsanti): Media come prima, fino a 6 preferiti del telefono da
+  chiamare con un tocco, oppure fino a 6 scorciatoie alle app.
+- **Radio**: l'elenco delle stazioni si aggiorna da solo dopo una ricerca e tornando dall'app Radio; se è vuoto si
+  vedono i preferiti.
+- **Bluetooth all'accensione**: la musica riparte solo quando il telefono è collegato davvero (fino a 30 s di attesa);
+  titolo e artista arrivano prima dal telefono, poi dal sistema.
+- **Temperatura interna**: Automatico / Mostra / Nascondi; se l'auto non la fornisce l'opzione sparisce da sola.
+- **Controllo funzioni** in Impostazioni → Sistema: prova in sola lettura cosa funziona su questa auto (servizi,
+  temperature, tema, USB, Bluetooth, stazioni, tasti al volante, aggiornamenti, log) e permette di inviare il log.
+- Corretto un arresto all'apertura di un'app senza nome di attività; se l'app scelta per un pulsante non c'è più torna
+  il pulsante predefinito.
 
 #### 1.0.2
 - **Tema giorno/notte** più affidabile e uguale su tutte le versioni: segue il sistema quando è affidabile,
@@ -864,6 +889,25 @@ Even just **€2** is a great help to keep developing and testing new versions i
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Changelog
+
+#### 1.0.3
+- **Day/night theme**: on cars where the system is always stuck on "night" the launcher now notices (uiMode that hasn't
+  changed for 12 hours of power-on and contradicts the sun) and follows the headlights and sunrise/sunset. No more
+  night theme in broad daylight. The manual Day/Night choice still takes priority.
+- **FM/DAB** back next to the radio controls, as up to 1.0.1, and bigger.
+- **Order of the controls at the top** of the right panel, new option in Settings → Home: "Sources, then Map/Media" (as
+  before) or "Map/Media, then Sources", handy if you use the screen with your right hand.
+- **Panel next to the climate** can be configured (Bar and buttons): Media as before, up to 6 phone favourites to call
+  with one tap, or up to 6 app shortcuts.
+- **Radio**: the station list updates by itself after a search and when you come back from the Radio app; if it's
+  empty, favourites are shown.
+- **Bluetooth at start-up**: music restarts only once the phone is really connected (up to 30 s wait); title and artist
+  come from the phone first, then from the system.
+- **Inside temperature**: Automatic / Show / Hide; if the car doesn't provide it the option disappears by itself.
+- **Feature check** in Settings → System: checks, read-only, what works on this car (services, temperatures, theme,
+  USB, Bluetooth, stations, steering wheel buttons, updates, logs) and lets you send the log.
+- Fixed a crash when opening an app without an activity name; if the app chosen for a button is gone, the default
+  button comes back.
 
 #### 1.0.2
 - **Day/night theme** more reliable and the same on every version: it follows the system when it's reliable,

@@ -1,6 +1,6 @@
 {
-  "version": "1.0.2",
-  "apk": "releases/MG4Launcher-1.0.2.apk",
-  "size": 743937,
-  "notes": "Tema giorno/notte più affidabile, ritorno a CarPlay/Android Auto dopo la retromarcia, radio e Bluetooth più affidabili all'accensione, FM/DAB sotto la Radio, ricarica programmata, aggiornamenti e avvisi automatici."
+  "version": "1.0.3",
+  "apk": "releases/MG4Launcher-1.0.3.apk",
+  "size": 793089,
+  "notes": "Tema giorno/notte corretto sulle auto bloccate su notte, FM/DAB più grande accanto ai comandi, ordine dei comandi in alto scambiabile, riquadro accanto al clima con preferiti del telefono o app, elenco stazioni sempre aggiornato, Bluetooth più affidabile all'accensione, Controllo funzioni."
 }

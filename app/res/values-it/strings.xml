@@ -431,4 +431,57 @@
     <string name="news_v102_3" formatted="false">Radio e Bluetooth più affidabili: all\'accensione riparte l\'ultima sorgente, comandi e copertina Bluetooth nella card media</string>
     <string name="news_v102_4" formatted="false">Grafica: FM/DAB sotto la Radio, pressione gomme più grande, scritta \"360°\", fari accesi sull\'auto, temperatura esterna compatta, limite e ricarica programmata se l\'auto li supporta</string>
     <string name="news_v102_5" formatted="false">Il launcher controlla da solo gli aggiornamenti e può mostrare avvisi importanti; il pulsante Aggiorna funziona anche dalla home</string>
+    <string name="set_tile" formatted="false">Riquadro accanto al clima</string>
+    <string name="set_tile_sub" formatted="false">Nella barra in basso: la musica, i preferiti del telefono o le tue app</string>
+    <string name="tile_media" formatted="false">Media (come ora)</string>
+    <string name="tile_phone" formatted="false">Preferiti telefono</string>
+    <string name="tile_apps" formatted="false">Scorciatoie app</string>
+    <string name="tile_connect_phone" formatted="false">Collega il telefono</string>
+    <string name="tile_hint_contacts" formatted="false">Scegli i preferiti nelle impostazioni</string>
+    <string name="tile_hint_apps" formatted="false">Scegli le app nelle impostazioni</string>
+    <string name="tile_call_failed" formatted="false">Chiamata non riuscita</string>
+    <string name="tile_no_contacts" formatted="false">Rubrica vuota: collega il telefono e aspetta che si sincronizzi</string>
+    <string name="tile_pick_contacts" formatted="false">Preferiti telefono</string>
+    <string name="tile_pick_contacts_sub" formatted="false">Fino a 6 contatti: un tocco nella barra e parte la chiamata</string>
+    <string name="tile_pick_apps" formatted="false">Scorciatoie app</string>
+    <string name="tile_pick_apps_sub" formatted="false">Fino a 6 app, nell\'ordine in cui le tocchi</string>
+    <string name="check_title" formatted="false">Controllo funzioni</string>
+    <string name="check_sub" formatted="false">Prova cosa funziona su questa auto, solo leggendo: nessun comando viene inviato</string>
+    <string name="check_start" formatted="false">Avvia controllo</string>
+    <string name="check_running" formatted="false">Controllo in corso…</string>
+    <string name="check_ok" formatted="false">Funziona</string>
+    <string name="check_fail" formatted="false">Non funziona</string>
+    <string name="check_absent" formatted="false">Non presente su questa auto</string>
+    <string name="check_skipped" formatted="false">Saltata</string>
+    <string name="check_press_keys">Premi avanti o indietro sul volante (%s s)</string>
+    <string name="check_summary">%1$s ok · %2$s errori · %3$s assenti</string>
+    <string name="check_send_log" formatted="false">Invia log</string>
+    <string name="check_log_sent" formatted="false">Log in invio</string>
+    <string name="chk_vehicle" formatted="false">Servizio veicolo</string>
+    <string name="chk_climate" formatted="false">Clima</string>
+    <string name="chk_radio" formatted="false">Servizio radio</string>
+    <string name="chk_media" formatted="false">Servizio media</string>
+    <string name="chk_bms" formatted="false">Batteria (BMS)</string>
+    <string name="chk_projection" formatted="false">CarPlay / Android Auto</string>
+    <string name="chk_out_temp" formatted="false">Temperatura esterna</string>
+    <string name="chk_in_temp" formatted="false">Temperatura interna</string>
+    <string name="chk_theme" formatted="false">Tema giorno/notte</string>
+    <string name="chk_usb" formatted="false">Porte USB</string>
+    <string name="chk_bt" formatted="false">Bluetooth e titoli dei brani</string>
+    <string name="chk_stations" formatted="false">Elenco stazioni</string>
+    <string name="chk_keys" formatted="false">Tasti al volante</string>
+    <string name="chk_sys_button" formatted="false">Tasto del clima</string>
+    <string name="chk_comfort" formatted="false">Sedili e volante riscaldati</string>
+    <string name="chk_update" formatted="false">Aggiornamenti raggiungibili</string>
+    <string name="chk_logs" formatted="false">Invio dei log</string>
+    <string name="chk_notices" formatted="false">Avvisi da remoto</string>
+    <string name="set_top_order" formatted="false">Ordine in alto</string>
+    <string name="set_top_order_sub" formatted="false">Ordine dei comandi in alto nel riquadro a destra</string>
+    <string name="top_order_current" formatted="false">Sorgenti, poi Mappa/Media (attuale)</string>
+    <string name="top_order_swapped" formatted="false">Mappa/Media, poi Sorgenti</string>
+    <string name="news_v103_1" formatted="false">Tema giorno/notte: niente più tema notte in pieno giorno sulle auto dove il sistema resta bloccato su \"notte\"</string>
+    <string name="news_v103_2" formatted="false">FM/DAB più grande, di nuovo accanto ai comandi della radio; nuova opzione per mettere Mappa/Media prima delle sorgenti</string>
+    <string name="news_v103_3" formatted="false">Il riquadro accanto al clima può mostrare i preferiti del telefono o le tue app</string>
+    <string name="news_v103_4" formatted="false">Elenco stazioni sempre aggiornato, Bluetooth che parte solo a telefono collegato, temperatura interna nascosta se l\'auto non la dà</string>
+    <string name="news_v103_5" formatted="false">Nuovo \"Controllo funzioni\" in Impostazioni → Sistema: mostra cosa funziona su questa auto</string>
 </resources>

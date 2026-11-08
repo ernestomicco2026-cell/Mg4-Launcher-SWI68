@@ -431,4 +431,57 @@
     <string name="news_v102_3" formatted="false">More reliable radio and Bluetooth: the last source resumes at start-up, Bluetooth controls and cover art in the media card</string>
     <string name="news_v102_4" formatted="false">Look: FM/DAB under Radio, bigger tyre pressure, \"360°\" label, headlights on the car, compact outside temperature, charge limit and scheduled charging if the car supports them</string>
     <string name="news_v102_5" formatted="false">The launcher checks for updates by itself and can show important notices; the Update button also works from the home screen</string>
+    <string name="set_tile" formatted="false">Panel next to the climate</string>
+    <string name="set_tile_sub" formatted="false">In the bottom bar: music, phone favourites or your apps</string>
+    <string name="tile_media" formatted="false">Media (as now)</string>
+    <string name="tile_phone" formatted="false">Phone favourites</string>
+    <string name="tile_apps" formatted="false">App shortcuts</string>
+    <string name="tile_connect_phone" formatted="false">Connect your phone</string>
+    <string name="tile_hint_contacts" formatted="false">Choose favourites in settings</string>
+    <string name="tile_hint_apps" formatted="false">Choose apps in settings</string>
+    <string name="tile_call_failed" formatted="false">Call failed</string>
+    <string name="tile_no_contacts" formatted="false">Phone book empty: connect your phone and wait for it to sync</string>
+    <string name="tile_pick_contacts" formatted="false">Phone favourites</string>
+    <string name="tile_pick_contacts_sub" formatted="false">Up to 6 contacts: one tap in the bar starts the call</string>
+    <string name="tile_pick_apps" formatted="false">App shortcuts</string>
+    <string name="tile_pick_apps_sub" formatted="false">Up to 6 apps, in the order you tap them</string>
+    <string name="check_title" formatted="false">Feature check</string>
+    <string name="check_sub" formatted="false">Checks what works on this car by reading only: no commands are sent</string>
+    <string name="check_start" formatted="false">Start check</string>
+    <string name="check_running" formatted="false">Checking…</string>
+    <string name="check_ok" formatted="false">Works</string>
+    <string name="check_fail" formatted="false">Not working</string>
+    <string name="check_absent" formatted="false">Not on this car</string>
+    <string name="check_skipped" formatted="false">Skipped</string>
+    <string name="check_press_keys">Press next or previous on the steering wheel (%s s)</string>
+    <string name="check_summary">%1$s ok · %2$s errors · %3$s missing</string>
+    <string name="check_send_log" formatted="false">Send log</string>
+    <string name="check_log_sent" formatted="false">Sending log</string>
+    <string name="chk_vehicle" formatted="false">Vehicle service</string>
+    <string name="chk_climate" formatted="false">Climate</string>
+    <string name="chk_radio" formatted="false">Radio service</string>
+    <string name="chk_media" formatted="false">Media service</string>
+    <string name="chk_bms" formatted="false">Battery (BMS)</string>
+    <string name="chk_projection" formatted="false">CarPlay / Android Auto</string>
+    <string name="chk_out_temp" formatted="false">Outside temperature</string>
+    <string name="chk_in_temp" formatted="false">Inside temperature</string>
+    <string name="chk_theme" formatted="false">Day/night theme</string>
+    <string name="chk_usb" formatted="false">USB ports</string>
+    <string name="chk_bt" formatted="false">Bluetooth and track titles</string>
+    <string name="chk_stations" formatted="false">Station list</string>
+    <string name="chk_keys" formatted="false">Steering wheel buttons</string>
+    <string name="chk_sys_button" formatted="false">Climate button</string>
+    <string name="chk_comfort" formatted="false">Heated seats and wheel</string>
+    <string name="chk_update" formatted="false">Updates reachable</string>
+    <string name="chk_logs" formatted="false">Log upload</string>
+    <string name="chk_notices" formatted="false">Remote notices</string>
+    <string name="set_top_order" formatted="false">Order at the top</string>
+    <string name="set_top_order_sub" formatted="false">Order of the controls at the top of the right panel</string>
+    <string name="top_order_current" formatted="false">Sources, then Map/Media (current)</string>
+    <string name="top_order_swapped" formatted="false">Map/Media, then Sources</string>
+    <string name="news_v103_1" formatted="false">Day/night theme: no more night theme in broad daylight on cars where the system is stuck on \"night\"</string>
+    <string name="news_v103_2" formatted="false">FM/DAB bigger and back next to the radio controls; new option to put Map/Media before the sources</string>
+    <string name="news_v103_3" formatted="false">The panel next to the climate can show phone favourites or your apps</string>
+    <string name="news_v103_4" formatted="false">Station list always up to date, Bluetooth starts only once the phone is connected, inside temperature hidden if the car does not provide it</string>
+    <string name="news_v103_5" formatted="false">New \"Feature check\" in Settings → System: shows what works on this car</string>
 </resources>

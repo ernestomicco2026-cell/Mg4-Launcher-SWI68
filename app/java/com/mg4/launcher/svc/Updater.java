@@ -640,6 +640,23 @@ public final class Updater {
         }
     }
 
+    /** 1.0.3 (Controllo funzioni): legge latest.json e avvisi.json senza toccare lo stato degli aggiornamenti. */
+    public static String[] probeRemote() {
+        String[] out = new String[2];
+        try {
+            out[0] = new JSONObject(get(OWN_RAW + "releases/latest.json")).optString("version", "?");
+        } catch (Exception e) {
+            out[0] = null;
+        }
+        try {
+            JSONArray a = new JSONObject(get(OWN_RAW + "releases/avvisi.json")).optJSONArray("avvisi");
+            out[1] = String.valueOf(a == null ? 0 : a.length());
+        } catch (Exception e) {
+            out[1] = null;
+        }
+        return out;
+    }
+
     /** GET di un file piccolo (JSON) dal proprio repository. */
     private static String get(String url) throws IOException {
         if (!url.startsWith(OWN_RAW)) throw new IOException("indirizzo non ammesso");

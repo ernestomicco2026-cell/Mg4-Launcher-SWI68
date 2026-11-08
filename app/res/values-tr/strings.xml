@@ -431,4 +431,57 @@
     <string name="news_v102_3" formatted="false">Daha güvenilir radyo ve Bluetooth: açılışta son kaynak devam eder, medya kartında Bluetooth kontrolleri ve kapak</string>
     <string name="news_v102_4" formatted="false">Görünüm: Radyo altında FM/DAB, daha büyük lastik basıncı, \"360°\" yazısı, araçta yanan farlar, kompakt dış sıcaklık, araç destekliyorsa şarj sınırı ve zamanlı şarj</string>
     <string name="news_v102_5" formatted="false">Launcher güncellemeleri kendisi denetler ve önemli duyurular gösterebilir; Güncelle düğmesi ana ekranda da çalışır</string>
+    <string name="set_tile" formatted="false">Klimanın yanındaki alan</string>
+    <string name="set_tile_sub" formatted="false">Alt çubukta: müzik, telefon favorileri veya uygulamaların</string>
+    <string name="tile_media" formatted="false">Medya (şimdiki gibi)</string>
+    <string name="tile_phone" formatted="false">Telefon favorileri</string>
+    <string name="tile_apps" formatted="false">Uygulama kısayolları</string>
+    <string name="tile_connect_phone" formatted="false">Telefonu bağla</string>
+    <string name="tile_hint_contacts" formatted="false">Favorileri ayarlardan seç</string>
+    <string name="tile_hint_apps" formatted="false">Uygulamaları ayarlardan seç</string>
+    <string name="tile_call_failed" formatted="false">Arama yapılamadı</string>
+    <string name="tile_no_contacts" formatted="false">Rehber boş: telefonu bağla ve eşitlenmesini bekle</string>
+    <string name="tile_pick_contacts" formatted="false">Telefon favorileri</string>
+    <string name="tile_pick_contacts_sub" formatted="false">En fazla 6 kişi: çubukta bir dokunuşla arama başlar</string>
+    <string name="tile_pick_apps" formatted="false">Uygulama kısayolları</string>
+    <string name="tile_pick_apps_sub" formatted="false">En fazla 6 uygulama, dokunduğun sırayla</string>
+    <string name="check_title" formatted="false">İşlev kontrolü</string>
+    <string name="check_sub" formatted="false">Bu araçta neyin çalıştığını yalnızca okuyarak kontrol eder: komut gönderilmez</string>
+    <string name="check_start" formatted="false">Başlat</string>
+    <string name="check_running" formatted="false">Kontrol ediliyor…</string>
+    <string name="check_ok" formatted="false">Çalışıyor</string>
+    <string name="check_fail" formatted="false">Çalışmıyor</string>
+    <string name="check_absent" formatted="false">Bu araçta yok</string>
+    <string name="check_skipped" formatted="false">Atlandı</string>
+    <string name="check_press_keys">Direksiyonda ileri veya geri tuşuna bas (%s sn)</string>
+    <string name="check_summary">%1$s tamam · %2$s hata · %3$s yok</string>
+    <string name="check_send_log" formatted="false">Günlüğü gönder</string>
+    <string name="check_log_sent" formatted="false">Günlük gönderiliyor</string>
+    <string name="chk_vehicle" formatted="false">Araç hizmeti</string>
+    <string name="chk_climate" formatted="false">Klima</string>
+    <string name="chk_radio" formatted="false">Radyo hizmeti</string>
+    <string name="chk_media" formatted="false">Medya hizmeti</string>
+    <string name="chk_bms" formatted="false">Batarya (BMS)</string>
+    <string name="chk_projection" formatted="false">CarPlay / Android Auto</string>
+    <string name="chk_out_temp" formatted="false">Dış sıcaklık</string>
+    <string name="chk_in_temp" formatted="false">İç sıcaklık</string>
+    <string name="chk_theme" formatted="false">Gündüz/gece teması</string>
+    <string name="chk_usb" formatted="false">USB bağlantı noktaları</string>
+    <string name="chk_bt" formatted="false">Bluetooth ve şarkı adları</string>
+    <string name="chk_stations" formatted="false">İstasyon listesi</string>
+    <string name="chk_keys" formatted="false">Direksiyon tuşları</string>
+    <string name="chk_sys_button" formatted="false">Klima düğmesi</string>
+    <string name="chk_comfort" formatted="false">Isıtmalı koltuk ve direksiyon</string>
+    <string name="chk_update" formatted="false">Güncellemelere erişiliyor</string>
+    <string name="chk_logs" formatted="false">Günlük gönderimi</string>
+    <string name="chk_notices" formatted="false">Uzaktan duyurular</string>
+    <string name="set_top_order" formatted="false">Üstteki sıra</string>
+    <string name="set_top_order_sub" formatted="false">Sağ paneldeki üst kontrollerin sırası</string>
+    <string name="top_order_current" formatted="false">Kaynaklar, sonra Harita/Medya (şimdiki)</string>
+    <string name="top_order_swapped" formatted="false">Harita/Medya, sonra Kaynaklar</string>
+    <string name="news_v103_1" formatted="false">Gündüz/gece teması: sistemi \"gece\"de takılı kalan araçlarda artık gündüz gece teması yok</string>
+    <string name="news_v103_2" formatted="false">FM/DAB daha büyük ve yeniden radyo kontrollerinin yanında; Harita/Medya’yı kaynaklardan önce koyma seçeneği</string>
+    <string name="news_v103_3" formatted="false">Klimanın yanındaki alan telefon favorilerini veya uygulamalarını gösterebilir</string>
+    <string name="news_v103_4" formatted="false">İstasyon listesi her zaman güncel, Bluetooth yalnızca telefon bağlıyken başlar, araç vermiyorsa iç sıcaklık gizlenir</string>
+    <string name="news_v103_5" formatted="false">Ayarlar → Sistem içinde yeni \"İşlev kontrolü\": bu araçta neyin çalıştığını gösterir</string>
 </resources>

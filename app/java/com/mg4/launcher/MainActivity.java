@@ -87,6 +87,9 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         nav = new NavClient(this);
         updater = new Updater(this);
         logs = new com.mg4.launcher.svc.LogUploader(this);
+        // 1.0.3: Controllo funzioni (sola lettura) e controllo automatico 60 s dopo l'avvio di una versione nuova
+        com.mg4.launcher.svc.SelfCheck.bind(vehicle, media, logs);
+        com.mg4.launcher.svc.SelfCheck.scheduleAfterUpdate(this, updater.currentVersion());
         lastUiMode = getResources().getConfiguration().uiMode;
 
         root = new FrameLayout(this);
@@ -454,6 +457,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     /** Novità di ogni versione (testi in tutte le lingue in strings.xml). */
     private static int[] newsFor(String ver) {
         switch (ver) {
+            case "1.0.3":
+                return new int[]{R.string.news_v103_1, R.string.news_v103_2, R.string.news_v103_3, R.string.news_v103_4, R.string.news_v103_5};
             case "1.0.2":
                 return new int[]{R.string.news_v102_1, R.string.news_v102_2, R.string.news_v102_3, R.string.news_v102_4, R.string.news_v102_5};
             case "1.0.0":
@@ -524,6 +529,10 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         super.onResume();
         inFront = true;
         com.mg4.launcher.svc.RetroReturn.noteLauncherShown("ritorno nello stack (la telecamera era sopra il launcher)");
+        // 1.0.3: tornando dall'app Radio l'elenco delle stazioni si rilegge subito
+        if (media != null) media.refreshRadioLists("ritorno nel launcher");
+        // 1.0.3: stato del telefono riletto (riquadro "Preferiti telefono"), anche se gli avvisi del servizio non arrivano
+        com.mg4.launcher.svc.PhoneClient.get(this).refresh();
         if (wrongFirmware) {
             goFullscreen();
             return;

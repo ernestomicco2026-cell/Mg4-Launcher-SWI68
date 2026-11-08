@@ -47,6 +47,12 @@ public final class Diag {
         }
     }
 
+    /** 1.0.3: ultimo valore di una voce ("—" se non c'è). */
+    public static synchronized String value(String key) {
+        String v = VALUES.get(key);
+        return v == null ? "—" : v;
+    }
+
     /** Come put, ma senza riempire gli eventi (valori che cambiano di continuo, es. corrente). */
     public static synchronized void putQuiet(String key, Object value) {
         VALUES.put(key, String.valueOf(value));

@@ -128,6 +128,28 @@ public final class DayNight {
         }
     }
 
+    // ---- 1.0.3: letture per il Controllo funzioni ------------------------------------------------
+
+    private volatile double lastSunElevation = Double.NaN;
+
+    /** Fonte usata adesso (testo del log). */
+    public String source() {
+        return source;
+    }
+
+    /** Tema automatico applicato: true giorno, false notte, null non ancora deciso. */
+    public Boolean applied() {
+        return applied;
+    }
+
+    public double sunElevation() {
+        return lastSunElevation;
+    }
+
+    public boolean uiStuck() {
+        return sp.getBoolean(K_UI_STUCK, false);
+    }
+
     private void applyNow(boolean day, String how) {
         applied = day;
         lastChange = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.ITALY).format(new Date()) + " (" + how + ")";
@@ -158,6 +180,7 @@ public final class DayNight {
         nightPropTxt = nightProp == 1 ? "notte" : nightProp == 0 ? "giorno" : "non c'è";
         boolean sysNight = uiNight == 1 || mgr == 1 || nightProp == 1;
         long wall = System.currentTimeMillis();
+        trackUiChanges(uiNight, wall);
         long prevSeen = sp.getLong(K_SYS_NIGHT_AT, 0);
         boolean changed = lastUiNight >= 0 && uiNight >= 0 && uiNight != lastUiNight;
         // si scrive solo quando serve (al più una volta l'ora), non a ogni giro
@@ -169,12 +192,34 @@ public final class DayNight {
         // c) sole (calcolato sempre, serve anche ai fari e alla diagnostica)
         double[] loc = location();
         Sun sun = sun(loc[0], loc[1], wall);
+        lastSunElevation = sun.elevation;
         sunTxt = "alba " + sun.rise + " · tramonto " + sun.set + " · sole a " + Math.round(sun.elevation) + "° (" + (loc[2] == 1 ? "posizione"
                 : loc[2] == 2 ? "ultima posizione salvata" : "fuso orario/Italia") + ")";
 
         // b) fari
         int lights = VehicleClient.lights();
         lightsTxt = lights == 1 ? "accesi" : lights == 0 ? "spenti" : "non leggibili";
+
+        // 1.0.3: su alcune SWI68 uiMode (e UiModeManager) restano su "notte" per sempre. Un uiMode che non cambia
+        // da 12 ore di accensione e dice il contrario del sole è bloccato; alla prima accensione senza storico basta
+        // "notte" con il sole sopra +10°. Una volta bloccato resta ignorato finché uiMode non cambia davvero.
+        uiStuckTxt = "";
+        if (uiNight >= 0) {
+            boolean contradicts = uiNight == 1 ? sun.elevation > 6 : sun.elevation < -6;
+            long onMs = sp.getLong(K_UI_ON_MS, 0) + onPending;
+            boolean noHistory = sp.getLong(K_UI_CHANGED_AT, 0) == 0 && onMs < UI_STUCK_ON_MS;
+            if (!sp.getBoolean(K_UI_STUCK, false)) {
+                if (onMs >= UI_STUCK_ON_MS && contradicts) {
+                    markStuck("mai cambiato da 12 h, contraddice il sole");
+                } else if (noHistory && uiNight == 1 && sun.elevation > 10) {
+                    markStuck("prima accensione, notte con il sole a " + Math.round(sun.elevation) + "°");
+                }
+            }
+            if (sp.getBoolean(K_UI_STUCK, false)) {
+                uiStuckTxt = "uiMode " + uiTxt + " (" + sp.getString(K_UI_STUCK_WHY, "bloccato") + ": ignorato)";
+                reliable = false;
+            }
+        }
 
         if (reliable) {
             source = "sistema (" + (nightProp == 1 ? "NIGHT_MODE" : uiNight >= 0 ? "uiMode" : "UiModeManager") + ", affidabile)";
@@ -191,11 +236,61 @@ public final class DayNight {
         return !sunNight;
     }
 
+    // ---- uiMode bloccato (1.0.3) ----------------------------------------------------------------
+
+    /** Tempo di accensione senza cambi di uiMode oltre il quale, se contraddice il sole, uiMode è considerato bloccato. */
+    private static final long UI_STUCK_ON_MS = 12L * 60 * 60 * 1000;
+    private static final String K_UI_LAST = "temaUiUltimo", K_UI_CHANGED_AT = "temaUiCambiatoAlle", K_UI_ON_MS = "temaUiAccesoMs",
+            K_UI_STUCK = "temaUiBloccato", K_UI_STUCK_WHY = "temaUiBloccatoPerche";
+    private long onTickAt, onPending, onSavedAt;
+    private String uiStuckTxt = "";
+
+    /**
+     * Conta il tempo di accensione da quando uiMode è cambiato l'ultima volta (giorno↔notte), anche tra un'accensione e
+     * l'altra. Il tempo a auto spenta non conta: tra due giri si aggiunge al massimo 3 volte l'intervallo del controllo.
+     */
+    private void trackUiChanges(int uiNight, long wall) {
+        long now = SystemClock.elapsedRealtime();
+        if (onTickAt > 0) onPending += Math.max(0, Math.min(now - onTickAt, 3 * TICK_MS));
+        onTickAt = now;
+        if (uiNight < 0) return;
+        int last = sp.getInt(K_UI_LAST, -1);
+        SharedPreferences.Editor e = null;
+        if (last != uiNight) {
+            e = sp.edit().putInt(K_UI_LAST, uiNight);
+            if (last >= 0) {
+                // cambio reale: si azzera il conteggio e uiMode torna affidabile
+                e.putLong(K_UI_CHANGED_AT, wall).putLong(K_UI_ON_MS, 0).putBoolean(K_UI_STUCK, false).remove(K_UI_STUCK_WHY);
+                onPending = 0;
+                onSavedAt = now;
+            }
+        }
+        if (onPending > 0 && (now - onSavedAt > 5 * 60_000L || e != null)) {
+            if (e == null) e = sp.edit();
+            e.putLong(K_UI_ON_MS, sp.getLong(K_UI_ON_MS, 0) + onPending);
+            onPending = 0;
+            onSavedAt = now;
+        }
+        if (e != null) e.apply();
+    }
+
+    private void markStuck(String why) {
+        sp.edit().putBoolean(K_UI_STUCK, true).putString(K_UI_STUCK_WHY, why).apply();
+    }
+
+    private String uiHistoryTxt() {
+        long at = sp.getLong(K_UI_CHANGED_AT, 0);
+        long onH = (sp.getLong(K_UI_ON_MS, 0) + onPending) / 3_600_000L;
+        return "ultimo cambio uiMode " + (at == 0 ? "mai visto" : new SimpleDateFormat("dd/MM HH:mm", Locale.ITALY).format(new Date(at)))
+                + " (" + onH + " h di accensione da allora)";
+    }
+
     private void writeDiag() {
         String mode = sp.getString("theme", "auto");
         String manual = "giorno".equals(mode) ? "scelta manuale Giorno (ha la precedenza) · automatico: " : "notte".equals(mode)
                 ? "scelta manuale Notte (ha la precedenza) · automatico: " : "";
-        Diag.put("tema.stato", manual + "fonte " + source + " · uiMode " + uiTxt + " · UiModeManager " + mgrTxt + " · NIGHT_MODE " + nightPropTxt
+        Diag.put("tema.stato", manual + "fonte " + source + (uiStuckTxt.isEmpty() ? "" : " · " + uiStuckTxt) + " · " + uiHistoryTxt()
+                + " · uiMode " + uiTxt + " · UiModeManager " + mgrTxt + " · NIGHT_MODE " + nightPropTxt
                 + " · fari " + lightsTxt + " · " + sunTxt + " · applicato " + (applied == null ? "—" : applied ? "giorno" : "notte")
                 + (pending != null ? " (in conferma: " + (pending ? "giorno" : "notte") + ")" : "") + " · ultimo cambio " + lastChange);
     }
