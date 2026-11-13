@@ -14,10 +14,9 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * 1.0.2: tema automatico giorno/notte uguale per tutte le versioni, con una catena di fonti:
+ * 1.0.2: tema automatico giorno/notte uguale per tutte le versioni, con una catena di fonti.
+ * 1.0.4: il sistema (uiMode) non è più una fonte: il tema lo decide il launcher e lo scrive nel sistema (syncSystem).
  * <ol>
- *   <li>il sistema (uiMode della configurazione, UiModeManager, proprietà NIGHT_MODE), solo se è "affidabile": nelle
- *       ultime 72 ore ha detto "notte" almeno una volta (sulla SWI68 lo fa; su SWI69/SWI132 dice sempre "giorno");</li>
  *   <li>i fari (anabbaglianti o posizione, proprietà dell'auto): accesi con il sole basso = notte;</li>
  *   <li>l'orario: alba e tramonto calcolati senza internet dall'ultima posizione nota (se manca, fuso orario e Italia).</li>
  * </ol>
@@ -154,6 +153,82 @@ public final class DayNight {
         applied = day;
         lastChange = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.ITALY).format(new Date()) + " (" + how + ")";
         writeDiag();
+        syncSystem("decisione del launcher (" + how + ")");
+    }
+
+    // ---- 1.0.4 (punto A): il tema si scrive nel sistema ------------------------------------------
+
+    private volatile String sysTxt = "non ancora scritto";
+
+    /**
+     * Scrive nel sistema il tema effettivo (scelta manuale Giorno/Notte, altrimenti quello automatico) con
+     * UiModeManager.setNightMode(MODE_NIGHT_YES/NO), così Clima, MG4 Control, le app SAIC e la tendina seguono da sole.
+     * Si scrive solo quando il valore del sistema è diverso (ogni scrittura cambia la configurazione di tutte le app):
+     * alle decisioni del launcher, all'avvio e quando cambia la scelta manuale; mai a ogni giro.
+     * Serve il permesso MODIFY_DAY_NIGHT_MODE (firma platform). Se non riesce si scrive nel log e si va avanti.
+     */
+    public void syncSystem(String why) {
+        work.post(() -> {
+            String mode = sp.getString("theme", "auto");
+            Boolean day = "giorno".equals(mode) ? Boolean.TRUE : "notte".equals(mode) ? Boolean.FALSE : applied;
+            if (day == null) return;
+            String at = new SimpleDateFormat("HH:mm:ss", Locale.ITALY).format(new Date());
+            try {
+                android.app.UiModeManager um = (android.app.UiModeManager) ctx.getSystemService(Context.UI_MODE_SERVICE);
+                int want = day ? android.app.UiModeManager.MODE_NIGHT_NO : android.app.UiModeManager.MODE_NIGHT_YES;
+                int now = um.getNightMode();
+                if (now == want) {
+                    sysTxt = "già " + (day ? "giorno" : "notte") + " · controllato alle " + at + " · " + why;
+                } else {
+                    um.setNightMode(want);
+                    int after = um.getNightMode();
+                    sysTxt = "scritto " + (day ? "giorno" : "notte") + " · alle " + at + " · esito " + (after == want ? "ok"
+                            : "errore (il sistema dice ancora " + nightName(after) + ")") + " · " + why;
+                }
+            } catch (Throwable e) {
+                sysTxt = "scritto " + (day ? "giorno" : "notte") + " · alle " + at + " · esito errore " + e.getClass().getSimpleName()
+                        + " · " + why;
+            }
+            Diag.put("tema.sistema", sysTxt);
+            // il valore salvato non basta: 3 s dopo si guarda il tema davvero applicato (Configuration.uiMode)
+            final Boolean want = day;
+            work.postDelayed(() -> {
+                int ui = ctx.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                Boolean eff = ui == Configuration.UI_MODE_NIGHT_NO ? Boolean.TRUE : ui == Configuration.UI_MODE_NIGHT_YES ? Boolean.FALSE : null;
+                appliedOk = eff != null && eff.equals(want);
+                Diag.put("tema.sistema", sysTxt + " · applicato davvero: " + (eff == null ? "non definito" : eff ? "giorno" : "notte")
+                        + (appliedOk ? "" : " (DIVERSO da quello scritto)"));
+            }, 3000);
+        });
+    }
+
+    private volatile boolean appliedOk = true;
+
+    /** True se il tema effettivo della configurazione corrisponde a quello scritto (ultimo controllo). */
+    public boolean systemApplied() {
+        return appliedOk;
+    }
+
+    private static String nightName(int m) {
+        return m == android.app.UiModeManager.MODE_NIGHT_YES ? "notte" : m == android.app.UiModeManager.MODE_NIGHT_NO ? "giorno"
+                : m == android.app.UiModeManager.MODE_NIGHT_AUTO ? "auto" : String.valueOf(m);
+    }
+
+    /** Per il Controllo funzioni: [tema voluto (true giorno), tema del sistema riletto], null se non deciso o non leggibile. */
+    public Boolean[] systemCheck() {
+        String mode = sp.getString("theme", "auto");
+        Boolean day = "giorno".equals(mode) ? Boolean.TRUE : "notte".equals(mode) ? Boolean.FALSE : applied;
+        Boolean sys = null;
+        try {
+            int m = ((android.app.UiModeManager) ctx.getSystemService(Context.UI_MODE_SERVICE)).getNightMode();
+            sys = m == android.app.UiModeManager.MODE_NIGHT_NO ? Boolean.TRUE : m == android.app.UiModeManager.MODE_NIGHT_YES ? Boolean.FALSE : null;
+        } catch (Throwable ignored) {
+        }
+        return new Boolean[]{day, sys};
+    }
+
+    public String systemTxt() {
+        return sysTxt;
     }
 
     // ------------------------------------------------------------------------------------------
@@ -200,31 +275,10 @@ public final class DayNight {
         int lights = VehicleClient.lights();
         lightsTxt = lights == 1 ? "accesi" : lights == 0 ? "spenti" : "non leggibili";
 
-        // 1.0.3: su alcune SWI68 uiMode (e UiModeManager) restano su "notte" per sempre. Un uiMode che non cambia
-        // da 12 ore di accensione e dice il contrario del sole è bloccato; alla prima accensione senza storico basta
-        // "notte" con il sole sopra +10°. Una volta bloccato resta ignorato finché uiMode non cambia davvero.
+        // 1.0.4 (punto A): uiMode del sistema NON è più una fonte. Prima lo cambiava il launcher SAIC/il servizio
+        // impostazioni; con il nostro launcher nessuno lo cambiava e restava su "notte". Ora lo decidiamo noi (fari →
+        // alba/tramonto) e lo SCRIVIAMO nel sistema (syncSystem). uiMode, UiModeManager e NIGHT_MODE restano nel log.
         uiStuckTxt = "";
-        if (uiNight >= 0) {
-            boolean contradicts = uiNight == 1 ? sun.elevation > 6 : sun.elevation < -6;
-            long onMs = sp.getLong(K_UI_ON_MS, 0) + onPending;
-            boolean noHistory = sp.getLong(K_UI_CHANGED_AT, 0) == 0 && onMs < UI_STUCK_ON_MS;
-            if (!sp.getBoolean(K_UI_STUCK, false)) {
-                if (onMs >= UI_STUCK_ON_MS && contradicts) {
-                    markStuck("mai cambiato da 12 h, contraddice il sole");
-                } else if (noHistory && uiNight == 1 && sun.elevation > 10) {
-                    markStuck("prima accensione, notte con il sole a " + Math.round(sun.elevation) + "°");
-                }
-            }
-            if (sp.getBoolean(K_UI_STUCK, false)) {
-                uiStuckTxt = "uiMode " + uiTxt + " (" + sp.getString(K_UI_STUCK_WHY, "bloccato") + ": ignorato)";
-                reliable = false;
-            }
-        }
-
-        if (reliable) {
-            source = "sistema (" + (nightProp == 1 ? "NIGHT_MODE" : uiNight >= 0 ? "uiMode" : "UiModeManager") + ", affidabile)";
-            return !sysNight;
-        }
         boolean sunNight = sun.elevation < -0.833;
         if (lights >= 0) {
             // con il sole alto i fari accesi sono quelli diurni o la galleria: resta giorno

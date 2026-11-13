@@ -91,6 +91,29 @@ RENAME=()
 ASSETS=()
 if [ -d "$APP/assets" ]; then ASSETS=(-A "$APP/assets"); fi
 
+# 1.0.4: MG4 Store dentro il launcher (assets/MG4Store.apk). L'APK dello Store sta in tools/ (escluso da git, come gli
+# altri file di tools/); si può indicare un altro percorso con STORE_APK=... Senza Store la compilazione si ferma.
+STORE_APK="${STORE_APK:-$T/MG4Store.apk}"
+if [ ! -f "$STORE_APK" ]; then
+  echo "ERRORE: manca l'APK di MG4 Store ($STORE_APK)."
+  echo "        Copia l'ultimo MG4Store-<versione>.apk (repo Store, cartella apk/store) in tools/MG4Store.apk e rilancia."
+  exit 1
+fi
+# deve essere firmato con la stessa chiave platform del launcher (altrimenti non si installa in silenzio)
+# (awk legge tutto l'output, senza "exit": con pipefail una pipe chiusa in anticipo fermerebbe lo script)
+STORE_CERT="$(keytool -printcert -jarfile "$STORE_APK" 2>/dev/null | awk '/SHA256:/ && !f {print $2; f=1}' || true)"
+OWN_CERT="$(keytool -list -v -keystore "$KEYSTORE" -storepass "$KEY_PASS" -alias "$KEY_ALIAS" 2>/dev/null | awk '/SHA256:/ && !f {print $2; f=1}' || true)"
+if [ -z "$STORE_CERT" ] || [ "$STORE_CERT" != "$OWN_CERT" ]; then
+  echo "ERRORE: MG4 Store ($STORE_APK) non è firmato con la chiave platform del launcher."
+  exit 1
+fi
+mkdir -p "$OUT/assets"
+rm -f "$OUT/assets/"*.apk
+cp "$STORE_APK" "$OUT/assets/MG4Store.apk"
+STORE_INFO="$("$T/aapt2" dump badging "$STORE_APK" 2>/dev/null | sed -n 1p || true)"
+echo "==> MG4 Store incluso: ${STORE_INFO} · $(stat -c %s "$STORE_APK") byte"
+ASSETS+=(-A "$OUT/assets")
+
 echo "==> risorse (aapt2)"
 "$T/aapt2" compile --dir "$APP/res" -o "$OUT/res/compiled.zip"
 "$T/aapt2" link \

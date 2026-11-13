@@ -223,6 +223,39 @@ public final class AppCatalog {
         return out;
     }
 
+    /**
+     * 1.0.4 (issue #27): app installate che gestiscono la navigazione: i navigatori noti (anche ABRP), più tutte quelle che
+     * aprono "geo:" o "google.navigation:". Esclusa la navigazione MG (è la scelta predefinita).
+     */
+    public List<App> navCandidateApps(String mgNavPackage) {
+        Set<String> seen = new java.util.HashSet<>();
+        List<App> out = new ArrayList<>();
+        for (App a : otherNavApps(mgNavPackage)) if (seen.add(a.packageName)) out.add(a);
+        Set<String> extra = new java.util.LinkedHashSet<>();
+        Collections.addAll(extra, "com.iternio.abrpapp", "com.google.android.apps.maps");
+        for (String uri : new String[]{"google.navigation:q=roma", "geo:0,0?q=roma"}) {
+            try {
+                for (ResolveInfo ri : pm.queryIntentActivities(new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(uri)), 0)) {
+                    extra.add(ri.activityInfo.packageName);
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        for (String p : extra) {
+            if (seen.contains(p) || p.equals(mgNavPackage) || p.startsWith("com.saicmotor") || p.equals(ctx.getPackageName())) continue;
+            Intent li = pm.getLaunchIntentForPackage(p);
+            if (li == null) continue;
+            String label = p;
+            try {
+                label = String.valueOf(pm.getApplicationLabel(pm.getApplicationInfo(p, 0)));
+            } catch (Exception ignored) {
+            }
+            seen.add(p);
+            out.add(new App(label, null, li, 0, false, p));
+        }
+        return out;
+    }
+
     public Intent navIntent(String hint) {
         List<String> candidates = new ArrayList<>();
         if (hint != null && !hint.isEmpty()) candidates.add(hint);

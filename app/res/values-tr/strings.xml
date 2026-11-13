@@ -421,8 +421,8 @@
     <string name="limit_auto" formatted="false">Otomatik</string>
     <string name="limit_show" formatted="false">Göster</string>
     <string name="limit_hide" formatted="false">Gizle</string>
-    <string name="set_top_button" formatted="false">Sağ üst düğme</string>
-    <string name="set_top_button_sub" formatted="false">Harita/Medya panelinde. \"Hiçbiri\" seçilince medya kaynakları adlarıyla görünür</string>
+    <string name="set_top_button" formatted="false">Harita/Medya yanındaki düğme</string>
+    <string name="set_top_button_sub" formatted="false">Seçtiğiniz uygulamayı açan üçüncü düğme; CarPlay ve Android Auto alt çubukta</string>
     <string name="top_app" formatted="false">Bir uygulama…</string>
     <string name="top_none" formatted="false">Hiçbiri</string>
     <string name="top_pick_app" formatted="false">Sağ üst düğmenin uygulaması</string>
@@ -484,4 +484,27 @@
     <string name="news_v103_3" formatted="false">Klimanın yanındaki alan telefon favorilerini veya uygulamalarını gösterebilir</string>
     <string name="news_v103_4" formatted="false">İstasyon listesi her zaman güncel, Bluetooth yalnızca telefon bağlıyken başlar, araç vermiyorsa iç sıcaklık gizlenir</string>
     <string name="news_v103_5" formatted="false">Ayarlar → Sistem içinde yeni \"İşlev kontrolü\": bu araçta neyin çalıştığını gösterir</string>
+    <string name="set_sources" formatted="false">Ses kaynakları</string>
+    <string name="set_sources_sub" formatted="false">Medya panelinin üstünde hangi kaynaklar görünsün (en az bir)</string>
+    <string name="nav_other_app" formatted="false">Başka uygulama…</string>
+    <string name="nav_other_app_sub" formatted="false">Araçta yüklü navigasyon uygulamaları</string>
+    <string name="nav_no_apps" formatted="false">MG dışında yüklü navigasyon uygulaması yok</string>
+    <string name="store_install" formatted="false">MG4 Store\'u yükle</string>
+    <string name="store_install_sub" formatted="false">MG4 uygulama mağazası başlatıcının içinde: buradan yükleyin, sonra kendini günceller</string>
+    <string name="store_installing" formatted="false">Mağaza yükleniyor…</string>
+    <string name="store_installed" formatted="false">MG4 Store yüklendi</string>
+    <string name="store_failed" formatted="false">Yükleme başarısız</string>
+    <string name="set_charge_anim" formatted="false">Şarj animasyonu</string>
+    <string name="set_charge_anim_sub" formatted="false">Kabloyu taktığınızda araç canlanır; seçilen rengin paketi kendiliğinden iner</string>
+    <string name="anim_test" formatted="false">Şarj animasyonunu dene</string>
+    <string name="anim_test_sub" formatted="false">Aşamaları sırayla gösterir; paket yoksa USB bellekteki animazione-&lt;renk&gt;.zip kullanılır</string>
+    <string name="anim_test_missing" formatted="false">Paket yok: animazione-&lt;renk&gt;.zip dosyasını USB belleğe kopyalayın</string>
+    <string name="chk_theme_system" formatted="false">Sistem teması</string>
+    <string name="chk_lights" formatted="false">Farlar</string>
+    <string name="chk_charge_anim" formatted="false">Şarj animasyonu</string>
+    <string name="check_lights_on">Park lambalarını yak (%s sn)</string>
+    <string name="news_v104_1" formatted="false">Gündüz/gece temasına artık başlatıcı karar veriyor ve tüm sisteme uyguluyor (Klima, MG uygulamaları, panel)</string>
+    <string name="news_v104_2" formatted="false">Yeni ana ekran: Harita/Medya altta, FM/DAB Radyo altında, daha büyük kaynak düğmeleri</string>
+    <string name="news_v104_3" formatted="false">Kablo takılınca şarj animasyonu ve başlatıcıda MG4 Store</string>
+    <string name="news_v104_4" formatted="false">Seçilebilir ses kaynakları ve navigasyon uygulaması; farlar araçtan okunuyor; açılışta daha güvenilir radyo</string>
 </resources>

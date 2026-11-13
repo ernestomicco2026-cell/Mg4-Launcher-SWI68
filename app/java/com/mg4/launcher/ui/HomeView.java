@@ -70,11 +70,24 @@ public final class HomeView extends LinearLayout {
     private VehicleClient.State lastVehicle = new VehicleClient.State();
     private Bars.Progress battery;
     private CarView car;
+    private ChargeAnimView chargeAnim;
 
     // pannello destro
     private FrameLayout right;
     private View mapPanel, mediaPanel, phonePanel;
     private TextView tabMap, tabMedia, tabPhone;
+    /**
+     * 1.0.4 (nuova grafica): misure base (dp, crescono con "Dimensione comandi").
+     * SRC_H pulsanti delle sorgenti (+15% rispetto ai 48 di prima), TABS_H riga Mappa/Media (6 + 48 + 6),
+     * FAV_H riga dei preferiti, BAND_H riquadro FM/DAB (6 + 60 + 6).
+     */
+    private static final int SRC_H = 55, TABS_H = 60, FAV_H = 122, BAND_H = 72;
+    private View tabsBox, favBottom;
+
+    /** Distanza di Mappa/Media dal fondo del riquadro: centrata sulla riga dei preferiti (che sta a 20 dal fondo). */
+    private int tabsBottom() {
+        return dp(20) + Math.max(0, (dp(FAV_H) - tp(TABS_H)) / 2);
+    }
     private LinearLayout connRow;
     private ImageView connBt, connWifi;
     private TextView connNet;
@@ -110,7 +123,6 @@ public final class HomeView extends LinearLayout {
     private TextView[] bandChips;
     // 1.0.2 (issue #25): banda FM/DAB come sotto-opzione della Radio, subito sotto la riga delle sorgenti
     private LinearLayout bandBox, mediaCol;
-    private View bandLink;
     private LinearLayout mediaBody;
     private ImageView artCover;
     /** Sorgenti senza scritta (solo icona) quando non c'è spazio accanto ai pulsanti in alto a destra. */
@@ -288,7 +300,13 @@ public final class HomeView extends LinearLayout {
         p.addView(status, Ui.margins(new LayoutParams(-1, -2), 0, dp(14), 0, 0));
 
         car = new CarView(c);
-        p.addView(car, Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(4), 0, dp(4)));
+        // 1.0.4 (punto F): l'animazione di ricarica sta sopra l'auto, nello stesso riquadro
+        FrameLayout carFrame = new FrameLayout(c);
+        carFrame.addView(car, new FrameLayout.LayoutParams(-1, -1));
+        chargeAnim = new ChargeAnimView(c);
+        carFrame.addView(chargeAnim, new FrameLayout.LayoutParams(-1, -1));
+        carFrame.setClipChildren(true);
+        p.addView(carFrame, Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(4), 0, dp(4)));
 
         // pressione pneumatici sotto le ruote dell'auto (anteriori a sinistra, posteriori a destra)
         tpmsRow = Ui.row(c);
@@ -544,6 +562,7 @@ public final class HomeView extends LinearLayout {
         if (inShow && !outOk) outIcon.setVisibility(VISIBLE);
         // 1.0.2 (issue SWI69 #2): fari accesi sull'auto disegnata (se lo stato si legge)
         car.setLights(s.lights == 1);
+        updateChargeAnim(s);
         showTpms(s.tireBar, s.distUnit);
         if (s.fanLevel >= 0 && SystemClock.uptimeMillis() > localFanUntil) {
             fanLevel = s.fanLevel;
@@ -654,14 +673,12 @@ public final class HomeView extends LinearLayout {
         tabMedia = addTab(c, tabs, L.s(R.string.tab_media), TAB_MEDIA);
         tabPhone = addTab(c, tabs, "CarPlay", TAB_PHONE);
         // 0.9.6: un solo tocco apre CarPlay / Android Auto (prima il primo tocco mostrava solo la scheda)
-        tabPhone.setOnClickListener(v -> {
-            selectTab(TAB_PHONE, true);
-            media.openProjection();
-        });
+        // 1.0.4 (punto E5): CarPlay / Android Auto non sono più una scheda: compaiono nella barra in basso a destra
+        // con l'icona originale. La terza scheda resta solo per l'app scelta nelle impostazioni (issue #23).
         tabPhone.setVisibility(GONE);
         // 1.0.2 (issue #23): il pulsante in alto a destra si sceglie nelle impostazioni (CarPlay/AA come prima, un'app, nessuno)
         String top = prefs.topButton();
-        topMode = Prefs.TOP_NONE.equals(top) ? 2 : top.startsWith(Prefs.TOP_APP) ? 1 : 0;
+        topMode = Prefs.TOP_NONE.equals(top) ? 2 : top.startsWith(Prefs.TOP_APP) ? 1 : 2;
         if (topMode == 1) {
             topPkg = top.substring(Prefs.TOP_APP.length());
             String label = Cam360.label(c, topPkg);
@@ -673,13 +690,13 @@ public final class HomeView extends LinearLayout {
                 tabPhone.setOnClickListener(v -> openTopApp());
                 tabPhone.setVisibility(VISIBLE);
             } else {
-                topMode = 0;
+                topMode = 2;
                 topPkg = null;
             }
         }
-        com.mg4.launcher.svc.Diag.put("home.pulsanteAltoDestra", topMode == 0 ? "CarPlay/Android Auto"
-                + (top.startsWith(Prefs.TOP_APP) ? " (app scelta non installata: predefinito)" : "") : topMode == 1 ? "app " + topPkg : "nessuno");
-        // indicatori Bluetooth / Wi-Fi / 4G a sinistra delle schede
+        com.mg4.launcher.svc.Diag.put("home.pulsanteAltoDestra", topMode == 1 ? "app " + topPkg : "nessuno"
+                + (top.startsWith(Prefs.TOP_APP) ? " (app scelta non installata)" : "") + " · CarPlay/Android Auto nella barra in basso");
+        // indicatori Bluetooth / Wi-Fi / 4G in alto a destra, alti come i pulsanti delle sorgenti
         LinearLayout topRight = Ui.row(c);
         topRight.setGravity(Gravity.CENTER_VERTICAL);
         connRow = Ui.row(c);
@@ -696,41 +713,34 @@ public final class HomeView extends LinearLayout {
         connBars.setColors(t.text, t.track);
         connRow.addView(connBars, Ui.margins(new LayoutParams(dp(22), dp(18)), dp(5), 0, 0, dp(2)));
         connRow.setVisibility(GONE);
-        // 1.0.3 (issue #25): ordine in alto scambiabile. "attuale" = sorgenti a sinistra, Mappa/Media a destra;
-        // "scambiato" = Mappa/Media all'inizio a sinistra e le sorgenti subito dopo, sulla stessa riga. Le icone
-        // Bluetooth/Wi-Fi/4G restano all'estremità destra. Misure, spazi e stile dei pulsanti non cambiano.
-        boolean swapped = prefs.topSwapped();
-        com.mg4.launcher.svc.Diag.put("home.ordineAlto", swapped ? "scambiato" : "attuale");
-        topRight.addView(connRow, Ui.margins(new LayoutParams(-2, tp(48) + dp(12)), 0, 0, swapped ? 0 : dp(10), 0));
-        if (!swapped) topRight.addView(tabs);
+        topRight.addView(connRow, new LayoutParams(-2, tp(SRC_H)));
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.END);
         lp.setMargins(0, dp(20), dp(20), 0);
         f.addView(topRight, lp);
-        if (swapped) {
-            int inset = rhd && sysIndicator ? dp(SYSTEM_LIGHT_INSET) : 0;
-            FrameLayout.LayoutParams tl = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START);
-            // stessa posizione di partenza che oggi ha la riga delle sorgenti (margine del pannello 28, in alto 20)
-            tl.setMargins(dp(28) + inset, dp(20), 0, 0);
-            f.addView(tabs, tl);
-            // le sorgenti partono subito dopo Mappa/Media, con lo stesso spazio (10) che c'era tra icone e schede
-            tabs.addOnLayoutChangeListener((v, l, tp, r, b, ol, ot, or, ob) -> {
-                if (srcRow == null || r - l == or - ol) return;
-                LayoutParams sl = (LayoutParams) srcRow.getLayoutParams();
-                int want = inset + (r - l) + dp(10);
-                if (sl.leftMargin != want) {
-                    sl.leftMargin = want;
-                    srcRow.setLayoutParams(sl);
-                    srcRow.post(this::fitSources);   // con poco spazio le sorgenti passano alle sole icone, come oggi
-                }
-            });
-            // Mappa: le schede ora stanno in alto a sinistra, dove c'erano l'indicazione di guida e il titolo
-            // "Dove andiamo?": si spostano sotto la riga delle schede (solo con l'ordine scambiato)
-            int below = dp(20) + tp(48) + dp(12) + dp(10);
-            FrameLayout.LayoutParams cl = (FrameLayout.LayoutParams) navCard.getLayoutParams();
-            cl.topMargin = below;
-            navCard.setLayoutParams(cl);
-            navIdle.setPadding(navIdle.getPaddingLeft(), Math.max(navIdle.getPaddingTop(), below), navIdle.getPaddingRight(), navIdle.getPaddingBottom());
-        }
+        // 1.0.4 (punto E2): Mappa/Media scende in basso a sinistra, sulla riga dei preferiti e prima di loro. Sta sopra
+        // a tutti i riquadri (Mappa e Media) sempre nello stesso punto: centrato sulla riga dei preferiti (alta FAV_H).
+        // L'ordine in alto della 1.0.3 non serve più (in alto restano solo le sorgenti) e l'opzione è stata tolta.
+        int inset = rhd && sysIndicator ? dp(SYSTEM_LIGHT_INSET) : 0;
+        FrameLayout.LayoutParams tl = new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START);
+        tl.setMargins(dp(28) + inset, 0, 0, tabsBottom());
+        f.addView(tabs, tl);
+        tabsBox = tabs;
+        // i preferiti partono subito dopo Mappa/Media
+        tabs.addOnLayoutChangeListener((v, l, tp, r, b, ol, ot, or, ob) -> {
+            if (favBottom == null || r - l == or - ol) return;
+            android.view.ViewGroup.MarginLayoutParams fl = (android.view.ViewGroup.MarginLayoutParams) favScroll.getLayoutParams();
+            int want = inset + (r - l) + dp(16);
+            if (fl.leftMargin != want) {
+                fl.leftMargin = want;
+                favScroll.setLayoutParams(fl);
+            }
+        });
+        // Mappa: titolo, ricerca e arrivo restano sopra la riga di Mappa/Media
+        int above = tabsBottom() + tp(TABS_H) + dp(12);
+        navIdle.setPadding(navIdle.getPaddingLeft(), navIdle.getPaddingTop(), navIdle.getPaddingRight(), above);
+        FrameLayout.LayoutParams el = (FrameLayout.LayoutParams) navEta.getLayoutParams();
+        el.bottomMargin = above;
+        navEta.setLayoutParams(el);
         topRightBox = topRight;
         topRight.addOnLayoutChangeListener((v, l, tp, r, b, ol, ot, or, ob) -> {
             if (l != ol || r != or) fitSources();
@@ -752,10 +762,10 @@ public final class HomeView extends LinearLayout {
         TextView tv = Ui.text(c, label, ts(18), t.sub, Ui.MEDIUM);
         tv.setGravity(Gravity.CENTER);
         tv.setPadding(tp(22), 0, tp(22), 0);
-        tv.setMinHeight(tp(48));
+        tv.setMinHeight(tp(TABS_H - 12));
         tv.setClickable(true);
         tv.setOnClickListener(v -> selectTab(which, true));
-        parent.addView(tv, Ui.margins(Ui.lp(-2, tp(48)), which == 0 ? 0 : dp(6), 0, 0, 0));
+        parent.addView(tv, Ui.margins(Ui.lp(-2, tp(TABS_H - 12)), which == 0 ? 0 : dp(6), 0, 0, 0));
         return tv;
     }
 
@@ -1016,42 +1026,21 @@ public final class HomeView extends LinearLayout {
         mediaCol = col;
 
         // sorgenti: un pulsante per ciascuna (Radio, USB, Bluetooth, Online, + CarPlay/Android Auto se collegato)
+        // 1.0.4 (punto E4): pulsanti più grandi (+15%), ognuno con il suo fondo e un bordo leggero; niente riquadro comune
         srcRow = Ui.row(c);
-        srcRow.setBackground(Ui.round(t.overlay, dp(16)));
-        srcRow.setPadding(dp(6), dp(6), dp(6), dp(6));
         // guida a destra con la spia luci: la riga sorgenti parte più a destra (spazio di oggi, SYSTEM_LIGHT_INSET)
-        col.addView(srcRow, Ui.margins(new LayoutParams(-2, tp(48) + dp(12)), rhd && sysIndicator ? dp(SYSTEM_LIGHT_INSET) : 0, 0, 0, 0));
+        col.addView(srcRow, Ui.margins(new LayoutParams(-2, tp(SRC_H)), rhd && sysIndicator ? dp(SYSTEM_LIGHT_INSET) : 0, 0, 0, 0));
         srcRow.addOnLayoutChangeListener((v, l, tp, r, b, ol, ot, or, ob) -> {
             alignBand();
             if (r - l != or - ol) fitSources();
         });
 
-        // 1.0.2 (issue #25): sotto-opzioni della sorgente (oggi FM/DAB della Radio), collegate al pulsante con una linea.
-        // Ordine di lettura: sorgente → banda → stazioni. Visibile solo con la Radio attiva.
+        // sotto-opzioni della sorgente (oggi FM/DAB della Radio), sotto il pulsante Radio e allineate al suo bordo
+        // sinistro. 1.0.4: tolta la linea a "L" che collegava il pulsante alle bande. Visibile solo con la Radio attiva.
         bandBox = Ui.row(c);
         bandBox.setGravity(Gravity.CENTER_VERTICAL);
-        bandLink = new View(c) {
-            final android.graphics.Paint lp = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
-
-            @Override
-            protected void onDraw(android.graphics.Canvas cv) {
-                // linea a "L": scende dal pulsante Radio e piega verso le bande
-                lp.setColor(t.text);
-                lp.setStrokeWidth(dp(3));
-                lp.setStrokeCap(android.graphics.Paint.Cap.ROUND);
-                lp.setStyle(android.graphics.Paint.Style.STROKE);
-                float x = dp(3), y = getHeight() / 2f, r = dp(8);
-                android.graphics.Path path = new android.graphics.Path();
-                path.moveTo(x, dp(1));
-                path.lineTo(x, y - r);
-                path.quadTo(x, y, x + r, y);
-                path.lineTo(getWidth() - dp(2), y);
-                cv.drawPath(path, lp);
-            }
-        };
-        bandBox.addView(bandLink, new LayoutParams(dp(30), -1));
-        // 1.0.3: su richiesta la banda torna accanto ai comandi (come fino alla 1.0.1), più grande: la riga sotto le
-        // sorgenti non si aggiunge più
+        // 1.0.4 (punto E1): FM/DAB torna sotto il pulsante Radio (come nella 1.0.2), con la misura della 1.0.3
+        col.addView(bandBox, Ui.margins(new LayoutParams(-2, tp(BAND_H) + dp(8)), 0, 0, 0, 0));
         bandBox.setVisibility(GONE);
 
         // corpo: a sinistra copertina + comandi + preferiti, a destra (solo radio) l'elenco delle stazioni trovate
@@ -1131,7 +1120,7 @@ public final class HomeView extends LinearLayout {
         ctr.addView(Ui.iconButton(c, t, R.drawable.ic_prev, t.text, t.chip, 64, 28, 32, L.s(R.string.previous), v -> media.skip(false)));
         FrameLayout play = Ui.iconButton(c, t, R.drawable.ic_pause, t.panel, t.text, 84, 36, 42, L.s(R.string.play_pause), v -> media.playPause());
         playIcon = (ImageView) play.getChildAt(0);
-        int gap = dp(Ui.K > 1 ? 12 : 16);
+        int gap = dp(Ui.K > 1 ? 14 : 20);
         ctr.addView(play, Ui.margins(Ui.lp(tp(84), tp(84)), gap, 0, gap, 0));
         ctr.addView(Ui.iconButton(c, t, R.drawable.ic_next, t.text, t.chip, 64, 28, 32, L.s(R.string.next), v -> media.skip(true)));
         bandRow = Ui.row(c);
@@ -1157,7 +1146,7 @@ public final class HomeView extends LinearLayout {
             bandRow.addView(b, Ui.margins(Ui.lp(-2, tp(60)), i == 0 ? 0 : dp(4), 0, 0, 0));
             bandChips[i] = b;
         }
-        ctr.addView(bandRow, Ui.margins(Ui.lp(-2, tp(72)), dp(Ui.K > 1 ? 16 : 24), 0, 0, 0));
+        bandBox.addView(bandRow, Ui.lp(-2, tp(BAND_H)));
         info.addView(ctr, Ui.margins(new LayoutParams(-1, -2), 0, dp(20), 0, 0));
 
         // preferiti radio con i loghi (FM e DAB)
@@ -1167,7 +1156,12 @@ public final class HomeView extends LinearLayout {
         favRow = Ui.row(c);
         hs.addView(favRow);
         favScroll = hs;
-        left.addView(hs, Ui.margins(new LayoutParams(-1, dp(122)), dp(4), dp(10), 0, 0));
+        // 1.0.4 (punto E2): riga in basso alta FAV_H, sempre presente: a sinistra c'è Mappa/Media (sopra, in
+        // sovrimpressione), poi i preferiti della radio. Con le altre sorgenti resta solo Mappa/Media.
+        FrameLayout bottom = new FrameLayout(c);
+        bottom.addView(hs, new FrameLayout.LayoutParams(-1, -1));
+        favBottom = bottom;
+        left.addView(bottom, Ui.margins(new LayoutParams(-1, dp(FAV_H)), 0, dp(10), 0, 0));
 
         // elenco delle stazioni trovate dalla radio (banda attuale)
         stationPanel = Ui.column(c);
@@ -1230,20 +1224,24 @@ public final class HomeView extends LinearLayout {
     /** Pulsanti delle sorgenti: si ricreano solo se cambia l'elenco, poi si aggiorna l'evidenziazione. */
     private void showSources(MediaClient.State m) {
         Context c = getContext();
+        // 1.0.4 (issue #28): solo le sorgenti scelte nelle impostazioni (CarPlay/Android Auto restano sempre)
+        java.util.List<Integer> shownSrc = new java.util.ArrayList<>();
+        for (int src : m.sources) if (prefs.sourceShown(src)) shownSrc.add(src);
+        if (shownSrc.isEmpty()) shownSrc.addAll(m.sources);
         StringBuilder sig = new StringBuilder();
-        for (int src : m.sources) sig.append(src).append(',');
+        for (int src : shownSrc) sig.append(src).append(',');
         if (!sig.toString().equals(srcSignature)) {
             srcSignature = sig.toString();
             srcRow.removeAllViews();
             // 1.0.2: si prova sempre con la scritta; fitSources() passa alle sole icone se non c'è spazio
             srcCompact = false;
             boolean compact = false;
-            for (int i = 0; i < m.sources.size(); i++) {
-                final int src = m.sources.get(i);
-                TextView b = Ui.text(c, sourceLabel(src), ts(17), t.sub, Ui.MEDIUM);
+            for (int i = 0; i < shownSrc.size(); i++) {
+                final int src = shownSrc.get(i);
+                TextView b = Ui.text(c, sourceLabel(src), ts(19.5f), t.sub, Ui.MEDIUM);
                 b.setGravity(Gravity.CENTER_VERTICAL);
-                b.setPadding(tp(compact ? 14 : 18), 0, tp(compact ? 16 : 22), 0);
-                b.setCompoundDrawablePadding(dp(10));
+                b.setPadding(tp(compact ? 16 : 20), 0, tp(compact ? 18 : 24), 0);
+                b.setCompoundDrawablePadding(dp(11));
                 b.setClickable(true);
                 b.setTag(src);
                 b.setContentDescription(sourceLabel(src));
@@ -1253,7 +1251,7 @@ public final class HomeView extends LinearLayout {
                     styleSources(src);
                     media.selectSource(src);
                 });
-                srcRow.addView(b, Ui.margins(Ui.lp(-2, -1), i == 0 ? 0 : dp(4), 0, 0, 0));
+                srcRow.addView(b, Ui.margins(Ui.lp(-2, -1), i == 0 ? 0 : dp(8), 0, 0, 0));
             }
         }
         int shown = SystemClock.uptimeMillis() < pendingSourceUntil ? pendingSource : m.source;
@@ -1276,12 +1274,12 @@ public final class HomeView extends LinearLayout {
         srcCompact = true;
         for (int i = 0; i < srcRow.getChildCount(); i++) {
             TextView v = (TextView) srcRow.getChildAt(i);
-            v.setPadding(tp(14), 0, tp(16), 0);
+            v.setPadding(tp(16), 0, tp(18), 0);
         }
         styleSources(SystemClock.uptimeMillis() < pendingSourceUntil ? pendingSource : media.last().source);
     }
 
-    /** Porta l'inizio della linea della banda sotto il centro del pulsante Radio. */
+    /** Allinea FM/DAB al bordo sinistro del pulsante Radio. */
     private void alignBand() {
         if (bandBox == null || srcRow == null) return;
         bandBox.post(() -> {
@@ -1290,8 +1288,8 @@ public final class HomeView extends LinearLayout {
                 View v = srcRow.getChildAt(i);
                 if (Integer.valueOf(MediaClient.SRC_RADIO).equals(v.getTag())) radioBtn = v;
             }
-            int x = radioBtn == null ? dp(30) : radioBtn.getLeft() + radioBtn.getWidth() / 2;
-            int left = ((LayoutParams) srcRow.getLayoutParams()).leftMargin + x - dp(3);
+            int x = radioBtn == null ? 0 : radioBtn.getLeft();
+            int left = ((LayoutParams) srcRow.getLayoutParams()).leftMargin + x;
             LayoutParams lp = (LayoutParams) bandBox.getLayoutParams();
             if (lp.leftMargin != left) {
                 lp.leftMargin = left;
@@ -1305,16 +1303,25 @@ public final class HomeView extends LinearLayout {
             TextView b = (TextView) srcRow.getChildAt(i);
             int src = (Integer) b.getTag();
             boolean on = src == selected;
-            b.setBackground(on ? Ui.round(t.text, dp(12)) : Ui.pressable(getContext(), 0, 12, t));
-            b.setTextColor(on ? t.panel : t.sub);
+            // 1.0.4: ogni pulsante ha il suo fondo (chip) e un bordo leggero (track); quello scelto resta pieno come prima
+            b.setBackground(on ? Ui.round(t.text, dp(14)) : sourceBg());
+            b.setTextColor(on ? t.panel : t.text);
             boolean compact = srcCompact;
             b.setText(compact && !on ? "" : sourceLabel(src));
-            b.setCompoundDrawablePadding(compact && !on ? 0 : dp(10));
+            b.setCompoundDrawablePadding(compact && !on ? 0 : dp(11));
             android.graphics.drawable.Drawable d = getContext().getDrawable(sourceIcon(src)).mutate();
-            d.setTint(on ? t.panel : t.sub);
-            d.setBounds(0, 0, tp(22), tp(22));
+            d.setTint(on ? t.panel : t.text);
+            d.setBounds(0, 0, tp(25), tp(25));
             b.setCompoundDrawables(d, null, null, null);
         }
+    }
+
+    /** Fondo di un pulsante sorgente non scelto: chip + bordo di 1,5 dp color track, angoli 14, effetto al tocco. */
+    private android.graphics.drawable.Drawable sourceBg() {
+        android.graphics.drawable.GradientDrawable g = Ui.round(t.chip, dp(14));
+        g.setStroke(Math.max(1, dp(1.5f)), t.track);
+        return new android.graphics.drawable.RippleDrawable(
+                android.content.res.ColorStateList.valueOf(t.day ? 0x22000000 : 0x33FFFFFF), g, null);
     }
 
     /** Riquadro di una stazione preferita: logo (o iniziali) + nome. */
@@ -1511,8 +1518,13 @@ public final class HomeView extends LinearLayout {
         } else {
             mMeta.setText(sourceLabel(m.source).toUpperCase(L.locale()));
         }
-        // 1.0.3: banda FM/DAB accanto ai comandi, solo per la Radio
-        bandRow.setVisibility(radio ? VISIBLE : GONE);
+        // 1.0.4: banda FM/DAB sotto il pulsante Radio, solo per la Radio
+        if ((bandBox.getVisibility() == VISIBLE) != radio) {
+            bandBox.setVisibility(radio ? VISIBLE : GONE);
+            ((LayoutParams) mediaBody.getLayoutParams()).topMargin = dp(radio ? 2 : 12);
+            mediaBody.requestLayout();
+            alignBand();
+        }
         // con poco spazio in verticale (comandi grandi o barra grande) la riga "FM · 101,5 MHz" lascia posto alla banda
         mMeta.setVisibility(radio && (big || Ui.K > 1.05f) ? GONE : VISIBLE);
         stationPanel.setVisibility(radio ? VISIBLE : GONE);
@@ -1545,6 +1557,7 @@ public final class HomeView extends LinearLayout {
         if (projBtn != null) {
             projBtn.setVisibility(phone ? VISIBLE : GONE);
             projBtn.setContentDescription(m.deviceType == MediaClient.DEV_AAUTO ? "Android Auto" : "CarPlay");
+            if (phone && m.deviceType != projIconType) setProjectionIcon(m.deviceType);
         }
         if (topMode == 0) tabPhone.setText(m.deviceType == MediaClient.DEV_AAUTO ? "Android Auto" : "CarPlay");
         if ((!phone || topMode != 0) && tab == TAB_PHONE) selectTab(TAB_MEDIA, false);
@@ -1558,6 +1571,88 @@ public final class HomeView extends LinearLayout {
             phoneNavDist.setText(m.tbtDistance.isEmpty() ? L.s(R.string.next_maneuver) : m.tbtDistance);
             phoneNavRoad.setText(m.tbtRoad.isEmpty() ? L.s(R.string.nav_phone) : m.tbtRoad);
         }
+    }
+
+    // ---- 1.0.4 (punto F): animazione di ricarica -------------------------------------------------
+
+    private String animLog = "", animColor = "";
+    private int animGen = -1;
+    private long animEnsureAt;
+    private boolean animHave;
+
+    /** Schermo spento o launcher in secondo piano: animazione ferma e decoder rilasciati. */
+    public void pauseChargeAnim() {
+        if (chargeAnim != null) chargeAnim.pause();
+    }
+
+    private void updateChargeAnim(VehicleClient.State s) {
+        if (chargeAnim == null) return;
+        String color = Prefs.CAR_COLORS[prefs.carColorIndex()];
+        boolean plugged = VehicleClient.cablePlugged(s), done = VehicleClient.chargeDone(s);
+        boolean ready = s.ignition == 2, moving = !Float.isNaN(s.speedKmh) && Math.abs(s.speedKmh) >= 1f;
+        // il controllo dei file si rifà solo quando il pacchetto o il colore cambiano (niente disco a ogni lettura)
+        if (animGen != com.mg4.launcher.svc.ChargePack.generation || !color.equals(animColor)) {
+            animGen = com.mg4.launcher.svc.ChargePack.generation;
+            animColor = color;
+            animHave = com.mg4.launcher.svc.ChargePack.complete(getContext(), color);
+        }
+        boolean have = animHave;
+        String why = !prefs.chargeAnim() ? "spenta nelle impostazioni" : ready ? "in READY: ferma" : moving ? "in movimento: ferma"
+                : !have ? "pacchetto non disponibile" : "";
+        // al massimo una volta al minuto (ensure controlla poi il limite di 12 ore tra due download)
+        long nowMs = SystemClock.uptimeMillis();
+        if (!have && plugged && prefs.chargeAnim() && nowMs - animEnsureAt > 60_000) {
+            animEnsureAt = nowMs;
+            com.mg4.launcher.svc.ChargePack.ensure(getContext(), color, false);
+        }
+        Context c = getContext();
+        chargeAnim.update((day, phase) -> com.mg4.launcher.svc.ChargePack.clip(c, color, day, phase), t.day, plugged, done, why);
+        String txt = (prefs.chargeAnim() ? "attiva" : "spenta") + " · pacchetto " + color + " "
+                + (have ? "presente" : com.mg4.launcher.svc.ChargePack.busy() ? "in download" : "assente") + " · "
+                + ChargeAnimView.phaseTxt + " · cavo " + (plugged ? "inserito" : "non inserito") + (done ? " · carica finita" : "")
+                + " · stato ricarica " + s.chargingStatus + " · presa " + s.plugProp + " · accensione " + s.ignition;
+        if (!txt.equals(animLog)) {
+            animLog = txt;
+            com.mg4.launcher.svc.Diag.put("ricarica.animazione", txt);
+        }
+    }
+
+    /** Schermo riacceso: se il cavo è già inserito l'animazione parte dal loop. */
+    public void onScreenOn() {
+        if (chargeAnim != null) chargeAnim.markFresh();
+    }
+
+    /** Prova dalla modalità tecnica: pacchetto installato, altrimenti zip dalla chiavetta USB. */
+    public void testChargeAnim(java.io.File dir, String slug, Runnable done) {
+        if (chargeAnim == null) return;
+        chargeAnim.playTest((day, phase) -> com.mg4.launcher.svc.ChargePack.clipIn(dir, slug, day, phase), t.day, done);
+    }
+
+    private int projIconType = -1;
+
+    /**
+     * 1.0.4 (punto E5): nella barra l'icona ORIGINALE dell'app installata sull'auto (Android Auto: com.allgo.app.androidauto,
+     * CarPlay: com.allgo.carplay.service), letta dal PackageManager. Nell'APK non c'è nessun logo di Google o Apple:
+     * se l'app non ha un'icona si usa l'icona generica del launcher.
+     */
+    private void setProjectionIcon(int deviceType) {
+        projIconType = deviceType;
+        ImageView iv = (ImageView) projBtn.getChildAt(0);
+        String pkg = deviceType == MediaClient.DEV_AAUTO ? "com.allgo.app.androidauto" : "com.allgo.carplay.service";
+        android.graphics.drawable.Drawable d = null;
+        try {
+            d = getContext().getPackageManager().getApplicationIcon(pkg);
+        } catch (Exception ignored) {
+        }
+        if (d != null) {
+            iv.clearColorFilter();
+            iv.setImageDrawable(d);
+        } else {
+            iv.setImageResource(R.drawable.ic_projection);
+            iv.setColorFilter(t.text, android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+        com.mg4.launcher.svc.Diag.put("home.iconaProiezione", (deviceType == MediaClient.DEV_AAUTO ? "Android Auto" : "CarPlay")
+                + " · " + (d != null ? "icona originale di " + pkg : "icona generica (" + pkg + " senza icona)"));
     }
 
     private static String time(long ms) {
@@ -1800,7 +1895,7 @@ public final class HomeView extends LinearLayout {
         // scorciatoie; con la barra grande restano telefono e 360° (Radio è nel pannello Media, le Impostazioni tra le app)
         // 0.9.6: CarPlay / Android Auto nella barra, solo con il telefono collegato
         int pj = bs(64, BIG_SHORTCUT);
-        projBtn = barIcon(c, R.drawable.ic_projection, t.text, 0, pj, bs(30, BIG_ICON - 2), big ? 22 : 18 * Ui.K, "CarPlay / Android Auto",
+        projBtn = barIcon(c, R.drawable.ic_projection, t.text, 0, pj, bs(44, BIG_ICON + 16), big ? 22 : 18 * Ui.K, "CarPlay / Android Auto",
                 v -> media.openProjection());
         projBtn.setLayoutParams(Ui.margins(Ui.lp(pj, pj), dp(6), 0, 0, 0));
         projBtn.setVisibility(GONE);

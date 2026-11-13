@@ -8,6 +8,12 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <!-- 1.0.3: rubrica del telefono Bluetooth per i "Preferiti telefono" del riquadro in basso -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- 1.0.4: il launcher scrive il tema giorno/notte nel sistema (UiModeManager.setNightMode) -->
+    <uses-permission android:name="android.permission.MODIFY_DAY_NIGHT_MODE" />
+    <!-- 1.0.4: luci dell'auto (posizione, anabbaglianti, leva) per i fari e il tema -->
+    <uses-permission android:name="android.car.permission.CAR_EXTERIOR_LIGHTS" />
+    <!-- 1.0.4: riportare davanti la finestra già aperta dopo la retromarcia -->
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- CarService: pressione pneumatici (TPMS) e temperatura interna -->
     <uses-permission android:name="android.car.permission.CAR_TIRES" />

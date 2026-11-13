@@ -657,6 +657,11 @@ public final class Updater {
         return out;
     }
 
+    /** 1.0.4: GET di un file piccolo di testo (animazioni.json). */
+    public static String getText(String url) throws IOException {
+        return get(url);
+    }
+
     /** GET di un file piccolo (JSON) dal proprio repository. */
     private static String get(String url) throws IOException {
         if (!url.startsWith(OWN_RAW)) throw new IOException("indirizzo non ammesso");

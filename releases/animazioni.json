@@ -1,0 +1,45 @@
+{
+  "versione": 1,
+  "colori": {
+    "Arctic White": {
+      "url": "https://raw.githubusercontent.com/ernestomicco2026-cell/Mg4-Launcher-SWI68/main/animazioni/animazione-arctic-white.zip",
+      "size": 938726,
+      "sha256": "ca6b12e0e2df6fd37a19cdcb2f6710e542f5132accac0f7e838e987ff96b2f6f"
+    },
+    "Black Pearl": {
+      "url": "https://raw.githubusercontent.com/ernestomicco2026-cell/Mg4-Launcher-SWI68/main/animazioni/animazione-black-pearl.zip",
+      "size": 892069,
+      "sha256": "70a540c1ffb5e76fae6da7cbcd47375786bf7eed674a1cd7d296506f2a163cd9"
+    },
+    "Camden Grey": {
+      "url": "https://raw.githubusercontent.com/ernestomicco2026-cell/Mg4-Launcher-SWI68/main/animazioni/animazione-camden-grey.zip",
+      "size": 900666,
+      "sha256": "f356de0af5112af17890e072c90a65460b885a5d7c657ede2c9d14669b7d6651"
+    },
+    "Cosmic Silver": {
+      "url": "https://raw.githubusercontent.com/ernestomicco2026-cell/Mg4-Launcher-SWI68/main/animazioni/animazione-cosmic-silver.zip",
+      "size": 925786,
+      "sha256": "76696f68c80b1260af600ad392f4b162fe30d73795813faa6ad35bab4cd1e985"
+    },
+    "Ealing Green": {
+      "url": "https://raw.githubusercontent.com/ernestomicco2026-cell/Mg4-Launcher-SWI68/main/animazioni/animazione-ealing-green.zip",
+      "size": 926320,
+      "sha256": "8e2369e6f979d29bdb3aa04cef40b126f9c25a0b8026fb5bda88d73e37786440"
+    },
+    "Piccadilly Blue": {
+      "url": "https://raw.githubusercontent.com/ernestomicco2026-cell/Mg4-Launcher-SWI68/main/animazioni/animazione-piccadilly-blue.zip",
+      "size": 963454,
+      "sha256": "ac2ea68592221b2d51e92ea87d7789cadc8f002208c32d4cb5bfe0313d73f558"
+    },
+    "Dynamic Red": {
+      "url": "https://raw.githubusercontent.com/ernestomicco2026-cell/Mg4-Launcher-SWI68/main/animazioni/animazione-dynamic-red.zip",
+      "size": 988553,
+      "sha256": "7214e97749aa1474ed699d0d3b6095083d065e1942e6081168c8ea4cf8fbb2fe"
+    },
+    "Volcano Orange": {
+      "url": "https://raw.githubusercontent.com/ernestomicco2026-cell/Mg4-Launcher-SWI68/main/animazioni/animazione-volcano-orange.zip",
+      "size": 1021341,
+      "sha256": "3fd7881dc0c97efebc4f2aaa504f56bad143cee4bbf7eff4dbf17d661f917f00"
+    }
+  }
+}

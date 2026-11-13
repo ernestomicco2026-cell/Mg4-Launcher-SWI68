@@ -48,6 +48,10 @@ public final class SelfCheck {
         /** Prova dei tasti: secondi che restano (sul thread principale); 0 = finita. */
         void onKeysCountdown(int seconds);
 
+        /** 1.0.4: prova dei fari: secondi che restano (sul thread principale); 0 = finita. */
+        default void onLightsCountdown(int seconds) {
+        }
+
         void onDone(List<Item> items, int ok, int fail, int absent);
     }
 
@@ -82,6 +86,8 @@ public final class SelfCheck {
         l.add(new Item("tempEsterna", R.string.chk_out_temp));
         l.add(new Item("tempInterna", R.string.chk_in_temp));
         l.add(new Item("tema", R.string.chk_theme));
+        l.add(new Item("temaSistema", R.string.chk_theme_system));
+        l.add(new Item("fari", R.string.chk_lights));
         l.add(new Item("usb", R.string.chk_usb));
         l.add(new Item("bluetooth", R.string.chk_bt));
         l.add(new Item("stazioni", R.string.chk_stations));
@@ -91,6 +97,7 @@ public final class SelfCheck {
         l.add(new Item("aggiornamento", R.string.chk_update));
         l.add(new Item("log", R.string.chk_logs));
         l.add(new Item("avvisi", R.string.chk_notices));
+        l.add(new Item("animazione", R.string.chk_charge_anim));
         return l;
     }
 
@@ -221,6 +228,50 @@ public final class SelfCheck {
                 }
                 break;
             }
+            case "temaSistema": {
+                // 1.0.4 (punto A): il tema scritto dal launcher nel sistema, riletto da UiModeManager
+                Boolean[] r = DayNight.get(c).systemCheck();
+                if (r[0] == null) set(it, FAIL, "tema non ancora deciso · " + DayNight.get(c).systemTxt(), "");
+                else if (r[1] == null) set(it, FAIL, "UiModeManager non leggibile o su automatico · " + DayNight.get(c).systemTxt(), "");
+                else set(it, r[0].equals(r[1]) && DayNight.get(c).systemApplied() ? OK : FAIL, "voluto " + (r[0] ? "giorno" : "notte") + " · sistema " + (r[1] ? "giorno" : "notte")
+                        + (DayNight.get(c).systemApplied() ? "" : " · configurazione diversa")
+                        + " · " + DayNight.get(c).systemTxt(), r[1] ? "☀" : "☾");
+                break;
+            }
+            case "fari": {
+                // 1.0.4 (punto B): con la prova interattiva si chiede di accendere le luci di posizione entro 10 s
+                if (VehicleClient.lights() < 0) {
+                    set(it, FAIL, "fari non leggibili · " + VehicleClient.lightsDescription(), "");
+                    break;
+                }
+                if (!interactive) {
+                    set(it, OK, "leggibili · " + VehicleClient.lightsDescription(), "");
+                    break;
+                }
+                boolean seenOn = VehicleClient.lights() == 1;
+                for (int sec = 10; sec > 0 && !seenOn; sec--) {
+                    int left = sec;
+                    if (p != null) main.post(() -> p.onLightsCountdown(left));
+                    Thread.sleep(1000);
+                    if (v != null) v.refreshLightsNow();
+                    seenOn = VehicleClient.lights() == 1;
+                }
+                if (p != null) main.post(() -> p.onLightsCountdown(0));
+                set(it, seenOn ? OK : FAIL, (seenOn ? "accensione vista" : "nessuna accensione vista in 10 s") + " · "
+                        + VehicleClient.lightsDescription(), "");
+                break;
+            }
+            case "animazione": {
+                String color = com.mg4.launcher.ui.Prefs.CAR_COLORS[Math.max(0, Math.min(7,
+                        c.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE).getInt("carColor", 5)))];
+                boolean on = c.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE).getBoolean("animazioneRicarica", true);
+                if (com.mg4.launcher.ui.ChargeAnimView.errors > 0) set(it, FAIL, "errori di riproduzione: " + com.mg4.launcher.ui.ChargeAnimView.errors
+                        + " · " + ChargePack.state(), "");
+                else if (ChargePack.complete(c, color)) set(it, OK, "pacchetto " + color + " presente" + (on ? "" : " (animazione spenta)"), "");
+                else if (ChargePack.failed()) set(it, FAIL, ChargePack.state(), "");
+                else set(it, ABSENT, "non ancora disponibile · " + ChargePack.state(), "");
+                break;
+            }
             case "usb": {
                 List<String> ports = m == null ? null : m.usbPortsSeen();
                 if (ports == null) {
@@ -251,7 +302,14 @@ public final class SelfCheck {
                     set(it, FAIL, "servizio radio non collegato", "");
                     break;
                 }
+                // 1.0.4 (punto C2): l'elenco può arrivare dopo l'avvio del controllo: si aspetta fino a 30 s
                 MediaClient.State ms = m.last();
+                long until = android.os.SystemClock.uptimeMillis() + 30_000;
+                while ((ms.stations == null || ms.stations.isEmpty()) && (ms.favorites == null || ms.favorites.isEmpty())
+                        && android.os.SystemClock.uptimeMillis() < until) {
+                    Thread.sleep(1000);
+                    ms = m.last();
+                }
                 int n = ms.stations == null ? 0 : ms.stations.size();
                 int f = ms.favorites == null ? 0 : ms.favorites.size();
                 String elenco = Diag.value("radio.elenco");

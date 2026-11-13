@@ -108,7 +108,8 @@ public final class Prefs {
     public static final String NAV_AUTO = "auto", NAV_MG = "mg", NAV_PHONE = "phone";
 
     public String navApp() {
-        return sp.getString("navApp", NAV_AUTO);
+        // 1.0.4 (issue #27): predefinita la navigazione MG
+        return sp.getString("navApp", NAV_MG);
     }
 
     public void setNavApp(String v) {
@@ -368,6 +369,31 @@ public final class Prefs {
     }
 
     // --- 1.0.3 ---
+
+    /**
+     * 1.0.4 (issue #28): sorgenti audio da mostrare. Si salvano quelle NASCOSTE (così le sorgenti nuove compaiono da
+     * sole); predefinito: nessuna nascosta. CarPlay e Android Auto non si nascondono.
+     */
+    public boolean sourceShown(int src) {
+        return !("," + sp.getString("sorgentiNascoste", "") + ",").contains("," + src + ",");
+    }
+
+    public void setSourceShown(int src, boolean shown) {
+        java.util.LinkedHashSet<String> set = new java.util.LinkedHashSet<>();
+        for (String x : sp.getString("sorgentiNascoste", "").split(",")) if (!x.trim().isEmpty()) set.add(x.trim());
+        if (shown) set.remove(String.valueOf(src));
+        else set.add(String.valueOf(src));
+        sp.edit().putString("sorgentiNascoste", android.text.TextUtils.join(",", set)).apply();
+    }
+
+    /** 1.0.4 (punto F): animazione di ricarica (predefinito: attiva). */
+    public boolean chargeAnim() {
+        return sp.getBoolean("animazioneRicarica", true);
+    }
+
+    public void setChargeAnim(boolean on) {
+        sp.edit().putBoolean("animazioneRicarica", on).apply();
+    }
 
     /** Ordine in alto nel riquadro destro: false = sorgenti poi Mappa/Media (attuale, predefinito), true = scambiato. */
     public boolean topSwapped() {

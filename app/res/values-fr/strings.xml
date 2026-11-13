@@ -421,8 +421,8 @@
     <string name="limit_auto" formatted="false">Automatique</string>
     <string name="limit_show" formatted="false">Afficher</string>
     <string name="limit_hide" formatted="false">Masquer</string>
-    <string name="set_top_button" formatted="false">Bouton en haut à droite</string>
-    <string name="set_top_button_sub" formatted="false">Dans le panneau Carte/Médias. Avec « Aucun », les sources médias gardent toujours leur nom</string>
+    <string name="set_top_button" formatted="false">Bouton à côté de Carte/Médias</string>
+    <string name="set_top_button_sub" formatted="false">Un troisième bouton qui ouvre l\'appli de ton choix ; CarPlay et Android Auto sont dans la barre du bas</string>
     <string name="top_app" formatted="false">Une appli…</string>
     <string name="top_none" formatted="false">Aucun</string>
     <string name="top_pick_app" formatted="false">Appli du bouton en haut à droite</string>
@@ -484,4 +484,27 @@
     <string name="news_v103_3" formatted="false">L\'encadré à côté de la clim peut afficher les favoris du téléphone ou tes applis</string>
     <string name="news_v103_4" formatted="false">Liste des stations toujours à jour, le Bluetooth ne démarre qu\'avec le téléphone connecté, température intérieure masquée si la voiture ne la fournit pas</string>
     <string name="news_v103_5" formatted="false">Nouveau « Contrôle des fonctions » dans Réglages → Système : montre ce qui marche sur cette voiture</string>
+    <string name="set_sources" formatted="false">Sources audio</string>
+    <string name="set_sources_sub" formatted="false">Quelles sources afficher en haut du panneau Médias (au moins une)</string>
+    <string name="nav_other_app" formatted="false">Autre appli…</string>
+    <string name="nav_other_app_sub" formatted="false">Applis de navigation installées sur la voiture</string>
+    <string name="nav_no_apps" formatted="false">Aucune appli de navigation installée à part celle de MG</string>
+    <string name="store_install" formatted="false">Installer MG4 Store</string>
+    <string name="store_install_sub" formatted="false">Le Store des applis MG4 est dans le launcher : installe-le d\'ici, ensuite il se met à jour seul</string>
+    <string name="store_installing" formatted="false">Installation du Store…</string>
+    <string name="store_installed" formatted="false">MG4 Store installé</string>
+    <string name="store_failed" formatted="false">Installation impossible</string>
+    <string name="set_charge_anim" formatted="false">Animation de recharge</string>
+    <string name="set_charge_anim_sub" formatted="false">Quand tu branches le câble la voiture s\'anime ; le pack de la couleur choisie se télécharge tout seul</string>
+    <string name="anim_test" formatted="false">Tester l\'animation de recharge</string>
+    <string name="anim_test_sub" formatted="false">Montre les phases l\'une après l\'autre ; sans pack, utilise animazione-&lt;couleur&gt;.zip de la clé USB</string>
+    <string name="anim_test_missing" formatted="false">Pas de pack : copie animazione-&lt;couleur&gt;.zip sur la clé USB</string>
+    <string name="chk_theme_system" formatted="false">Thème du système</string>
+    <string name="chk_lights" formatted="false">Phares</string>
+    <string name="chk_charge_anim" formatted="false">Animation de recharge</string>
+    <string name="check_lights_on">Allume les feux de position (%s s)</string>
+    <string name="news_v104_1" formatted="false">Le launcher décide maintenant le thème jour/nuit et l\'applique à tout le système (Clim, applis MG, volet)</string>
+    <string name="news_v104_2" formatted="false">Nouvel accueil : Carte/Médias en bas, FM/DAB sous Radio, boutons de source plus grands</string>
+    <string name="news_v104_3" formatted="false">Animation de recharge au branchement du câble, et MG4 Store inclus dans le launcher</string>
+    <string name="news_v104_4" formatted="false">Sources audio et appli de navigation au choix ; phares lus depuis la voiture ; radio plus fiable au démarrage</string>
 </resources>

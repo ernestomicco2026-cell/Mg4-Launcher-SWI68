@@ -184,6 +184,48 @@ public final class Diag {
         return sb.length() == 0 ? "nessuno\n" : sb.toString();
     }
 
+    /**
+     * 1.0.4 (punto C3): righe di logcat con tag "RadioFix" (la patch del servizio radio ci scrive cambi di frequenza AF,
+     * segnale, scelte). Righe uniche (senza l'ora davanti per il confronto), al massimo le ultime 300.
+     * Se la patch non è installata: "radiofix = assente". Serve READ_LOGS (firma platform).
+     */
+    static String radioFix(Context c) {
+        String ver = null;
+        try {
+            ver = c.getPackageManager().getPackageInfo("com.saicmotor.service.radio", 0).versionName;
+        } catch (Exception ignored) {
+        }
+        boolean installed = ver != null && ver.toLowerCase(Locale.ROOT).contains("radiofix");
+        StringBuilder sb = new StringBuilder();
+        if (!installed) {
+            put("radiofix", "assente (servizio radio " + (ver == null ? "non trovato" : ver) + ")");
+            return "radiofix = assente\n";
+        }
+        java.util.LinkedHashMap<String, String> uniq = new java.util.LinkedHashMap<>();
+        try {
+            Process p = Runtime.getRuntime().exec(new String[]{"logcat", "-d", "-v", "time", "-s", "RadioFix:*"});
+            try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"))) {
+                String l;
+                while ((l = r.readLine()) != null) {
+                    if (l.startsWith("-----") || l.trim().isEmpty()) continue;
+                    // chiave senza data e ora: le righe uguali si tengono una volta sola (l'ultima)
+                    int i = l.indexOf(' ', l.indexOf(' ') + 1);
+                    String key = i > 0 ? l.substring(i + 1) : l;
+                    uniq.remove(key);
+                    uniq.put(key, l);
+                }
+            }
+            p.waitFor();
+        } catch (Exception e) {
+            sb.append("logcat non disponibile: ").append(e).append('\n');
+        }
+        List<String> lines = new ArrayList<>(uniq.values());
+        int from = Math.max(0, lines.size() - 300);
+        for (int i = from; i < lines.size(); i++) sb.append(lines.get(i)).append('\n');
+        put("radiofix", "presente (" + ver + ") · " + lines.size() + " righe uniche" + (from > 0 ? ", tenute le ultime 300" : ""));
+        return sb.length() == 0 ? "nessuna riga RadioFix nel logcat\n" : sb.toString();
+    }
+
     /** Testo completo del log: versione, valori attuali, eventi recenti, logcat del launcher (stesso formato della SWI69). */
     public static String buildLog(Context c) {
         StringBuilder sb = new StringBuilder();
@@ -200,6 +242,7 @@ public final class Diag {
         sb.append("===== VALORI ATTUALI =====\n").append(dump()).append('\n');
         sb.append("===== EVENTI RECENTI =====\n").append(events()).append('\n');
         sb.append("===== CRASH RECENTI (tutte le app) =====\n").append(crashes()).append('\n');
+        sb.append("===== RadioFix =====\n").append(radioFix(c)).append('\n');
         sb.append("===== LOGCAT DEL LAUNCHER =====\n").append(logcat());
         return sb.toString();
     }

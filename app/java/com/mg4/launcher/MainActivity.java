@@ -90,6 +90,16 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         // 1.0.3: Controllo funzioni (sola lettura) e controllo automatico 60 s dopo l'avvio di una versione nuova
         com.mg4.launcher.svc.SelfCheck.bind(vehicle, media, logs);
         com.mg4.launcher.svc.SelfCheck.scheduleAfterUpdate(this, updater.currentVersion());
+        // 1.0.4 (punto F): pacchetto dell'animazione di ricarica del colore scelto (in background, se attiva)
+        android.os.Handler later = new android.os.Handler(android.os.Looper.getMainLooper());
+        later.postDelayed(() -> {
+            if (!isDestroyed() && prefs.chargeAnim())
+                new Thread(() -> com.mg4.launcher.svc.ChargePack.ensure(this, Prefs.CAR_COLORS[prefs.carColorIndex()], false), "mg4-anim-avvio").start();
+        }, 45_000);
+        // 1.0.4 (punto D): MG4 Store contenuto nel launcher, installato una volta sola se manca o è più vecchio (30 s dopo l'avvio)
+        later.postDelayed(() -> {
+            if (!isDestroyed()) new Thread(() -> com.mg4.launcher.svc.StoreSetup.onStart(this), "mg4-store-avvio").start();
+        }, 30_000);
         lastUiMode = getResources().getConfiguration().uiMode;
 
         root = new FrameLayout(this);
@@ -193,12 +203,14 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         public void onReceive(Context c, Intent i) {
             if (Intent.ACTION_SCREEN_OFF.equals(i.getAction())) {
                 screenOffAt = android.os.SystemClock.elapsedRealtime();
+                if (home != null) home.pauseChargeAnim();   // 1.0.4: niente decoder video a schermo spento
                 return;
             }
             // accensione vera solo dopo almeno 2 minuti di schermo spento (non il tasto "schermo spento" del momento)
             long off = screenOffAt < 0 ? 0 : android.os.SystemClock.elapsedRealtime() - screenOffAt;
             screenOffAt = -1;
             if (off < 2 * 60_000L) return;
+            if (home != null) home.onScreenOn();
             if (media != null) media.onPowerOn("risveglio dello schermo dopo " + (off / 60_000) + " min");
             com.mg4.launcher.svc.Notices.newPowerOn();
             root.removeCallbacks(autoCheck);
@@ -457,6 +469,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     /** Novità di ogni versione (testi in tutte le lingue in strings.xml). */
     private static int[] newsFor(String ver) {
         switch (ver) {
+            case "1.0.4":
+                return new int[]{R.string.news_v104_1, R.string.news_v104_2, R.string.news_v104_3, R.string.news_v104_4};
             case "1.0.3":
                 return new int[]{R.string.news_v103_1, R.string.news_v103_2, R.string.news_v103_3, R.string.news_v103_4, R.string.news_v103_5};
             case "1.0.2":
@@ -600,6 +614,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
 
     @Override
     protected void onStop() {
+        if (home != null) home.pauseChargeAnim();   // 1.0.4: animazione ferma con il launcher in secondo piano
         super.onStop();
         if (wrongFirmware) return;
         vehicle.pause();
@@ -792,15 +807,22 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
                 return;
             }
         } else if (!Prefs.NAV_AUTO.equals(which) && !Prefs.NAV_MG.equals(which)) {
-            Intent li = getPackageManager().getLaunchIntentForPackage(which);
+            // 1.0.4 (issue #27): app di navigazione scelta; se non c'è più si apre quella MG, senza crash
+            Intent li = null;
+            try {
+                li = getPackageManager().getLaunchIntentForPackage(which);
+            } catch (Exception ignored) {
+            }
             if (li != null) {
                 try {
                     startActivity(li.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    Diag.put("nav.appScelta", which + " · aperta");
                     return;
                 } catch (Exception e) {
                     Diag.error("navigatore.app", e.toString());
                 }
             }
+            Diag.put("nav.appScelta", which + " · non disponibile: apro la navigazione MG");
         }
         Intent i = catalog.navIntent(nav.last().mapPackage);
         if (i != null) {
@@ -817,6 +839,43 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public java.util.List<AppCatalog.App> otherNavApps() {
         return catalog.otherNavApps(nav.last().mapPackage);
+    }
+
+    /**
+     * 1.0.4 (punto F5): prova dell'animazione di ricarica. Usa il pacchetto del colore scelto se c'è, altrimenti uno zip
+     * animazione-<colore>.zip nella cartella principale della chiavetta USB. Si chiudono le impostazioni e la prova
+     * gira sull'auto della home: aggancio → loop (3 giri) → finita → sgancio.
+     */
+    @Override
+    public void testChargeAnimation() {
+        String color = Prefs.CAR_COLORS[prefs.carColorIndex()];
+        new Thread(() -> {
+            java.io.File dir;
+            String slug;
+            if (com.mg4.launcher.svc.ChargePack.complete(this, color)) {
+                dir = com.mg4.launcher.svc.ChargePack.dir(this, color);
+                slug = com.mg4.launcher.svc.ChargePack.slug(color);
+                Diag.put("ricarica.prova", "pacchetto " + color + " installato");
+            } else {
+                Object[] usb = com.mg4.launcher.svc.ChargePack.loadFromUsb(this);
+                if (usb == null) {
+                    runOnUiThread(() -> android.widget.Toast.makeText(this, L.s(R.string.anim_test_missing), android.widget.Toast.LENGTH_LONG).show());
+                    Diag.put("ricarica.prova", "nessun pacchetto: né scaricato né zip animazione-<colore>.zip sulla chiavetta");
+                    return;
+                }
+                dir = (java.io.File) usb[0];
+                slug = (String) usb[1];
+            }
+            runOnUiThread(() -> {
+                if (settings != null) closeSettings();
+                if (home != null) home.testChargeAnim(dir, slug, () -> Diag.put("ricarica.prova", "finita · " + slug));
+            });
+        }, "mg4-prova-animazione").start();
+    }
+
+    @Override
+    public java.util.List<AppCatalog.App> navCandidateApps() {
+        return catalog.navCandidateApps(nav.last().mapPackage);
     }
 
     @Override

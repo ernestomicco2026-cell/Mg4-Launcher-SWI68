@@ -9,3 +9,5 @@ tools/log-token.txt
 __pycache__/
 .env
 tools/*token*
+# 1.0.4: APK di MG4 Store da includere nel launcher (non va nel repository)
+tools/*.apk

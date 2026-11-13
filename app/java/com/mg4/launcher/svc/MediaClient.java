@@ -606,11 +606,30 @@ public final class MediaClient {
         return a + " · " + b;
     }
 
+    /** Riserva: CarPlay / Android Auto dalla sessione media attiva delle app AllGo (0 se nessuna). */
+    private int projectionFromSessions() {
+        try {
+            android.media.session.MediaSessionManager msm =
+                    (android.media.session.MediaSessionManager) ctx.getSystemService(Context.MEDIA_SESSION_SERVICE);
+            for (MediaController mc : msm.getActiveSessions(null)) {
+                String p = mc.getPackageName();
+                if ("com.allgo.app.androidauto".equals(p)) return DEV_AAUTO;
+                if ("com.allgo.carplay.service".equals(p)) return DEV_CARPLAY;
+            }
+        } catch (Throwable ignored) {
+        }
+        return 0;
+    }
+
     private void poll() {
         State s = new State();
 
         // CarPlay / Android Auto collegato?
+        // 1.0.4 (punto E5): fonte principale il servizio AllGo (getActiveRemoteDevice, codice 15: null = nessuna
+        // sessione; tipo 1 CarPlay, 2 Android Auto). Se non risponde, le sessioni media delle app AllGo.
         IBinder r = rui.binder();
+        String projSrc = "AllGo (codice 15)";
+        boolean ruiOk = false;
         if (r != null) {
             try {
                 int[] dev = Rpc.call(r, RUI, RUI_ACTIVE_DEVICE, Rpc.NONE, p -> Rpc.readNullable(p, q -> {
@@ -623,11 +642,18 @@ public final class MediaClient {
                     return new int[]{type, session};
                 }));
                 s.deviceType = dev == null ? 0 : dev[0];
-                Diag.put("carplay.dispositivo", dev == null ? "nessuno" : ("tipo " + dev[0] + ", sessione " + dev[1] + ", " + s.deviceName));
+                ruiOk = true;
+                // nel log niente nome del telefono (dato personale)
+                Diag.put("carplay.dispositivo", dev == null ? "nessuno" : ("tipo " + dev[0] + ", sessione " + dev[1]));
             } catch (Exception e) {
                 Diag.error("carplay", e.toString());
             }
         }
+        if (!ruiOk) {
+            projSrc = "sessioni media AllGo (servizio AllGo non risponde)";
+            s.deviceType = projectionFromSessions();
+        }
+        Diag.putQuiet("proiezione", "fonte " + projSrc + " · " + (s.deviceType == DEV_AAUTO ? "AA" : s.deviceType == DEV_CARPLAY ? "CarPlay" : "nessuna"));
 
         // sorgenti disponibili (come la lista dell'originale)
         s.sources.add(SRC_RADIO);
@@ -955,8 +981,19 @@ public final class MediaClient {
         return msg.contains("NOT_INITIALIZED") || msg.contains("binder non disponibile") || msg.contains("non collegato");
     }
 
+    /**
+     * 1.0.4 (punto C1): all'accensione su 5 auto "avvio RADIO: non riuscito dopo 4 tentativi (Result::NOT_INITIALIZED)":
+     * il sintonizzatore non era ancora pronto. Per la ripresa automatica si riprova per circa 49 s (1+2+3+5+8+10+10+10).
+     */
+    private static final long[] RESUME_WAIT_MS = {1000, 2000, 3000, 5000, 8000, 10_000, 10_000, 10_000};
+
     /** onDone: chiamato con true/false a fine tentativi (sul thread di lavoro), può essere null. */
     private void attempt(String what, Cmd cmd, int n, boolean isRadio, boolean startLike, java.util.function.Consumer<Boolean> onDone) {
+        attempt(what, cmd, n, isRadio, startLike, onDone, RETRY_WAIT_MS);
+    }
+
+    private void attempt(String what, Cmd cmd, int n, boolean isRadio, boolean startLike, java.util.function.Consumer<Boolean> onDone,
+                         long[] waits) {
         State before = last;
         Boolean result = null;
         try {
@@ -980,9 +1017,9 @@ public final class MediaClient {
             }, 1500);
             result = true;
         } catch (Exception e) {
-            if (notReady(e) && n < RETRY_WAIT_MS.length && bg != null) {
-                Diag.put("media.attesa", what + ": servizio non ancora pronto, nuovo tentativo " + (n + 2) + " tra " + (RETRY_WAIT_MS[n] / 1000) + " s");
-                bg.postDelayed(() -> attempt(what, cmd, n + 1, isRadio, startLike, onDone), RETRY_WAIT_MS[n]);
+            if (notReady(e) && n < waits.length && bg != null) {
+                Diag.put("media.attesa", what + ": servizio non ancora pronto, nuovo tentativo " + (n + 2) + " tra " + (waits[n] / 1000) + " s");
+                bg.postDelayed(() -> attempt(what, cmd, n + 1, isRadio, startLike, onDone, waits), waits[n]);
                 return;
             }
             if (isRadio) Diag.put("radio.tentativi", what + ": non riuscito dopo " + (n + 1) + " tentativi (" + e.getMessage() + ") · " + clock());
@@ -1483,16 +1520,66 @@ public final class MediaClient {
             }
             return;
         }
-        final int[] tries = {0};
-        attempt("avvio RADIO", () -> {
-            tries[0]++;
-            autoRadio = true;
-            try {
-                radioResume();
-            } finally {
-                autoRadio = false;
+        // 1.0.4 (punto C1): prima si aspetta che il servizio radio sia pronto (collegato e con una stazione corrente,
+        // fino a 20 s), poi si avvia con nuovi tentativi per circa 49 s. All'accensione l'app Radio non si apre mai.
+        long since = android.os.SystemClock.uptimeMillis();
+        // se nel frattempo l'utente sceglie un'altra sorgente (selectSource fa crescere btGen) la ripresa si ferma
+        final int gen = btGen;
+        waitRadioReady(since, gen, () -> {
+            if (gen != btGen) {
+                finishResume(head, "RADIO", "annullata: l'utente ha scelto un'altra sorgente", 0);
+                return;
             }
-        }, 0, true, true, ok -> finishResume(head, "RADIO (" + what + ")", ok ? "riuscita" : "non riuscita", tries[0]));
+            long waited = android.os.SystemClock.uptimeMillis() - since;
+            final int[] tries = {0};
+            attempt("avvio RADIO", () -> {
+                if (gen != btGen) throw new IllegalStateException("annullata: scelta un'altra sorgente");
+                tries[0]++;
+                autoRadio = true;
+                try {
+                    radioResume();
+                    // srcPlayRadio risponde "sì" anche quando non fa niente (nessuna stazione corrente): si riprova
+                    if (currentRadioBean() == null) throw new RemoteException("Result::NOT_INITIALIZED (nessuna stazione corrente)");
+                } finally {
+                    autoRadio = false;
+                }
+            }, 0, true, true, ok -> {
+                if (gen != btGen) {
+                    finishResume(head, "RADIO", "annullata: l'utente ha scelto un'altra sorgente", tries[0]);
+                    return;
+                }
+                long total = android.os.SystemClock.uptimeMillis() - since;
+                Diag.put("radio.tentativi", "avvio RADIO: " + (ok ? "riuscito" : "non riuscito") + " · attesa servizio "
+                        + Math.round(waited / 1000.0) + " s · tentativi " + tries[0] + " · totale " + Math.round(total / 1000.0) + " s · " + clock());
+                finishResume(head, "RADIO (" + what + ")", ok ? "riuscita" : "non riuscita", tries[0]);
+            }, RESUME_WAIT_MS);
+        });
+    }
+
+    private static final long RADIO_READY_MAX_MS = 20_000;
+
+    /** Aspetta (a passi di 1 s, sul thread di lavoro) che il servizio radio sia collegato e abbia una stazione corrente. */
+    private void waitRadioReady(long since, int gen, Runnable then) {
+        long waited = android.os.SystemClock.uptimeMillis() - since;
+        boolean ready = radio.binder() != null && currentRadioBean() != null;
+        if (ready || waited >= RADIO_READY_MAX_MS || bg == null || !running || gen != btGen) {
+            Diag.put("radio.pronta", (ready ? "pronta" : "non ancora pronta, provo lo stesso") + " dopo " + Math.round(waited / 1000.0) + " s");
+            then.run();
+            return;
+        }
+        bg.postDelayed(() -> waitRadioReady(since, gen, then), 1000);
+    }
+
+    /** Stazione corrente del servizio radio (codice 19), null se non c'è o il servizio non risponde. */
+    private Station currentRadioBean() {
+        try {
+            IBinder b = radio.binder();
+            if (b == null) return null;
+            Station st = Rpc.call(b, RAD, RAD_CURRENT, Rpc.NONE, p -> Rpc.readNullable(p, MediaClient::readStationHead));
+            return st != null && (st.khz > 0 || st.sid != 0) ? st : null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /** Avvio radio automatico (accensione): mai aprire l'app Radio sopra il launcher. */

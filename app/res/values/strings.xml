@@ -421,8 +421,8 @@
     <string name="limit_auto" formatted="false">Automatic</string>
     <string name="limit_show" formatted="false">Show</string>
     <string name="limit_hide" formatted="false">Hide</string>
-    <string name="set_top_button" formatted="false">Top-right button</string>
-    <string name="set_top_button_sub" formatted="false">In the Map/Media panel. With \"None\" the media sources always keep their label</string>
+    <string name="set_top_button" formatted="false">Button next to Map/Media</string>
+    <string name="set_top_button_sub" formatted="false">A third button that opens an app of your choice; CarPlay and Android Auto are in the bottom bar</string>
     <string name="top_app" formatted="false">An app…</string>
     <string name="top_none" formatted="false">None</string>
     <string name="top_pick_app" formatted="false">App for the top-right button</string>
@@ -484,4 +484,27 @@
     <string name="news_v103_3" formatted="false">The panel next to the climate can show phone favourites or your apps</string>
     <string name="news_v103_4" formatted="false">Station list always up to date, Bluetooth starts only once the phone is connected, inside temperature hidden if the car does not provide it</string>
     <string name="news_v103_5" formatted="false">New \"Feature check\" in Settings → System: shows what works on this car</string>
+    <string name="set_sources" formatted="false">Audio sources</string>
+    <string name="set_sources_sub" formatted="false">Which sources to show at the top of the Media panel (at least one)</string>
+    <string name="nav_other_app" formatted="false">Other app…</string>
+    <string name="nav_other_app_sub" formatted="false">Navigation apps installed on the car</string>
+    <string name="nav_no_apps" formatted="false">No navigation app installed besides the MG one</string>
+    <string name="store_install" formatted="false">Install MG4 Store</string>
+    <string name="store_install_sub" formatted="false">The MG4 app Store is inside the launcher: install it from here, then it updates itself</string>
+    <string name="store_installing" formatted="false">Installing the Store…</string>
+    <string name="store_installed" formatted="false">MG4 Store installed</string>
+    <string name="store_failed" formatted="false">Installation failed</string>
+    <string name="set_charge_anim" formatted="false">Charging animation</string>
+    <string name="set_charge_anim_sub" formatted="false">When you plug in the cable the car comes to life; the pack for the chosen colour downloads by itself</string>
+    <string name="anim_test" formatted="false">Test charging animation</string>
+    <string name="anim_test_sub" formatted="false">Shows the phases one after another; without a pack it uses animazione-&lt;colour&gt;.zip from the USB stick</string>
+    <string name="anim_test_missing" formatted="false">No pack: copy animazione-&lt;colour&gt;.zip to the USB stick</string>
+    <string name="chk_theme_system" formatted="false">System theme</string>
+    <string name="chk_lights" formatted="false">Headlights</string>
+    <string name="chk_charge_anim" formatted="false">Charging animation</string>
+    <string name="check_lights_on">Turn on the side lights (%s s)</string>
+    <string name="news_v104_1" formatted="false">The launcher now decides the day/night theme and applies it to the whole system (Climate, MG apps, panel)</string>
+    <string name="news_v104_2" formatted="false">New home: Map/Media at the bottom, FM/DAB under Radio, bigger source buttons</string>
+    <string name="news_v104_3" formatted="false">Charging animation when you plug in the cable, and MG4 Store included in the launcher</string>
+    <string name="news_v104_4" formatted="false">Choose audio sources and navigation app; headlights read from the car; radio more reliable at start-up</string>
 </resources>

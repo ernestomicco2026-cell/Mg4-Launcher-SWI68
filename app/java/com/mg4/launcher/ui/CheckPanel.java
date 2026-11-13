@@ -106,6 +106,15 @@ public final class CheckPanel {
             }
 
             @Override
+            public void onLightsCountdown(int seconds) {
+                for (int i = 0; i < items.size(); i++) {
+                    if (!"fari".equals(items.get(i).key) || seconds <= 0) continue;
+                    marks[i].setText("…");
+                    subs[i].setText(L.f(R.string.check_lights_on, String.valueOf(seconds)));
+                }
+            }
+
+            @Override
             public void onDone(List<SelfCheck.Item> all, int ok, int fail, int absent) {
                 summary.setText(L.f(R.string.check_summary, String.valueOf(ok), String.valueOf(fail), String.valueOf(absent)));
                 send.setEnabled(true);

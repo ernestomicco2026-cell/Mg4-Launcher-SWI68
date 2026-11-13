@@ -73,6 +73,8 @@ public final class CarProps {
     public synchronized void connect() {
         if (car != null) return;
         // velocità (assistente di guida e pedale solo ad auto ferma): senza permesso non si prova nemmeno a leggerla
+        // 1.0.4: luci esterne (fari) per l'auto disegnata e il tema
+        ensurePermission("android.car.permission.CAR_EXTERIOR_LIGHTS");
         if (!ensurePermission(PERM_CAR_SPEED)) {
             denied.add(PERF_VEHICLE_SPEED);
             Diag.put("auto.velocità", "non letta: l'auto non concede il permesso CAR_SPEED (scritto una sola volta)");
@@ -254,6 +256,72 @@ public final class CarProps {
     // ---- 1.0.2: proprietà standard di Android Automotive per luci e giorno/notte --------------------
     /** NIGHT_MODE (BOOLEAN): il sistema dice che è notte. */
     public static final int NIGHT_MODE = 287310855;
+    /**
+     * 1.0.4 (punto B): luci SAIC (proprietà globali, area 0), le stesse che legge il servizio impostazioni SAIC per il
+     * tema e che MG4 Control usa (solo l'informazione, nessun codice copiato).
+     * VEH_SIDE_LGHT (INT32): luci di posizione, 3 = accese (segue i fari automatici).
+     * DIPD_BEAM_LGHT (BOOLEAN): anabbaglianti accesi.
+     * LIGHT_SWITCH_POS_STS (INT32): posizione della leva (sulla SWI68 probabilmente non esposta).
+     */
+    public static final int VEH_SIDE_LGHT = 557880099, DIPD_BEAM_LGHT = 555782944, LIGHT_SWITCH_POS_STS = 557880119;
+    /** 1.0.4: presa di ricarica, BMS_CHRG_PLUG_CNCTNIO (globale, INT32): 0 = cavo inserito, 1 = non inserito. */
+    public static final int BMS_CHRG_PLUG_CNCTNIO = 557904904;
+    private Object lampManager;
+    private boolean lampTried;
+    private String lampWhy = "";
+
+    /** Gestore "lamp" del CarService SAIC (CarLampManager), come lo usa il launcher originale. Null se non c'è. */
+    private synchronized Object lamp() {
+        if (lampManager == null && !lampTried && car != null && connected) {
+            lampTried = true;
+            try {
+                lampManager = car.getClass().getMethod("getCarManager", String.class).invoke(car, "lamp");
+                lampWhy = lampManager == null ? "nessun gestore lamp" : "";
+            } catch (Throwable e) {
+                Throwable c = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
+                lampWhy = c.getClass().getSimpleName();
+            }
+        }
+        return lampManager;
+    }
+
+    /**
+     * Legge una luce: prima dal gestore "lamp", poi dal gestore delle proprietà (getProperty(Class, id, 0)).
+     * Restituisce Integer (booleani come 1/0) o null se non si legge; in why[0] la fonte o il motivo.
+     */
+    public Integer readLight(int prop, boolean bool, String[] why) {
+        Class<?> cls = bool ? Boolean.class : Integer.class;
+        String err = "";
+        Object[] mgrs = new Object[2];
+        mgrs[0] = lamp();
+        try {
+            mgrs[1] = pm();
+        } catch (Throwable ignored) {
+        }
+        String[] names = {"lamp", "property"};
+        for (int i = 0; i < 2; i++) {
+            Object m = mgrs[i];
+            if (m == null) continue;
+            try {
+                Object v = m.getClass().getMethod("getProperty", Class.class, int.class, int.class).invoke(m, cls, prop, 0);
+                if (v != null) v = v.getClass().getMethod("getValue").invoke(v);
+                if (v instanceof Boolean) {
+                    why[0] = names[i];
+                    return (Boolean) v ? 1 : 0;
+                }
+                if (v instanceof Integer) {
+                    why[0] = names[i];
+                    return (Integer) v;
+                }
+            } catch (Throwable e) {
+                Throwable c = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
+                err = names[i] + ": " + c.getClass().getSimpleName();
+            }
+        }
+        why[0] = err.isEmpty() ? (lampWhy.isEmpty() ? "non letta" : lampWhy) : err;
+        return null;
+    }
+
     /** HEADLIGHTS_STATE (INT32): 0 spenti, 1 accesi, 2 luci diurne. */
     public static final int HEADLIGHTS_STATE = 289410560;
     /** HEADLIGHTS_SWITCH (INT32): posizione della leva, 0 spenti, 1 accesi, 2 diurne, 3 automatico. */

@@ -31,16 +31,16 @@
 
 <table>
 <tr>
-<td width="50%" valign="top"><img src="docs/home-1.0.2-giorno-bluetooth.png" alt="Home di giorno con il Bluetooth: copertina, comandi e sorgenti con la scritta (simulazione)" width="100%"><br>
-<sub>Tema <b>giorno</b>, sorgente <b>Bluetooth</b> con copertina; pulsante in alto a destra su "Nessuno": le sorgenti tengono la scritta · <i><b>Day</b> theme, <b>Bluetooth</b> source with cover art; top-right button set to "None": sources keep their label</i></sub></td>
-<td width="50%" valign="top"><img src="docs/home-1.0.3-ricarica.png" alt="Pulsanti di ricarica con limite e ricarica programmata (simulazione)" width="100%"><br>
+<td width="50%" valign="top"><img src="docs/home-1.0.4-giorno-radio.png" alt="Home di giorno con la radio: FM/DAB sotto Radio, Mappa/Media in basso (simulazione)" width="100%"><br>
+<sub>Tema <b>giorno</b> con la radio: <b>FM/DAB</b> sotto Radio, <b>Mappa/Media</b> in basso prima dei preferiti · <i><b>Day</b> theme with the radio: <b>FM/DAB</b> under Radio, <b>Map/Media</b> at the bottom before the favourites</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.4-ricarica.png" alt="Pulsanti di ricarica con limite e ricarica programmata (simulazione)" width="100%"><br>
 <sub><b>Pulsanti di ricarica</b> con limite e <b>ricarica programmata</b> (si vedono solo se l'auto li supporta) · <i><b>Charging buttons</b> with limit and <b>scheduled charging</b> (shown only if the car supports them)</i></sub></td>
 </tr>
 <tr>
-<td width="50%" valign="top"><img src="docs/home-1.0.3-ordine-scambiato.png" alt="Ordine in alto scambiato: Mappa/Media, poi le sorgenti (simulazione)" width="100%"><br>
-<sub>Opzione <b>Ordine in alto</b>: Mappa/Media prima delle sorgenti, comodo con la mano destra · <i><b>Order at the top</b> option: Map/Media before the sources, handy with your right hand</i></sub></td>
-<td width="50%" valign="top"><img src="docs/home-1.0.3-giorno.png" alt="Home di giorno con la radio e FM/DAB accanto ai comandi (simulazione)" width="100%"><br>
-<sub>Tema <b>giorno</b> con la radio: <b>FM/DAB</b> accanto ai comandi · <i><b>Day</b> theme with the radio: <b>FM/DAB</b> next to the controls</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.4-giorno-usb.png" alt="Home di giorno con la chiavetta USB (simulazione)" width="100%"><br>
+<sub>Sorgente <b>USB</b>: pulsanti delle sorgenti più grandi, ognuno con il suo fondo · <i><b>USB</b> source: bigger source buttons, each with its own background</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.4-notte-mappa.png" alt="Riquadro Mappa di notte (simulazione)" width="100%"><br>
+<sub>Riquadro <b>Mappa</b> di notte, con Mappa/Media in basso a sinistra · <i><b>Map</b> panel at night, with Map/Media at the bottom left</i></sub></td>
 </tr>
 <tr>
 <td width="50%" valign="top"><img src="screenshots/guida.png" alt="Gruppo Guida: corsia, One Pedal, assistente, pedale del freno" width="100%"><br>
@@ -273,6 +273,23 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Versioni
+
+#### 1.0.4
+- **Tema giorno/notte di tutto il sistema**: ora lo decide il launcher (scelta manuale, fari, alba/tramonto) e lo
+  scrive nel sistema: Clima, MG4 Control, app MG e tendina seguono da sole. Prima, senza il launcher originale, il
+  sistema restava spesso su "notte".
+- **Fari letti dall'auto** (luci di posizione e anabbaglianti): fari accesi sull'auto disegnata e tema più preciso.
+- **Nuova home**: Mappa/Media in basso, prima dei preferiti; FM/DAB di nuovo sotto Radio; pulsanti delle sorgenti più
+  grandi, ognuno con il suo fondo. CarPlay e Android Auto compaiono nella barra in basso con la loro icona originale.
+- **Animazione di ricarica**: quando colleghi il cavo l'auto si anima (aggancio, in carica, carica finita, sgancio).
+  Il pacchetto del colore scelto si scarica da solo; si può disattivare nelle impostazioni.
+- **MG4 Store incluso**: alla prima accensione si installa da solo se manca, poi si aggiorna per conto suo.
+- **Sorgenti audio a scelta** e **app di navigazione a scelta** (anche Google Maps, Waze, ABRP...).
+- **Radio all'accensione** più affidabile: aspetta che il sintonizzatore sia pronto (fino a circa un minuto).
+- **Ritorno dopo la retromarcia**: riporta davanti la finestra già aperta, senza riavviare le app (niente più richieste
+  di permessi di altre app).
+- Controllo funzioni con le prove "tema di sistema", "fari" e "animazione di ricarica"; log della patch Radio Fix.
+- L'opzione "Ordine in alto" della 1.0.3 non serve più ed è stata tolta.
 
 #### 1.0.3
 - **Tema giorno/notte**: sulle auto dove il sistema resta sempre su "notte" il launcher se ne accorge (uiMode che non
@@ -872,6 +889,23 @@ Even just **€2** is a great help to keep developing and testing new versions i
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Changelog
+
+#### 1.0.4
+- **System-wide day/night theme**: the launcher now decides it (manual choice, headlights, sunrise/sunset) and writes
+  it to the system, so Climate, MG4 Control, MG apps and the pull-down panel follow by themselves. Before, without the
+  original launcher, the system often stayed on "night".
+- **Headlights read from the car** (side lights and dipped beam): headlights on the drawn car and a more accurate theme.
+- **New home**: Map/Media at the bottom, before the favourites; FM/DAB back under Radio; bigger source buttons, each
+  with its own background. CarPlay and Android Auto appear in the bottom bar with their original icon.
+- **Charging animation**: when you plug in the cable the car comes to life (plug-in, charging, charge complete,
+  unplug). The pack for the chosen colour downloads by itself; it can be switched off in the settings.
+- **MG4 Store included**: on the first start it installs itself if missing, then it updates on its own.
+- **Choose your audio sources** and **your navigation app** (Google Maps, Waze, ABRP...).
+- **Radio at start-up** more reliable: it waits until the tuner is ready (up to about a minute).
+- **Return after reversing**: brings the window that was already open back to the front, without restarting apps (no
+  more permission requests from other apps).
+- Feature check with the "system theme", "headlights" and "charging animation" tests; Radio Fix patch log.
+- The 1.0.3 "Order at the top" option is no longer needed and has been removed.
 
 #### 1.0.3
 - **Day/night theme**: on cars where the system is always stuck on "night" the launcher now notices (uiMode that hasn't

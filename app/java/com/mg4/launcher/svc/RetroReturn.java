@@ -63,6 +63,74 @@ public final class RetroReturn {
                 || pkg.equals("com.saicmotor.hmi.hvac.panel");
     }
 
+    /**
+     * 1.0.4 (issue SWI69 #2): app da NON memorizzare né riaprire mai. Dopo la retromarcia compariva la richiesta
+     * "Grant Permissions" di un'altra app: il launcher riapriva da zero app passate davanti solo un attimo.
+     * Escluse: altri launcher (CATEGORY_HOME), app di sistema (tranne CarPlay/Android Auto), dashcam e app con sole
+     * finestre sovrapposte (MG4 Control, clusterprojection), la home MG.
+     */
+    private static final String[] NEVER = {"com.drivehub.kamera", "com.saicmotor.hmi.clusterprojection", "com.tommasov.mg4swipenovalauncher"};
+    private static java.util.Set<String> homeApps;
+
+    static boolean neverReopen(Context c, String pkg) {
+        if (pkg == null || ignored(c, pkg) || isHomeLike(c, pkg) || isCamera(pkg)) return true;
+        String p = pkg.toLowerCase(java.util.Locale.ROOT);
+        for (String n : NEVER) if (p.equals(n)) return true;
+        if (p.contains("dashcam") || p.contains("kamera") || p.contains("dvr") || p.contains("mg4control") || p.contains("mg4.control")) return true;
+        if (homeApps == null) {
+            java.util.Set<String> h = new java.util.HashSet<>();
+            try {
+                Intent i = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME);
+                for (android.content.pm.ResolveInfo ri : c.getPackageManager().queryIntentActivities(i, 0)) h.add(ri.activityInfo.packageName);
+            } catch (Exception ignored2) {
+            }
+            homeApps = h;
+        }
+        if (homeApps.contains(pkg)) return true;
+        if (isProjection(pkg)) return false;
+        try {
+            android.content.pm.ApplicationInfo ai = c.getPackageManager().getApplicationInfo(pkg, 0);
+            if ((ai.flags & android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0) return true;
+        } catch (Exception e) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * App con una finestra vera (task) davanti, la più recente non esclusa: le app con sole finestre sovrapposte non
+     * hanno un task e restano fuori da sole. Restituisce {pacchetto, id del task} oppure null.
+     */
+    @SuppressWarnings("deprecation")
+    private static Object[] topTask(Context c) {
+        try {
+            android.app.ActivityManager am = (android.app.ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
+            for (android.app.ActivityManager.RunningTaskInfo ti : am.getRunningTasks(8)) {
+                if (ti.topActivity == null) continue;
+                String pkg = ti.topActivity.getPackageName();
+                if (isCamera(pkg) || ignored(c, pkg)) continue;
+                if (neverReopen(c, pkg)) return null;   // davanti c'era il launcher, la home MG o un'app esclusa
+                return new Object[]{pkg, ti.id};
+            }
+        } catch (Exception ignored2) {
+        }
+        return null;
+    }
+
+    /** Id del task già aperto di un pacchetto, -1 se non c'è. */
+    @SuppressWarnings("deprecation")
+    private static int taskOf(Context c, String pkg) {
+        try {
+            android.app.ActivityManager am = (android.app.ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
+            for (android.app.ActivityManager.RunningTaskInfo ti : am.getRunningTasks(16)) {
+                if (ti.topActivity != null && pkg.equals(ti.topActivity.getPackageName())) return ti.id;
+                if (ti.baseActivity != null && pkg.equals(ti.baseActivity.getPackageName())) return ti.id;
+            }
+        } catch (Exception ignored2) {
+        }
+        return -1;
+    }
+
     private static boolean isHomeLike(Context c, String pkg) {
         return c.getPackageName().equals(pkg) || StartGuard.isHome(c, pkg);
     }
@@ -95,8 +163,14 @@ public final class RetroReturn {
                 cameraSince = now;
                 userActed = false;
                 broughtBy = "";
-                savedPkg = prevPkg != null && !isHomeLike(c, prevPkg) && !isCamera(prevPkg) ? prevPkg : null;
-                if (savedPkg == null && lastAppPkg != null && now - lastAppAt < 3000) savedPkg = lastAppPkg;
+                // 1.0.4: l'app da riaprire è quella con una finestra vera davanti (task), non l'ultima finestra vista
+                Object[] top = topTask(c);
+                String cand = prevPkg != null && !neverReopen(c, prevPkg) ? prevPkg : null;
+                if (cand == null && lastAppPkg != null && now - lastAppAt < 3000 && !neverReopen(c, lastAppPkg)) cand = lastAppPkg;
+                if (top != null && (cand == null || !isProjection(cand))) cand = (String) top[0];
+                // davanti c'era il launcher o un'app esclusa: si riapre solo CarPlay/Android Auto (mai un'app in background)
+                else if (top == null && cand != null && !isProjection(cand)) cand = null;
+                savedPkg = cand;
                 Diag.put("retro.ritorno", "telecamera aperta (" + pkg + ") · app memorizzata " + label(savedPkg));
             }
             return;
@@ -149,19 +223,41 @@ public final class RetroReturn {
                 Diag.put("retro.ritorno", head + how + " · non riaperta: CarPlay/Android Auto non più collegato");
                 return;
             }
-            boolean ok = m.openProjection();
+            // CarPlay/Android Auto: se il task c'è ancora si riporta davanti, altrimenti si avvia come il pulsante
+            int task = taskOf(c, pkg);
+            boolean ok;
+            String method;
+            if (task >= 0) {
+                try {
+                    ((android.app.ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE)).moveTaskToFront(task, 0);
+                    ok = true;
+                } catch (Exception e) {
+                    ok = m.openProjection();
+                }
+                method = "task riportato davanti";
+            } else {
+                ok = m.openProjection();
+                method = "avviata";
+            }
             Diag.put("retro.ritorno", head + how + " · riaperta " + (m.last().deviceType == MediaClient.DEV_AAUTO ? "Android Auto" : "CarPlay")
-                    + (ok ? "" : " (non riuscita)"));
+                    + " · metodo: " + method + (ok ? "" : " (non riuscita)"));
+            return;
+        }
+        // 1.0.4: si riporta davanti la finestra già aperta (stesso stato, nessun riavvio, nessuna richiesta di permessi);
+        // se il task non c'è più l'app NON si avvia da zero (solo CarPlay/Android Auto, sopra)
+        if (neverReopen(c, pkg)) {
+            Diag.put("retro.ritorno", head + how + " · non riaperta: app esclusa (launcher, sistema, dashcam o sovrapposta)");
+            return;
+        }
+        int task = taskOf(c, pkg);
+        if (task < 0) {
+            Diag.put("retro.ritorno", head + how + " · non riaperta: la finestra di " + pkg + " non è più aperta");
             return;
         }
         try {
-            Intent i = c.getPackageManager().getLaunchIntentForPackage(pkg);
-            if (i == null) {
-                Diag.put("retro.ritorno", head + how + " · non riaperta: app non più disponibile");
-                return;
-            }
-            c.startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            Diag.put("retro.ritorno", head + how + " · riaperta " + pkg);
+            android.app.ActivityManager am = (android.app.ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
+            am.moveTaskToFront(task, 0);
+            Diag.put("retro.ritorno", head + how + " · riaperta " + pkg + " · metodo: task riportato davanti");
         } catch (Exception e) {
             Diag.put("retro.ritorno", head + how + " · non riaperta: " + e.getClass().getSimpleName());
         }

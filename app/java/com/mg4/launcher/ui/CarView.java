@@ -104,6 +104,29 @@ public final class CarView extends View {
         invalidate();
     }
 
+    // ---- 1.0.4: geometria della foto, per allineare l'animazione di ricarica ----------------------
+
+    /** Dimensioni della foto car_base (763×287). */
+    private static final float PHOTO_W = 763, PHOTO_H = 287;
+
+    /** Scala della foto in una vista w×h (stessa formula di onDraw). */
+    public static float photoScale(int w, int h) {
+        return Math.min(w / PHOTO_W, (h * 0.9f) / PHOTO_H);
+    }
+
+    /** Centro della ruota anteriore della foto (a sinistra) in px della vista w×h. */
+    public static float[] wheelCenter(int w, int h) {
+        float s = photoScale(w, h);
+        float dw = PHOTO_W * s, dh = PHOTO_H * s;
+        float left = (w - dw) / 2f, top = (h - dh) / 2f - h * 0.02f;
+        return new float[]{left + WHEEL_CENTERS[0][0] * s, top + WHEEL_CENTERS[0][1] * s};
+    }
+
+    /** Distanza tra i centri delle ruote nella foto (px della foto). */
+    public static float wheelDistance() {
+        return WHEEL_CENTERS[1][0] - WHEEL_CENTERS[0][0];
+    }
+
     @Override
     protected void onDraw(Canvas c) {
         int w = getWidth(), h = getHeight();

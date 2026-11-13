@@ -421,8 +421,8 @@
     <string name="limit_auto" formatted="false">Automatisch</string>
     <string name="limit_show" formatted="false">Anzeigen</string>
     <string name="limit_hide" formatted="false">Ausblenden</string>
-    <string name="set_top_button" formatted="false">Taste oben rechts</string>
-    <string name="set_top_button_sub" formatted="false">Im Feld Karte/Medien. Mit „Keine“ behalten die Medienquellen immer ihre Beschriftung</string>
+    <string name="set_top_button" formatted="false">Taste neben Karte/Medien</string>
+    <string name="set_top_button_sub" formatted="false">Eine dritte Taste, die eine App deiner Wahl öffnet; CarPlay und Android Auto sind in der unteren Leiste</string>
     <string name="top_app" formatted="false">Eine App…</string>
     <string name="top_none" formatted="false">Keine</string>
     <string name="top_pick_app" formatted="false">App für die Taste oben rechts</string>
@@ -484,4 +484,27 @@
     <string name="news_v103_3" formatted="false">Das Feld neben der Klimaanlage kann Telefon-Favoriten oder deine Apps zeigen</string>
     <string name="news_v103_4" formatted="false">Senderliste immer aktuell, Bluetooth startet erst bei verbundenem Telefon, Innentemperatur ausgeblendet, wenn das Auto sie nicht liefert</string>
     <string name="news_v103_5" formatted="false">Neue „Funktionsprüfung“ in Einstellungen → System: zeigt, was in diesem Auto funktioniert</string>
+    <string name="set_sources" formatted="false">Audioquellen</string>
+    <string name="set_sources_sub" formatted="false">Welche Quellen oben im Medienfeld angezeigt werden (mindestens eine)</string>
+    <string name="nav_other_app" formatted="false">Andere App…</string>
+    <string name="nav_other_app_sub" formatted="false">Im Auto installierte Navigations-Apps</string>
+    <string name="nav_no_apps" formatted="false">Keine Navigations-App außer der von MG installiert</string>
+    <string name="store_install" formatted="false">MG4 Store installieren</string>
+    <string name="store_install_sub" formatted="false">Der MG4-App-Store ist im Launcher enthalten: hier installieren, danach aktualisiert er sich selbst</string>
+    <string name="store_installing" formatted="false">Store wird installiert…</string>
+    <string name="store_installed" formatted="false">MG4 Store installiert</string>
+    <string name="store_failed" formatted="false">Installation fehlgeschlagen</string>
+    <string name="set_charge_anim" formatted="false">Lade-Animation</string>
+    <string name="set_charge_anim_sub" formatted="false">Beim Einstecken des Kabels wird das Auto animiert; das Paket der gewählten Farbe lädt sich selbst</string>
+    <string name="anim_test" formatted="false">Lade-Animation testen</string>
+    <string name="anim_test_sub" formatted="false">Zeigt die Phasen nacheinander; ohne Paket wird animazione-&lt;Farbe&gt;.zip vom USB-Stick verwendet</string>
+    <string name="anim_test_missing" formatted="false">Kein Paket: animazione-&lt;Farbe&gt;.zip auf den USB-Stick kopieren</string>
+    <string name="chk_theme_system" formatted="false">Systemmodus</string>
+    <string name="chk_lights" formatted="false">Scheinwerfer</string>
+    <string name="chk_charge_anim" formatted="false">Lade-Animation</string>
+    <string name="check_lights_on">Standlicht einschalten (%s s)</string>
+    <string name="news_v104_1" formatted="false">Der Launcher bestimmt jetzt den Tag-/Nachtmodus und wendet ihn auf das ganze System an (Klima, MG-Apps, Leiste)</string>
+    <string name="news_v104_2" formatted="false">Neuer Startbildschirm: Karte/Medien unten, FM/DAB unter Radio, größere Quellentasten</string>
+    <string name="news_v104_3" formatted="false">Lade-Animation beim Einstecken des Kabels und MG4 Store im Launcher enthalten</string>
+    <string name="news_v104_4" formatted="false">Audioquellen und Navigations-App wählbar; Scheinwerfer vom Auto gelesen; Radio zuverlässiger beim Start</string>
 </resources>
