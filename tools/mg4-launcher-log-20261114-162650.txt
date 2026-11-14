@@ -1,0 +1,728 @@
+MG4 Launcher 1.0.3 (40)
+14/11/2026 16:26:50
+Android 9 (API 28) · AUTUS SAIC · PPR1.181005.003 test-keys
+
+===== VALORI ATTUALI =====
+aggiornamenti.controllo = ultima 1.0.3
+app.installate = 5
+app.sistema = impostazioni ok, file com.android.documentsui
+assistenza.config = LDWS 4, One Pedal 0
+assistenza.guida = ACC/TJA 2, pedale 1
+assistenza.stato = LKA 1 (modo 5), OPD 0 (blocco 0)
+auto.carservice = collegato
+auto.config.fornitore = assente (non interrogato)
+auto.config.guida = sconosciuta (sinistra) · wheel_position -1 · sedile guida ?
+auto.config.spiaLuci = no · rearfog -/- · frontfog -/- · hiboard -/-
+auto.permesso.CAR_SPEED = concesso
+auto.proprietà = 893 disponibili; TPMS sì, temp. interna no (solo ambient = esterna)
+auto.velocità/marcia = 0.0 / 1
+avvio.accessibilita = attivo
+avvio.boot = ricevuto alle 01:00:36 (normale) · 36 s dall'accensione
+avvio.homePredefinita = ok
+avvio.homeRipresa = launcher davanti, in attesa della home MG (accensione)
+avvio.premiHome = spento
+avvio.tempi = processo 16,0s · accessibilità 18,2s · boot 26,2s · home MG — · nostro launcher 29,2s
+barra.tasto360 = scelta orig → 360 originale · telecamera originale presente · MG4 360 assente
+carplay.bind = ok
+carplay.dispositivo = nessuno
+carplay.media = collegato
+carplay.stato = collegato
+clima.ac/auto/sbrinamento = 1 / 0 / 1
+clima.accensione = 1
+clima.pannelloSistema = servizio del pannello collegato
+clima.ricircolo = 1 (0 interno, 1 esterno, 2 auto, -1 non supportato)
+clima.sedili sx/dx · volante = 0 / 0 · 0
+clima.tastoApre = app Clima (o MG4 Clima se installata)
+clima.tempEsterna = 8.0 · validità ok
+clima.tempGuidatore = 21
+clima.tempInterna = letto — · fonte nessuna (si mostra --) · valida no: proprietà assente · esterna 8.0 · ambient 8.0 (è l'esterna: mai usata come interna)
+clima.ventola = 15
+clima.ventolaMinMax = 1 / 11
+conn.bt/wifi/rete = BT collegato · Wi-Fi 1/3 · 4G 4/4
+dongle.esito = nessuna sessione, porta media nota ma nessun dongle visto finora: non intervengo
+engmode.bind = ok
+engmode.stato = collegato
+finestra = 1920×720 · margini sistema 0,0,0,0
+firmware = SWI68 · fornitore config no · app MG 7/7
+home.avvioSicuro = attivo (home MG disattivata)
+home.ordineAlto = attuale
+home.predefinita = nostra
+home.pulsanteAltoDestra = CarPlay/Android Auto
+log.invio = inviato alle 16:26 → SWI68/afe480df/2026-11-14/16-26-10.txt
+log.salvato = /storage/emulated/0/Android/data/com.mg4.launcher/files/mg4-launcher-log-20261114-162609.txt
+loghi.pacchetti = BE v1 113 loghi 0,6 MB (internet), NL v1 288 loghi 1,5 MB (internet)
+loghi.paeseAuto = fuso Europe/Brussels → BE · lingua en → GB · regione nl-NL → NL · RDS 8 (BG/NL/PT, 57 servizi DAB) ⇒ NL (RDS, cifra RDS confermata da un'altra fonte)
+loghi.paesi = auto → [NL]
+loghi.permessoMemoria = concesso
+loghi.scaricati.dab_82d8 = non trovato (riprovo tra 3 giorni)
+loghi.scaricati.dab_83bb = non trovato (riprovo tra 3 giorni)
+loghi.scaricati.dab_8802 = non trovato (riprovo tra 3 giorni)
+loghi.scaricati.dab_8804 = trovato e salvato
+loghi.scaricati.dab_88c7 = non trovato (riprovo tra 3 giorni)
+loghi.scaricati.dab_88d2 = non trovato (riprovo tra 3 giorni)
+loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 NONSTOP | 538 TOMORROWLAND | BBC WORLDSERVICE | BNR BusinessBeat | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | Qmusic Non-stop | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | YOURSAFE | gpr SPORTRADIO
+loghi.stazioni = 25 con logo, 31 senza
+loghi.utente = nessuno (cartella MG4Launcher/loghi)
+luci.fari = stato ? · leva ? → non leggibili
+luci.fendinebbia ant/post = -1 / 0
+luci.fendinebbiaAnterioriConfig = 1
+luci.pulsanteSistema = nascosto dallo schermo intero (vive nella StatusBar di Android, come gli altri pulsanti di sistema) · fornitore di configurazione assente su questa firmware
+media.appMusica = com.saicmotor.onlinemedia 1.0.46 | com.saicmotor.hmi.music Music.45101 (apribile)
+media.attiva = RADIO
+media.avvio = sorgente salvata RADIO (avvio del launcher all'accensione) · ripresa RADIO (radio) · esito riuscita · tentativi 1 · 16:26:23
+media.bind = ok
+media.bt.bind = ok
+media.bt.stato = collegato
+media.comando = avvio RADIO · RADIO · prima in pausa "Omroep Flevoland" · dopo in riproduzione "Omroep Flevoland"
+media.online.bind = ok
+media.online.servizio = nessuno (né Amazon Music né Spotify)
+media.online.stato = collegato
+media.player = 0
+media.sessioni = nessuna
+media.sorgenteAudio = 3
+media.stato = collegato
+media.tastiVolante = in ascolto (com.android.systemui.ACTION_HARD_KEY_EVENT) · nessun tasto visto finora
+media.usb.bind = ok
+media.usb.stato = collegato
+media.usb2 = SWI68: nessun servizio USB2 separato (un solo lettore per le due porte): USB 2 non mostrata a parte · dispositivi USB 2 (porta usb1, scansione 2) · brano da —
+nav.app = com.telenav.app.arp
+nav.appAttiva = true
+nav.prossimaManovra = 0 m · icona 0 · 
+nav.push = registrato
+nav.push.altro = codice 11
+nav.push.appAttiva = true
+nav.segnali = isMapNavigating false · statoGuida 0 · rim. 0 m / 0 s
+nav.unitaDistanza = 1
+nav.via = 
+navigatore.bind = ok
+navigatore.stato = collegato
+pip.com.allgo.app.androidauto = ProjectionActivity resize=1 | FRXActivity resize=1
+pip.com.allgo.carplay.service = CarPlayActivity resize=1
+pip.com.allgo.rui = nessuna attività esportata
+pip.com.telenav.app.arp = ClusterActivity resize=1 | SecretScreenActivity resize=1 | MainActivity resize=1 | MixpanelNotificationRouteActivity resize=1 privata
+pip.displaySecondari = sì
+pip.permessoIncorpora = non concesso
+pneumatici (grezzo AS/AD/PS/PD) = 228 / 228 / 228 / 228
+radio.ascolto = registrato (aggiornamento automatico di elenco e preferiti)
+radio.attesa = nessuna: servizio pronto, comandi attivi
+radio.bind = ok
+radio.codici = standard (verificata)
+radio.collegatoAlle = 01:00:33
+radio.corrente = banda 4, 197648 kHz, Omroep Flevoland
+radio.elenco = fonte elenco della ricerca (22) · DAB 57 stazioni · aggiornato: ritorno nel launcher
+radio.preferiti = 0 stazioni
+radio.profilo = vecchio (R46/R59): comandi solo 30 s dopo l'avvio del servizio, altrimenti app Radio
+radio.riparazione = nessun crash dei promemoria DAB
+radio.servizio = RadioService_eh32_P.apk · firmware vecchio: collegamento senza avvio
+radio.stato = 1
+radio.tentativi = avvio RADIO: riuscito al primo tentativo · 16:26:23
+radio.ultimaChiamata = preferiti (7) alle 16:26:49
+radio.versione = RadioService.44231 (1)
+ricarica.bmsDisponibile = 1
+ricarica.comandi = corrente 4 · avvia/ferma 2 · V2L 2 · limite V2L 4 · unità quadro 0 · blocco presa 2
+ricarica.limite = supportato sì · valore letto 80% (codice 5) · scelta auto · mostrato
+ricarica.programmata = stato 2 · inizio 13:0 · fine 16:0 · supportata sì
+telefono.stato = servizio non collegato · Bluetooth ? · rubrica ? · permesso rubrica ?
+tema.candidati = CarService non pronto · fari (servizio) non letti · sensore di luce in lettura · impostazioni system/SAIC_DAY_NIGHT_MODE_FROM_CAR=1, system/screen_day_night_mode=0, system/screen_brightness_mode=0, system/screen_brightness_for_vr=86, system/screen_brightness=66, secure/ui_night_mode=2, global/mg4dash_theme=1,0,0,1,0,0,0,0 · ui_night_mode 2 · broadcast: cambio di configurazione (uiMode) ascoltato dall'activity
+tema.scelta = automatico · applicato notte · ricostruito 01/01 01:00:31
+tema.stato = fonte orario (alba/tramonto) · uiMode notte (prima accensione, notte con il sole a 26°: ignorato) · ultimo cambio uiMode mai visto (3 h di accensione da allora) · uiMode notte · UiModeManager notte · NIGHT_MODE giorno · fari non leggibili · alba 06:49 · tramonto 16:40 · sole a 1° (fuso orario/Italia) · applicato notte (in conferma: giorno) · ultimo cambio 01/01 01:00:31 (avvio)
+usb.dispositivi = 0483:5740 STM32 Virtual ComPort (STMicroelectronics) classe 2 @001/005 | 1d6b:0003 xHCI Host Controller (Linux 4.9.188 xhci-hcd) classe 9 @002/001 | 1d6b:0002 xHCI Host Controller (Linux 4.9.188 xhci-hcd) classe 9 @003/001 | 0424:2514 classe 9 @001/002 | 1d6b:0002 xHCI Host Controller (Linux 4.9.188 xhci-hcd) classe 9 @001/001 | 0951:172b DataTraveler 70 (Kingston) classe 0 @001/004 | 05c6:902d MDM9628-MTP _SN:9EDABB9D (Android) classe 0 @001/003 | 1d6b:0003 xHCI Host Controller (Linux 4.9.188 xhci-hcd) classe 9 @004/001
+usb.porte = 1d6b:0003@2 porte 0 comando ? occupate [] | 1d6b:0002@3 porte 2 comando singolo occupate [1] | 0424:2514@1 porte 4 comando singolo occupate [1,2] | 1d6b:0002@1 porte 2 comando singolo occupate [1,2] | 1d6b:0003@4 porte 0 comando ? occupate []
+veicolo.autonomia = 179 (valido false)
+veicolo.bind = ok
+veicolo.correnteA/tensioneV = 9.900024 / 382.0
+veicolo.limiteRicarica = codice 5 = 80%
+veicolo.minutiRicarica = 1023
+veicolo.soc = 48.4 (valido false)
+veicolo.stato = collegato
+veicolo.statoRicarica = 7
+veicolo.statoScarica(V2L) = 0
+veicolo.unitaDistanza = scelta km · quadro 0 · navigatore 1 · mostrata km
+
+===== EVENTI RECENTI =====
+01:00:18  auto.config.fornitore = assente (non interrogato)
+01:00:18  firmware = SWI68 · fornitore config no · app MG 7/7
+01:00:18  avvio.tempi = processo 16,0s · accessibilità 18,2s · boot — · home MG — · nostro launcher —
+01:00:18  avvio.accessibilita = collegato prima dello sblocco: aspetto lo sblocco
+01:00:18  clima.pannelloSistema = servizio del pannello collegato
+01:00:26  avvio.boot = ricevuto alle 01:00:26 (locked) · 26 s dall'accensione
+01:00:26  avvio.tempi = processo 16,0s · accessibilità 18,2s · boot 26,2s · home MG — · nostro launcher —
+01:00:26  avvio.accessibilita = abilitato, in attesa di collegamento
+01:00:26  avvio.homeRipresa = in attesa dello sblocco
+01:00:29  avvio.accessibilita = utente sbloccato: avvio
+01:00:29  avvio.accessibilita = attivo
+01:00:29  avvio.homeRipresa = controllo in corso (accensione)
+01:00:29  avvio.tempi = processo 16,0s · accessibilità 18,2s · boot 26,2s · home MG — · nostro launcher 29,2s
+01:00:29  avvio.premiHome = spento
+01:00:29  home.avvioSicuro = attivo (home MG disattivata)
+01:00:29  avvio.homePredefinita = ok
+01:00:31  radio.servizio = RadioService_eh32_P.apk · firmware vecchio: collegamento senza avvio
+01:00:31  radio.versione = RadioService.44231 (1)
+01:00:31  radio.codici = standard (verificata)
+01:00:31  radio.profilo = vecchio (R46/R59): comandi solo 30 s dopo l'avvio del servizio, altrimenti app Radio
+01:00:31  loghi.permessoMemoria = concesso
+01:00:31  tema.stato = fonte orario (alba/tramonto) · uiMode notte (prima accensione, notte con il sole a 26°: ignorato) · ultimo cambio uiMode mai visto (3 h di accensione da allora) · uiMode notte · UiModeManager notte · NIGHT_MODE non c'è · fari non leggibili · alba 07:29 · tramonto 16:35 · sole a -67° (fuso orario/Italia) · applicato notte · ultimo cambio 01/01 01:00:31 (avvio)
+01:00:31  tema.scelta = automatico · applicato notte · ricostruito 01/01 01:00:31
+01:00:31  auto.config.guida = sconosciuta (sinistra) · wheel_position -1 · sedile guida ?
+01:00:31  auto.config.spiaLuci = no · rearfog -/- · frontfog -/- · hiboard -/-
+01:00:31  luci.pulsanteSistema = nascosto dallo schermo intero (vive nella StatusBar di Android, come gli altri pulsanti di sistema) · fornitore di configurazione assente su questa firmware
+01:00:31  loghi.utente = nessuno (cartella MG4Launcher/loghi)
+01:00:31  home.pulsanteAltoDestra = CarPlay/Android Auto
+01:00:31  home.ordineAlto = attuale
+01:00:31  clima.tastoApre = app Clima (o MG4 Clima se installata)
+01:00:31  barra.tasto360 = scelta orig → 360 originale · telecamera originale presente · MG4 360 assente
+01:00:31  app.sistema = impostazioni ok, file com.android.documentsui
+01:00:31  app.installate = 5
+01:00:31  home.predefinita = nostra
+01:00:31  telefono.stato = servizio non collegato · Bluetooth ? · rubrica ? · permesso rubrica ?
+01:00:31  finestra = 0×0 · margini sistema 0,0,0,0
+01:00:31  tema.candidati = CarService non pronto · fari (servizio) non letti · sensore di luce in lettura · impostazioni system/SAIC_DAY_NIGHT_MODE_FROM_CAR=1, system/screen_day_night_mode=0, system/screen_brightness_mode=0, system/screen_brightness_for_vr=86, system/screen_brightness=66, secure/ui_night_mode=2, global/mg4dash_theme=1,0,0,1,0,0,0,0 · ui_night_mode 2 · broadcast: cambio di configurazione (uiMode) ascoltato dall'activity
+01:00:32  finestra = 0×0 · margini sistema 142,0,0,0
+01:00:32  veicolo.bind = ok
+01:00:32  auto.permesso.CAR_SPEED = concesso
+01:00:32  auto.carservice = collegamento…
+01:00:32  engmode.bind = ok
+01:00:32  media.bind = ok
+01:00:32  media.usb.bind = ok
+01:00:32  media.bt.bind = ok
+01:00:32  media.online.bind = ok
+01:00:32  radio.bind = ok
+01:00:32  carplay.bind = ok
+01:00:32  media.tastiVolante = in ascolto (com.android.systemui.ACTION_HARD_KEY_EVENT) · nessun tasto visto finora
+01:00:32  media.online.servizio = nessuno (né Amazon Music né Spotify)
+01:00:32  navigatore.bind = ok
+01:00:32  usb.dispositivi = 0483:5740 STM32 Virtual ComPort (STMicroelectronics) classe 2 @001/005 | 1d6b:0003 xHCI Host Controller (Linux 4.9.188 xhci-hcd) classe 9 @002/001 | 1d6b:0002 xHCI Host Controller (Linux 4.9.188 xhci-hcd) classe 9 @003/001 | 0424:2514 classe 9 @001/002 | 1d6b:0002 xHCI Host Controller (Linux 4.9.188 xhci-hcd) classe 9 @001/001 | 0951:172b DataTraveler 70 (Kingston) classe 0 @001/004 | 05c6:902d MDM9628-MTP _SN:9EDABB9D (Android) classe 0 @001/003 | 1d6b:0003 xHCI Host Controller (Linux 4.9.188 xhci-hcd) classe 9 @004/001
+01:00:32  finestra = 1920×720 · margini sistema 142,0,0,0
+01:00:32  pip.displaySecondari = sì
+01:00:32  pip.permessoIncorpora = non concesso
+01:00:32  pip.com.telenav.app.arp = ClusterActivity resize=1 | SecretScreenActivity resize=1 | MainActivity resize=1 | MixpanelNotificationRouteActivity resize=1 privata
+01:00:32  pip.com.allgo.carplay.service = CarPlayActivity resize=1
+01:00:32  pip.com.allgo.app.androidauto = ProjectionActivity resize=1 | FRXActivity resize=1
+01:00:32  pip.com.allgo.rui = nessuna attività esportata
+01:00:32  loghi.paeseAuto = fuso Europe/Brussels → BE · lingua en → GB · regione nl-NL → NL · RDS 8 (BG/NL/PT, 57 servizi DAB) ⇒ NL (RDS, cifra RDS confermata da un'altra fonte)
+01:00:32  loghi.paesi = auto → [NL]
+01:00:32  loghi.pacchetti = BE v1 113 loghi 0,6 MB (internet), NL v1 288 loghi 1,5 MB (internet)
+01:00:32  veicolo.stato = collegato
+01:00:32  auto.carservice = collegato
+01:00:32  media.appMusica = com.saicmotor.onlinemedia 1.0.46 | com.saicmotor.hmi.music Music.45101 (apribile)
+01:00:32  media.sessioni = nessuna
+01:00:32  media.attiva = MEDIA
+01:00:32  radio.attesa = servizio radio non avviato
+01:00:32  ricarica.programmata = stato 2 · inizio 13:0 · fine 16:0 · supportata no
+01:00:32  ricarica.comandi = corrente 4 · avvia/ferma 2 · V2L 2 · limite V2L 4 · unità quadro 0 · blocco presa 2
+01:00:32  veicolo.soc = 48.5 (valido false)
+01:00:32  veicolo.autonomia = 171 (valido false)
+01:00:32  veicolo.statoRicarica = 5
+01:00:32  veicolo.minutiRicarica = 1023
+01:00:32  veicolo.limiteRicarica = codice 5 = 80%
+01:00:32  veicolo.statoScarica(V2L) = 0
+01:00:32  clima.ventolaMinMax = 1 / 11
+01:00:32  clima.tempEsterna = 8.5
+01:00:32  clima.tempGuidatore = 21
+01:00:32  clima.ventola = 15
+01:00:32  clima.accensione = 1
+01:00:32  clima.ricircolo = 1 (0 interno, 1 esterno, 2 auto, -1 non supportato)
+01:00:32  clima.ac/auto/sbrinamento = 1 / 0 / 1
+01:00:32  clima.sedili sx/dx · volante = 0 / 0 · 0
+01:00:32  luci.fendinebbiaAnterioriConfig = 1
+01:00:33  ricarica.bmsDisponibile = 1
+01:00:33  luci.fendinebbia ant/post = -1 / 0
+01:00:33  assistenza.config = LDWS 4, One Pedal 0
+01:00:33  assistenza.guida = ACC/TJA 2, pedale 0
+01:00:33  assistenza.stato = LKA -1 (modo 0), OPD 0 (blocco 0)
+01:00:33  auto.proprietà = 893 disponibili; TPMS sì, temp. interna no (solo ambient = esterna)
+01:00:33  engmode.stato = collegato
+01:00:33  radio.stato = collegato
+01:00:33  radio.collegatoAlle = 01:00:33
+01:00:33  navigatore.stato = collegato
+01:00:33  nav.push = registrato
+01:00:33  media.online.stato = collegato
+01:00:33  media.stato = collegato
+01:00:33  carplay.stato = collegato
+01:00:33  media.usb.stato = collegato
+01:00:33  media.bt.stato = collegato
+01:00:33  nav.segnali = isMapNavigating false · statoGuida 0 · rim. 0 m / 0 s
+01:00:33  nav.prossimaManovra = 0 m · icona 0 · 
+01:00:33  nav.unitaDistanza = 1
+01:00:33  nav.via = 
+01:00:33  nav.app = com.telenav.app.arp
+01:00:33  nav.appAttiva = false
+01:00:33  pneumatici (grezzo AS/AD/PS/PD) = 228 / 228 / 228 / 228
+01:00:33  clima.tempInterna = letto — · fonte nessuna (si mostra --) · valida no: proprietà assente · esterna 8.5 · ambient 8.5 (è l'esterna: mai usata come interna)
+01:00:33  luci.fari = stato ? · leva ? → non leggibili
+01:00:33  veicolo.unitaDistanza = scelta km · quadro 0 · navigatore 1 · mostrata km
+01:00:33  ricarica.limite = supportato sì · valore letto 80% (codice 5) · scelta auto · mostrato
+01:00:33  carplay.media = collegato
+01:00:33  nav.push.altro = codice 11
+01:00:33  radio.ascolto = registrato (aggiornamento automatico di elenco e preferiti)
+01:00:33  carplay.dispositivo = nessuno
+01:00:33  media.player = 0
+01:00:33  media.sorgenteAudio = 3
+01:00:33  media.attiva = RADIO
+01:00:33  radio.attesa = servizio radio avviato da poco (ancora 30 s)
+01:00:33  media.usb2 = SWI68: nessun servizio USB2 separato (un solo lettore per le due porte): USB 2 non mostrata a parte · dispositivi USB 2 (porta usb1, scansione 2) · brano da —
+01:00:34  ricarica.programmata = stato 2 · inizio 13:0 · fine 16:0 · supportata sì
+01:00:34  radio.attesa = servizio radio avviato da poco (ancora 29 s)
+01:00:34  clima.tempEsterna = 8.5 · validità ok
+01:00:34  assistenza.guida = ACC/TJA 2, pedale 1
+01:00:35  dongle.esito = nessuna sessione, porta media nota ma nessun dongle visto finora: non intervengo
+01:00:35  finestra = 1920×720 · margini sistema 0,0,0,0
+01:00:35  radio.attesa = servizio radio avviato da poco (ancora 28 s)
+01:00:36  avvio.boot = ricevuto alle 01:00:36 (normale) · 36 s dall'accensione
+01:00:36  veicolo.autonomia = 179 (valido false)
+01:00:36  assistenza.stato = LKA 1 (modo 5), OPD 0 (blocco 0)
+16:25:48  radio.attesa = servizio radio avviato da poco (ancora 27 s)
+16:25:49  avvio.homeRipresa = aperto il launcher: home MG non comparsa, davanti com.saicmotor.hmi.clusterprojection
+16:25:49  radio.attesa = servizio radio avviato da poco (ancora 26 s)
+16:25:50  radio.attesa = servizio radio avviato da poco (ancora 25 s)
+16:25:51  radio.attesa = servizio radio avviato da poco (ancora 24 s)
+16:25:52  nav.push.altro = codice 8
+16:25:52  nav.push.altro = codice 9
+16:25:52  nav.push.appAttiva = true
+16:25:52  nav.appAttiva = true
+16:25:52  media.avvio = sorgente salvata RADIO (avvio del launcher all'accensione) · ripresa RADIO in attesa: servizio radio avviato da poco (ancora 23 s)
+16:25:52  radio.attesa = servizio radio avviato da poco (ancora 23 s)
+16:25:52  nav.push.altro = codice 11
+16:25:58  radio.attesa = servizio radio avviato da poco (ancora 22 s)
+16:25:54  radio.attesa = servizio radio avviato da poco (ancora 21 s)
+16:25:57  finestra = 1920×720 · margini sistema 142,0,0,0
+16:25:57  radio.attesa = servizio radio avviato da poco (ancora 18 s)
+16:25:58  finestra = 1920×720 · margini sistema 0,0,0,0
+16:25:58  radio.attesa = servizio radio avviato da poco (ancora 17 s)
+16:25:58  nav.push.altro = codice 7
+16:26:00  nav.push.altro = codice 11
+16:26:00  usb.porte = 1d6b:0003@2 porte 0 comando ? occupate [] | 1d6b:0002@3 porte 2 comando singolo occupate [] | 0424:2514@1 porte 4 comando singolo occupate [1,2] | 1d6b:0002@1 porte 2 comando singolo occupate [1,2] | 1d6b:0003@4 porte 0 comando ? occupate []
+16:26:00  radio.riparazione = nessun crash dei promemoria DAB
+16:26:00  radio.attesa = servizio radio avviato da poco (ancora 16 s)
+16:26:01  radio.attesa = servizio radio avviato da poco (ancora 15 s)
+16:26:02  aggiornamenti.controllo = ultima 1.0.3
+16:26:02  radio.attesa = servizio radio avviato da poco (ancora 14 s)
+16:26:03  media.avvio = sorgente salvata RADIO (avvio del launcher all'accensione) · ripresa RADIO in attesa: servizio radio avviato da poco (ancora 13 s)
+16:26:03  radio.attesa = servizio radio avviato da poco (ancora 13 s)
+16:26:04  avvio.homeRipresa = launcher davanti, in attesa della home MG (accensione)
+16:26:04  tema.stato = fonte orario (alba/tramonto) · uiMode notte (prima accensione, notte con il sole a 26°: ignorato) · ultimo cambio uiMode mai visto (3 h di accensione da allora) · uiMode notte · UiModeManager notte · NIGHT_MODE giorno · fari non leggibili · alba 06:49 · tramonto 16:40 · sole a 1° (fuso orario/Italia) · applicato notte (in conferma: giorno) · ultimo cambio 01/01 01:00:31 (avvio)
+16:26:04  nav.push.altro = codice 8
+16:26:04  nav.push.altro = codice 9
+16:26:04  radio.attesa = servizio radio avviato da poco (ancora 12 s)
+16:26:05  nav.push.altro = codice 11
+16:26:05  radio.attesa = servizio radio avviato da poco (ancora 11 s)
+16:26:06  radio.attesa = servizio radio avviato da poco (ancora 10 s)
+16:26:07  radio.attesa = servizio radio avviato da poco (ancora 9 s)
+16:26:08  radio.attesa = servizio radio avviato da poco (ancora 8 s)
+16:26:08  radio.attesa = servizio radio avviato da poco (ancora 7 s)
+16:26:09  radio.attesa = servizio radio avviato da poco (ancora 6 s)
+16:26:10  log.salvato = /storage/emulated/0/Android/data/com.mg4.launcher/files/mg4-launcher-log-20261114-162609.txt
+16:26:10  radio.attesa = servizio radio avviato da poco (ancora 5 s)
+16:26:11  radio.attesa = servizio radio avviato da poco (ancora 4 s)
+16:26:12  media.avvio = sorgente salvata RADIO (avvio del launcher all'accensione) · ripresa RADIO in attesa: servizio radio avviato da poco (ancora 3 s)
+16:26:12  log.invio = inviato alle 16:26 → SWI68/afe480df/2026-11-14/16-26-10.txt
+16:26:12  radio.attesa = servizio radio avviato da poco (ancora 3 s)
+16:26:13  radio.attesa = servizio radio avviato da poco (ancora 2 s)
+16:26:14  radio.attesa = servizio radio avviato da poco (ancora 1 s)
+16:26:15  clima.tempEsterna = 8.0 · validità ok
+16:26:15  radio.attesa = nessuna: servizio pronto, comandi attivi
+16:26:15  radio.stato = 2
+16:26:15  radio.corrente = banda 4, 197648 kHz, Omroep Flevoland
+16:26:15  loghi.stazioni = 0 con logo, 1 senza
+16:26:15  loghi.senzaLogo = Omroep Flevoland
+16:26:15  radio.preferiti = 0 stazioni
+16:26:15  loghi.stazioni = 1 con logo, 1 senza
+16:26:15  loghi.stazioni = 1 con logo, 2 senza
+16:26:15  loghi.senzaLogo = 538 TOMORROWLAND | Omroep Flevoland
+16:26:15  loghi.stazioni = 2 con logo, 2 senza
+16:26:16  loghi.stazioni = 2 con logo, 3 senza
+16:26:16  loghi.senzaLogo = 538 TOMORROWLAND | Omroep Flevoland | R10 Soul & Jazz
+16:26:16  loghi.stazioni = 2 con logo, 4 senza
+16:26:16  loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | Omroep Flevoland | R10 Soul & Jazz
+16:26:16  loghi.stazioni = 3 con logo, 4 senza
+16:26:16  loghi.stazioni = 3 con logo, 5 senza
+16:26:16  loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GOD Radio | Omroep Flevoland | R10 Soul & Jazz
+16:26:16  loghi.stazioni = 4 con logo, 5 senza
+16:26:16  loghi.stazioni = 4 con logo, 6 senza
+16:26:16  loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GOD Radio | Omroep Flevoland | R10 Soul & Jazz | Vibe Radio
+16:26:16  loghi.stazioni = 4 con logo, 7 senza
+16:26:16  loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Vibe Radio
+16:26:16  loghi.stazioni = 4 con logo, 8 senza
+16:26:16  loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Vibe Radio
+16:26:16  loghi.stazioni = 5 con logo, 8 senza
+16:26:16  loghi.stazioni = 5 con logo, 9 senza
+16:26:16  loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 5 con logo, 10 senza
+16:26:16  loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GNR-Non-Stop | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 6 con logo, 10 senza
+16:26:16  loghi.stazioni = 6 con logo, 11 senza
+16:26:16  loghi.senzaLogo = 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GNR-Non-Stop | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 6 con logo, 12 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GNR-Non-Stop | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 7 con logo, 12 senza
+16:26:16  loghi.stazioni = 7 con logo, 13 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 7 con logo, 14 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 7 con logo, 15 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 8 con logo, 15 senza
+16:26:16  loghi.stazioni = 8 con logo, 16 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 8 con logo, 17 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | Tukker FM | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 9 con logo, 17 senza
+16:26:16  loghi.stazioni = 9 con logo, 18 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | THE GROOVE | Tukker FM | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 9 con logo, 19 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | THE GROOVE | Tukker FM | Veronica 90s | Vibe Radio
+16:26:16  loghi.stazioni = 9 con logo, 20 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | THE GROOVE | Tukker FM | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 9 con logo, 21 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 10 con logo, 21 senza
+16:26:16  loghi.stazioni = 11 con logo, 21 senza
+16:26:16  loghi.stazioni = 12 con logo, 21 senza
+16:26:16  loghi.stazioni = 13 con logo, 21 senza
+16:26:16  loghi.stazioni = 13 con logo, 22 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 14 con logo, 22 senza
+16:26:16  loghi.stazioni = 14 con logo, 23 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 15 con logo, 23 senza
+16:26:16  loghi.stazioni = 16 con logo, 23 senza
+16:26:16  loghi.stazioni = 17 con logo, 23 senza
+16:26:16  loghi.stazioni = 17 con logo, 24 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 17 con logo, 25 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 18 con logo, 25 senza
+16:26:16  loghi.stazioni = 18 con logo, 26 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 18 con logo, 27 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 19 con logo, 27 senza
+16:26:16  loghi.stazioni = 19 con logo, 28 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | YOURSAFE | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 19 con logo, 29 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 TOMORROWLAND | BBC WORLDSERVICE | BNR BusinessBeat | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | YOURSAFE | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 20 con logo, 29 senza
+16:26:16  loghi.stazioni = 21 con logo, 29 senza
+16:26:16  loghi.stazioni = 22 con logo, 29 senza
+16:26:16  loghi.stazioni = 23 con logo, 29 senza
+16:26:16  loghi.stazioni = 24 con logo, 29 senza
+16:26:16  loghi.stazioni = 25 con logo, 29 senza
+16:26:16  loghi.stazioni = 25 con logo, 30 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 NONSTOP | 538 TOMORROWLAND | BBC WORLDSERVICE | BNR BusinessBeat | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | YOURSAFE | gpr SPORTRADIO
+16:26:16  loghi.stazioni = 25 con logo, 31 senza
+16:26:16  loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 NONSTOP | 538 TOMORROWLAND | BBC WORLDSERVICE | BNR BusinessBeat | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | Qmusic Non-stop | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | YOURSAFE | gpr SPORTRADIO
+16:26:17  radio.elenco = fonte elenco della ricerca (22) · DAB 57 stazioni · aggiornato: ritorno nel launcher
+16:26:17  loghi.scaricati.dab_88c7 = non trovato (riprovo tra 3 giorni)
+16:26:17  loghi.scaricati.dab_88d2 = non trovato (riprovo tra 3 giorni)
+16:26:17  loghi.scaricati.dab_82d8 = non trovato (riprovo tra 3 giorni)
+16:26:17  radio.elenco = fonte elenco della ricerca (22) · DAB 57 stazioni · aggiornato: servizio radio: elenco cambiato
+16:26:18  loghi.scaricati.dab_83bb = non trovato (riprovo tra 3 giorni)
+16:26:18  loghi.scaricati.dab_8802 = non trovato (riprovo tra 3 giorni)
+16:26:18  clima.tempInterna = letto — · fonte nessuna (si mostra --) · valida no: proprietà assente · esterna 8.0 · ambient 8.0 (è l'esterna: mai usata come interna)
+16:26:23  radio.tentativi = avvio RADIO: riuscito al primo tentativo · 16:26:23
+16:26:23  media.avvio = sorgente salvata RADIO (avvio del launcher all'accensione) · ripresa RADIO (radio) · esito riuscita · tentativi 1 · 16:26:23
+16:26:23  radio.stato = 1
+16:26:24  media.comando = avvio RADIO · RADIO · prima in pausa "Omroep Flevoland" · dopo in riproduzione "Omroep Flevoland"
+16:26:31  radio.elenco = fonte elenco della ricerca (22) · DAB 57 stazioni · aggiornato: servizio radio: preferiti cambiati
+16:26:31  loghi.scaricati.dab_8804 = trovato e salvato
+16:26:34  radio.elenco = fonte elenco della ricerca (22) · DAB 57 stazioni · aggiornato: servizio radio: elenco cambiato
+16:26:39  veicolo.soc = 48.4 (valido false)
+16:26:44  veicolo.statoRicarica = 7
+16:26:45  usb.porte = 1d6b:0003@2 porte 0 comando ? occupate [] | 1d6b:0002@3 porte 2 comando singolo occupate [1] | 0424:2514@1 porte 4 comando singolo occupate [1,2] | 1d6b:0002@1 porte 2 comando singolo occupate [1,2] | 1d6b:0003@4 porte 0 comando ? occupate []
+16:26:45  radio.elenco = fonte elenco della ricerca (22) · DAB 57 stazioni · aggiornato: ritorno nel launcher
+
+===== CRASH RECENTI (tutte le app) =====
+01-01 01:00:13.917 E/AndroidRuntime( 2906): FATAL EXCEPTION: main
+01-01 01:00:13.917 E/AndroidRuntime( 2906): Process: com.saicmotor.service.engmode:haha, PID: 2906
+01-01 01:00:13.917 E/AndroidRuntime( 2906): java.lang.RuntimeException: Unable to create service com.saicmotor.service.engmode.EngineeringModeService: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String[] android.content.pm.PackageManager.getPackagesForUid(int)' on a null object reference
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.app.ActivityThread.handleCreateService(ActivityThread.java:3544)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.app.ActivityThread.access$1300(ActivityThread.java:199)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1666)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.os.Looper.loop(Looper.java:193)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.app.ActivityThread.main(ActivityThread.java:6669)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at java.lang.reflect.Method.invoke(Native Method)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:493)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:892)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String[] android.content.pm.PackageManager.getPackagesForUid(int)' on a null object reference
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.os.Parcel.createException(Parcel.java:1948)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.os.Parcel.readException(Parcel.java:1910)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.os.Parcel.readException(Parcel.java:1860)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.location.ILocationManager$Stub$Proxy.requestLocationUpdates(ILocationManager.java:772)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.location.LocationManager.requestLocationUpdates(LocationManager.java:1007)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.location.LocationManager.requestLocationUpdates(LocationManager.java:561)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at com.saicmotor.service.engmode.manager.SystemHardwareManager.startReceivingLocationUpdates(SystemHardwareManager.java:779)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at com.saicmotor.service.engmode.manager.SystemHardwareManager.<init>(SystemHardwareManager.java:113)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at com.saicmotor.service.engmode.EngineeringModeService.onCreate(EngineeringModeService.java:45)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.app.ActivityThread.handleCreateService(ActivityThread.java:3532)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	... 8 more
+01-01 01:00:13.917 E/AndroidRuntime( 2906): Caused by: android.os.RemoteException: Remote stack trace:
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at com.android.server.LocationManagerService.checkPackageName(LocationManagerService.java:2031)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at com.android.server.LocationManagerService.requestLocationUpdates(LocationManagerService.java:2070)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.location.ILocationManager$Stub.onTransact(ILocationManager.java:72)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 	at android.os.Binder.execTransact(Binder.java:731)
+01-01 01:00:13.917 E/AndroidRuntime( 2906): 
+01-01 01:00:14.362 E/AndroidRuntime( 3046): FATAL EXCEPTION: main
+01-01 01:00:14.362 E/AndroidRuntime( 3046): Process: com.saicvehicleservice, PID: 3046
+01-01 01:00:14.362 E/AndroidRuntime( 3046): java.lang.RuntimeException: Unable to create service com.saicvehicleservice.service.VehicleService: java.lang.IllegalStateException: SharedPreferences in credential encrypted storage are not available until after user is unlocked
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at android.app.ActivityThread.handleCreateService(ActivityThread.java:3544)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at android.app.ActivityThread.access$1300(ActivityThread.java:199)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1666)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at android.os.Looper.loop(Looper.java:193)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at android.app.ActivityThread.main(ActivityThread.java:6669)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at java.lang.reflect.Method.invoke(Native Method)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:493)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:892)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): Caused by: java.lang.IllegalStateException: SharedPreferences in credential encrypted storage are not available until after user is unlocked
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at android.app.ContextImpl.getSharedPreferences(ContextImpl.java:419)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at android.app.ContextImpl.getSharedPreferences(ContextImpl.java:404)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at android.content.ContextWrapper.getSharedPreferences(ContextWrapper.java:174)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at com.blankj.utilcode.util.SPUtils.<init>(SPUtils.java:84)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at com.blankj.utilcode.util.SPUtils.getInstance(SPUtils.java:71)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at com.blankj.utilcode.util.SPUtils.getInstance(SPUtils.java:34)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at com.saicvehicleservice.utli.PropertiesHelp.getString(PropertiesHelp.java:57)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at com.saicvehicleservice.utli.CacheUtils.getString(CacheUtils.java:46)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at com.saicvehicleservice.service.VehicleService.getPreferences(VehicleService.java:729)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at com.saicvehicleservice.service.VehicleService.onCreate(VehicleService.java:96)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	at android.app.ActivityThread.handleCreateService(ActivityThread.java:3532)
+01-01 01:00:14.362 E/AndroidRuntime( 3046): 	... 8 more
+01-01 01:00:15.276 E/AndroidRuntime( 3154): FATAL EXCEPTION: main
+01-01 01:00:15.276 E/AndroidRuntime( 3154): Process: com.saicmotor.service.engmode:haha, PID: 3154
+01-01 01:00:15.276 E/AndroidRuntime( 3154): java.lang.RuntimeException: Unable to create service com.saicmotor.service.engmode.EngineeringModeService: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String[] android.content.pm.PackageManager.getPackagesForUid(int)' on a null object reference
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.app.ActivityThread.handleCreateService(ActivityThread.java:3544)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.app.ActivityThread.access$1300(ActivityThread.java:199)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1666)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.os.Looper.loop(Looper.java:193)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.app.ActivityThread.main(ActivityThread.java:6669)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at java.lang.reflect.Method.invoke(Native Method)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:493)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:892)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String[] android.content.pm.PackageManager.getPackagesForUid(int)' on a null object reference
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.os.Parcel.createException(Parcel.java:1948)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.os.Parcel.readException(Parcel.java:1910)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.os.Parcel.readException(Parcel.java:1860)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.location.ILocationManager$Stub$Proxy.requestLocationUpdates(ILocationManager.java:772)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.location.LocationManager.requestLocationUpdates(LocationManager.java:1007)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.location.LocationManager.requestLocationUpdates(LocationManager.java:561)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at com.saicmotor.service.engmode.manager.SystemHardwareManager.startReceivingLocationUpdates(SystemHardwareManager.java:779)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at com.saicmotor.service.engmode.manager.SystemHardwareManager.<init>(SystemHardwareManager.java:113)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at com.saicmotor.service.engmode.EngineeringModeService.onCreate(EngineeringModeService.java:45)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.app.ActivityThread.handleCreateService(ActivityThread.java:3532)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	... 8 more
+01-01 01:00:15.276 E/AndroidRuntime( 3154): Caused by: android.os.RemoteException: Remote stack trace:
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at com.android.server.LocationManagerService.checkPackageName(LocationManagerService.java:2031)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at com.android.server.LocationManagerService.requestLocationUpdates(LocationManagerService.java:2070)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.location.ILocationManager$Stub.onTransact(ILocationManager.java:72)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 	at android.os.Binder.execTransact(Binder.java:731)
+01-01 01:00:15.276 E/AndroidRuntime( 3154): 
+01-01 01:00:16.058 E/AndroidRuntime( 3267): FATAL EXCEPTION: main
+01-01 01:00:16.058 E/AndroidRuntime( 3267): Process: com.saicvehicleservice, PID: 3267
+01-01 01:00:16.058 E/AndroidRuntime( 3267): java.lang.RuntimeException: Unable to create service com.saicvehicleservice.service.VehicleService: java.lang.IllegalStateException: SharedPreferences in credential encrypted storage are not available until after user is unlocked
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at android.app.ActivityThread.handleCreateService(ActivityThread.java:3544)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at android.app.ActivityThread.access$1300(ActivityThread.java:199)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1666)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at android.os.Looper.loop(Looper.java:193)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at android.app.ActivityThread.main(ActivityThread.java:6669)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at java.lang.reflect.Method.invoke(Native Method)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:493)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:892)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): Caused by: java.lang.IllegalStateException: SharedPreferences in credential encrypted storage are not available until after user is unlocked
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at android.app.ContextImpl.getSharedPreferences(ContextImpl.java:419)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at android.app.ContextImpl.getSharedPreferences(ContextImpl.java:404)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at android.content.ContextWrapper.getSharedPreferences(ContextWrapper.java:174)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at com.blankj.utilcode.util.SPUtils.<init>(SPUtils.java:84)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at com.blankj.utilcode.util.SPUtils.getInstance(SPUtils.java:71)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at com.blankj.utilcode.util.SPUtils.getInstance(SPUtils.java:34)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at com.saicvehicleservice.utli.PropertiesHelp.getString(PropertiesHelp.java:57)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at com.saicvehicleservice.utli.CacheUtils.getString(CacheUtils.java:46)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at com.saicvehicleservice.service.VehicleService.getPreferences(VehicleService.java:729)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at com.saicvehicleservice.service.VehicleService.onCreate(VehicleService.java:96)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	at android.app.ActivityThread.handleCreateService(ActivityThread.java:3532)
+01-01 01:00:16.058 E/AndroidRuntime( 3267): 	... 8 more
+
+===== LOGCAT DEL LAUNCHER =====
+--------- beginning of main
+11-14 16:25:49.106 I/MG4L    ( 3278): avvio.homeRipresa = aperto il launcher: home MG non comparsa, davanti com.saicmotor.hmi.clusterprojection
+11-14 16:25:49.149 W/OpenGLRenderer( 3278): Incorrectly called buildLayer on View: AppsView, destroying layer...
+11-14 16:25:49.642 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 26 s)
+11-14 16:25:50.924 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 25 s)
+11-14 16:25:51.930 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 24 s)
+11-14 16:25:52.378 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 23 s)
+11-14 16:25:52.661 I/MG4L    ( 3278): nav.push.altro = codice 11
+11-14 16:25:57.754 I/MG4L    ( 3278): finestra = 1920×720 · margini sistema 142,0,0,0
+11-14 16:25:57.836 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 18 s)
+11-14 16:25:57.860 D/mali_winsys( 3278): EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, EGLBoolean) returns 0x3000
+11-14 16:25:57.866 W/OpenGLRenderer( 3278): Incorrectly called buildLayer on View: AppsView, destroying layer...
+11-14 16:25:58.333 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 17 s)
+11-14 16:25:58.904 I/MG4L    ( 3278): nav.push.altro = codice 7
+11-14 16:26:00.074 I/MG4L    ( 3278): nav.push.altro = codice 11
+11-14 16:26:00.136 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:00.148 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:00.162 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:00.168 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:00.179 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:00.185 I/MG4L    ( 3278): usb.porte = 1d6b:0003@2 porte 0 comando ? occupate [] | 1d6b:0002@3 porte 2 comando singolo occupate [] | 0424:2514@1 porte 4 comando singolo occupate [1,2] | 1d6b:0002@1 porte 2 comando singolo occupate [1,2] | 1d6b:0003@4 porte 0 comando ? occupate []
+11-14 16:26:00.458 I/MG4L    ( 3278): radio.riparazione = nessun crash dei promemoria DAB
+11-14 16:26:00.766 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 16 s)
+11-14 16:26:00.921 D/NetworkSecurityConfig( 3278): Using Network Security Config from resource network_security_config debugBuild: false
+11-14 16:26:02.087 I/MG4L    ( 3278): aggiornamenti.controllo = ultima 1.0.3
+11-14 16:26:02.819 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 14 s)
+11-14 16:26:03.072 I/MG4L    ( 3278): media.avvio = sorgente salvata RADIO (avvio del launcher all'accensione) · ripresa RADIO in attesa: servizio radio avviato da poco (ancora 13 s)
+11-14 16:26:03.828 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 13 s)
+11-14 16:26:04.752 I/MG4L    ( 3278): nav.push.altro = codice 8
+11-14 16:26:04.786 I/MG4L    ( 3278): nav.push.altro = codice 9
+11-14 16:26:05.053 I/MG4L    ( 3278): nav.push.altro = codice 11
+11-14 16:26:05.180 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:05.191 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:05.232 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:05.234 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:05.819 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 11 s)
+11-14 16:26:06.823 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 10 s)
+11-14 16:26:07.829 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 9 s)
+11-14 16:26:08.823 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 7 s)
+11-14 16:26:08.841 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 8 s)
+11-14 16:26:09.250 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:09.252 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:09.254 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:09.257 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:09.827 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 6 s)
+11-14 16:26:10.297 I/MG4L    ( 3278): log.salvato = /storage/emulated/0/Android/data/com.mg4.launcher/files/mg4-launcher-log-20261114-162609.txt
+11-14 16:26:10.836 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 5 s)
+11-14 16:26:11.843 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 4 s)
+11-14 16:26:12.030 I/MG4L    ( 3278): media.avvio = sorgente salvata RADIO (avvio del launcher all'accensione) · ripresa RADIO in attesa: servizio radio avviato da poco (ancora 3 s)
+11-14 16:26:12.235 I/MG4L    ( 3278): log.invio = inviato alle 16:26 → SWI68/afe480df/2026-11-14/16-26-10.txt
+11-14 16:26:12.849 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 3 s)
+11-14 16:26:13.814 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 2 s)
+11-14 16:26:14.245 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:14.247 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:14.255 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:14.256 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:14.818 I/MG4L    ( 3278): radio.attesa = servizio radio avviato da poco (ancora 1 s)
+11-14 16:26:15.581 I/MG4L    ( 3278): clima.tempEsterna = 8.0 · validità ok
+11-14 16:26:15.829 I/MG4L    ( 3278): radio.attesa = nessuna: servizio pronto, comandi attivi
+11-14 16:26:15.832 I/MG4L    ( 3278): radio.stato = 2
+11-14 16:26:15.833 I/MG4L    ( 3278): radio.corrente = banda 4, 197648 kHz, Omroep Flevoland
+11-14 16:26:15.857 I/MG4L    ( 3278): loghi.stazioni = 0 con logo, 1 senza
+11-14 16:26:15.864 I/MG4L    ( 3278): loghi.senzaLogo = Omroep Flevoland
+11-14 16:26:15.903 I/MG4L    ( 3278): radio.preferiti = 0 stazioni
+11-14 16:26:15.957 I/MG4L    ( 3278): loghi.stazioni = 1 con logo, 1 senza
+11-14 16:26:15.968 I/MG4L    ( 3278): loghi.stazioni = 1 con logo, 2 senza
+11-14 16:26:15.968 I/MG4L    ( 3278): loghi.senzaLogo = 538 TOMORROWLAND | Omroep Flevoland
+11-14 16:26:15.990 I/MG4L    ( 3278): loghi.stazioni = 2 con logo, 2 senza
+11-14 16:26:16.014 I/MG4L    ( 3278): loghi.stazioni = 2 con logo, 3 senza
+11-14 16:26:16.014 I/MG4L    ( 3278): loghi.senzaLogo = 538 TOMORROWLAND | Omroep Flevoland | R10 Soul & Jazz
+11-14 16:26:16.017 I/MG4L    ( 3278): loghi.stazioni = 2 con logo, 4 senza
+11-14 16:26:16.018 I/MG4L    ( 3278): loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | Omroep Flevoland | R10 Soul & Jazz
+11-14 16:26:16.069 I/MG4L    ( 3278): loghi.stazioni = 3 con logo, 4 senza
+11-14 16:26:16.072 I/MG4L    ( 3278): loghi.stazioni = 3 con logo, 5 senza
+11-14 16:26:16.073 I/MG4L    ( 3278): loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GOD Radio | Omroep Flevoland | R10 Soul & Jazz
+11-14 16:26:16.097 I/MG4L    ( 3278): loghi.stazioni = 4 con logo, 5 senza
+11-14 16:26:16.115 I/MG4L    ( 3278): loghi.stazioni = 4 con logo, 6 senza
+11-14 16:26:16.115 I/MG4L    ( 3278): loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GOD Radio | Omroep Flevoland | R10 Soul & Jazz | Vibe Radio
+11-14 16:26:16.120 I/MG4L    ( 3278): loghi.stazioni = 4 con logo, 7 senza
+11-14 16:26:16.121 I/MG4L    ( 3278): loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Vibe Radio
+11-14 16:26:16.126 I/MG4L    ( 3278): loghi.stazioni = 4 con logo, 8 senza
+11-14 16:26:16.130 I/MG4L    ( 3278): loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Vibe Radio
+11-14 16:26:16.136 I/MG4L    ( 3278): loghi.stazioni = 5 con logo, 8 senza
+11-14 16:26:16.140 I/MG4L    ( 3278): loghi.stazioni = 5 con logo, 9 senza
+11-14 16:26:16.140 I/MG4L    ( 3278): loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+11-14 16:26:16.170 I/MG4L    ( 3278): loghi.stazioni = 5 con logo, 10 senza
+11-14 16:26:16.170 I/MG4L    ( 3278): loghi.senzaLogo = 538 TOMORROWLAND | CONTINU | GNR-Non-Stop | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+11-14 16:26:16.196 I/MG4L    ( 3278): loghi.stazioni = 6 con logo, 10 senza
+11-14 16:26:16.205 I/MG4L    ( 3278): loghi.stazioni = 6 con logo, 11 senza
+11-14 16:26:16.205 I/MG4L    ( 3278): loghi.senzaLogo = 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GNR-Non-Stop | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+11-14 16:26:16.213 I/MG4L    ( 3278): loghi.stazioni = 6 con logo, 12 senza
+11-14 16:26:16.213 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GNR-Non-Stop | GOD Radio | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+11-14 16:26:16.249 I/MG4L    ( 3278): loghi.stazioni = 7 con logo, 12 senza
+11-14 16:26:16.253 I/MG4L    ( 3278): loghi.stazioni = 7 con logo, 13 senza
+11-14 16:26:16.253 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+11-14 16:26:16.320 I/MG4L    ( 3278): loghi.stazioni = 7 con logo, 14 senza
+11-14 16:26:16.321 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+11-14 16:26:16.339 I/MG4L    ( 3278): loghi.stazioni = 7 con logo, 15 senza
+11-14 16:26:16.340 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | Sky Radio Xmas | Veronica 90s | Vibe Radio
+11-14 16:26:16.355 I/MG4L    ( 3278): loghi.stazioni = 8 con logo, 15 senza
+11-14 16:26:16.366 I/MG4L    ( 3278): loghi.stazioni = 8 con logo, 16 senza
+11-14 16:26:16.366 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | Veronica 90s | Vibe Radio
+11-14 16:26:16.385 I/MG4L    ( 3278): loghi.stazioni = 8 con logo, 17 senza
+11-14 16:26:16.386 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | Tukker FM | Veronica 90s | Vibe Radio
+11-14 16:26:16.397 I/MG4L    ( 3278): loghi.stazioni = 9 con logo, 17 senza
+11-14 16:26:16.407 I/MG4L    ( 3278): loghi.stazioni = 9 con logo, 18 senza
+11-14 16:26:16.412 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | THE GROOVE | Tukker FM | Veronica 90s | Vibe Radio
+11-14 16:26:16.416 I/MG4L    ( 3278): loghi.stazioni = 9 con logo, 19 senza
+11-14 16:26:16.428 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | THE GROOVE | Tukker FM | Veronica 90s | Vibe Radio
+11-14 16:26:16.432 I/MG4L    ( 3278): loghi.stazioni = 9 con logo, 20 senza
+11-14 16:26:16.432 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | THE GROOVE | Tukker FM | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+11-14 16:26:16.442 I/MG4L    ( 3278): loghi.stazioni = 9 con logo, 21 senza
+11-14 16:26:16.443 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+11-14 16:26:16.466 I/MG4L    ( 3278): loghi.stazioni = 10 con logo, 21 senza
+11-14 16:26:16.509 I/MG4L    ( 3278): loghi.stazioni = 11 con logo, 21 senza
+11-14 16:26:16.522 I/MG4L    ( 3278): loghi.stazioni = 12 con logo, 21 senza
+11-14 16:26:16.544 I/MG4L    ( 3278): loghi.stazioni = 13 con logo, 21 senza
+11-14 16:26:16.554 I/MG4L    ( 3278): loghi.stazioni = 13 con logo, 22 senza
+11-14 16:26:16.556 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+11-14 16:26:16.585 I/MG4L    ( 3278): loghi.stazioni = 14 con logo, 22 senza
+11-14 16:26:16.604 I/MG4L    ( 3278): loghi.stazioni = 14 con logo, 23 senza
+11-14 16:26:16.604 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+11-14 16:26:16.630 I/MG4L    ( 3278): loghi.stazioni = 15 con logo, 23 senza
+11-14 16:26:16.663 I/MG4L    ( 3278): loghi.stazioni = 16 con logo, 23 senza
+11-14 16:26:16.685 I/MG4L    ( 3278): loghi.stazioni = 17 con logo, 23 senza
+11-14 16:26:16.696 I/MG4L    ( 3278): loghi.stazioni = 17 con logo, 24 senza
+11-14 16:26:16.696 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+11-14 16:26:16.729 I/MG4L    ( 3278): loghi.stazioni = 17 con logo, 25 senza
+11-14 16:26:16.729 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+11-14 16:26:16.776 I/MG4L    ( 3278): loghi.stazioni = 18 con logo, 25 senza
+11-14 16:26:16.792 I/MG4L    ( 3278): loghi.stazioni = 18 con logo, 26 senza
+11-14 16:26:16.792 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+11-14 16:26:16.797 I/MG4L    ( 3278): loghi.stazioni = 18 con logo, 27 senza
+11-14 16:26:16.802 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | gpr SPORTRADIO
+11-14 16:26:16.808 I/MG4L    ( 3278): loghi.stazioni = 19 con logo, 27 senza
+11-14 16:26:16.816 I/MG4L    ( 3278): loghi.stazioni = 19 con logo, 28 senza
+11-14 16:26:16.816 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 TOMORROWLAND | BBC WORLDSERVICE | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | YOURSAFE | gpr SPORTRADIO
+11-14 16:26:16.827 I/MG4L    ( 3278): loghi.stazioni = 19 con logo, 29 senza
+11-14 16:26:16.831 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 TOMORROWLAND | BBC WORLDSERVICE | BNR BusinessBeat | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | YOURSAFE | gpr SPORTRADIO
+11-14 16:26:16.838 I/MG4L    ( 3278): loghi.stazioni = 20 con logo, 29 senza
+11-14 16:26:16.891 I/MG4L    ( 3278): loghi.stazioni = 21 con logo, 29 senza
+11-14 16:26:16.908 I/MG4L    ( 3278): loghi.stazioni = 22 con logo, 29 senza
+11-14 16:26:16.919 I/MG4L    ( 3278): loghi.stazioni = 23 con logo, 29 senza
+11-14 16:26:16.934 I/MG4L    ( 3278): loghi.stazioni = 24 con logo, 29 senza
+11-14 16:26:16.952 I/MG4L    ( 3278): loghi.stazioni = 25 con logo, 29 senza
+11-14 16:26:16.964 I/MG4L    ( 3278): loghi.stazioni = 25 con logo, 30 senza
+11-14 16:26:16.965 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 NONSTOP | 538 TOMORROWLAND | BBC WORLDSERVICE | BNR BusinessBeat | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | YOURSAFE | gpr SPORTRADIO
+11-14 16:26:16.983 I/MG4L    ( 3278): loghi.stazioni = 25 con logo, 31 senza
+11-14 16:26:16.983 I/MG4L    ( 3278): loghi.senzaLogo = 247SPICE | 538 GreatestHits | 538 NONSTOP | 538 TOMORROWLAND | BBC WORLDSERVICE | BNR BusinessBeat | CONTINU | GLXY.STATE | GLXY.THROWBACK | GNR-Non-Stop | GOD Radio | Jolene Country | Joy Radio Hits | KISS FM | Magic FM | Omroep Flevoland | Qmusic Non-stop | R10 Soul & Jazz | RADIONL | Radio 10 60s&70s | Radio 10 80s | Radio Maria | Sky Radio Xmas | Sunrise FM | THE GROOVE | Tukker FM | Veronica 80s | Veronica 90s | Vibe Radio | YOURSAFE | gpr SPORTRADIO
+11-14 16:26:17.033 I/MG4L    ( 3278): radio.elenco = fonte elenco della ricerca (22) · DAB 57 stazioni · aggiornato: ritorno nel launcher
+11-14 16:26:17.205 I/MG4L    ( 3278): loghi.scaricati.dab_88c7 = non trovato (riprovo tra 3 giorni)
+11-14 16:26:17.739 I/MG4L    ( 3278): loghi.scaricati.dab_88d2 = non trovato (riprovo tra 3 giorni)
+11-14 16:26:17.943 I/MG4L    ( 3278): loghi.scaricati.dab_82d8 = non trovato (riprovo tra 3 giorni)
+11-14 16:26:17.963 I/MG4L    ( 3278): radio.elenco = fonte elenco della ricerca (22) · DAB 57 stazioni · aggiornato: servizio radio: elenco cambiato
+11-14 16:26:18.315 I/MG4L    ( 3278): loghi.scaricati.dab_8802 = non trovato (riprovo tra 3 giorni)
+11-14 16:26:18.494 I/MG4L    ( 3278): clima.tempInterna = letto — · fonte nessuna (si mostra --) · valida no: proprietà assente · esterna 8.0 · ambient 8.0 (è l'esterna: mai usata come interna)
+11-14 16:26:20.210 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:20.216 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:20.227 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:20.233 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:20.246 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:23.020 I/MG4L    ( 3278): radio.tentativi = avvio RADIO: riuscito al primo tentativo · 16:26:23
+11-14 16:26:23.023 I/MG4L    ( 3278): media.avvio = sorgente salvata RADIO (avvio del launcher all'accensione) · ripresa RADIO (radio) · esito riuscita · tentativi 1 · 16:26:23
+11-14 16:26:23.057 I/MG4L    ( 3278): radio.stato = 1
+11-14 16:26:25.270 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:25.272 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:25.279 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:30.284 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:30.286 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:30.298 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:30.302 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:35.292 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:35.295 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:35.300 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:35.304 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:44.132 I/MG4L    ( 3278): veicolo.statoRicarica = 7
+11-14 16:26:45.065 W/OpenGLRenderer( 3278): Incorrectly called buildLayer on View: AppsView, destroying layer...
+11-14 16:26:50.340 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:50.348 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:50.357 D/UsbDeviceConnectionJNI( 3278): close
+11-14 16:26:50.359 D/UsbDeviceConnectionJNI( 3278): close
+(8 righe di sistema ripetitive non incluse)
