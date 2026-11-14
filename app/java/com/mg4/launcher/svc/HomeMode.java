@@ -34,10 +34,11 @@ public final class HomeMode {
 
     /** Logica di avvio e riconferma della home attive? */
     public static boolean active(Context c) {
-        return enabled(c);
+        return enabled(c) && !HomeLock.uninstalling(c);   // 1.0.4: durante la disinstallazione comanda la home MG
     }
 
     public static String reason(Context c) {
+        if (HomeLock.uninstalling(c)) return "disinstallazione in corso";
         if (officina(c)) return "officina";
         return sp(c).getBoolean(K_ENABLED, true) ? "attiva" : "interruttore spento";
     }

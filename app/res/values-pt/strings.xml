@@ -507,4 +507,6 @@
     <string name="news_v104_2" formatted="false">Novo ecrã: Mapa/Multimédia em baixo, FM/DAB sob Rádio, botões de fonte maiores</string>
     <string name="news_v104_3" formatted="false">Animação de carregamento ao ligar o cabo, e MG4 Store incluído no launcher</string>
     <string name="news_v104_4" formatted="false">Fontes de áudio e app de navegação à escolha; faróis lidos do carro; rádio mais fiável no arranque</string>
+    <string name="fav_empty" formatted="false">Sem favoritas: adiciona-as na app Rádio</string>
+    <string name="news_v104_5" formatted="false">Desinstalação mais segura: o ecrã inicial MG original volta sempre, mesmo que o launcher seja removido no menu Apps</string>
 </resources>

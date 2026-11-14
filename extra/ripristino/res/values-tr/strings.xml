@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MG4 Ripristino Home</string>
+    <string name="ok">Orijinal ana ekran geri yüklendi</string>
+    <string name="fail">Orijinal ana ekran geri yüklenemedi</string>
+    <string name="launcher_present">MG4 Launcher hâlâ yüklü: kaldırmak için launcher\'da Ayarlar → Kaldır\'ı kullanın.</string>
+    <string name="open_home">Orijinal ana ekranı aç</string>
+    <string name="uninstall">Bu uygulamayı kaldır</string>
+    <string name="working">Orijinal ana ekran geri yükleniyor…</string>
+</resources>

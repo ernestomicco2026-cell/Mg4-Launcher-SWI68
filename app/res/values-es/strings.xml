@@ -507,4 +507,6 @@
     <string name="news_v104_2" formatted="false">Nueva pantalla: Mapa/Multimedia abajo, FM/DAB bajo Radio, botones de fuente más grandes</string>
     <string name="news_v104_3" formatted="false">Animación de carga al conectar el cable, y MG4 Store incluido en el launcher</string>
     <string name="news_v104_4" formatted="false">Fuentes de audio y app de navegación a elegir; faros leídos del coche; radio más fiable al arrancar</string>
+    <string name="fav_empty" formatted="false">Sin favoritas: añádelas en la app Radio</string>
+    <string name="news_v104_5" formatted="false">Desinstalación más segura: la pantalla de inicio MG original siempre vuelve, aunque el launcher se quite desde el menú Apps</string>
 </resources>

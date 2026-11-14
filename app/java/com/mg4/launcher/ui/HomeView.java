@@ -81,12 +81,14 @@ public final class HomeView extends LinearLayout {
      * SRC_H pulsanti delle sorgenti (+15% rispetto ai 48 di prima), TABS_H riga Mappa/Media (6 + 48 + 6),
      * FAV_H riga dei preferiti, BAND_H riquadro FM/DAB (6 + 60 + 6).
      */
-    private static final int SRC_H = 55, TABS_H = 60, FAV_H = 122, BAND_H = 72;
+    private static final int SRC_H = 55, TABS_H = 60, FAV_H = 108, BAND_H = 72;
+    /** 1.0.4: elenco stazioni a destra, larghezza (× dimensione comandi) e altezza riga (tp, + 2 dp di spazio). */
+    private static final int STATION_W = 372, STATION_ROW = 62;
     private View tabsBox, favBottom;
 
     /** Distanza di Mappa/Media dal fondo del riquadro: centrata sulla riga dei preferiti (che sta a 20 dal fondo). */
     private int tabsBottom() {
-        return dp(20) + Math.max(0, (dp(FAV_H) - tp(TABS_H)) / 2);
+        return dp(20) + Math.max(0, (tp(FAV_H) - tp(TABS_H)) / 2);
     }
     private LinearLayout connRow;
     private ImageView connBt, connWifi;
@@ -105,7 +107,7 @@ public final class HomeView extends LinearLayout {
     private boolean navWithPhone;
 
     // media
-    private LinearLayout srcRow, stationPanel, stationList, stationEmpty;
+    private LinearLayout srcRow, stationPanel, stationList, stationEmpty, stationHead;
     private android.widget.ScrollView stationScroll;
     private TextView stationTitle, stationCount;
     private String stationSignature = "";
@@ -127,6 +129,8 @@ public final class HomeView extends LinearLayout {
     private ImageView artCover;
     /** Sorgenti senza scritta (solo icona) quando non c'è spazio accanto ai pulsanti in alto a destra. */
     private boolean srcCompact;
+    /** 1.0.4: 0 spazi normali, 1 stretti, 2 strettissimi, 3 solo icone (ultima risorsa, mai vista finora). */
+    private int srcFit;
     private View topRightBox;
     /** 1.0.2 (issue #23): pulsante in alto a destra: 0 CarPlay/Android Auto, 1 app scelta, 2 nessuno. */
     private int topMode;
@@ -1040,7 +1044,6 @@ public final class HomeView extends LinearLayout {
         bandBox = Ui.row(c);
         bandBox.setGravity(Gravity.CENTER_VERTICAL);
         // 1.0.4 (punto E1): FM/DAB torna sotto il pulsante Radio (come nella 1.0.2), con la misura della 1.0.3
-        col.addView(bandBox, Ui.margins(new LayoutParams(-2, tp(BAND_H) + dp(8)), 0, 0, 0, 0));
         bandBox.setVisibility(GONE);
 
         // corpo: a sinistra copertina + comandi + preferiti, a destra (solo radio) l'elenco delle stazioni trovate
@@ -1049,10 +1052,13 @@ public final class HomeView extends LinearLayout {
         col.addView(body, Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(10), 0, 0));
         LinearLayout left = Ui.column(c);
         body.addView(left, Ui.lpWeight(0, -1, 1));
+        // 1.0.4: FM/DAB sta in cima alla colonna di sinistra, così l'elenco delle stazioni a destra parte alla sua
+        // stessa altezza (subito sotto le sorgenti) e riempie lo spazio che prima restava vuoto
+        left.addView(bandBox, Ui.margins(new LayoutParams(-2, tp(BAND_H) + dp(Ui.K > 1.2f ? 2 : 8)), 0, 0, 0, 0));
 
         LinearLayout main = Ui.row(c);
         main.setGravity(Gravity.CENTER_VERTICAL);
-        left.addView(main, Ui.margins(Ui.lpWeight(-1, 0, 1), dp(8), 0, 0, 0));
+        left.addView(main, Ui.margins(Ui.lpWeight(-1, 0, 1), dp(8), dp(Ui.K > 1.2f ? 0 : 4), 0, 0));
 
         FrameLayout art = new FrameLayout(c);
         art.setBackground(Ui.pressable(c, t.chip, 26, t));
@@ -1086,7 +1092,7 @@ public final class HomeView extends LinearLayout {
         artRadio.setPadding(dp(12), 0, dp(12), 0);
         art.addView(artRadio, new FrameLayout.LayoutParams(-1, -1));
         // con i comandi più grandi la copertina si restringe un po' per lasciare spazio ai pulsanti
-        int artSize = dp(Math.round(208 - 110 * (Ui.K - 1)));
+        int artSize = dp(Ui.K > 1.2f ? 160 : Math.round(208 - 110 * (Ui.K - 1)));   // 1.0.4: in "Molto grande" 160, entra senza tagli
         main.addView(art, new LayoutParams(artSize, artSize));
 
         LinearLayout info = Ui.column(c);
@@ -1095,7 +1101,7 @@ public final class HomeView extends LinearLayout {
         mMeta = Ui.oneLine(Ui.text(c, "", 17, t.sub, Ui.MEDIUM));
         mMeta.setLetterSpacing(0.06f);
         info.addView(mMeta, new LayoutParams(-1, -2));
-        mTitle = Ui.oneLine(Ui.text(c, "", 40, t.text, Ui.MEDIUM));
+        mTitle = Ui.oneLine(Ui.text(c, "", 40 * Math.min(Ui.K, 1.15f), t.text, Ui.MEDIUM));   // 1.0.4: cresce con la dimensione (fino a "Grande": oltre il tasto play non ci starebbe)
         info.addView(mTitle, Ui.margins(new LayoutParams(-1, -2), 0, dp(4), 0, 0));
         mSub = Ui.oneLine(Ui.text(c, "", 21, t.sub, Ui.REGULAR));
         info.addView(mSub, Ui.margins(new LayoutParams(-1, -2), 0, dp(4), 0, 0));
@@ -1117,12 +1123,16 @@ public final class HomeView extends LinearLayout {
         // sorgenti), più grande di prima: alta come i pulsanti avanti/indietro, scritte più grandi
         LinearLayout ctr = Ui.row(c);
         ctr.setGravity(Gravity.CENTER_VERTICAL);
-        ctr.addView(Ui.iconButton(c, t, R.drawable.ic_prev, t.text, t.chip, 64, 28, 32, L.s(R.string.previous), v -> media.skip(false)));
-        FrameLayout play = Ui.iconButton(c, t, R.drawable.ic_pause, t.panel, t.text, 84, 36, 42, L.s(R.string.play_pause), v -> media.playPause());
+        // 1.0.4: in "Molto grande" questi tasti restano grandi come in "Grande": in altezza non c'è spazio per di più
+        // (prima il tasto play usciva tagliato sopra e sotto)
+        float cf = Math.min(Ui.K, 1.15f) / Ui.K;
+        int prevSz = Math.round(64 * cf), playSz = Math.round(84 * cf);
+        ctr.addView(Ui.iconButton(c, t, R.drawable.ic_prev, t.text, t.chip, prevSz, Math.round(28 * cf), 32 * cf, L.s(R.string.previous), v -> media.skip(false)));
+        FrameLayout play = Ui.iconButton(c, t, R.drawable.ic_pause, t.panel, t.text, playSz, Math.round(36 * cf), 42 * cf, L.s(R.string.play_pause), v -> media.playPause());
         playIcon = (ImageView) play.getChildAt(0);
         int gap = dp(Ui.K > 1 ? 14 : 20);
-        ctr.addView(play, Ui.margins(Ui.lp(tp(84), tp(84)), gap, 0, gap, 0));
-        ctr.addView(Ui.iconButton(c, t, R.drawable.ic_next, t.text, t.chip, 64, 28, 32, L.s(R.string.next), v -> media.skip(true)));
+        ctr.addView(play, Ui.margins(Ui.lp(tp(playSz), tp(playSz)), gap, 0, gap, 0));
+        ctr.addView(Ui.iconButton(c, t, R.drawable.ic_next, t.text, t.chip, prevSz, Math.round(28 * cf), 32 * cf, L.s(R.string.next), v -> media.skip(true)));
         bandRow = Ui.row(c);
         bandRow.setBackground(Ui.round(t.chip, dp(18)));
         bandRow.setPadding(dp(6), dp(6), dp(6), dp(6));
@@ -1154,6 +1164,8 @@ public final class HomeView extends LinearLayout {
         hs.setHorizontalScrollBarEnabled(false);
         hs.setOverScrollMode(OVER_SCROLL_NEVER);
         favRow = Ui.row(c);
+        favRow.setGravity(Gravity.CENTER_VERTICAL);
+        favRow.setMinimumHeight(tp(FAV_H));   // 1.0.4: tessere (o l'invito senza preferiti) centrate sulla riga
         hs.addView(favRow);
         favScroll = hs;
         // 1.0.4 (punto E2): riga in basso alta FAV_H, sempre presente: a sinistra c'è Mappa/Media (sopra, in
@@ -1161,7 +1173,7 @@ public final class HomeView extends LinearLayout {
         FrameLayout bottom = new FrameLayout(c);
         bottom.addView(hs, new FrameLayout.LayoutParams(-1, -1));
         favBottom = bottom;
-        left.addView(bottom, Ui.margins(new LayoutParams(-1, dp(FAV_H)), 0, dp(10), 0, 0));
+        left.addView(bottom, Ui.margins(new LayoutParams(-1, tp(FAV_H)), 0, dp(10), 0, 0));
 
         // elenco delle stazioni trovate dalla radio (banda attuale)
         stationPanel = Ui.column(c);
@@ -1170,10 +1182,10 @@ public final class HomeView extends LinearLayout {
         LinearLayout sh = Ui.row(c);
         sh.setGravity(Gravity.CENTER_VERTICAL);
         sh.setPadding(dp(12), 0, dp(10), dp(6));
-        stationTitle = Ui.text(c, "", 14, t.sub, Ui.MEDIUM);
+        stationTitle = Ui.text(c, "", ts(15), t.sub, Ui.MEDIUM);
         stationTitle.setLetterSpacing(0.08f);
         sh.addView(stationTitle, Ui.lpWeight(0, -2, 1));
-        stationCount = Ui.text(c, "", 14, t.sub, Ui.REGULAR);
+        stationCount = Ui.text(c, "", ts(15), t.sub, Ui.REGULAR);
         sh.addView(stationCount);
         stationPanel.addView(sh, new LayoutParams(-1, -2));
         android.widget.ScrollView ss = new android.widget.ScrollView(c);
@@ -1183,6 +1195,11 @@ public final class HomeView extends LinearLayout {
         ss.addView(stationList, new FrameLayout.LayoutParams(-1, -2));
         stationScroll = ss;
         stationPanel.addView(ss, Ui.lpWeight(-1, 0, 1));
+        stationHead = sh;
+        // 1.0.4: solo righe intere (prima in "Molto grande" l'ultima era tagliata a metà)
+        stationPanel.addOnLayoutChangeListener((v, l, tp, r, b, ol, ot, or, ob) -> {
+            if (b - tp != ob - ot) fitStationRows();
+        });
         stationEmpty = Ui.column(c);
         stationEmpty.setGravity(Gravity.CENTER);
         stationEmpty.setPadding(dp(18), 0, dp(18), 0);
@@ -1197,7 +1214,8 @@ public final class HomeView extends LinearLayout {
         eb.setOnClickListener(v -> host.launch("com.saicmotor.hmi.radio", "com.saicmotor.hmi.radio.app.RadioHomeActivity"));
         stationEmpty.addView(eb, Ui.margins(new LayoutParams(-2, tp(52)), 0, dp(16), 0, 0));
         stationPanel.addView(stationEmpty, Ui.lpWeight(-1, 0, 1));
-        body.addView(stationPanel, Ui.margins(new LayoutParams(dp(346), -1), dp(18), 0, 0, 0));
+        // 1.0.4: la colonna cresce con la dimensione scelta (stesso fattore del testo), così il centro non resta vuoto
+        body.addView(stationPanel, Ui.margins(new LayoutParams(dp(STATION_W * Ui.K), -1), dp(18), 0, 0, 0));
         return col;
     }
 
@@ -1224,17 +1242,19 @@ public final class HomeView extends LinearLayout {
     /** Pulsanti delle sorgenti: si ricreano solo se cambia l'elenco, poi si aggiorna l'evidenziazione. */
     private void showSources(MediaClient.State m) {
         Context c = getContext();
-        // 1.0.4 (issue #28): solo le sorgenti scelte nelle impostazioni (CarPlay/Android Auto restano sempre)
+        // 1.0.4 (issue #28): solo le sorgenti scelte nelle impostazioni. CarPlay/Android Auto non stanno qui: hanno la
+        // loro icona originale nella barra in basso.
         java.util.List<Integer> shownSrc = new java.util.ArrayList<>();
-        for (int src : m.sources) if (prefs.sourceShown(src)) shownSrc.add(src);
-        if (shownSrc.isEmpty()) shownSrc.addAll(m.sources);
+        for (int src : m.sources) if (!isProjection(src) && prefs.sourceShown(src)) shownSrc.add(src);
+        if (shownSrc.isEmpty()) for (int src : m.sources) if (!isProjection(src)) shownSrc.add(src);
         StringBuilder sig = new StringBuilder();
         for (int src : shownSrc) sig.append(src).append(',');
         if (!sig.toString().equals(srcSignature)) {
             srcSignature = sig.toString();
             srcRow.removeAllViews();
-            // 1.0.2: si prova sempre con la scritta; fitSources() passa alle sole icone se non c'è spazio
+            // si parte sempre con scritte e spazi normali; fitSources() stringe gli spazi se non c'è posto
             srcCompact = false;
+            srcFit = 0;
             boolean compact = false;
             for (int i = 0; i < shownSrc.size(); i++) {
                 final int src = shownSrc.get(i);
@@ -1264,19 +1284,37 @@ public final class HomeView extends LinearLayout {
      * esempio con il pulsante in alto a destra su "nessuno"); altrimenti, come prima, solo icone tranne quella scelta.
      */
     private void fitSources() {
-        if (srcRow == null || topRightBox == null || srcRow.getWidth() == 0 || srcCompact) return;
+        if (srcRow == null || topRightBox == null || srcRow.getWidth() == 0 || srcFit >= 3) return;
         int[] a = new int[2], b = new int[2];
         srcRow.getLocationOnScreen(a);
         topRightBox.getLocationOnScreen(b);
         boolean overlap = topRightBox.getVisibility() == VISIBLE && a[0] + srcRow.getWidth() > b[0] - dp(12)
                 && mediaPanel.getVisibility() == VISIBLE;
         if (!overlap) return;
-        srcCompact = true;
-        for (int i = 0; i < srcRow.getChildCount(); i++) {
-            TextView v = (TextView) srcRow.getChildAt(i);
-            v.setPadding(tp(16), 0, tp(18), 0);
-        }
+        // 1.0.4: le scritte restano; prima si stringono margini e spazi tra i pulsanti (due passi), solo icone se
+        // proprio non basta (con 4 sorgenti e "Molto grande" non succede)
+        srcFit++;
+        srcCompact = srcFit >= 3;
+        if (srcCompact) com.mg4.launcher.svc.Diag.put("home.sorgenti", "solo icone: spazio insufficiente anche con gli spazi stretti");
+        applySrcFit();
         styleSources(SystemClock.uptimeMillis() < pendingSourceUntil ? pendingSource : media.last().source);
+    }
+
+    private static boolean isProjection(int src) {
+        return src == MediaClient.SRC_CARPLAY || src == MediaClient.SRC_AAUTO;
+    }
+
+    /** Margini interni e spazi tra i pulsanti delle sorgenti secondo srcFit. */
+    private void applySrcFit() {
+        int pl = srcFit == 0 ? 20 : srcFit == 1 ? 14 : 10, pr = srcFit == 0 ? 24 : srcFit == 1 ? 16 : 12;
+        int gap = srcFit == 0 ? 8 : srcFit == 1 ? 5 : 3;
+        for (int i = 0; i < srcRow.getChildCount(); i++) {
+            View v = srcRow.getChildAt(i);
+            v.setPadding(tp(pl), 0, tp(pr), 0);
+            LayoutParams lp = (LayoutParams) v.getLayoutParams();
+            lp.leftMargin = i == 0 ? 0 : dp(gap);
+            v.setLayoutParams(lp);
+        }
     }
 
     /** Allinea FM/DAB al bordo sinistro del pulsante Radio. */
@@ -1308,7 +1346,7 @@ public final class HomeView extends LinearLayout {
             b.setTextColor(on ? t.panel : t.text);
             boolean compact = srcCompact;
             b.setText(compact && !on ? "" : sourceLabel(src));
-            b.setCompoundDrawablePadding(compact && !on ? 0 : dp(11));
+            b.setCompoundDrawablePadding(compact && !on ? 0 : dp(srcFit == 0 ? 11 : 7));
             android.graphics.drawable.Drawable d = getContext().getDrawable(sourceIcon(src)).mutate();
             d.setTint(on ? t.panel : t.text);
             d.setBounds(0, 0, tp(25), tp(25));
@@ -1346,25 +1384,26 @@ public final class HomeView extends LinearLayout {
             iv.setPadding(dp(8), dp(8), dp(8), dp(8));
             box.addView(iv, new FrameLayout.LayoutParams(-1, -1));
         } else {
-            TextView ini = Ui.text(c, initials(st), 18, t.text, Ui.MEDIUM);
+            TextView ini = Ui.text(c, initials(st), ts(18), t.text, Ui.MEDIUM);
             ini.setGravity(Gravity.CENTER);
             box.addView(ini, new FrameLayout.LayoutParams(-1, -1));
         }
-        TextView band = Ui.text(c, st.band == MediaClient.BAND_DAB ? "DAB" : "FM", 10, t.sub, Ui.MEDIUM);
+        TextView band = Ui.text(c, st.band == MediaClient.BAND_DAB ? "DAB" : "FM", ts(10), t.sub, Ui.MEDIUM);
         band.setPadding(dp(5), dp(1), dp(5), dp(1));
         band.setBackground(Ui.round(t.panel, dp(6)));
         FrameLayout.LayoutParams blp = new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.END);
         blp.setMargins(0, 0, dp(5), dp(5));
         box.addView(band, blp);
-        tile.addView(box, new LayoutParams(dp(72), dp(72)));
+        // 1.0.4: le tessere crescono con la dimensione scelta, come il resto (prima restavano fisse)
+        tile.addView(box, new LayoutParams(tp(60), tp(60)));
         // sempre nome + frequenza (o DAB+), anche con il logo
-        TextView name = Ui.oneLine(Ui.text(c, st.label(), 14, current ? t.text : t.sub, Ui.MEDIUM));
+        TextView name = Ui.oneLine(Ui.text(c, st.label(), ts(14), current ? t.text : t.sub, Ui.MEDIUM));
         name.setGravity(Gravity.CENTER);
-        tile.addView(name, Ui.margins(new LayoutParams(dp(96), -2), 0, dp(4), 0, 0));
+        tile.addView(name, Ui.margins(new LayoutParams(tp(92), -2), 0, dp(4), 0, 0));
         String freq = st.band == MediaClient.BAND_DAB ? "DAB+" : String.format(L.locale(), "%.1f MHz", st.khz / 1000f);
-        TextView fq = Ui.oneLine(Ui.text(c, freq, 12, t.sub, Ui.REGULAR));
+        TextView fq = Ui.oneLine(Ui.text(c, freq, ts(12), t.sub, Ui.REGULAR));
         fq.setGravity(Gravity.CENTER);
-        tile.addView(fq, new LayoutParams(dp(96), -2));
+        tile.addView(fq, new LayoutParams(tp(92), -2));
         tile.setPadding(dp(4), dp(4), dp(4), dp(4));
         return tile;
     }
@@ -1400,15 +1439,29 @@ public final class HomeView extends LinearLayout {
             ini.setGravity(Gravity.CENTER);
             box.addView(ini, new FrameLayout.LayoutParams(-1, -1));
         }
-        row.addView(box, new LayoutParams(tp(44), tp(44)));
+        row.addView(box, new LayoutParams(tp(48), tp(48)));
         LinearLayout tx = Ui.column(c);
         String sub = st.band == MediaClient.BAND_DAB ? "DAB+" : String.format(L.locale(), "FM %.1f MHz", st.khz / 1000f);
         // sempre logo (o iniziali) + nome + frequenza o DAB+
-        tx.addView(Ui.oneLine(Ui.text(c, st.label(), ts(18), t.text, current ? Ui.MEDIUM : Ui.REGULAR)));
-        tx.addView(Ui.oneLine(Ui.text(c, sub, ts(14), t.sub, Ui.REGULAR)));
+        tx.addView(Ui.oneLine(Ui.text(c, st.label(), ts(20), t.text, current ? Ui.MEDIUM : Ui.REGULAR)));
+        tx.addView(Ui.oneLine(Ui.text(c, sub, ts(15.5f), t.sub, Ui.REGULAR)));
         row.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(12), 0, 0, 0));
-        if (current) row.addView(Ui.icon(c, R.drawable.ic_wave, t.text, 20), new LayoutParams(dp(20), dp(20)));
+        if (current) row.addView(Ui.icon(c, R.drawable.ic_wave, t.text, 20), new LayoutParams(tp(22), tp(22)));
         return row;
+    }
+
+    /** Altezza dell'elenco stazioni = numero intero di righe (lo spazio che avanza resta vuoto in fondo al riquadro). */
+    private void fitStationRows() {
+        if (stationScroll == null || stationHead == null) return;
+        int inner = stationPanel.getHeight() - stationPanel.getPaddingTop() - stationPanel.getPaddingBottom() - stationHead.getHeight();
+        int row = tp(STATION_ROW) + dp(2);
+        if (inner <= 0 || row <= 0) return;
+        int want = Math.max(1, inner / row) * row;
+        LayoutParams lp = (LayoutParams) stationScroll.getLayoutParams();
+        if (lp.height == want && lp.weight == 0) return;
+        lp.height = want;
+        lp.weight = 0;
+        stationScroll.setLayoutParams(lp);
     }
 
     private void showStations(MediaClient.State m) {
@@ -1431,7 +1484,7 @@ public final class HomeView extends LinearLayout {
             MediaClient.Station st = m.stations.get(i);
             boolean cur = st.key.equals(m.stationKey);
             if (cur) currentIndex = i;
-            stationList.addView(stationRow(c, st, cur), Ui.margins(new LayoutParams(-1, tp(62)), 0, 0, 0, dp(2)));
+            stationList.addView(stationRow(c, st, cur), Ui.margins(new LayoutParams(-1, tp(STATION_ROW)), 0, 0, 0, dp(2)));
         }
         // porta in vista la stazione in onda
         if (currentIndex >= 0) {
@@ -1453,6 +1506,22 @@ public final class HomeView extends LinearLayout {
         if (sig.toString().equals(favSignature)) return;
         favSignature = sig.toString();
         favRow.removeAllViews();
+        if (m.favorites.isEmpty()) {
+            // 1.0.4: senza preferiti la riga resta, con un invito che apre l'app Radio
+            TextView hint = Ui.text(getContext(), L.s(R.string.fav_empty), ts(16), t.sub, Ui.REGULAR);
+            hint.setGravity(Gravity.CENTER_VERTICAL);
+            hint.setSingleLine(false);
+            hint.setMaxLines(2);
+            hint.setMaxWidth(tp(360));   // nella riga che scorre il testo va a capo invece di uscire dal riquadro
+            hint.setPadding(tp(20), 0, tp(20), 0);
+            hint.setBackground(Ui.pressable(getContext(), t.chip, 16, t));
+            hint.setClickable(true);
+            hint.setOnClickListener(v -> host.launch("com.saicmotor.hmi.radio", "com.saicmotor.hmi.radio.app.RadioHomeActivity"));
+            LinearLayout.LayoutParams hl = new LayoutParams(-2, -2);
+            hint.setMinHeight(tp(56));
+            hl.gravity = Gravity.CENTER_VERTICAL;
+            favRow.addView(hint, hl);
+        }
         for (MediaClient.Station st : m.favorites) {
             favRow.addView(stationTile(getContext(), st, st.key.equals(m.stationKey)), Ui.margins(new LayoutParams(-2, -2), 0, 0, dp(8), 0));
         }
@@ -1495,6 +1564,9 @@ public final class HomeView extends LinearLayout {
         showSources(m);
         mTitle.setText(m.title);
         mSub.setText(m.subtitle);
+        // 1.0.4: riga vuota, o radio con comandi grandi (la banda è già nel riquadro della frequenza) = niente spazio
+        // rubato ai comandi (prima in "Molto grande" il tasto play risultava tagliato)
+        mSub.setVisibility(m.subtitle.isEmpty() || (m.source == MediaClient.SRC_RADIO && (big || Ui.K > 1.05f)) ? GONE : VISIBLE);
         boolean logo = radio && m.logo != null;
         artLogo.setVisibility(logo ? VISIBLE : GONE);
         if (logo) artLogo.setImageBitmap(m.logo);
@@ -1529,7 +1601,7 @@ public final class HomeView extends LinearLayout {
         mMeta.setVisibility(radio && (big || Ui.K > 1.05f) ? GONE : VISIBLE);
         stationPanel.setVisibility(radio ? VISIBLE : GONE);
         if (radio) showStations(m);
-        favScroll.setVisibility(radio && !m.favorites.isEmpty() ? VISIBLE : GONE);
+        favScroll.setVisibility(radio ? VISIBLE : GONE);
         boolean hasProgress = !radio && m.durationMs > 0;
         progressRow.setVisibility(hasProgress ? VISIBLE : GONE);
         if (hasProgress) {
@@ -1848,13 +1920,15 @@ public final class HomeView extends LinearLayout {
         FrameLayout artBox = new FrameLayout(c);
         artBox.setBackground(Ui.round(t.chip, big ? dp(16) : tp(12)));
         artBox.addView(miniArt, new FrameLayout.LayoutParams(bs(26, 40), bs(26, 40), Gravity.CENTER));
-        mini.addView(artBox, new LayoutParams(bs(48, 76), bs(48, 76)));
+        // 1.0.4: in "Molto grande" il riquadro dell'icona lascia il posto al testo (prima "93.8…" troncato)
+        boolean tightMini = !big && Ui.K >= 1.25f;
+        if (!tightMini) mini.addView(artBox, new LayoutParams(bs(48, 76), bs(48, 76)));
         LinearLayout mt = Ui.column(c);
         miniTitle = Ui.oneLine(Ui.text(c, "", bt(17, 22), t.text, Ui.MEDIUM));
         miniSub = Ui.oneLine(Ui.text(c, "", bt(14, 18), t.sub, Ui.REGULAR));
         mt.addView(miniTitle);
         mt.addView(miniSub, Ui.margins(new LayoutParams(-2, -2), 0, dp(2), 0, 0));
-        mini.addView(mt, Ui.margins(Ui.lpWeight(0, -2, 1), dp(12), 0, dp(4), 0));
+        mini.addView(mt, Ui.margins(Ui.lpWeight(0, -2, 1), dp(tightMini ? 4 : 12), 0, dp(4), 0));
         mini.setClickable(true);
         mini.setOnClickListener(v -> selectTab(TAB_MEDIA, true));
         FrameLayout mp = Ui.iconButton(c, t, R.drawable.ic_pause, t.text, 0, big ? 76 : 52, big ? 36 : 26, 26, L.s(R.string.play_pause), v -> media.playPause());

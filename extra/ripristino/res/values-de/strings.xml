@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MG4 Ripristino Home</string>
+    <string name="ok">Original-Startbildschirm wiederhergestellt</string>
+    <string name="fail">Der Original-Startbildschirm konnte nicht wiederhergestellt werden</string>
+    <string name="launcher_present">MG4 Launcher ist noch installiert: Zum Entfernen im Launcher Einstellungen → Deinstallieren verwenden.</string>
+    <string name="open_home">Original-Startbildschirm öffnen</string>
+    <string name="uninstall">Diese App deinstallieren</string>
+    <string name="working">Original-Startbildschirm wird wiederhergestellt…</string>
+</resources>

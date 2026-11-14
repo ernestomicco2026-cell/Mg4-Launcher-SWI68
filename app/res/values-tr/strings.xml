@@ -507,4 +507,6 @@
     <string name="news_v104_2" formatted="false">Yeni ana ekran: Harita/Medya altta, FM/DAB Radyo altında, daha büyük kaynak düğmeleri</string>
     <string name="news_v104_3" formatted="false">Kablo takılınca şarj animasyonu ve başlatıcıda MG4 Store</string>
     <string name="news_v104_4" formatted="false">Seçilebilir ses kaynakları ve navigasyon uygulaması; farlar araçtan okunuyor; açılışta daha güvenilir radyo</string>
+    <string name="fav_empty" formatted="false">Favori yok: Radyo uygulamasından ekleyin</string>
+    <string name="news_v104_5" formatted="false">Daha güvenli kaldırma: başlatıcı Uygulamalar menüsünden kaldırılsa bile orijinal MG ana ekranı her zaman geri gelir</string>
 </resources>

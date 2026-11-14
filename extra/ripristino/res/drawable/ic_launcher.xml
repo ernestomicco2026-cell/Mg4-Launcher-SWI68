@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icona: casa (home ripristinata), colori della palette MG4 (notte: panel 15171B, testo F2F3F5, batteria 34C77B) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#FF15171B" android:pathData="M24,4h60a20,20 0,0 1,20 20v60a20,20 0,0 1,-20 20h-60a20,20 0,0 1,-20 -20v-60a20,20 0,0 1,20 -20z"/>
+    <path android:fillColor="#FFF2F3F5" android:pathData="M54,24L24,50h8v32h18v-20h8v20h18v-32h8z"/>
+    <path android:fillColor="#FF34C77B" android:pathData="M66,70m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0"/>
+    <path android:strokeColor="#FF15171B" android:strokeWidth="3.5" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M60.5,70.5l4,4l7.5,-8"/>
+</vector>

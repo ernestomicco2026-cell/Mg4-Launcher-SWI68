@@ -470,7 +470,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     private static int[] newsFor(String ver) {
         switch (ver) {
             case "1.0.4":
-                return new int[]{R.string.news_v104_1, R.string.news_v104_2, R.string.news_v104_3, R.string.news_v104_4};
+                return new int[]{R.string.news_v104_1, R.string.news_v104_2, R.string.news_v104_3, R.string.news_v104_4, R.string.news_v104_5};
             case "1.0.3":
                 return new int[]{R.string.news_v103_1, R.string.news_v103_2, R.string.news_v103_3, R.string.news_v103_4, R.string.news_v103_5};
             case "1.0.2":

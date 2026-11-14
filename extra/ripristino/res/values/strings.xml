@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MG4 Ripristino Home</string>
+    <string name="ok">Original home restored</string>
+    <string name="fail">The original home could not be restored</string>
+    <string name="launcher_present">MG4 Launcher is still installed: to remove it, use Settings → Uninstall in the launcher.</string>
+    <string name="open_home">Open the original home</string>
+    <string name="uninstall">Uninstall this app</string>
+    <string name="working">Restoring the original home…</string>
+</resources>

@@ -22,6 +22,10 @@ import java.util.List;
  */
 public final class HomeLock {
     public static final String K_ON = "avvioSicuro";
+    /** 1.0.4 (issue #29): disinstallazione in corso (istante di inizio). Finché vale, la home MG non si spegne mai. */
+    private static final String K_UNINSTALL = "disinstallazioneInCorso";
+    /** Dopo 10 minuti senza esito (es. conferma di sistema lasciata a metà) il segno scade da solo. */
+    private static final long UNINSTALL_MAX_MS = 10 * 60_000L;
 
     private HomeLock() {}
 
@@ -37,6 +41,28 @@ public final class HomeLock {
     public static void setOption(Context c, boolean on) {
         sp(c).edit().putBoolean(K_ON, on).apply();
         new Thread(() -> apply(c, on ? "opzione accesa" : "opzione spenta"), "mg4-homelock").start();
+    }
+
+    /** Disinstallazione in corso? Con il segno attivo la home MG resta accesa e la nostra non si riconferma. */
+    public static boolean uninstalling(Context c) {
+        SharedPreferences s = sp(c);
+        long at = s.getLong(K_UNINSTALL, 0);
+        if (at <= 0) return false;
+        long age = System.currentTimeMillis() - at;
+        if (age >= 0 && age < UNINSTALL_MAX_MS) return true;
+        s.edit().remove(K_UNINSTALL).apply();
+        Diag.put("disinstalla", "segno scaduto dopo 10 minuti senza esito: launcher di nuovo normale");
+        return false;
+    }
+
+    /** Segno "disinstallazione in corso", scritto subito su disco (commit) prima di toccare la home. */
+    public static void beginUninstall(Context c) {
+        sp(c).edit().putLong(K_UNINSTALL, System.currentTimeMillis()).commit();
+    }
+
+    /** Toglie il segno (disinstallazione annullata o non riuscita). */
+    public static void endUninstall(Context c) {
+        sp(c).edit().remove(K_UNINSTALL).commit();
     }
 
     /** Schermata principale MG disattivata in questo momento? */
@@ -55,6 +81,11 @@ public final class HomeLock {
      */
     public static synchronized void apply(Context c, String why) {
         Context app = c.getApplicationContext();
+        if (uninstalling(app)) {   // issue #29: mai spegnere la home MG mentre si disinstalla (conferma a schermo)
+            release(app, "disinstallazione in corso · " + why);
+            Diag.put("home.avvioSicuro", "non attivato: disinstallazione in corso (" + why + ")");
+            return;
+        }
         boolean want = HomeMode.active(app) && option(app) && !CrashGuard.tripped(app);
         if (want) lock(app, why);
         else release(app, why);
@@ -62,6 +93,7 @@ public final class HomeLock {
     }
 
     private static void lock(Context c, String why) {
+        if (uninstalling(c)) return;
         if (mgDisabled(c)) {
             Diag.put("home.avvioSicuro", "attivo (home MG disattivata)");
             return;

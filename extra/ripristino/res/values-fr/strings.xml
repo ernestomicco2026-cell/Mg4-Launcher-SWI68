@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MG4 Ripristino Home</string>
+    <string name="ok">Écran d\'accueil d\'origine restauré</string>
+    <string name="fail">Impossible de restaurer l\'écran d\'accueil d\'origine</string>
+    <string name="launcher_present">MG4 Launcher est toujours installé : pour le supprimer, utilisez Réglages → Désinstaller dans le launcher.</string>
+    <string name="open_home">Ouvrir l\'écran d\'accueil d\'origine</string>
+    <string name="uninstall">Désinstaller cette app</string>
+    <string name="working">Restauration de l\'écran d\'accueil d\'origine…</string>
+</resources>
