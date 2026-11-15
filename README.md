@@ -274,6 +274,11 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 
 ### Versioni
 
+#### 1.0.4.8
+- **Icone di navigazione complete**: gestiti i 40 codici (0–39) verificati nell'APK MG originale, con nuove icone vettoriali per manovre, rotonde, traghetto, pedaggio e tappe.
+- **Codice 0 invariato**: freccia dritto/continua, anche quando il testo annuncia una manovra lontana. I codici sconosciuti mantengono la segnalazione manuale.
+- **Testi originali riconosciuti**: le segnalazioni usano solo categorie fisse, senza nomi di strade o destinazioni.
+
 #### 1.0.4
 - **Tema giorno/notte di tutto il sistema**: ora lo decide il launcher (scelta manuale, fari, alba/tramonto) e lo
   scrive nel sistema: Clima, MG4 Control, app MG e tendina seguono da sole. Prima, senza il launcher originale, il
@@ -889,6 +894,11 @@ Even just **€2** is a great help to keep developing and testing new versions i
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Changelog
+
+#### 1.0.4.8
+- **Complete navigation icon coverage**: handle all 40 codes (0–39) verified in the original MG APK, with new vector icons for maneuvers, roundabouts, ferries, toll booths and waypoints.
+- **Code 0 preserved**: straight/continue arrow, including when the text describes a distant maneuver. Unknown codes retain manual reporting.
+- **Native instruction text recognized**: reports use fixed categories without road names or destinations.
 
 #### 1.0.4
 - **System-wide day/night theme**: the launcher now decides it (manual choice, headlights, sunrise/sunset) and writes

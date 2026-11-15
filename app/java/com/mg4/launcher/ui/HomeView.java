@@ -1038,7 +1038,9 @@ public final class HomeView extends LinearLayout {
             missingIconSending = true;
             missingIconButton.setEnabled(false);
             missingIconStatus.setText("Sending missing icon " + n.turnIcon + "...");
-            com.mg4.launcher.svc.LogUploader.reportMissingIcon(n.turnIcon, n.turnMeters, n.turnText, n.road, message -> {
+            // EN: Report a fixed instruction category, without road names or free navigation text.
+            // IT: Segnala una categoria fissa, senza nomi delle strade o testo libero di navigazione.
+            com.mg4.launcher.svc.LogUploader.reportMissingIcon(n.turnIcon, n.turnMeters, n.turnText, message -> {
                 missingIconSending = false;
                 missingIconButton.setEnabled(true);
                 missingIconStatus.setText(message);

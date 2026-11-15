@@ -1,78 +1,249 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="540" viewBox="0 0 1000 540">
-<rect width="1000" height="540" fill="#17212b"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1620" viewBox="0 0 1000 1620">
+<rect width="1000" height="1620" fill="#17212b"/>
 <g transform="translate(64 18) scale(3)">
 <path d="M12 21V3M7 8l5-5 5 5" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
 <text x="100" y="116" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 0</text>
 <text x="100" y="142" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Straight ahead</text>
 <g transform="translate(264 18) scale(3)">
 <path d="M17 21V11a3 3 0 0 0-3-3H4M8 4L4 8l4 4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
 <text x="300" y="116" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 1</text>
 <text x="300" y="142" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Turn left</text>
 <g transform="translate(464 18) scale(3)">
 <path d="M7 21V11a3 3 0 0 1 3-3h10M16 4l4 4-4 4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
 <text x="500" y="116" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 2</text>
 <text x="500" y="142" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Turn right</text>
 <g transform="translate(664 18) scale(3)">
 <path d="M16 21v-7a4 4 0 0 0-1.2-2.8L6 3M6 9V3h6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
 <text x="700" y="116" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 3</text>
 <text x="700" y="142" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Direction to left</text>
 <g transform="translate(864 18) scale(3)">
-<path d="M18 21V8a6 6 0 0 0-12 0v10M2 14l4 4 4-4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 21v-7a4 4 0 0 1 1.2-2.8L18 3M12 3h6v6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="900" y="116" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 5</text>
-<text x="900" y="142" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">U-turn</text>
+<text x="900" y="116" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 4</text>
+<text x="900" y="142" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Direction Right</text>
 <g transform="translate(64 198) scale(3)">
-<path d="M12 22v-5a5 5 0 0 0 0-10V2M8 6l4-4 4 4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M18 21V8a6 6 0 0 0-12 0v10M2 14l4 4 4-4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="100" y="296" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 9</text>
-<text x="100" y="322" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: straight</text>
+<text x="100" y="296" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 5</text>
+<text x="100" y="322" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">U-turn</text>
 <g transform="translate(264 198) scale(3)">
-<path d="M12 22v-5a5 5 0 1 0-5-5H2M6 8l-4 4 4 4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6 21V8a6 6 0 0 1 12 0v10M14 14l4 4 4-4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="300" y="296" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 10</text>
-<text x="300" y="322" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: 9 o&#x27;clock</text>
+<text x="300" y="296" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 6</text>
+<text x="300" y="322" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Right U-turn</text>
 <g transform="translate(464 198) scale(3)">
-<path d="M12 22v-5a5 5 0 0 0 5-5h5M18 8l4 4-4 4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7 22V7a3 3 0 0 1 5-2l8 13M14 18h6v-6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="500" y="296" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 11</text>
-<text x="500" y="322" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: 3 o&#x27;clock</text>
+<text x="500" y="296" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 7</text>
+<text x="500" y="322" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Sharp right (4 o&#x27;clock)</text>
 <g transform="translate(664 198) scale(3)">
-<path d="M13 22v-5a5 5 0 1 0-5-5v9M4 17l4 4 4-4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 22V7a3 3 0 0 0-5-2L4 18M4 12v6h6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="700" y="296" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 12</text>
-<text x="700" y="322" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: U-turn</text>
+<text x="700" y="296" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 8</text>
+<text x="700" y="322" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Sharp left (8 o&#x27;clock)</text>
 <g transform="translate(864 198) scale(3)">
-<path d="M12 22v-5a5 5 0 0 0 3.54-8.54L21 3M15 3h6v6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 22v-5a5 5 0 0 0 0-10V2M8 6l4-4 4 4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="900" y="296" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 13</text>
-<text x="900" y="322" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: 1 o&#x27;clock</text>
+<text x="900" y="296" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 9</text>
+<text x="900" y="322" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: straight</text>
 <g transform="translate(64 378) scale(3)">
-<path d="M12 21v-9l-7-7M5 11V5h6M12 15l7-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 22v-5a5 5 0 1 0-5-5H2M6 8l-4 4 4 4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="100" y="476" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 17</text>
-<text x="100" y="502" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Keep left</text>
+<text x="100" y="476" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 10</text>
+<text x="100" y="502" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: 9 o&#x27;clock</text>
 <g transform="translate(264 378) scale(3)">
-<path d="M12 21v-9l7-7M13 5h6v6M12 15L5 8" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 22v-5a5 5 0 0 0 5-5h5M18 8l4 4-4 4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="300" y="476" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 18</text>
-<text x="300" y="502" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Keep right</text>
+<text x="300" y="476" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 11</text>
+<text x="300" y="502" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: 3 o&#x27;clock</text>
 <g transform="translate(464 378) scale(3)">
-<path d="M6 22V3h13l-3 4 3 4H6M10 3v8M14 3v8M6 7h11" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13 22v-5a5 5 0 1 0-5-5v9M4 17l4 4 4-4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="500" y="476" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 21</text>
-<text x="500" y="502" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Destination</text>
+<text x="500" y="476" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 12</text>
+<text x="500" y="502" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: U-turn</text>
 <g transform="translate(664 378) scale(3)">
-<path d="M7 21V3M7 16l13-13M14 3h6v6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 22v-5a5 5 0 0 0 3.54-8.54L21 3M15 3h6v6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="700" y="476" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 37</text>
-<text x="700" y="502" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Exit right</text>
+<text x="700" y="476" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 13</text>
+<text x="700" y="502" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: 1 o&#x27;clock</text>
 <g transform="translate(864 378) scale(3)">
-<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20M9 8a3 3 0 1 1 4 2.83c-1 .35-1 1.17-1 2.17M12 17h0.01" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 22v-5a5 5 0 1 1 4-2l5 5M16 20h5v-5" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
 </g>
-<text x="900" y="476" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code ?</text>
-<text x="900" y="502" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Unknown code</text>
+<text x="900" y="476" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 14</text>
+<text x="900" y="502" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: 4 o&#x27;clock</text>
+<g transform="translate(64 558) scale(3)">
+<path d="M12 22v-5a5 5 0 1 0-4-2l-5 5M3 15v5h5" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="100" y="656" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 15</text>
+<text x="100" y="682" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: 8 o&#x27;clock</text>
+<g transform="translate(264 558) scale(3)">
+<path d="M12 22v-5a5 5 0 0 1-3.54-8.54L3 3M3 9V3h6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="300" y="656" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 16</text>
+<text x="300" y="682" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Roundabout: 11 o&#x27;clock</text>
+<g transform="translate(464 558) scale(3)">
+<path d="M12 21v-9l-7-7M5 11V5h6M12 15l7-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="500" y="656" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 17</text>
+<text x="500" y="682" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Keep left</text>
+<g transform="translate(664 558) scale(3)">
+<path d="M12 21v-9l7-7M13 5h6v6M12 15L5 8" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="700" y="656" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 18</text>
+<text x="700" y="682" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Keep right</text>
+<g transform="translate(864 558) scale(3)">
+<path d="M4 17l3 4h10l3-4-8-3-8 3M7 15V8h10v7M10 8V4h4v4M3 22l3-1 3 1 3-1 3 1 3-1 3 1" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="900" y="656" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 19</text>
+<text x="900" y="682" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Ferry</text>
+<g transform="translate(64 738) scale(3)">
+<path d="M7 22V4M3 8l4-4 4 4M15 22V3h7l-2 3 2 3h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="100" y="836" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 20</text>
+<text x="100" y="862" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Destination ahead</text>
+<g transform="translate(264 738) scale(3)">
+<path d="M6 22V3h13l-3 4 3 4H6M10 3v8M14 3v8M6 7h11" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="300" y="836" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 21</text>
+<text x="300" y="862" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Destination</text>
+<g transform="translate(464 738) scale(3)">
+<path d="M3 22v-7h11M10 11l4 4-4 4M18 22V3h4l-2 3 2 3h-4" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="500" y="836" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 22</text>
+<text x="500" y="862" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Destination on right</text>
+<g transform="translate(664 738) scale(3)">
+<path d="M9 22V12M5 16l4-4 4 4M15 12V2h7v8h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 5l2-1v4" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="700" y="836" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 23</text>
+<text x="700" y="862" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Waypoint 1: ahead</text>
+<g transform="translate(864 738) scale(3)">
+<path d="M12 22v-7H2M6 11l-4 4 4 4M15 12V2h7v8h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 5l2-1v4" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="900" y="836" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 24</text>
+<text x="900" y="862" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Waypoint 1: left</text>
+<g transform="translate(64 918) scale(3)">
+<path d="M3 22v-7h11M10 11l4 4-4 4M15 12V2h7v8h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 5l2-1v4" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="100" y="1016" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 25</text>
+<text x="100" y="1042" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Waypoint 1: right</text>
+<g transform="translate(264 918) scale(3)">
+<path d="M9 22V12M5 16l4-4 4 4M15 12V2h7v8h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 4h3v2h-3v2h3" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="300" y="1016" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 26</text>
+<text x="300" y="1042" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Waypoint 2: ahead</text>
+<g transform="translate(464 918) scale(3)">
+<path d="M12 22v-7H2M6 11l-4 4 4 4M15 12V2h7v8h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 4h3v2h-3v2h3" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="500" y="1016" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 27</text>
+<text x="500" y="1042" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Waypoint 2: left</text>
+<g transform="translate(664 918) scale(3)">
+<path d="M3 22v-7h11M10 11l4 4-4 4M15 12V2h7v8h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 4h3v2h-3v2h3" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="700" y="1016" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 28</text>
+<text x="700" y="1042" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Waypoint 2: right</text>
+<g transform="translate(864 918) scale(3)">
+<path d="M9 22V12M5 16l4-4 4 4M15 12V2h7v8h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 4h3v4h-3M18 6h2" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="900" y="1016" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 29</text>
+<text x="900" y="1042" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Waypoint 3: ahead</text>
+<g transform="translate(64 1098) scale(3)">
+<path d="M12 22v-7H2M6 11l-4 4 4 4M15 12V2h7v8h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 4h3v4h-3M18 6h2" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="100" y="1196" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 30</text>
+<text x="100" y="1222" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Waypoint 3: left</text>
+<g transform="translate(264 1098) scale(3)">
+<path d="M3 22v-7h11M10 11l4 4-4 4M15 12V2h7v8h-7" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 4h3v4h-3M18 6h2" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="300" y="1196" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 31</text>
+<text x="300" y="1222" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Waypoint 3: right</text>
+<g transform="translate(464 1098) scale(3)">
+<path d="M17 22V3M13 7l4-4 4 4M3 20l7-5q7-5 7-12" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="500" y="1196" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 32</text>
+<text x="500" y="1222" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Enter right</text>
+<g transform="translate(664 1098) scale(3)">
+<path d="M17 22V3M13 7l4-4 4 4M3 20l7-5q7-5 7-12" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="700" y="1196" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 33</text>
+<text x="700" y="1222" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Merge left</text>
+<g transform="translate(864 1098) scale(3)">
+<path d="M7 22V3M3 7l4-4 4 4M21 20l-7-5Q7 10 7 3" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="900" y="1196" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 34</text>
+<text x="900" y="1222" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Enter left</text>
+<g transform="translate(64 1278) scale(3)">
+<path d="M7 22V3M3 7l4-4 4 4M21 20l-7-5Q7 10 7 3" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="100" y="1376" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 35</text>
+<text x="100" y="1402" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Merge right</text>
+<g transform="translate(264 1278) scale(3)">
+<path d="M17 21V3M17 16L4 3M4 9V3h6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="300" y="1376" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 36</text>
+<text x="300" y="1402" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Exit left</text>
+<g transform="translate(464 1278) scale(3)">
+<path d="M7 21V3M7 16l13-13M14 3h6v6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="500" y="1376" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 37</text>
+<text x="500" y="1402" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Exit right</text>
+<g transform="translate(664 1278) scale(3)">
+<path d="M3 9h18M5 9v13M19 9v13M8 9V3h8v6M9 21v-8h6v8" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="700" y="1376" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 38</text>
+<text x="700" y="1402" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Pass toll booth</text>
+<g transform="translate(864 1278) scale(3)">
+<path d="M12 22v-7L5 9V4h16M17 1l4 3-4 3" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="900" y="1376" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code 39</text>
+<text x="900" y="1402" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Hook turn right</text>
+<g transform="translate(64 1458) scale(3)">
+<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20M9 8a3 3 0 1 1 4 2.83c-1 .35-1 1.17-1 2.17M12 17h0.01" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+</g>
+<text x="100" y="1556" text-anchor="middle" fill="#a9c8e5" font-family="sans-serif" font-size="16">Code ?</text>
+<text x="100" y="1582" text-anchor="middle" fill="white" font-family="sans-serif" font-size="13">Unknown code</text>
 </svg>

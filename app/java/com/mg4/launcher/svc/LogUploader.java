@@ -51,7 +51,10 @@ public final class LogUploader {
         instance = this;
     }
 
-    /** Custom builds may bundle the same log destination used for every report. */
+    /**
+     * EN: Read an optional bundled repository override so custom builds send reports to their configured destination.
+     * IT: Leggi un repository alternativo incluso, affinche le build personalizzate usino la destinazione configurata.
+     */
     private static String configuredRepository(Context context) {
         try (InputStream in = context.getAssets().open("log-repo.txt")) {
             String repo = new String(readAll(in), "UTF-8").trim();
@@ -93,6 +96,15 @@ public final class LogUploader {
         if (bg != null) return;
         thread.start();
         bg = new Handler(thread.getLooper());
+        bg.post(() -> {
+            // EN: Remove the old queue once, because earlier logs may contain location-related text.
+            // IT: Elimina una volta la vecchia coda, perche i log precedenti possono contenere testo sulla posizione.
+            if (!sp.getBoolean("log_location_privacy_v2", false)) {
+                File[] legacy = queueDir().listFiles();
+                if (legacy != null) for (File f : legacy) f.delete();
+                sp.edit().putBoolean("log_location_privacy_v2", true).commit();
+            }
+        });
         if (!configured()) {
             status = "non configurato";
             Diag.put("log.invio", "non configurato in questa versione");
@@ -114,8 +126,11 @@ public final class LogUploader {
 
     public interface ReportListener { void complete(String message); }
 
-    /** Freeze maneuver fields at the tap, independently of subsequent navigation updates. */
-    public static void reportMissingIcon(int code, int meters, String text, String road,
+    /**
+     * EN: Capture the maneuver at the tap, save its sanitized report locally, then attempt upload with retry support.
+     * IT: Acquisisci la manovra al tocco, salva localmente il rapporto filtrato, poi tenta l'invio con nuovi tentativi.
+     */
+    public static void reportMissingIcon(int code, int meters, String text,
                                          ReportListener listener) {
         LogUploader u = instance;
         if (u == null || u.bg == null || !configured()) {
@@ -123,10 +138,7 @@ public final class LogUploader {
             return;
         }
         final Date captured = new Date();
-        final String report = "===== MISSING NAVIGATION ICON =====\n"
-                + "Captured: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z", Locale.ROOT).format(captured)
-                + "\nSource: MG\nIcon code: " + code + "\nDistance meters: " + meters
-                + "\nNavigation text: " + text + "\nRoad: " + road + "\n\n";
+        final String report = ManeuverReport.body(code, meters, text);
         u.bg.post(() -> {
             String message;
             try {
@@ -135,7 +147,7 @@ public final class LogUploader {
                 String time = new SimpleDateFormat("HH-mm-ss-SSS", Locale.ROOT).format(captured);
                 String path = FOLDER + "/" + u.installId() + "/" + day + "/missing-icon-" + time
                         + "-" + UUID.randomUUID().toString().substring(0, 8) + ".txt";
-                byte[] bytes = (report + Diag.buildLog(u.ctx)).getBytes("UTF-8");
+                byte[] bytes = report.getBytes("UTF-8");
                 if (bytes.length > MAX_BYTES) bytes = Arrays.copyOf(bytes, MAX_BYTES);
                 // Persist the exact captured report before attempting network I/O.
                 if (!u.enqueue(path, bytes)) throw new Exception("Could not save report locally");
@@ -252,6 +264,11 @@ public final class LogUploader {
         for (File f : files) {
             try {
                 byte[] data = readAll(new FileInputStream(f));
+                if (f.getName().contains("missing-icon-")
+                        && !new String(data, "UTF-8").matches("(?s)===== MISSING NAVIGATION ICON =====\\nIcon code: -?[0-9]+\\nInstruction type: [a-z_]+\\nDistance meters: -?[0-9]+\\n")) {
+                    f.delete(); // Drop legacy reports that included road names / diagnostic dumps.
+                    continue;
+                }
                 put(f.getName().replace('~', '/'), data);
                 //noinspection ResultOfMethodCallIgnored
                 f.delete();
@@ -281,8 +298,8 @@ public final class LogUploader {
         }
         int code = c.getResponseCode();
         c.disconnect();
-        // GitHub also uses 422 for validation errors. Only acknowledge an existing
-        // upload if its blob hash matches, so the report button never claims false success.
+        // EN: HTTP 422 can be a validation error; count a duplicate as sent only if its content hash matches.
+        // IT: HTTP 422 puo indicare un errore di validazione; considera inviato un duplicato solo se l'hash coincide.
         if (code == 422) {
             HttpURLConnection check = (HttpURLConnection) new URL("https://api.github.com/repos/" + REPO + "/contents/" + path).openConnection();
             check.setConnectTimeout(15000);
