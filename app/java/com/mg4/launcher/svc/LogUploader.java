@@ -96,15 +96,6 @@ public final class LogUploader {
         if (bg != null) return;
         thread.start();
         bg = new Handler(thread.getLooper());
-        bg.post(() -> {
-            // EN: Remove the old queue once, because earlier logs may contain location-related text.
-            // IT: Elimina una volta la vecchia coda, perche i log precedenti possono contenere testo sulla posizione.
-            if (!sp.getBoolean("log_location_privacy_v2", false)) {
-                File[] legacy = queueDir().listFiles();
-                if (legacy != null) for (File f : legacy) f.delete();
-                sp.edit().putBoolean("log_location_privacy_v2", true).commit();
-            }
-        });
         if (!configured()) {
             status = "non configurato";
             Diag.put("log.invio", "non configurato in questa versione");
@@ -264,11 +255,6 @@ public final class LogUploader {
         for (File f : files) {
             try {
                 byte[] data = readAll(new FileInputStream(f));
-                if (f.getName().contains("missing-icon-")
-                        && !new String(data, "UTF-8").matches("(?s)===== MISSING NAVIGATION ICON =====\\nIcon code: -?[0-9]+\\nInstruction type: [a-z_]+\\nDistance meters: -?[0-9]+\\n")) {
-                    f.delete(); // Drop legacy reports that included road names / diagnostic dumps.
-                    continue;
-                }
                 put(f.getName().replace('~', '/'), data);
                 //noinspection ResultOfMethodCallIgnored
                 f.delete();
