@@ -308,8 +308,9 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 - **Fari letti dall'auto** (luci di posizione e anabbaglianti): fari accesi sull'auto disegnata e tema più preciso.
 - **Nuova home**: Mappa/Media in basso, prima dei preferiti; FM/DAB di nuovo sotto Radio; pulsanti delle sorgenti più
   grandi, ognuno con il suo fondo. CarPlay e Android Auto solo nella barra in basso, con la loro icona originale.
-- **Elenco delle stazioni** più leggibile e più in alto (accanto a FM/DAB), solo righe intere; senza preferiti la riga
-  dei preferiti lo dice e apre l'app Radio.
+- **Elenco delle stazioni** più leggibile, più in alto (accanto a FM/DAB) e a destra; solo righe intere.
+- **Auto disegnata dal modello 3D**: la stessa auto dell'animazione di ricarica, nella stessa posa e con gli stessi
+  colori, così il passaggio all'animazione non si nota. Restano colori, cerchi, tetto nero e fari accesi.
 - **Dimensione "Molto grande"** sistemata: tutte le sorgenti con la scritta, tasti della radio interi, testo della barra
   in basso non più troncato; testo, pulsanti, preferiti ed elenco crescono con la dimensione scelta.
 - **Animazione di ricarica**: quando colleghi il cavo l'auto si anima (aggancio, in carica, carica finita, sgancio).
@@ -932,8 +933,9 @@ Even just **€2** is a great help to keep developing and testing new versions i
 - **Headlights read from the car** (side lights and dipped beam): headlights on the drawn car and a more accurate theme.
 - **New home**: Map/Media at the bottom, before the favourites; FM/DAB back under Radio; bigger source buttons, each
   with its own background. CarPlay and Android Auto only in the bottom bar, with their original icon.
-- **Station list** easier to read and higher up (next to FM/DAB), whole rows only; with no favourites the favourites
-  row says so and opens the Radio app.
+- **Station list** easier to read, higher up (next to FM/DAB) and to the right; whole rows only.
+- **Car drawn from the 3D model**: the same car as the charging animation, in the same pose and colours, so the switch
+  to the animation is seamless. Colours, wheels, black roof and lit headlights are still there.
 - **"Extra large" size** fixed: every source keeps its label, radio buttons no longer cut, bottom bar text no longer
   truncated; text, buttons, favourites and list grow with the chosen size.
 - **Charging animation**: when you plug in the cable the car comes to life (plug-in, charging, charge complete,

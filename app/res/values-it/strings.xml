@@ -507,6 +507,7 @@
     <string name="news_v104_2" formatted="false">Nuova home: Mappa/Media in basso, FM/DAB sotto Radio, pulsanti delle sorgenti più grandi</string>
     <string name="news_v104_3" formatted="false">Animazione di ricarica quando colleghi il cavo, e MG4 Store incluso nel launcher</string>
     <string name="news_v104_4" formatted="false">Sorgenti audio e app di navigazione a scelta; fari letti dall\'auto; radio più affidabile all\'accensione</string>
-    <string name="fav_empty" formatted="false">Nessun preferito: aggiungili dall\'app Radio</string>
     <string name="news_v104_5" formatted="false">Disinstalla più sicuro: la home originale MG torna sempre accesa, anche se il launcher viene tolto dal menu App</string>
+    <string name="anim_preparing" formatted="false">Preparo l\'animazione di ricarica: solo la prima volta, 2–3 minuti. Parte da sola quando è pronta.</string>
+    <string name="anim_prepare_failed">Non riesco a preparare l\'animazione di ricarica (%1$s). I dettagli sono nel log.</string>
 </resources>

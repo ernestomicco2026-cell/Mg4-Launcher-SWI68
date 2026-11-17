@@ -507,6 +507,7 @@
     <string name="news_v104_2" formatted="false">New home: Map/Media at the bottom, FM/DAB under Radio, bigger source buttons</string>
     <string name="news_v104_3" formatted="false">Charging animation when you plug in the cable, and MG4 Store included in the launcher</string>
     <string name="news_v104_4" formatted="false">Choose audio sources and navigation app; headlights read from the car; radio more reliable at start-up</string>
-    <string name="fav_empty" formatted="false">No favourites: add them in the Radio app</string>
     <string name="news_v104_5" formatted="false">Safer uninstall: the original MG home always comes back, even if the launcher is removed from the Apps menu</string>
+    <string name="anim_preparing" formatted="false">Preparing the charging animation: first time only, 2–3 minutes. It starts by itself when ready.</string>
+    <string name="anim_prepare_failed">Could not prepare the charging animation (%1$s). Details are in the log.</string>
 </resources>

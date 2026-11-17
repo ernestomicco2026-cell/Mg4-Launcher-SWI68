@@ -507,6 +507,7 @@
     <string name="news_v104_2" formatted="false">Neuer Startbildschirm: Karte/Medien unten, FM/DAB unter Radio, größere Quellentasten</string>
     <string name="news_v104_3" formatted="false">Lade-Animation beim Einstecken des Kabels und MG4 Store im Launcher enthalten</string>
     <string name="news_v104_4" formatted="false">Audioquellen und Navigations-App wählbar; Scheinwerfer vom Auto gelesen; Radio zuverlässiger beim Start</string>
-    <string name="fav_empty" formatted="false">Keine Favoriten: in der Radio-App hinzufügen</string>
     <string name="news_v104_5" formatted="false">Sichereres Deinstallieren: der originale MG-Startbildschirm kommt immer zurück, auch wenn der Launcher über das App-Menü entfernt wird</string>
+    <string name="anim_preparing" formatted="false">Ladeanimation wird vorbereitet: nur beim ersten Mal, 2–3 Minuten. Sie startet von selbst, sobald sie fertig ist.</string>
+    <string name="anim_prepare_failed">Die Ladeanimation konnte nicht vorbereitet werden (%1$s). Details stehen im Log.</string>
 </resources>

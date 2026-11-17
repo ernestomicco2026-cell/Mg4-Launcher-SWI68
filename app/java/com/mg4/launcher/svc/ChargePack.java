@@ -93,6 +93,7 @@ public final class ChargePack {
                 if (complete(c, color)) {
                     state = "pacchetto " + color + " presente";
                     failed = false;
+                    buildFrames(c, color);
                     generation++;
                     return;
                 }
@@ -100,11 +101,32 @@ public final class ChargePack {
                 if (!force && System.currentTimeMillis() - last < CHECK_EVERY_MS && last > 0) return;
                 sp.edit().putLong("animControllo." + slug(color), System.currentTimeMillis()).apply();
                 download(c, color);
+                if (complete(c, color)) buildFrames(c, color);
                 generation++;
             } finally {
                 busy = false;
             }
         }, "mg4-animazione").start();
+    }
+
+    /** Fotogrammi di tutte le clip del colore (una volta sola: poi ChargeFrames li trova già pronti). */
+    private static void buildFrames(Context c, String color) {
+        java.util.List<File> all = new java.util.ArrayList<>();
+        for (String ph : PHASES) {
+            all.add(clip(c, color, true, ph));
+            all.add(clip(c, color, false, ph));
+        }
+        ChargeFrames.build(all.toArray(new File[0]));
+    }
+
+    /** Fotogrammi delle clip di una cartella di prova (chiavetta). */
+    public static String buildFramesIn(File dir, String slug) {
+        java.util.List<File> all = new java.util.ArrayList<>();
+        for (String ph : PHASES) {
+            all.add(clipIn(dir, slug, true, ph));
+            all.add(clipIn(dir, slug, false, ph));
+        }
+        return ChargeFrames.build(all.toArray(new File[0]));
     }
 
     /** Cresce quando il pacchetto cambia (scaricato, cancellato): chi tiene in memoria complete() lo ricalcola. */

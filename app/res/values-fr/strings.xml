@@ -507,6 +507,7 @@
     <string name="news_v104_2" formatted="false">Nouvel accueil : Carte/Médias en bas, FM/DAB sous Radio, boutons de source plus grands</string>
     <string name="news_v104_3" formatted="false">Animation de recharge au branchement du câble, et MG4 Store inclus dans le launcher</string>
     <string name="news_v104_4" formatted="false">Sources audio et appli de navigation au choix ; phares lus depuis la voiture ; radio plus fiable au démarrage</string>
-    <string name="fav_empty" formatted="false">Aucun favori : ajoutez-les dans l\'appli Radio</string>
     <string name="news_v104_5" formatted="false">Désinstallation plus sûre : l\'accueil MG d\'origine revient toujours, même si le launcher est supprimé depuis le menu Applis</string>
+    <string name="anim_preparing" formatted="false">Préparation de l\'animation de recharge : la première fois seulement, 2 à 3 minutes. Elle démarre seule dès qu\'elle est prête.</string>
+    <string name="anim_prepare_failed">Impossible de préparer l\'animation de recharge (%1$s). Les détails sont dans le journal.</string>
 </resources>

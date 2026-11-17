@@ -83,7 +83,7 @@ public final class HomeView extends LinearLayout {
      */
     private static final int SRC_H = 55, TABS_H = 60, FAV_H = 108, BAND_H = 72;
     /** 1.0.4: elenco stazioni a destra, larghezza (× dimensione comandi) e altezza riga (tp, + 2 dp di spazio). */
-    private static final int STATION_W = 372, STATION_ROW = 62;
+    private static final int STATION_W = 320, STATION_ROW = 62;
     private View tabsBox, favBottom;
 
     /** Distanza di Mappa/Media dal fondo del riquadro: centrata sulla riga dei preferiti (che sta a 20 dal fondo). */
@@ -1506,22 +1506,6 @@ public final class HomeView extends LinearLayout {
         if (sig.toString().equals(favSignature)) return;
         favSignature = sig.toString();
         favRow.removeAllViews();
-        if (m.favorites.isEmpty()) {
-            // 1.0.4: senza preferiti la riga resta, con un invito che apre l'app Radio
-            TextView hint = Ui.text(getContext(), L.s(R.string.fav_empty), ts(16), t.sub, Ui.REGULAR);
-            hint.setGravity(Gravity.CENTER_VERTICAL);
-            hint.setSingleLine(false);
-            hint.setMaxLines(2);
-            hint.setMaxWidth(tp(360));   // nella riga che scorre il testo va a capo invece di uscire dal riquadro
-            hint.setPadding(tp(20), 0, tp(20), 0);
-            hint.setBackground(Ui.pressable(getContext(), t.chip, 16, t));
-            hint.setClickable(true);
-            hint.setOnClickListener(v -> host.launch("com.saicmotor.hmi.radio", "com.saicmotor.hmi.radio.app.RadioHomeActivity"));
-            LinearLayout.LayoutParams hl = new LayoutParams(-2, -2);
-            hint.setMinHeight(tp(56));
-            hl.gravity = Gravity.CENTER_VERTICAL;
-            favRow.addView(hint, hl);
-        }
         for (MediaClient.Station st : m.favorites) {
             favRow.addView(stationTile(getContext(), st, st.key.equals(m.stationKey)), Ui.margins(new LayoutParams(-2, -2), 0, 0, dp(8), 0));
         }
@@ -1601,7 +1585,7 @@ public final class HomeView extends LinearLayout {
         mMeta.setVisibility(radio && (big || Ui.K > 1.05f) ? GONE : VISIBLE);
         stationPanel.setVisibility(radio ? VISIBLE : GONE);
         if (radio) showStations(m);
-        favScroll.setVisibility(radio ? VISIBLE : GONE);
+        favScroll.setVisibility(radio && !m.favorites.isEmpty() ? VISIBLE : GONE);
         boolean hasProgress = !radio && m.durationMs > 0;
         progressRow.setVisibility(hasProgress ? VISIBLE : GONE);
         if (hasProgress) {

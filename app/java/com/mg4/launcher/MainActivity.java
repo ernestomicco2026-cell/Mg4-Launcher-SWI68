@@ -866,6 +866,17 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
                 dir = (java.io.File) usb[0];
                 slug = (String) usb[1];
             }
+            // 1.0.4: la prima volta i fotogrammi si preparano dalle clip (circa 20–40 s), poi la prova parte subito
+            java.io.File probe = com.mg4.launcher.svc.ChargePack.clipIn(dir, slug, true, "loop");
+            if (probe != null && com.mg4.launcher.svc.ChargeFrames.frames(probe) == null) {
+                runOnUiThread(() -> android.widget.Toast.makeText(this, L.s(R.string.anim_preparing), android.widget.Toast.LENGTH_LONG).show());
+                String err = com.mg4.launcher.svc.ChargePack.buildFramesIn(dir, slug);
+                if (err != null) {
+                    Diag.put("ricarica.prova", "fotogrammi non preparati: " + err);
+                    runOnUiThread(() -> android.widget.Toast.makeText(this, L.f(R.string.anim_prepare_failed, err), android.widget.Toast.LENGTH_LONG).show());
+                    return;
+                }
+            }
             runOnUiThread(() -> {
                 if (settings != null) closeSettings();
                 if (home != null) home.testChargeAnim(dir, slug, () -> Diag.put("ricarica.prova", "finita · " + slug));

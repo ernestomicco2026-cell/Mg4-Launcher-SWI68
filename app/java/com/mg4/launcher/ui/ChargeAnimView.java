@@ -1,14 +1,18 @@
 package com.mg4.launcher.ui;
 
 import android.content.Context;
-import android.graphics.SurfaceTexture;
-import android.media.MediaPlayer;
-import android.view.Surface;
-import android.view.TextureView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.SystemClock;
 import android.view.View;
-import android.widget.FrameLayout;
 
-import com.mg4.launcher.svc.ChargePack;
+import com.mg4.launcher.svc.ChargeFrames;
 import com.mg4.launcher.svc.Diag;
 
 import java.io.File;
@@ -19,49 +23,62 @@ import java.io.File;
  * Quattro fasi: aggancio (una volta) → loop "in carica" (ripetuto) → finita (una volta, l'ultimo fotogramma resta
  * fermo) → sgancio (al distacco del cavo, poi torna l'immagine ferma). Se il cavo è già inserito quando si accende lo
  * schermo si parte dal loop (o dalla fase finita). Mai in READY o con l'auto in movimento: si torna subito all'immagine
- * ferma. Foto → clip e clip → foto con dissolvenza di 0,3 s; cavo staccato durante il loop: 0,2 s.
+ * ferma. Foto → clip e clip → foto con dissolvenza di 0,3 s.
  * <p>
- * Riproduzione con il decoder hardware (MediaPlayer su TextureView), due lettori al massimo: quello che si vede e
- * quello della fase successiva, preparata mentre gira la fase attuale. Il fotogramma finale di una fase è uguale al
- * primo della successiva (verificato nella chat di rendering), quindi il passaggio non si vede. I lettori si
- * rilasciano quando la clip non è visibile.
+ * Riproduzione (correzione 1.0.4, prova in auto del 15/11): niente più MediaPlayer su TextureView, che sull'auto
+ * restava fermo sul primo fotogramma con il riquadro nero. Le clip vengono trasformate una volta sola in fotogrammi
+ * JPEG ({@link ChargeFrames}); un thread li decodifica a 30 al secondo in tre bitmap che si alternano e questa vista
+ * normale li disegna. Il fotogramma finale di una fase è uguale al primo della successiva, quindi il passaggio non si vede.
  * <p>
  * Posizione: la clip (1312×400) è il doppio del riquadro dell'auto nel layout di ricarica (circa 656×200); i centri
  * ruota della clip (x 358 e 973, y 288) si allineano a quelli della foto disegnata da CarView.
  */
-public final class ChargeAnimView extends FrameLayout {
+public final class ChargeAnimView extends View {
     public static final int IDLE = 0, AGGANCIO = 1, LOOP = 2, FINITA = 3, SGANCIO = 4;
     private static final String[] NAMES = {"ferma", "aggancio", "loop", "finita", "sgancio"};
     private static final float CLIP_W = 1312, CLIP_H = 400, CLIP_WHEEL_X1 = 358, CLIP_WHEEL_X2 = 973, CLIP_WHEEL_Y = 288;
+    private static final long FRAME_MS = 1000 / 30;
 
     /** Dove prendere le clip: pacchetto del colore scelto oppure cartella di prova (chiavetta). */
     public interface Source {
         File clip(boolean day, String phase);
     }
 
-    private final TextureView[] tv = new TextureView[2];
-    private final MediaPlayer[] mp = new MediaPlayer[2];
-    private final String[] mpPhase = new String[2];
-    private int showing = -1;                // slot che si vede
+    private final Handler main = new Handler(Looper.getMainLooper());
+    /** Thread di disegno con le sue tre bitmap: a ogni rilascio se ne crea uno nuovo (niente bitmap condivise). */
+    private static final class Player {
+        final HandlerThread thread = new HandlerThread("mg4-animazione-disegno", android.os.Process.THREAD_PRIORITY_DISPLAY);
+        final Handler h;
+        final Bitmap[] buf = new Bitmap[3];
+
+        Player() {
+            thread.start();
+            h = new Handler(thread.getLooper());
+        }
+    }
+
+    private Player player;
+    private final Rect dst = new Rect();
+    private final Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG);
+    private volatile Bitmap front;
+    /** Cresce a ogni nuova sequenza: il thread smette di disegnare quelle vecchie. */
+    private volatile int gen;
+
     private int state = IDLE;
     private boolean day = true;
     private boolean fresh = true;            // prima valutazione dopo l'accensione dello schermo
-    private boolean finishAfterLoop;
+    private volatile boolean finishAfterLoop;
     private Source source;
     private String reason = "";
     private Runnable afterTest;
+    private boolean lastPlugged, lastDone, failedThisPlug;
+    private boolean preparing;
 
     public ChargeAnimView(Context c) {
         super(c);
-        for (int i = 0; i < 2; i++) {
-            TextureView v = new TextureView(c);
-            v.setOpaque(false);
-            v.setAlpha(0f);
-            tv[i] = v;
-            addView(v, new FrameLayout.LayoutParams(1, 1));
-        }
         setClickable(false);
         setVisibility(GONE);
+        setAlpha(0f);
     }
 
     public int state() {
@@ -88,17 +105,14 @@ public final class ChargeAnimView extends FrameLayout {
             float k = s * CarView.wheelDistance() / (CLIP_WHEEL_X2 - CLIP_WHEEL_X1);
             int cw = Math.round(CLIP_W * k), ch = Math.round(CLIP_H * k);
             int cx = Math.round(wc[0] - CLIP_WHEEL_X1 * k), cy = Math.round(wc[1] - CLIP_WHEEL_Y * k);
-            for (TextureView v : tv) {
-                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) v.getLayoutParams();
-                if (lp.width != cw || lp.height != ch || lp.leftMargin != cx || lp.topMargin != cy) {
-                    lp.width = cw;
-                    lp.height = ch;
-                    lp.leftMargin = cx;
-                    lp.topMargin = cy;
-                    v.setLayoutParams(lp);
-                }
-            }
+            dst.set(cx, cy, cx + cw, cy + ch);
         }
+    }
+
+    @Override
+    protected void onDraw(Canvas c) {
+        Bitmap b = front;
+        if (b != null && !b.isRecycled()) c.drawBitmap(b, null, dst, paint);
     }
 
     // ---- logica delle fasi ---------------------------------------------------------------------
@@ -113,61 +127,56 @@ public final class ChargeAnimView extends FrameLayout {
         boolean themeChanged = dayTheme != day;
         day = dayTheme;
         source = src;
+        lastPlugged = plugged;
+        lastDone = done;
         if (!stopWhy.isEmpty()) {
             reason = stopWhy;
             // con il cavo già inserito, alla ripartenza si va dritti al loop; l'aggancio solo per un inserimento nuovo
             fresh = plugged;
             if (!plugged) failedThisPlug = false;
-            if (state != IDLE) toPhoto(0.3f);
+            if (state != IDLE) toPhoto();
+            else writeLog();
             return;
         }
-        // 3: dopo un errore di riproduzione l'animazione resta ferma fino al distacco del cavo (niente tentativi a ripetizione)
+        // dopo un errore l'animazione resta ferma fino al distacco del cavo (niente tentativi a ripetizione)
         if (!plugged) failedThisPlug = false;
         if (failedThisPlug) {
-            reason = "errore di riproduzione: ferma fino al distacco del cavo";
-            if (state != IDLE) toPhoto(0.3f);
+            if (state != IDLE) toPhoto();
             writeLog();
             return;
         }
+        if (preparing) return;   // fotogrammi in preparazione: si decide quando sono pronti
         reason = "";
         boolean wasFresh = fresh;
         fresh = false;
         switch (state) {
             case IDLE:
                 if (!plugged) break;
-                if (wasFresh) play(done ? FINITA : LOOP, true);
-                else play(AGGANCIO, true);
+                if (wasFresh) play(done ? FINITA : LOOP);
+                else play(AGGANCIO);
                 break;
             case AGGANCIO:
                 break;   // si decide alla fine dell'aggancio
             case LOOP:
-                if (!plugged) play(SGANCIO, false);
-                else if (done && !finishAfterLoop) {
-                    finishAfterLoop = true;   // la fase "finita" parte alla fine del giro del loop (stesso fotogramma)
-                    MediaPlayer m = cur();
-                    if (m != null) m.setLooping(false);
-                    prepare(FINITA);
-                } else if (themeChanged) play(LOOP, false);
+                if (!plugged) play(SGANCIO);
+                else if (done) finishAfterLoop = true;   // "finita" parte alla fine del giro del loop (stesso fotogramma)
+                else if (themeChanged) play(LOOP);
                 break;
             case FINITA:
-                if (!plugged) play(SGANCIO, false);
-                else if (!done) play(LOOP, false);
-                else if (themeChanged) play(FINITA, false);
+                if (!plugged) play(SGANCIO);
+                else if (!done) play(LOOP);
+                else if (themeChanged) play(FINITA);
                 break;
             case SGANCIO:
                 break;   // alla fine torna la foto
         }
-        lastPlugged = plugged;
-        lastDone = done;
     }
 
-    private boolean lastPlugged, lastDone, failedThisPlug;
-
-    /** Schermo spento o launcher in secondo piano: si torna alla foto e si rilasciano i decoder. */
+    /** Schermo spento o launcher in secondo piano: si torna alla foto e si liberano i fotogrammi. */
     public void pause() {
         afterTest = null;
         fresh = true;
-        if (state != IDLE || showing >= 0) {
+        if (state != IDLE) {
             state = IDLE;
             finishAfterLoop = false;
             writeLog();
@@ -175,7 +184,7 @@ public final class ChargeAnimView extends FrameLayout {
         release();
     }
 
-    /** Fine di una fase (dal lettore). */
+    /** Fine di una fase (dal thread di disegno, riportata sul principale). */
     private void onPhaseEnd(int phase) {
         if (afterTest != null) {
             testNext(phase);
@@ -183,23 +192,23 @@ public final class ChargeAnimView extends FrameLayout {
         }
         switch (phase) {
             case AGGANCIO:
-                if (!lastPlugged) play(SGANCIO, false);
-                else play(lastDone ? FINITA : LOOP, false);
+                if (!lastPlugged) play(SGANCIO);
+                else play(lastDone ? FINITA : LOOP);
                 break;
             case LOOP:   // solo con il loop non più ripetuto: arriva la fase "finita"
                 finishAfterLoop = false;
-                if (!lastPlugged) play(SGANCIO, false);
-                else play(FINITA, false);
+                if (!lastPlugged) play(SGANCIO);
+                else play(FINITA);
                 break;
             case FINITA:
                 break;   // l'ultimo fotogramma resta fermo
             case SGANCIO:
-                toPhoto(0.3f);
+                toPhoto();
                 break;
         }
     }
 
-    // ---- prova dalla modalità tecnica ----------------------------------------------------------
+    // ---- prova dalle impostazioni --------------------------------------------------------------
 
     private int testLoops;
 
@@ -210,26 +219,27 @@ public final class ChargeAnimView extends FrameLayout {
         day = dayTheme;
         afterTest = done;
         testLoops = 0;
-        play(AGGANCIO, true);
+        failedThisPlug = false;
+        play(AGGANCIO);
     }
 
     private void testNext(int phase) {
         switch (phase) {
             case AGGANCIO:
-                play(LOOP, false);
+                play(LOOP);
                 break;
             case LOOP:
-                play(FINITA, false);   // dopo i 3 giri del loop
+                play(FINITA);   // dopo i 3 giri del loop
                 break;
             case FINITA:
-                postDelayed(() -> {
-                    if (afterTest != null) play(SGANCIO, false);
+                main.postDelayed(() -> {
+                    if (afterTest != null) play(SGANCIO);
                 }, 2000);
                 break;
             case SGANCIO:
                 Runnable r = afterTest;
                 afterTest = null;
-                toPhoto(0.3f);
+                toPhoto();
                 if (r != null) r.run();
                 break;
         }
@@ -237,203 +247,162 @@ public final class ChargeAnimView extends FrameLayout {
 
     // ---- riproduzione --------------------------------------------------------------------------
 
-    private MediaPlayer cur() {
-        return showing >= 0 ? mp[showing] : null;
-    }
-
-    /** Prepara una fase sul lettore libero (senza farla partire). */
-    private void prepare(int phase) {
-        int slot = showing < 0 ? 0 : 1 - showing;
-        String ph = NAMES[phase];
-        if (mp[slot] != null && ph.equals(mpPhase[slot])) return;
-        open(slot, phase, null);
-    }
-
-    /** Fa partire una fase: sul lettore libero, e quando il primo fotogramma è pronto la mostra al posto dell'altra. */
-    private void play(int phase, boolean fromPhoto) {
-        int slot = showing < 0 ? 0 : 1 - showing;
-        state = phase;
-        writeLog();
-        if (mp[slot] != null && NAMES[phase].equals(mpPhase[slot]) && prepared[slot]) {
-            startSlot(slot, phase, fromPhoto);
-            return;
-        }
-        open(slot, phase, () -> startSlot(slot, phase, fromPhoto));
-    }
-
-    private final boolean[] prepared = new boolean[2];
-    private final Surface[] surfaces = new Surface[2];
-
-    /** Fine anticipata della prova (errore): la callback finale si chiama comunque e i segnali dell'auto tornano validi. */
-    private void endTest() {
-        Runnable r = afterTest;
-        afterTest = null;
-        if (r != null) r.run();
-    }
-
-    private void open(int slot, int phase, Runnable onReady) {
-        releaseSlot(slot);
-        File f = source == null ? null : source.clip(day, NAMES[phase]);
-        if (f == null) {
-            reason = "clip " + NAMES[phase] + " mancante";
-            if (afterTest == null) failedThisPlug = true;
-            endTest();
-            toPhoto(0.3f);
-            return;
-        }
-        TextureView v = tv[slot];
-        setVisibility(VISIBLE);
-        Runnable go = () -> {
-            SurfaceTexture st = v.getSurfaceTexture();
-            if (st == null) return;
-            try {
-                MediaPlayer m = new MediaPlayer();
-                mp[slot] = m;
-                mpPhase[slot] = NAMES[phase];
-                prepared[slot] = false;
-                Surface sf = new Surface(st);
-                surfaces[slot] = sf;
-                m.setSurface(sf);
-                m.setDataSource(f.getAbsolutePath());
-                m.setLooping(phase == LOOP && afterTest == null);
-                m.setVolume(0f, 0f);
-                m.setOnPreparedListener(x -> {
-                    prepared[slot] = true;
-                    if (onReady != null) onReady.run();
-                });
-                m.setOnCompletionListener(x -> {
-                    if (mp[slot] != x) return;
-                    if (afterTest != null && phase == LOOP && ++testLoops < 3) {
-                        x.seekTo(0);
-                        x.start();
-                        return;
-                    }
-                    // la fase dopo, se già nota, si prepara subito: il passaggio resta sul fotogramma comune
-                    onPhaseEnd(phase);
-                });
-                m.setOnErrorListener((x, what, extra) -> {
-                    Diag.put("ricarica.animazione", "errore di riproduzione " + NAMES[phase] + " (" + what + "/" + extra + ")");
-                    errors++;
-                    if (afterTest == null) failedThisPlug = true;
-                    endTest();
-                    toPhoto(0.3f);
-                    return true;
-                });
-                m.prepareAsync();
-            } catch (Exception e) {
-                Diag.put("ricarica.animazione", "errore di riproduzione " + NAMES[phase] + ": " + e.getClass().getSimpleName());
-                errors++;
-                if (afterTest == null) failedThisPlug = true;
-                endTest();
-                toPhoto(0.3f);
-            }
-        };
-        if (v.getSurfaceTexture() != null) go.run();
-        else v.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-            @Override
-            public void onSurfaceTextureAvailable(SurfaceTexture s, int w, int h) {
-                go.run();
-            }
-
-            @Override
-            public void onSurfaceTextureSizeChanged(SurfaceTexture s, int w, int h) {
-            }
-
-            @Override
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture s) {
-                return true;
-            }
-
-            @Override
-            public void onSurfaceTextureUpdated(SurfaceTexture s) {
-            }
-        });
-    }
-
     /** Errori di riproduzione dall'avvio (per il Controllo funzioni). */
     public static int errors;
 
-    private void startSlot(int slot, int phase, boolean fromPhoto) {
-        MediaPlayer m = mp[slot];
-        if (m == null) return;
-        int old = showing;
-        m.setOnInfoListener((x, what, extra) -> {
-            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                TextureView v = tv[slot];
-                v.animate().cancel();
-                // da foto: dissolvenza 0,3 s; tra due fasi: subito (stesso fotogramma), cavo staccato nel loop 0,2 s
-                long fade = fromPhoto ? 300 : phase == SGANCIO && old >= 0 && LOOP_NAME.equals(mpPhase[old]) ? 200 : 0;
-                if (fade > 0) v.animate().alpha(1f).setDuration(fade).start();
-                else v.setAlpha(1f);
-                if (old >= 0 && old != slot) {
-                    MediaPlayer oldMp = mp[old];
-                    postDelayed(() -> {
-                        // solo se in quello slot c'è ancora il lettore vecchio (non uno ripartito nel frattempo)
-                        if (showing != old && mp[old] == oldMp) {
-                            tv[old].setAlpha(0f);
-                            releaseSlot(old);
-                        }
-                    }, fade + 80);
+    private Player ensurePlayer() {
+        if (player == null) player = new Player();
+        return player;
+    }
+
+    /** Fa partire una fase. Se i fotogrammi non sono ancora pronti li prepara (una volta sola) e poi parte. */
+    private void play(int phase) {
+        state = phase;
+        writeLog();
+        Source src = source;
+        File clip = src == null ? null : src.clip(day, NAMES[phase]);
+        if (clip == null) {
+            fail("clip " + NAMES[phase] + " mancante");
+            return;
+        }
+        File[] frames = ChargeFrames.frames(clip);
+        if (frames == null) {
+            // prima volta con questo pacchetto: si preparano i fotogrammi di tutte le fasi del tema, poi si riprova
+            preparing = true;
+            reason = "preparazione fotogrammi";
+            writeLog();
+            final boolean d = day;
+            final int g = ++gen;
+            ensurePlayer().h.post(() -> {
+                File[] all = new File[NAMES.length - 1];
+                for (int i = 1; i < NAMES.length; i++) all[i - 1] = src.clip(d, NAMES[i]);
+                String err = ChargeFrames.build(all);
+                main.post(() -> {
+                    preparing = false;
+                    reason = "";
+                    if (g != gen) return;   // nel frattempo è cambiato tutto
+                    if (err != null) fail("fotogrammi non preparati: " + err);
+                    else if (state == phase) play(phase);
+                });
+            });
+            return;
+        }
+        boolean fromPhoto = getVisibility() != VISIBLE || getAlpha() < 1f;
+        setVisibility(VISIBLE);
+        final Player p = ensurePlayer();
+        final int g = ++gen;
+        final long t0 = SystemClock.uptimeMillis();
+        p.h.post(new Runnable() {
+            int i = 0, slot = 0;
+            boolean shown;
+
+            @Override
+            public void run() {
+                if (g != gen) return;
+                int n = frames.length;
+                Bitmap b = decode(p, frames[i], slot);
+                if (b == null) {
+                    main.post(() -> {
+                        if (g == gen) fail("fotogramma " + (i + 1) + " di " + NAMES[phase] + " non leggibile");
+                    });
+                    return;
                 }
-                // la fase successiva già nota si prepara mentre gira questa
-                if (phase == AGGANCIO) postDelayed(() -> prepare(lastDone ? FINITA : LOOP), 300);
+                slot = (slot + 1) % p.buf.length;
+                main.post(() -> {
+                    if (g != gen) return;
+                    front = b;
+                    invalidate();
+                    if (!shown && fromPhoto) {
+                        animate().cancel();
+                        animate().alpha(1f).setDuration(300).start();
+                    } else if (!shown) setAlpha(1f);
+                    shown = true;
+                });
+                i++;
+                boolean looping = phase == LOOP && (afterTest != null ? testLoops < 2 : !finishAfterLoop);
+                if (i >= n) {
+                    if (looping) {
+                        if (afterTest != null) testLoops++;
+                        i = 1;   // l'ultimo fotogramma del loop è uguale al primo: si riparte dal secondo
+                    } else {
+                        main.post(() -> {
+                            if (g == gen) onPhaseEnd(phase);
+                        });
+                        return;
+                    }
+                }
+                long next = t0 + (long) (++ticks) * FRAME_MS;
+                p.h.postAtTime(this, Math.max(next, SystemClock.uptimeMillis() + 1));
             }
-            return false;
+
+            private long ticks;
         });
-        showing = slot;
+    }
+
+    /** Decodifica un fotogramma nella bitmap dello slot (riusata: niente spazzatura a ogni fotogramma). */
+    private static Bitmap decode(Player p, File f, int slot) {
         try {
-            m.start();
-        } catch (Exception e) {
-            toPhoto(0.3f);
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inMutable = true;
+            o.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            Bitmap reuse = p.buf[slot];
+            if (reuse != null && !reuse.isRecycled()) o.inBitmap = reuse;
+            Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), o);
+            if (b != null) p.buf[slot] = b;
+            return b;
+        } catch (Throwable e) {
+            return null;
         }
     }
 
-    private static final String LOOP_NAME = "loop";
-    private int fadeToken;
+    private void fail(String why) {
+        reason = why;
+        errors++;
+        Diag.put("ricarica.animazione", "errore: " + why);
+        if (afterTest == null) failedThisPlug = true;
+        Runnable r = afterTest;
+        afterTest = null;
+        toPhoto();
+        if (r != null) r.run();
+    }
 
-    /** Torna all'immagine ferma (dissolvenza) e rilascia i lettori. */
-    private void toPhoto(float seconds) {
+    /** Torna all'immagine ferma (dissolvenza 0,3 s) e libera i fotogrammi. */
+    private void toPhoto() {
         state = IDLE;
         finishAfterLoop = false;
+        gen++;
         writeLog();
-        int s = showing;
-        if (s < 0) {
+        if (getVisibility() != VISIBLE) {
             release();
             return;
         }
-        tv[s].animate().cancel();
-        final int token = ++fadeToken;
-        tv[s].animate().alpha(0f).setDuration(Math.round(seconds * 1000)).withEndAction(() -> {
-            // se nel frattempo è ripartita una fase non si tocca niente
-            if (token == fadeToken && state == IDLE && showing < 0) release();
+        final int g = gen;
+        animate().cancel();
+        animate().alpha(0f).setDuration(300).withEndAction(() -> {
+            if (g == gen && state == IDLE) release();
         }).start();
-        showing = -1;
     }
 
-    private void releaseSlot(int i) {
-        MediaPlayer m = mp[i];
-        mp[i] = null;
-        mpPhase[i] = null;
-        prepared[i] = false;
-        if (m != null) {
-            try {
-                m.release();
-            } catch (Exception ignored) {
-            }
-        }
-        Surface sf = surfaces[i];
-        surfaces[i] = null;
-        if (sf != null) sf.release();
-    }
-
-    /** Rilascia tutti i lettori (clip non visibile). */
+    /** Libera tutto (clip non visibile). */
     public void release() {
-        for (int i = 0; i < 2; i++) {
-            releaseSlot(i);
-            tv[i].setAlpha(0f);
+        gen++;
+        animate().cancel();
+        setAlpha(0f);
+        setVisibility(GONE);
+        front = null;
+        Player p = player;
+        player = null;
+        if (p != null) {
+            // le bitmap si liberano sul loro thread, dopo l'eventuale fotogramma in corso; il thread poi si chiude
+            p.h.post(() -> {
+                for (int i = 0; i < p.buf.length; i++) {
+                    if (p.buf[i] != null) p.buf[i].recycle();
+                    p.buf[i] = null;
+                }
+                p.thread.quitSafely();
+            });
         }
-        showing = -1;
-        if (state == IDLE) setVisibility(GONE);
+        invalidate();
     }
 
     @Override
@@ -456,14 +425,4 @@ public final class ChargeAnimView extends FrameLayout {
 
     /** Testo della fase per il log (lo compone HomeView con il resto). */
     public static volatile String phaseTxt = "fase ferma";
-
-    @Override
-    public boolean onTouchEvent(android.view.MotionEvent e) {
-        return false;
-    }
-
-    @SuppressWarnings("unused")
-    private static boolean visible(View v) {
-        return v.getVisibility() == VISIBLE;
-    }
 }
