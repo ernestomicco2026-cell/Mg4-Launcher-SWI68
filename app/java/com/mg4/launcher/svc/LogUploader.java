@@ -25,12 +25,12 @@ import java.util.UUID;
 /**
  * Invio automatico dei log nel repository privato dei log su GitHub (API "contents", un file per invio):
  *   SWI68/<codice installazione>/<aaaa-mm-gg>/<hh-mm-ss>.txt
- * All'avvio (dopo 90 s, quando i servizi dell'auto hanno risposto), ogni 30 minuti e con "Salva log".
+ * All’avvio dopo 90 s e ogni 30 minuti. Anche "Salva log" richiede un invio.
  * Senza rete i log restano in coda (al massimo 20) e partono al primo invio riuscito.
  * Il token NON è nel codice: build.sh genera LogConfig da tools/log-token.txt (escluso da git).
  */
 public final class LogUploader {
-    private static final String REPO = "ernestomicco2026-cell/mg4-launcher-logs";
+    private final String REPO;
     private static final String FOLDER = "SWI68";
     private static final long FIRST_DELAY_MS = 90_000, PERIOD_MS = 30 * 60_000;
     private static final int MAX_QUEUE = 20;
@@ -46,8 +46,21 @@ public final class LogUploader {
 
     public LogUploader(Context c) {
         ctx = c.getApplicationContext();
+        REPO = configuredRepository(ctx);
         sp = ctx.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE);
         instance = this;
+    }
+
+    /**
+     * EN: Read an optional bundled repository override so custom builds send reports to their configured destination.
+     * IT: Leggi un repository alternativo incluso, affinche le build personalizzate usino la destinazione configurata.
+     */
+    private static String configuredRepository(Context context) {
+        try (InputStream in = context.getAssets().open("log-repo.txt")) {
+            String repo = new String(readAll(in), "UTF-8").trim();
+            if (repo.matches("[A-Za-z0-9][A-Za-z0-9-]*/[A-Za-z0-9_.-]+")) return repo;
+        } catch (Exception ignored) {}
+        return "ernestomicco2026-cell/mg4-launcher-logs";
     }
 
     /** true se questa versione è stata compilata con il token del repository dei log. */
@@ -100,6 +113,54 @@ public final class LogUploader {
     public static void requestNow() {
         LogUploader u = instance;
         if (u != null && u.bg != null) u.bg.post(u::uploadOnce);
+    }
+
+    public interface ReportListener { void complete(String message); }
+
+    /**
+     * EN: Capture the maneuver at the tap, save its sanitized report locally, then attempt upload with retry support.
+     * IT: Acquisisci la manovra al tocco, salva localmente il rapporto filtrato, poi tenta l'invio con nuovi tentativi.
+     */
+    public static void reportMissingIcon(int code, int meters, String text,
+                                         ReportListener listener) {
+        LogUploader u = instance;
+        if (u == null || u.bg == null || !configured()) {
+            listener.complete("Log upload is not configured");
+            return;
+        }
+        final Date captured = new Date();
+        final String report = ManeuverReport.body(code, meters, text);
+        u.bg.post(() -> {
+            String message;
+            try {
+                if (u.notCar()) throw new Exception("Not available on this device");
+                String day = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(captured);
+                String time = new SimpleDateFormat("HH-mm-ss-SSS", Locale.ROOT).format(captured);
+                String path = FOLDER + "/" + u.installId() + "/" + day + "/missing-icon-" + time
+                        + "-" + UUID.randomUUID().toString().substring(0, 8) + ".txt";
+                byte[] bytes = report.getBytes("UTF-8");
+                if (bytes.length > MAX_BYTES) bytes = Arrays.copyOf(bytes, MAX_BYTES);
+                // Persist the exact captured report before attempting network I/O.
+                if (!u.enqueue(path, bytes)) throw new Exception("Could not save report locally");
+                message = "Missing icon log saved; queued for upload";
+                if (Offline.canTry()) {
+                    try {
+                        u.put(path, bytes);
+                        new File(u.queueDir(), path.replace('/', '~')).delete();
+                        Offline.ok();
+                        message = "Missing icon log sent to developer";
+                        u.flushQueue();
+                    } catch (Exception e) {
+                        Offline.failed("log", e);
+                        message = "Upload failed; missing icon log saved for retry";
+                    }
+                }
+            } catch (Exception e) {
+                message = "Could not send missing icon log: " + e.getMessage();
+            }
+            final String result = message;
+            new Handler(u.ctx.getMainLooper()).post(() -> listener.complete(result));
+        });
     }
 
     private final Runnable periodic = new Runnable() {
@@ -170,7 +231,7 @@ public final class LogUploader {
         }
     }
 
-    private void enqueue(String path, byte[] data) {
+    private boolean enqueue(String path, byte[] data) {
         File dir = queueDir();
         File[] old = dir.listFiles();
         if (old != null && old.length >= MAX_QUEUE) {
@@ -180,8 +241,10 @@ public final class LogUploader {
         }
         try (OutputStream o = new FileOutputStream(new File(dir, path.replace('/', '~')))) {
             o.write(data);
+            return true;
         } catch (Exception e) {
             Diag.error("log.coda", e.toString());
+            return false;
         }
     }
 
@@ -221,10 +284,27 @@ public final class LogUploader {
         }
         int code = c.getResponseCode();
         c.disconnect();
-        // 422: il file esiste già (reinvio dalla coda di un log già arrivato) → considerato inviato
+        // EN: HTTP 422 can be a validation error; count a duplicate as sent only if its content hash matches.
+        // IT: HTTP 422 puo indicare un errore di validazione; considera inviato un duplicato solo se l'hash coincide.
         if (code == 422) {
-            Diag.put("log.giàPresente", path);
-            return;
+            HttpURLConnection check = (HttpURLConnection) new URL("https://api.github.com/repos/" + REPO + "/contents/" + path).openConnection();
+            check.setConnectTimeout(15000);
+            check.setReadTimeout(30000);
+            check.setRequestProperty("Authorization", "Bearer " + LogConfig.token());
+            check.setRequestProperty("Accept", "application/vnd.github+json");
+            check.setRequestProperty("User-Agent", "MG4Launcher");
+            try {
+                if (check.getResponseCode() == 200) {
+                    JSONObject existing = new JSONObject(new String(readAll(check.getInputStream()), "UTF-8"));
+                    java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-1");
+                    digest.update(("blob " + data.length + "\0").getBytes("UTF-8"));
+                    StringBuilder hash = new StringBuilder();
+                    for (byte value : digest.digest(data)) hash.append(String.format(Locale.ROOT, "%02x", value & 255));
+                    if (hash.toString().equals(existing.optString("sha"))) return;
+                }
+            } finally {
+                check.disconnect();
+            }
         }
         if (code != 200 && code != 201) throw new Exception("HTTP " + code);
     }

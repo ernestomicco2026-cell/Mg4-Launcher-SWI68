@@ -23,7 +23,6 @@ import java.util.Locale;
 
 /** Home in stile Tesla (MG4, SWI68): auto + energia a sinistra, pannello Mappa/Media/CarPlay a destra, barra in basso. */
 public final class HomeView extends LinearLayout {
-
     /** Azioni che la home chiede all'activity. */
     public interface Host {
         void openApps();
@@ -101,6 +100,10 @@ public final class HomeView extends LinearLayout {
     // mappa
     private LinearLayout navIdle, navCard, navEta;
     private TextView navCardTitle, navCardSub, navEtaArrive, navEtaMin, navEtaKm;
+    private ImageView navManeuverIcon;
+    private TextView navRoad, missingIconButton, missingIconStatus;
+    private boolean missingIconSending;
+    private int displayedMissingIcon = Integer.MIN_VALUE;
     private View navHomeBtn, navOfficeBtn;
     private LinearLayout navWith, navWithBox, navPlaces;
     private TextView navDefaultTv;
@@ -855,21 +858,45 @@ public final class HomeView extends LinearLayout {
         f.addView(navIdle, new FrameLayout.LayoutParams(-1, -1));
 
         // guida in corso: indicazione in alto a sinistra + arrivo in basso
-        navCard = Ui.row(c);
+        navCard = Ui.column(c);
         navCard.setBackground(Ui.round(t.overlay, dp(18)));
         navCard.setPadding(dp(22), dp(16), dp(26), dp(16));
-        navCard.addView(Ui.icon(c, R.drawable.ic_turn, t.text, 44));
+        LinearLayout maneuverRow = Ui.row(c);
+        maneuverRow.setGravity(Gravity.CENTER_VERTICAL);
+        navManeuverIcon = Ui.icon(c, R.drawable.ic_maneuver_unknown, t.text, 76);
+        maneuverRow.addView(navManeuverIcon, new LayoutParams(tp(76), tp(76)));
         LinearLayout txt = Ui.column(c);
         navCardTitle = Ui.oneLine(Ui.text(c, "", 30, t.text, Ui.MEDIUM));
-        navCardSub = Ui.oneLine(Ui.text(c, "", 18, t.sub, Ui.REGULAR));
+        navCardSub = Ui.text(c, "", 26, t.text, Ui.REGULAR);
+        navRoad = Ui.text(c, "", 18, t.sub, Ui.REGULAR);
         txt.addView(navCardTitle);
         txt.addView(navCardSub, Ui.margins(new LayoutParams(-2, -2), 0, dp(4), 0, 0));
-        navCard.addView(txt, Ui.margins(new LayoutParams(-2, -2), dp(18), 0, 0, 0));
+        txt.addView(navRoad, Ui.margins(new LayoutParams(-1, -2), 0, dp(8), 0, 0));
+        maneuverRow.addView(txt, Ui.margins(new LayoutParams(0, -2, 1), dp(22), 0, 0, 0));
+        navCard.addView(maneuverRow, new LayoutParams(-1, -2));
+        missingIconButton = Ui.text(c, "Send missing icon log to developer", 17, t.onAccent, Ui.MEDIUM);
+        missingIconButton.setBackground(Ui.round(t.accent, dp(10)));
+        missingIconButton.setPadding(dp(16), dp(12), dp(16), dp(12));
+        missingIconButton.setMinHeight(tp(48));
+        navCard.addView(missingIconButton, Ui.margins(new LayoutParams(-1, -2), 0, dp(18), 0, 0));
+        missingIconStatus = Ui.text(c, "", 14, t.sub, Ui.REGULAR);
+        navCard.addView(missingIconStatus, Ui.margins(new LayoutParams(-1, -2), 0, dp(8), 0, 0));
         navCard.setClickable(true);
         navCard.setOnClickListener(v -> openNavigation());
-        FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START);
-        cl.setMargins(dp(20 + (rhd && sysIndicator ? SYSTEM_LIGHT_INSET : 0)), dp(20), dp(20), 0);
+        FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(dp(500), -2, Gravity.CENTER_VERTICAL | Gravity.START);
+        cl.setMargins(dp(20), 0, dp(20), 0);
         f.addView(navCard, cl);
+
+        // EN: Use the available width now that the temporary code panel is removed.
+        // IT: Usa lo spazio disponibile dopo la rimozione del pannello temporaneo dei codici.
+        f.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            int width = right - left;
+            if (width <= 0 || width == oldRight - oldLeft) return;
+            FrameLayout.LayoutParams cardParams = (FrameLayout.LayoutParams) navCard.getLayoutParams();
+            cardParams.leftMargin = dp(20);
+            cardParams.width = Math.min(dp(500), Math.max(1, width - dp(40)));
+            navCard.setLayoutParams(cardParams);
+        });
 
         navEta = Ui.row(c);
         navEta.setBackground(Ui.round(t.overlay, dp(16)));
@@ -987,6 +1014,31 @@ public final class HomeView extends LinearLayout {
         MediaClient.State m = media.last();
         boolean remote = m.deviceType != 0 && m.tbtActive;
         boolean guiding = n.navigating || remote;
+        int icon = ManeuverIcons.drawable(remote ? -1 : n.turnIcon);
+        navManeuverIcon.setImageResource(icon);
+        boolean missing = n.navigating && !remote && icon == R.drawable.ic_maneuver_unknown;
+        if (!missingIconSending && displayedMissingIcon != n.turnIcon) {
+            displayedMissingIcon = n.turnIcon;
+            missingIconStatus.setText("Missing icon: code " + n.turnIcon);
+        }
+        missingIconButton.setVisibility(missing ? VISIBLE : GONE);
+        missingIconStatus.setVisibility(missing ? VISIBLE : GONE);
+        missingIconButton.setEnabled(!missingIconSending);
+        missingIconButton.setOnClickListener(v -> {
+            if (missingIconSending) return;
+            missingIconSending = true;
+            missingIconButton.setEnabled(false);
+            missingIconStatus.setText("Sending missing icon " + n.turnIcon + "...");
+            // EN: Report a fixed instruction category, without road names or free navigation text.
+            // IT: Segnala una categoria fissa, senza nomi delle strade o testo libero di navigazione.
+            com.mg4.launcher.svc.LogUploader.reportMissingIcon(n.turnIcon, n.turnMeters, n.turnText, message -> {
+                missingIconSending = false;
+                missingIconButton.setEnabled(true);
+                missingIconStatus.setText(message);
+            });
+        });
+        navRoad.setText(remote ? "" : n.road);
+        navRoad.setVisibility(!remote && !n.road.isEmpty() ? VISIBLE : GONE);
         navHomeBtn.setVisibility(n.connected && n.hasHome ? VISIBLE : GONE);
         navOfficeBtn.setVisibility(n.connected && n.hasOffice ? VISIBLE : GONE);
         navPlaces.setVisibility(n.connected && (n.hasHome || n.hasOffice) ? VISIBLE : GONE);

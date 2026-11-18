@@ -1197,7 +1197,8 @@ public final class SettingsView extends FrameLayout {
         col.addView(card, topFull(14));
 
         // 1.0.4 (punto D): MG4 Store. Se l'utente l'ha tolto il launcher non lo rimette da solo: si reinstalla da qui
-        if (com.mg4.launcher.svc.StoreSetup.installedCode(c) < 0) {
+        if (com.mg4.launcher.svc.StoreSetup.installedCode(c) < 0
+                && com.mg4.launcher.svc.StoreSetup.hasBundledStore(c)) {
             card = card(c);
             View stBtn = button(c, L.s(R.string.store_install), v -> {
                 android.widget.Toast.makeText(c, L.s(R.string.store_installing), android.widget.Toast.LENGTH_SHORT).show();

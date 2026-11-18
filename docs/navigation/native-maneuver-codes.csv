@@ -1,0 +1,41 @@
+Code,Exact MG instruction,Meaning,Condition
+0,Go Straight,Straight / continue (also before a distant maneuver),
+1,Turn Left,Turn left,
+2,Turn Right,Turn right,
+3,Direction to Left,Bear left,
+4,Direction Right,Bear right,
+5,U-Turn,Left U-turn,
+6,U-Turn,Right U-turn,
+7,To right 4 o’clock,Sharp right,
+8,To left 8 o’clock,Sharp left,
+9,Go straight (At a rotary),Roundabout straight,EnterAhead; GRT_ROUNDABOUT; turnIndex=3
+10,To left 9 o’clock (At a rotary),Roundabout 9 oclock,EnterAhead; GRT_ROUNDABOUT; turnIndex=5
+11,To right 3 o’clock (At a rotary),Roundabout 3 oclock,EnterAhead; GRT_ROUNDABOUT; turnIndex=1
+12,U-Turn (At a rotary),Roundabout U-turn,EnterAhead; GRT_ROUNDABOUT; turnIndex=7
+13,To right 1 o’clock (At a rotary),Roundabout 1 oclock,EnterAhead; GRT_ROUNDABOUT; turnIndex=2
+14,To right 4 o’clock (At a rotary),Roundabout 4 oclock,EnterAhead; GRT_ROUNDABOUT; turnIndex=0
+15,To left 8 o’clock (At a rotary),Roundabout 8 oclock,EnterAhead; GRT_ROUNDABOUT; turnIndex=6
+16,To left 11 o’clock (At a rotary),Roundabout 11 oclock,EnterAhead; GRT_ROUNDABOUT; turnIndex=4
+17,Keep Left,Keep left,
+18,Keep Right,Keep right,
+19,Ferry,Ferry,EnterAhead; GRT_FERRY
+20,Reach destination,Destination ahead,LocationAhead/Left/Right; waypoint index=-1
+21,Reach destination,Destination left,LocationAhead/Left/Right; waypoint index=-1
+22,Reach destination,Destination right,LocationAhead/Left/Right; waypoint index=-1
+23,Reach way point 1,Waypoint 1 ahead,LocationAhead/Left/Right; waypoint index=0
+24,Reach way point 1,Waypoint 1 left,LocationAhead/Left/Right; waypoint index=0
+25,Reach way point 1,Waypoint 1 right,LocationAhead/Left/Right; waypoint index=0
+26,Reach way point 2,Waypoint 2 ahead,LocationAhead/Left/Right; waypoint index=1
+27,Reach way point 2,Waypoint 2 left,LocationAhead/Left/Right; waypoint index=1
+28,Reach way point 2,Waypoint 2 right,LocationAhead/Left/Right; waypoint index=1
+29,Reach way point 3,Waypoint 3 ahead,LocationAhead/Left/Right; waypoint index=2
+30,Reach way point 3,Waypoint 3 left,LocationAhead/Left/Right; waypoint index=2
+31,Reach way point 3,Waypoint 3 right,LocationAhead/Left/Right; waypoint index=2
+32,Enter Right,Enter right,
+33,Merge Left,Merge left,
+34,Enter Left,Enter left,
+35,Merge Right,Merge right,
+36,Exit Left,Exit left,
+37,Exit Right,Exit right,
+38,PassTollBooth,Pass toll booth,
+39,HookTurnRight,Hook turn right,
