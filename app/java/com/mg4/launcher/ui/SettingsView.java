@@ -320,7 +320,7 @@ public final class SettingsView extends FrameLayout {
     /**
      * 1.0.4 (issue #33): posizione della pagina. Cambiando un'opzione la sezione si ricostruisce: si rimette lo
      * scorrimento dov'era. Statico perché alcune opzioni (tema, dimensione) ricreano tutte le impostazioni: in quel caso
-     * vale se la ricostruzione arriva entro pochi secondi. Cambiando sezione dal menu si parte sempre in cima.
+     * si salva la posizione quando le vecchie impostazioni si chiudono e vale se le nuove si aprono entro pochi secondi. Cambiando sezione dal menu si parte sempre in cima.
      */
     private static int keptSection = -1, keptY;
     private static long keptAt;
@@ -363,16 +363,8 @@ public final class SettingsView extends FrameLayout {
         sv.setVerticalScrollBarEnabled(false);
         sv.setOverScrollMode(OVER_SCROLL_NEVER);
         curScroll = sv;
-        sv.setOnScrollChangeListener((v, x, y, ox, oy) -> {
-            keptSection = key;
-            keptY = y;
-            keptAt = SystemClock.uptimeMillis();
-        });
         if (keep > 0) {
             final int y0 = keep;
-            keptSection = key;
-            keptY = y0;
-            keptAt = SystemClock.uptimeMillis();
             // dopo il layout (prima la pagina ha altezza 0 e lo scorrimento verrebbe azzerato), senza animazione
             sv.addOnLayoutChangeListener(new OnLayoutChangeListener() {
                 @Override
@@ -1533,6 +1525,12 @@ public final class SettingsView extends FrameLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         main.removeCallbacks(refreshTick);
+        // posizione al momento della chiusura: se le impostazioni si ricreano subito (tema, dimensione) si riparte da qui
+        if (curScroll != null) {
+            keptSection = curKey;
+            keptY = curScroll.getScrollY();
+            keptAt = SystemClock.uptimeMillis();
+        }
         host.updater().setListener(null);
         com.mg4.launcher.svc.LogoPacks.get(getContext()).removeListener(logoListener);
     }

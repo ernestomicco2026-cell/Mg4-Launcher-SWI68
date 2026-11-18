@@ -23,6 +23,7 @@ import java.util.zip.ZipInputStream;
  * <ul>
  *   <li>in background, con ripresa se il download si interrompe (Range), controllo sha256 e dimensione;</li>
  *   <li>se si cambia colore si scarica il nuovo e si cancella il vecchio;</li>
+ *   <li>1.0.5: se il pacchetto su GitHub cambia (sha256 in animazioni.json) si riscarica, al massimo un controllo ogni 12 ore;</li>
  *   <li>se animazioni.json o il pacchetto non ci sono: niente animazione, nessun errore a schermo.</li>
  * </ul>
  * Le 8 clip si estraggono in files/animazione/&lt;colore&gt;/ (carica-&lt;colore&gt;-&lt;giorno|notte&gt;-&lt;fase&gt;.mp4).
@@ -90,15 +91,18 @@ public final class ChargePack {
         new Thread(() -> {
             try {
                 removeOthers(c, color);
-                if (complete(c, color)) {
+                boolean have = complete(c, color);
+                long last = sp.getLong("animControllo." + slug(color), 0);
+                boolean due = force || last <= 0 || System.currentTimeMillis() - last >= CHECK_EVERY_MS;
+                if (have && (!due || !changed(c, color))) {
                     state = "pacchetto " + color + " presente";
                     failed = false;
+                    if (due) sp.edit().putLong("animControllo." + slug(color), System.currentTimeMillis()).apply();
                     buildFrames(c, color);
                     generation++;
                     return;
                 }
-                long last = sp.getLong("animControllo." + slug(color), 0);
-                if (!force && System.currentTimeMillis() - last < CHECK_EVERY_MS && last > 0) return;
+                if (!due) return;
                 sp.edit().putLong("animControllo." + slug(color), System.currentTimeMillis()).apply();
                 download(c, color);
                 if (complete(c, color)) buildFrames(c, color);
@@ -151,12 +155,59 @@ public final class ChargePack {
         f.delete();
     }
 
+    /** Impronta (sha256) del pacchetto scaricato, salvata accanto alle clip. */
+    private static File shaFile(Context c, String color) {
+        return new File(dir(c, color), "sha256");
+    }
+
+    private static String readSha(Context c, String color) {
+        try {
+            return new String(java.nio.file.Files.readAllBytes(shaFile(c, color).toPath()), "UTF-8").trim();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static void writeSha(Context c, String color, String sha) {
+        try (OutputStream out = new FileOutputStream(shaFile(c, color))) {
+            out.write(sha.getBytes("UTF-8"));
+        } catch (Exception ignored) {
+        }
+    }
+
+    private static JSONObject entry(String color) throws Exception {
+        JSONObject colors = new JSONObject(Updater.getText(JSON_URL)).optJSONObject("colori");
+        return colors == null ? null : colors.optJSONObject(color);
+    }
+
+    /**
+     * 1.0.5: il pacchetto su GitHub è cambiato (sha256 diverso da quello scaricato)? Se animazioni.json non si legge,
+     * si tiene quello che c'è. Pacchetti scaricati con la 1.0.4 (senza impronta): si prende quella attuale, senza
+     * riscaricare.
+     */
+    private static boolean changed(Context c, String color) {
+        String want;
+        try {
+            JSONObject e = entry(color);
+            want = e == null ? "" : e.optString("sha256", "").toLowerCase(Locale.ROOT);
+        } catch (Exception e) {
+            return false;
+        }
+        if (want.isEmpty()) return false;
+        String got = readSha(c, color);
+        if (got == null) {
+            writeSha(c, color, want);
+            return false;
+        }
+        if (got.equals(want)) return false;
+        Diag.put("ricarica.pacchetto", "pacchetto " + color + " cambiato su GitHub: si riscarica");
+        return true;
+    }
+
     private static void download(Context c, String color) {
         JSONObject entry;
         try {
-            JSONObject j = new JSONObject(Updater.getText(JSON_URL));
-            JSONObject colors = j.optJSONObject("colori");
-            entry = colors == null ? null : colors.optJSONObject(color);
+            entry = entry(color);
         } catch (Exception e) {
             state = "pacchetto " + color + " assente (animazioni.json non disponibile)";
             Diag.put("ricarica.pacchetto", state);
@@ -189,6 +240,7 @@ public final class ChargePack {
             File dst = dir(c, color);
             deleteTree(dst);
             if (!tmp.renameTo(dst)) throw new java.io.IOException("cartella non rinominata");
+            writeSha(c, color, got);
             //noinspection ResultOfMethodCallIgnored
             part.delete();
             failed = !complete(c, color);
