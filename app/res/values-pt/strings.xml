@@ -510,4 +510,9 @@
     <string name="news_v104_5" formatted="false">Desinstalação mais segura: o ecrã inicial MG original volta sempre, mesmo que o launcher seja removido no menu Apps</string>
     <string name="anim_preparing" formatted="false">A preparar a animação de carregamento: só da primeira vez, 2–3 minutos. Começa sozinha quando estiver pronta.</string>
     <string name="anim_prepare_failed">Não foi possível preparar a animação de carregamento (%1$s). Os detalhes estão no registo.</string>
+    <string name="app_uninstall" formatted="false">Desinstalar</string>
+    <string name="app_uninstall_q">Queres desinstalar %1$s?</string>
+    <string name="app_uninstall_done">%1$s desinstalada</string>
+    <string name="app_uninstall_failed">Não foi possível desinstalar %1$s</string>
+    <string name="news_v104_6" formatted="false">Definições: ao mudar uma opção a página fica onde estava · Apps: toque longo numa app que instalaste para a desinstalar</string>
 </resources>

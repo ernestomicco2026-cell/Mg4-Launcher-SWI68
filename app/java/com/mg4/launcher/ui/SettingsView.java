@@ -199,6 +199,8 @@ public final class SettingsView extends FrameLayout {
                 if (section == idx && !diagOpen) return;
                 section = idx;
                 diagOpen = false;
+                curScroll = null;      // sezione nuova: si parte in cima
+                keptSection = -1;
                 buildMenu();
                 showSection(idx);
             });
@@ -315,8 +317,24 @@ public final class SettingsView extends FrameLayout {
     // Contenuto delle sezioni
     // =========================================================================================
 
+    /**
+     * 1.0.4 (issue #33): posizione della pagina. Cambiando un'opzione la sezione si ricostruisce: si rimette lo
+     * scorrimento dov'era. Statico perché alcune opzioni (tema, dimensione) ricreano tutte le impostazioni: in quel caso
+     * vale se la ricostruzione arriva entro pochi secondi. Cambiando sezione dal menu si parte sempre in cima.
+     */
+    private static int keptSection = -1, keptY;
+    private static long keptAt;
+    private ScrollView curScroll;
+    private int curKey = -1;
+
     private void showSection(int s) {
         Context c = getContext();
+        int key = s + (diagOpen ? 100 : 0);
+        int keep = 0;
+        if (curScroll != null && curKey == key) keep = curScroll.getScrollY();
+        else if (curScroll == null && keptSection == key && SystemClock.uptimeMillis() - keptAt < 5000) keep = keptY;
+        curScroll = null;
+        curKey = key;
         content.removeAllViews();
         diagText = null;
         logUploadSub = null;
@@ -344,6 +362,27 @@ public final class SettingsView extends FrameLayout {
         ScrollView sv = new ScrollView(c);
         sv.setVerticalScrollBarEnabled(false);
         sv.setOverScrollMode(OVER_SCROLL_NEVER);
+        curScroll = sv;
+        sv.setOnScrollChangeListener((v, x, y, ox, oy) -> {
+            keptSection = key;
+            keptY = y;
+            keptAt = SystemClock.uptimeMillis();
+        });
+        if (keep > 0) {
+            final int y0 = keep;
+            keptSection = key;
+            keptY = y0;
+            keptAt = SystemClock.uptimeMillis();
+            // dopo il layout (prima la pagina ha altezza 0 e lo scorrimento verrebbe azzerato), senza animazione
+            sv.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int l, int tp, int r, int b, int ol, int ot, int or, int ob) {
+                    if (sv.getChildCount() == 0 || sv.getChildAt(0).getHeight() == 0) return;
+                    sv.removeOnLayoutChangeListener(this);
+                    sv.scrollTo(0, y0);
+                }
+            });
+        }
         LinearLayout col = Ui.column(c);
         col.setPadding(0, dp(26), 0, 0);
         sv.addView(col, new FrameLayout.LayoutParams(-1, -2));

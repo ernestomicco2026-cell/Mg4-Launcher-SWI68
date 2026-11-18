@@ -510,4 +510,9 @@
     <string name="news_v104_5" formatted="false">Disinstalla più sicuro: la home originale MG torna sempre accesa, anche se il launcher viene tolto dal menu App</string>
     <string name="anim_preparing" formatted="false">Preparo l\'animazione di ricarica: solo la prima volta, 2–3 minuti. Parte da sola quando è pronta.</string>
     <string name="anim_prepare_failed">Non riesco a preparare l\'animazione di ricarica (%1$s). I dettagli sono nel log.</string>
+    <string name="app_uninstall" formatted="false">Disinstalla</string>
+    <string name="app_uninstall_q">Vuoi disinstallare %1$s?</string>
+    <string name="app_uninstall_done">%1$s disinstallata</string>
+    <string name="app_uninstall_failed">Non sono riuscito a disinstallare %1$s</string>
+    <string name="news_v104_6" formatted="false">Impostazioni: cambiando un\'opzione la pagina resta dov\'era · App: pressione lunga su un\'app installata da te per disinstallarla</string>
 </resources>

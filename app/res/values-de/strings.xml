@@ -510,4 +510,9 @@
     <string name="news_v104_5" formatted="false">Sichereres Deinstallieren: der originale MG-Startbildschirm kommt immer zurück, auch wenn der Launcher über das App-Menü entfernt wird</string>
     <string name="anim_preparing" formatted="false">Ladeanimation wird vorbereitet: nur beim ersten Mal, 2–3 Minuten. Sie startet von selbst, sobald sie fertig ist.</string>
     <string name="anim_prepare_failed">Die Ladeanimation konnte nicht vorbereitet werden (%1$s). Details stehen im Log.</string>
+    <string name="app_uninstall" formatted="false">Deinstallieren</string>
+    <string name="app_uninstall_q">Möchtest du %1$s deinstallieren?</string>
+    <string name="app_uninstall_done">%1$s deinstalliert</string>
+    <string name="app_uninstall_failed">%1$s konnte nicht deinstalliert werden</string>
+    <string name="news_v104_6" formatted="false">Einstellungen: beim Ändern einer Option bleibt die Seite, wo sie war · Apps: eine selbst installierte App lange drücken, um sie zu deinstallieren</string>
 </resources>

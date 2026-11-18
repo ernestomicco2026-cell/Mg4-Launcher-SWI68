@@ -510,4 +510,9 @@
     <string name="news_v104_5" formatted="false">Désinstallation plus sûre : l\'accueil MG d\'origine revient toujours, même si le launcher est supprimé depuis le menu Applis</string>
     <string name="anim_preparing" formatted="false">Préparation de l\'animation de recharge : la première fois seulement, 2 à 3 minutes. Elle démarre seule dès qu\'elle est prête.</string>
     <string name="anim_prepare_failed">Impossible de préparer l\'animation de recharge (%1$s). Les détails sont dans le journal.</string>
+    <string name="app_uninstall" formatted="false">Désinstaller</string>
+    <string name="app_uninstall_q">Voulez-vous désinstaller %1$s ?</string>
+    <string name="app_uninstall_done">%1$s désinstallée</string>
+    <string name="app_uninstall_failed">Impossible de désinstaller %1$s</string>
+    <string name="news_v104_6" formatted="false">Réglages : en changeant une option, la page reste où elle était · Applis : appui long sur une appli que vous avez installée pour la désinstaller</string>
 </resources>

@@ -510,4 +510,9 @@
     <string name="news_v104_5" formatted="false">Bezpieczniejsze odinstalowanie: oryginalny ekran główny MG zawsze wraca, nawet gdy launcher zostanie usunięty z menu Aplikacje</string>
     <string name="anim_preparing" formatted="false">Przygotowuję animację ładowania: tylko za pierwszym razem, 2–3 minuty. Uruchomi się sama, gdy będzie gotowa.</string>
     <string name="anim_prepare_failed">Nie udało się przygotować animacji ładowania (%1$s). Szczegóły są w logu.</string>
+    <string name="app_uninstall" formatted="false">Odinstaluj</string>
+    <string name="app_uninstall_q">Czy odinstalować %1$s?</string>
+    <string name="app_uninstall_done">Odinstalowano %1$s</string>
+    <string name="app_uninstall_failed">Nie udało się odinstalować %1$s</string>
+    <string name="news_v104_6" formatted="false">Ustawienia: po zmianie opcji strona zostaje w tym samym miejscu · Aplikacje: przytrzymaj zainstalowaną przez siebie aplikację, aby ją odinstalować</string>
 </resources>

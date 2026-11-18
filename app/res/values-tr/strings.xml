@@ -510,4 +510,9 @@
     <string name="news_v104_5" formatted="false">Daha güvenli kaldırma: başlatıcı Uygulamalar menüsünden kaldırılsa bile orijinal MG ana ekranı her zaman geri gelir</string>
     <string name="anim_preparing" formatted="false">Şarj animasyonu hazırlanıyor: yalnızca ilk sefer, 2–3 dakika. Hazır olunca kendiliğinden başlar.</string>
     <string name="anim_prepare_failed">Şarj animasyonu hazırlanamadı (%1$s). Ayrıntılar günlükte.</string>
+    <string name="app_uninstall" formatted="false">Kaldır</string>
+    <string name="app_uninstall_q">%1$s kaldırılsın mı?</string>
+    <string name="app_uninstall_done">%1$s kaldırıldı</string>
+    <string name="app_uninstall_failed">%1$s kaldırılamadı</string>
+    <string name="news_v104_6" formatted="false">Ayarlar: bir seçeneği değiştirince sayfa olduğu yerde kalır · Uygulamalar: yüklediğiniz bir uygulamayı kaldırmak için uzun basın</string>
 </resources>

@@ -1,6 +1,6 @@
 {
-  "version": "1.0.3",
-  "apk": "releases/MG4Launcher-1.0.3.apk",
-  "size": 793089,
-  "notes": "Tema giorno/notte corretto sulle auto bloccate su notte, FM/DAB più grande accanto ai comandi, ordine dei comandi in alto scambiabile, riquadro accanto al clima con preferiti del telefono o app, elenco stazioni sempre aggiornato, Bluetooth più affidabile all'accensione, Controllo funzioni."
+  "version": "1.0.4",
+  "apk": "releases/MG4Launcher-1.0.4.apk",
+  "size": 1125461,
+  "notes": "Disinstallazione sicura (riaccende prima la home MG), tema giorno/notte di tutto il sistema, fari letti dall'auto, nuova home con FM/DAB sotto Radio ed elenco stazioni più in alto, auto disegnata dal modello 3D, animazione di ricarica, Molto grande sistemato, impostazioni che restano al loro posto, disinstallazione delle app con pressione lunga, MG4 Store incluso."
 }

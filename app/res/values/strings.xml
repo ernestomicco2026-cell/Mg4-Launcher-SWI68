@@ -510,4 +510,9 @@
     <string name="news_v104_5" formatted="false">Safer uninstall: the original MG home always comes back, even if the launcher is removed from the Apps menu</string>
     <string name="anim_preparing" formatted="false">Preparing the charging animation: first time only, 2–3 minutes. It starts by itself when ready.</string>
     <string name="anim_prepare_failed">Could not prepare the charging animation (%1$s). Details are in the log.</string>
+    <string name="app_uninstall" formatted="false">Uninstall</string>
+    <string name="app_uninstall_q">Do you want to uninstall %1$s?</string>
+    <string name="app_uninstall_done">%1$s uninstalled</string>
+    <string name="app_uninstall_failed">Could not uninstall %1$s</string>
+    <string name="news_v104_6" formatted="false">Settings: changing an option keeps the page where it was · Apps: long-press an app you installed to uninstall it</string>
 </resources>

@@ -32,6 +32,9 @@ public final class AppsView extends LinearLayout {
         void openSettings();
 
         String navPackageHint();
+
+        /** Contenitore per le finestre di conferma (1.0.4). */
+        FrameLayout overlayRoot();
     }
 
     private final Theme t;
@@ -156,6 +159,18 @@ public final class AppsView extends LinearLayout {
         return p.startsWith("com.mg4.") && (p.contains("360") || String.valueOf(app.label).contains("360"));
     }
 
+    private void askUninstall(AppCatalog.App app) {
+        FrameLayout root = host.overlayRoot();
+        if (root == null) return;
+        String name = String.valueOf(app.label);
+        Confirm.show(root, t, L.s(R.string.app_uninstall), L.f(R.string.app_uninstall_q, name), L.s(R.string.btn_cancel),
+                L.s(R.string.app_uninstall), () -> com.mg4.launcher.svc.AppUninstall.uninstall(getContext(), app.packageName, ok -> {
+                    android.widget.Toast.makeText(getContext(), ok ? L.f(R.string.app_uninstall_done, name)
+                            : L.f(R.string.app_uninstall_failed, name), android.widget.Toast.LENGTH_LONG).show();
+                    if (ok) reload();
+                }));
+    }
+
     private View tile(Context c, AppCatalog.App app, Set<String> editable) {
         LinearLayout col = Ui.column(c);
         col.setGravity(Gravity.CENTER);
@@ -176,6 +191,13 @@ public final class AppsView extends LinearLayout {
             col.setOnClickListener(v -> {
                 if (catalog.launch(app)) host.closeApps();
             });
+            // 1.0.4 (issue #26): pressione lunga → Disinstalla, solo per le app installate dall'utente
+            if (com.mg4.launcher.svc.AppUninstall.allowed(c, app.packageName)) {
+                col.setOnLongClickListener(v -> {
+                    askUninstall(app);
+                    return true;
+                });
+            }
         }
 
         FrameLayout box = new FrameLayout(c);

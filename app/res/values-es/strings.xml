@@ -510,4 +510,9 @@
     <string name="news_v104_5" formatted="false">Desinstalación más segura: la pantalla de inicio MG original siempre vuelve, aunque el launcher se quite desde el menú Apps</string>
     <string name="anim_preparing" formatted="false">Preparando la animación de carga: solo la primera vez, 2–3 minutos. Empieza sola cuando esté lista.</string>
     <string name="anim_prepare_failed">No se pudo preparar la animación de carga (%1$s). Los detalles están en el registro.</string>
+    <string name="app_uninstall" formatted="false">Desinstalar</string>
+    <string name="app_uninstall_q">¿Quieres desinstalar %1$s?</string>
+    <string name="app_uninstall_done">%1$s desinstalada</string>
+    <string name="app_uninstall_failed">No se pudo desinstalar %1$s</string>
+    <string name="news_v104_6" formatted="false">Ajustes: al cambiar una opción la página se queda donde estaba · Apps: mantén pulsada una app que instalaste para desinstalarla</string>
 </resources>

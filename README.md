@@ -311,6 +311,9 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 - **Elenco delle stazioni** più leggibile, più in alto (accanto a FM/DAB) e a destra; solo righe intere.
 - **Auto disegnata dal modello 3D**: la stessa auto dell'animazione di ricarica, nella stessa posa e con gli stessi
   colori, così il passaggio all'animazione non si nota. Restano colori, cerchi, tetto nero e fari accesi.
+- **Impostazioni** (issue #33): cambiando un'opzione la pagina resta dov'era, invece di tornare in cima.
+- **Disinstallare le app** (issue #26): pressione lunga sull'icona di un'app installata da te → "Disinstalla", con
+  conferma. Le app di sistema, quelle MG e le nostre app sono protette.
 - **Dimensione "Molto grande"** sistemata: tutte le sorgenti con la scritta, tasti della radio interi, testo della barra
   in basso non più troncato; testo, pulsanti, preferiti ed elenco crescono con la dimensione scelta.
 - **Animazione di ricarica**: quando colleghi il cavo l'auto si anima (aggancio, in carica, carica finita, sgancio).
@@ -936,6 +939,9 @@ Even just **€2** is a great help to keep developing and testing new versions i
 - **Station list** easier to read, higher up (next to FM/DAB) and to the right; whole rows only.
 - **Car drawn from the 3D model**: the same car as the charging animation, in the same pose and colours, so the switch
   to the animation is seamless. Colours, wheels, black roof and lit headlights are still there.
+- **Settings** (issue #33): changing an option keeps the page where it was, instead of jumping back to the top.
+- **Uninstalling apps** (issue #26): long-press the icon of an app you installed → "Uninstall", with confirmation.
+  System apps, MG apps and our own apps are protected.
 - **"Extra large" size** fixed: every source keeps its label, radio buttons no longer cut, bottom bar text no longer
   truncated; text, buttons, favourites and list grow with the chosen size.
 - **Charging animation**: when you plug in the cable the car comes to life (plug-in, charging, charge complete,
