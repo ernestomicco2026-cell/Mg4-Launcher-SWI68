@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-<a href="releases/MG4Launcher-1.0.3.apk"><img alt="Scarica / Download 1.0.3" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.3-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
+<a href="releases/MG4Launcher-1.0.4.apk"><img alt="Scarica / Download 1.0.4" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.4-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
 <a href="https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT"><img alt="Sostieni il progetto con PayPal · Support the project with PayPal" src="https://img.shields.io/badge/Sostieni%20%2F%20Support-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white"></a>
 </p>
 
@@ -198,7 +198,7 @@ Si installa come una normale app: non serve per forza un computer. Ci sono due m
 
 #### Metodo 1 — Da chiavetta USB (senza computer)
 
-1. Copia `MG4Launcher-1.0.1.apk` su una chiavetta USB formattata **FAT32** o **exFAT**.
+1. Copia `MG4Launcher-1.0.4.apk` su una chiavetta USB formattata **FAT32** o **exFAT**.
 2. Inserisci la chiavetta nell'auto, apri il file manager e tocca l'APK.
 3. Se Android avvisa che non può installare app da questa fonte: tocca **Impostazioni**, attiva
    **Consenti da questa fonte** per il file manager e torna indietro.
@@ -214,7 +214,7 @@ Il firmware MG può bloccare l'installazione normale delle app: l'opzione `-f` l
 
 1. Installa:
    ```bash
-   adb install -r -f MG4Launcher-1.0.1.apk
+   adb install -r -f MG4Launcher-1.0.4.apk
    ```
 2. Rendilo la home predefinita:
    ```bash
@@ -826,7 +826,7 @@ It installs like a normal app, so a computer isn't required. There are two ways:
 
 #### Method 1 — From a USB stick (no computer)
 
-1. Copy `MG4Launcher-1.0.1.apk` to a USB stick formatted as **FAT32** or **exFAT**.
+1. Copy `MG4Launcher-1.0.4.apk` to a USB stick formatted as **FAT32** or **exFAT**.
 2. Plug it into the car, open the file manager and tap the APK.
 3. If Android says it cannot install apps from this source: tap **Settings**, enable
    **Allow from this source** for the file manager and go back.
@@ -842,7 +842,7 @@ The MG firmware may block normal app installs; the `-f` option allows it.
 
 1. Install it:
    ```bash
-   adb install -r -f MG4Launcher-1.0.1.apk
+   adb install -r -f MG4Launcher-1.0.4.apk
    ```
 2. Make it the default home:
    ```bash
