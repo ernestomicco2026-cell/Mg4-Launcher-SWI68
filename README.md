@@ -17,7 +17,8 @@
 
 # MG4 Launcher — SWI68 SAIC 1.0+
 
-<p align="center"><img src="screenshots/home.png" alt="Home di MG4 Launcher SWI68 SAIC 1.0+ (simulazione) · MG4 Launcher SWI68 SAIC 1.0+ home (mock-up)" width="100%"></p>
+<p align="center"><img src="docs/home-1.0.4-ricarica.gif" alt="Home di MG4 Launcher SWI68 SAIC 1.0+ con l'animazione di ricarica (simulazione) · MG4 Launcher SWI68 SAIC 1.0+ home with the charging animation (mock-up)" width="100%"></p>
+<p align="center"><sub><b>Animazione di ricarica</b>: l'auto si gira, il cavo si aggancia e la carica scorre; potenza e tempo restante accanto alla temperatura · <i><b>Charging animation</b>: the car turns, the cable plugs in and the charge flows; power and time left next to the temperature</i></sub></p>
 
 <p align="center">
 <b>Launcher in stile Tesla per l'infotainment MG4 SWI68 SAIC 1.0+</b><br>
@@ -50,8 +51,8 @@
 <tr>
 <td width="50%" valign="top"><img src="docs/home-1.0.4-giorno-radio.png" alt="Home di giorno con la radio: FM/DAB sotto Radio, Mappa/Media in basso (simulazione)" width="100%"><br>
 <sub>Tema <b>giorno</b> con la radio: <b>FM/DAB</b> sotto Radio, <b>Mappa/Media</b> in basso prima dei preferiti · <i><b>Day</b> theme with the radio: <b>FM/DAB</b> under Radio, <b>Map/Media</b> at the bottom before the favourites</i></sub></td>
-<td width="50%" valign="top"><img src="docs/home-1.0.4-ricarica.gif" alt="Animazione di ricarica: l'auto ruota, il cavo si aggancia e il flusso scorre (simulazione)" width="100%"><br>
-<sub><b>Animazione di ricarica</b>: l'auto si gira, il cavo si aggancia e la carica scorre; potenza e tempo restante accanto alla temperatura · <i><b>Charging animation</b>: the car turns, the cable plugs in and the charge flows; power and time left next to the temperature</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.4-notte-radio.png" alt="Home di notte con la radio (simulazione)" width="100%"><br>
+<sub>Tema <b>notte</b> con la radio · <i><b>Night</b> theme with the radio</i></sub></td>
 </tr>
 <tr>
 <td width="50%" valign="top"><img src="docs/home-1.0.4-giorno-usb.png" alt="Home di giorno con la chiavetta USB (simulazione)" width="100%"><br>
