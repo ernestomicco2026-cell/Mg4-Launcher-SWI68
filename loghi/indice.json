@@ -489,11 +489,11 @@
     "pl": "Wielka Brytania"
    },
    "file": "GB.zip",
-   "versione": 1,
-   "dimensione": 3655008,
-   "sha256": "66d77fb677ffe146d0c1e80b6c72cc590cd2facb339d13c759395c9216da10fb",
+   "versione": 2,
+   "dimensione": 3655242,
+   "sha256": "4c54c3563a599039f793b1f9cdc867f8992bc48cd4927548d6d540f61b40b930",
    "loghi": 635,
-   "alias": 103
+   "alias": 139
   },
   {
    "codice": "GI",
