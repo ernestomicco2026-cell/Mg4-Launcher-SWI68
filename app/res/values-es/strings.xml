@@ -362,6 +362,15 @@
     <string name="newsh_5" formatted="false">CarPlay / Android Auto: se abre con un solo toque y tiene su icono en la barra mientras el teléfono está conectado</string>
     <string name="newsh_6" formatted="false">Ajustes: eliminado el espacio vacío entre Panel del coche y Barra inferior</string>
     <string name="newsh_7" formatted="false">Con MG4 Clima abierto, el panel de clima del sistema se cierra solo con el comando del sistema</string>
+    <string name="group_airflow" formatted="false">Flujo de aire</string>
+    <string name="airflow_fan_speed" formatted="false">Velocidad del ventilador</string>
+    <string name="airflow_direction" formatted="false">Dirección del aire</string>
+    <string name="airflow_windscreen" formatted="false">Parabrisas</string>
+    <string name="airflow_face" formatted="false">Cara</string>
+    <string name="airflow_feet" formatted="false">Pies</string>
+    <string name="airflow_window_clearing" formatted="false">Desempañado</string>
+    <string name="airflow_front_clear" formatted="false">Desempañar parabrisas</string>
+    <string name="airflow_rear_heat" formatted="false">Luneta térmica</string>
     <string name="set_apps_size" formatted="false">TAMAÑO DE APPS</string>
     <string name="news_v097_1" formatted="false">Tamaño propio para la pantalla de apps: elígelo en ajustes (iconos y texto más grandes)</string>
     <string name="news_v097_2" formatted="false">Dongle: el registro indica ahora si el dongle vuelve a aparecer tras el reinicio</string>
