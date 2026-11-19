@@ -1,6 +1,6 @@
 {
-  "version": "1.0.4",
-  "apk": "releases/MG4Launcher-1.0.4.apk",
-  "size": 1125461,
-  "notes": "Disinstallazione sicura (riaccende prima la home MG), tema giorno/notte di tutto il sistema, fari letti dall'auto, nuova home con FM/DAB sotto Radio ed elenco stazioni più in alto, auto disegnata dal modello 3D, animazione di ricarica, Molto grande sistemato, impostazioni che restano al loro posto, disinstallazione delle app con pressione lunga, MG4 Store incluso."
+  "version": "1.0.5",
+  "apk": "releases/MG4Launcher-1.0.5.apk",
+  "size": 1190375,
+  "notes": "Animazione di ricarica che parte davvero con il cavo attaccato e lo schermo acceso; impostazioni che restano al loro posto anche dopo una pausa; pacchetto dell'animazione che si aggiorna da solo; Spegni la vettura dalle impostazioni (solo in P); riquadro auto nascondibile; icone delle manovre del navigatore (grazie a sommistica); navigatore in finestra nel pannello mappe (sperimentale)."
 }

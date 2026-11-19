@@ -514,5 +514,41 @@
     <string name="app_uninstall_q">¿Quieres desinstalar %1$s?</string>
     <string name="app_uninstall_done">%1$s desinstalada</string>
     <string name="app_uninstall_failed">No se pudo desinstalar %1$s</string>
+    <string name="chk_ready" formatted="false">READY leído</string>
+    <string name="chk_power" formatted="false">Apagado disponible</string>
+    <string name="power_off" formatted="false">Apagar el coche</string>
+    <string name="power_off_sub" formatted="false">Como el botón del coche: solo en P, con confirmación</string>
+    <string name="power_off_q" formatted="false">¿Apagar el coche?</string>
+    <string name="power_off_msg" formatted="false">Si no tocas nada, se cancela en unos segundos.</string>
+    <string name="power_off_btn" formatted="false">Apagar</string>
+    <string name="power_off_not_p" formatted="false">No se puede apagar: pon la P</string>
+    <string name="power_off_unavailable" formatted="false">El apagado no está disponible ahora</string>
+    <string name="power_off_failed" formatted="false">No se pudo enviar el apagado</string>
+    <string name="set_power_btn" formatted="false">Botón Apagar el coche en la barra inferior</string>
+    <string name="set_power_btn_sub" formatted="false">Misma confirmación que en ajustes; solo funciona en P</string>
+    <string name="set_car_panel" formatted="false">Panel del coche</string>
+    <string name="set_car_panel_sub" formatted="false">El coche en el panel izquierdo; si lo ocultas, otro panel ocupa su lugar</string>
+    <string name="car_panel_show" formatted="false">Mostrar</string>
+    <string name="car_panel_hide" formatted="false">Ocultar</string>
+    <string name="set_side_widget" formatted="false">En lugar del coche</string>
+    <string name="set_side_widget_sub" formatted="false">Reloj y fecha grandes, mapa, multimedia o favoritos del teléfono (los mismos de la barra)</string>
+    <string name="side_clock" formatted="false">Reloj</string>
+    <string name="nav_missing_send" formatted="false">Enviar al desarrollador el registro del icono que falta</string>
+    <string name="nav_missing_code">Icono que falta: código %1$d</string>
+    <string name="nav_missing_sending">Enviando el icono que falta %1$d…</string>
+    <string name="nav_missing_sent" formatted="false">Registro enviado al desarrollador</string>
+    <string name="nav_missing_queued" formatted="false">Registro guardado: se enviará en el próximo envío</string>
+    <string name="nav_missing_retry" formatted="false">Envío fallido: el registro está guardado y se reintentará</string>
+    <string name="nav_missing_not_configured" formatted="false">El envío de registros no está disponible en esta versión</string>
+    <string name="nav_missing_error" formatted="false">No se pudo enviar el registro del icono que falta</string>
+    <string name="set_map_panel" formatted="false">Contenido del panel de mapas (experimental)</string>
+    <string name="set_map_panel_sub" formatted="false">Indicaciones como hoy, o el navegador MG en una ventana solo para ver: un toque lo abre a pantalla completa</string>
+    <string name="map_panel_directions" formatted="false">Indicaciones</string>
+    <string name="map_panel_window" formatted="false">Navegador en ventana</string>
+    <string name="pip_refused" formatted="false">El navegador en ventana no es compatible con este coche: el panel de mapas vuelve a ser como antes</string>
+    <string name="news_v105_1" formatted="false">Animación de carga: ahora empieza de verdad al conectar el cable con la pantalla encendida</string>
+    <string name="news_v105_2" formatted="false">Apagar el coche desde los ajustes (solo en P) y panel del coche ocultable</string>
+    <string name="news_v105_3" formatted="false">Iconos de maniobras del navegador (gracias a sommistica) y navegador en ventana en el panel de mapas (experimental)</string>
+    <string name="news_v105_4" formatted="false">Ajustes: la página se queda en su sitio incluso tras una pausa · el paquete de la animación se actualiza solo</string>
     <string name="news_v104_6" formatted="false">Ajustes: al cambiar una opción la página se queda donde estaba · Apps: mantén pulsada una app que instalaste para desinstalarla</string>
 </resources>

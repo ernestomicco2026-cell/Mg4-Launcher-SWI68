@@ -101,6 +101,10 @@ public final class HomeView extends LinearLayout {
     // mappa
     private LinearLayout navIdle, navCard, navEta;
     private TextView navCardTitle, navCardSub, navEtaArrive, navEtaMin, navEtaKm;
+    // 1.0.5 (PR #31 di sommistica): icona della manovra, via, segnalazione di un'icona mancante
+    private ImageView navManeuverIcon;
+    private TextView navRoad, missingIconButton, missingIconStatus;
+    private boolean missingIconSending;
     private View navHomeBtn, navOfficeBtn;
     private LinearLayout navWith, navWithBox, navPlaces;
     private TextView navDefaultTv;
@@ -169,6 +173,8 @@ public final class HomeView extends LinearLayout {
     private final boolean rhd, sysIndicator;
     /** Barra in basso grande (opzione): misure fisse in px, indipendenti da "Dimensione comandi". */
     private final boolean big;
+    /** 1.0.5: riquadro auto mostrato (altrimenti widget a scelta nel pannello sinistro). */
+    private final boolean carShown;
 
     public HomeView(Context c, Theme t, Prefs prefs, Host host, VehicleClient vehicle, MediaClient media, NavClient nav) {
         super(c);
@@ -189,6 +195,7 @@ public final class HomeView extends LinearLayout {
         rhd = Prefs.DRIVE_RIGHT.equals(side) || (Prefs.DRIVE_AUTO.equals(side) && carRhd);
         sysIndicator = CarFeatures.hasSystemLightIndicator(c) || carRhd;
         big = prefs.bigBar();
+        carShown = prefs.carPanel();
 
         LinearLayout top = Ui.row(c);
         top.setGravity(Gravity.FILL_VERTICAL);
@@ -304,13 +311,18 @@ public final class HomeView extends LinearLayout {
         p.addView(status, Ui.margins(new LayoutParams(-1, -2), 0, dp(14), 0, 0));
 
         car = new CarView(c);
-        // 1.0.4 (punto F): l'animazione di ricarica sta sopra l'auto, nello stesso riquadro
-        FrameLayout carFrame = new FrameLayout(c);
-        carFrame.addView(car, new FrameLayout.LayoutParams(-1, -1));
-        chargeAnim = new ChargeAnimView(c);
-        carFrame.addView(chargeAnim, new FrameLayout.LayoutParams(-1, -1));
-        carFrame.setClipChildren(true);
-        p.addView(carFrame, Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(4), 0, dp(4)));
+        if (carShown) {
+            // 1.0.4 (punto F): l'animazione di ricarica sta sopra l'auto, nello stesso riquadro
+            FrameLayout carFrame = new FrameLayout(c);
+            carFrame.addView(car, new FrameLayout.LayoutParams(-1, -1));
+            chargeAnim = new ChargeAnimView(c);
+            carFrame.addView(chargeAnim, new FrameLayout.LayoutParams(-1, -1));
+            carFrame.setClipChildren(true);
+            p.addView(carFrame, Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(4), 0, dp(4)));
+        } else {
+            // 1.0.5 (issue SWI132 #4): riquadro auto nascosto, al suo posto il widget scelto (niente animazione di ricarica)
+            p.addView(buildSideWidget(c), Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(14), 0, dp(6)));
+        }
 
         // pressione pneumatici sotto le ruote dell'auto (anteriori a sinistra, posteriori a destra)
         tpmsRow = Ui.row(c);
@@ -322,7 +334,7 @@ public final class HomeView extends LinearLayout {
         tpmsRow.addView(tpmsRear, Ui.lpWeight(0, -2, 0.32f));
         tpmsRow.addView(new View(c), Ui.lpWeight(0, 1, 0.07f));
         // lo spazio della pressione è sempre riservato (anche prima che arrivi il dato): l'auto non cambia dimensione
-        tpmsRow.setVisibility(prefs.showTpms() ? INVISIBLE : GONE);
+        tpmsRow.setVisibility(prefs.showTpms() && carShown ? INVISIBLE : GONE);
         p.addView(tpmsRow, Ui.margins(new LayoutParams(-1, -2), 0, 0, 0, dp(10)));
 
         // pulsanti di ricarica (opzione): limite, corrente AC, avvia/ferma; spenti = più spazio all'auto
@@ -346,6 +358,187 @@ public final class HomeView extends LinearLayout {
             styleChargeButtons(new VehicleClient.State());
         }
         return p;
+    }
+
+    // =========================================================================================
+    // 1.0.5 (issue SWI132 #4): widget al posto del riquadro auto
+    // =========================================================================================
+
+    private TextView sideClock, sideDate, sideMediaTitle, sideMediaSub, sideNavTitle, sideNavSub;
+    private ImageView sideMediaArt, sideMediaPlay;
+    private View sideNavIdle, sideNavCard;
+    private LinearLayout sideFavBox;
+    private Boolean sidePhoneShown;
+
+    /**
+     * Occupa lo stesso spazio dell'auto (tra la riga delle temperature e i pulsanti di ricarica), con gli stessi colori
+     * del tema. Orologio e data: niente sfondo, testo centrato. Mappa, Media, Preferiti: riquadro t.chip con angoli 20 dp.
+     */
+    private View buildSideWidget(Context c) {
+        String kind = prefs.sideWidget();
+        com.mg4.launcher.svc.Diag.put("home.riquadroAuto", "nascosto · al suo posto " + kind);
+        if (Prefs.SIDE_MAP.equals(kind)) return sideMap(c);
+        if (Prefs.SIDE_MEDIA.equals(kind)) return sideMedia(c);
+        if (Prefs.SIDE_PHONE.equals(kind)) return sidePhone(c);
+        LinearLayout col = Ui.column(c);
+        col.setGravity(Gravity.CENTER);
+        sideClock = Ui.oneLine(Ui.text(c, "", 150, t.text, Ui.LIGHT));
+        sideClock.setLetterSpacing(-0.03f);
+        sideClock.setGravity(Gravity.CENTER);
+        col.addView(sideClock, new LayoutParams(-2, -2));
+        sideDate = Ui.oneLine(Ui.text(c, "", 30, t.sub, Ui.REGULAR));
+        col.addView(sideDate, Ui.margins(new LayoutParams(-2, -2), 0, dp(4), 0, 0));
+        updateClock();
+        return col;
+    }
+
+    /** "venerdì 16 ottobre" nella lingua scelta. */
+    private static String longDate(Date d) {
+        return new SimpleDateFormat("EEEE d MMMM", L.locale()).format(d);
+    }
+
+    private FrameLayout sideCard(Context c, View.OnClickListener l) {
+        FrameLayout f = new FrameLayout(c);
+        f.setBackground(Ui.pressable(c, t.chip, 20, t));
+        f.setClickable(true);
+        f.setOnClickListener(l);
+        int r = dp(20);
+        f.setOutlineProvider(new android.view.ViewOutlineProvider() {
+            @Override
+            public void getOutline(View v, android.graphics.Outline o) {
+                o.setRoundRect(0, 0, v.getWidth(), v.getHeight(), r);
+            }
+        });
+        f.setClipToOutline(true);
+        return f;
+    }
+
+    private View sideMap(Context c) {
+        FrameLayout f = sideCard(c, v -> openNavigation());
+        Bars.MapDecor decor = new Bars.MapDecor(c);
+        decor.setColors(t.map, t.road, t.roadMinor);
+        f.addView(decor, new FrameLayout.LayoutParams(-1, -1));
+        View veil = new View(c);
+        veil.setBackground(new android.graphics.drawable.GradientDrawable(
+                android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT,
+                new int[]{withAlpha(t.panel, 0xF2), withAlpha(t.panel, 0xB0), withAlpha(t.panel, 0x00)}));
+        f.addView(veil, new FrameLayout.LayoutParams(-1, -1));
+        LinearLayout idle = Ui.column(c);
+        idle.setGravity(Gravity.CENTER_VERTICAL);
+        idle.setPadding(dp(32), dp(20), dp(32), dp(20));
+        idle.addView(Ui.text(c, L.s(R.string.where_to), 36, t.text, Ui.MEDIUM));
+        LinearLayout search = Ui.row(c);
+        search.setGravity(Gravity.CENTER_VERTICAL);
+        search.setPadding(dp(22), 0, dp(22), 0);
+        search.setBackground(Ui.pressable(c, t.panel, 30, t));
+        search.setClickable(true);
+        search.setOnClickListener(v -> host.launchNavigator());
+        search.addView(Ui.icon(c, R.drawable.ic_search, t.sub, 26), new LayoutParams(tp(26), tp(26)));
+        search.addView(Ui.oneLine(Ui.text(c, L.s(R.string.search_destination), ts(20), t.sub, Ui.REGULAR)),
+                Ui.margins(Ui.lpWeight(0, -2, 1), dp(14), 0, 0, 0));
+        idle.addView(search, Ui.margins(new LayoutParams(dp(480), tp(64)), 0, dp(18), 0, 0));
+        sideNavIdle = idle;
+        f.addView(idle, new FrameLayout.LayoutParams(-1, -1));
+        LinearLayout card = Ui.row(c);
+        card.setGravity(Gravity.CENTER_VERTICAL);
+        card.setPadding(dp(32), dp(20), dp(32), dp(20));
+        card.addView(Ui.icon(c, R.drawable.ic_turn, t.text, 56));
+        LinearLayout txt = Ui.column(c);
+        sideNavTitle = Ui.oneLine(Ui.text(c, "", 36, t.text, Ui.MEDIUM));
+        sideNavSub = Ui.oneLine(Ui.text(c, "", 20, t.sub, Ui.REGULAR));
+        txt.addView(sideNavTitle);
+        txt.addView(sideNavSub, Ui.margins(new LayoutParams(-2, -2), 0, dp(6), 0, 0));
+        card.addView(txt, Ui.margins(Ui.lpWeight(0, -2, 1), dp(22), 0, 0, 0));
+        card.setVisibility(GONE);
+        sideNavCard = card;
+        f.addView(card, new FrameLayout.LayoutParams(-1, -1));
+        return f;
+    }
+
+    private View sideMedia(Context c) {
+        FrameLayout f = sideCard(c, v -> selectTab(TAB_MEDIA, true));
+        LinearLayout row = Ui.row(c);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(24), dp(20), dp(24), dp(20));
+        FrameLayout art = new FrameLayout(c);
+        art.setBackground(Ui.round(t.panel, dp(18)));
+        art.setClipToOutline(true);
+        sideMediaArt = Ui.icon(c, R.drawable.ic_music, t.sub, 56);
+        sideMediaArt.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        art.addView(sideMediaArt, new FrameLayout.LayoutParams(-1, -1));
+        row.addView(art, new LayoutParams(dp(150), dp(150)));
+        LinearLayout col = Ui.column(c);
+        sideMediaTitle = Ui.oneLine(Ui.text(c, "", 30, t.text, Ui.MEDIUM));
+        sideMediaSub = Ui.oneLine(Ui.text(c, "", 20, t.sub, Ui.REGULAR));
+        col.addView(sideMediaTitle);
+        col.addView(sideMediaSub, Ui.margins(new LayoutParams(-2, -2), 0, dp(4), 0, 0));
+        LinearLayout ctl = Ui.row(c);
+        ctl.setGravity(Gravity.CENTER_VERTICAL);
+        ctl.addView(Ui.iconButton(c, t, R.drawable.ic_prev, t.text, 0, 60, 28, 30, L.s(R.string.previous), v -> media.skip(false)));
+        FrameLayout pp = Ui.iconButton(c, t, R.drawable.ic_play, t.panel, t.text, 68, 30, 34, L.s(R.string.play_pause), v -> media.playPause());
+        sideMediaPlay = (ImageView) pp.getChildAt(0);
+        ctl.addView(pp, Ui.margins(Ui.lp(-2, -2), dp(10), 0, dp(10), 0));
+        ctl.addView(Ui.iconButton(c, t, R.drawable.ic_next, t.text, 0, 60, 28, 30, L.s(R.string.next), v -> media.skip(true)));
+        col.addView(ctl, Ui.margins(new LayoutParams(-2, -2), -dp(10), dp(14), 0, 0));
+        row.addView(col, Ui.margins(Ui.lpWeight(0, -2, 1), dp(24), 0, 0, 0));
+        f.addView(row, new FrameLayout.LayoutParams(-1, -1));
+        return f;
+    }
+
+    private View sidePhone(Context c) {
+        FrameLayout f = sideCard(c, v -> host.launch("com.saicmotor.hmi.btcall", "com.saicmotor.hmi.btcall.BtCallActivity"));
+        LinearLayout col = Ui.column(c);
+        col.setPadding(dp(24), dp(18), dp(24), dp(18));
+        TextView lbl = Ui.text(c, L.s(R.string.tile_phone).toUpperCase(L.locale()), 13, t.sub, Ui.MEDIUM);
+        lbl.setLetterSpacing(0.08f);
+        col.addView(lbl);
+        sideFavBox = Ui.column(c);
+        col.addView(sideFavBox, Ui.margins(new LayoutParams(-1, -2), 0, dp(12), 0, 0));
+        f.addView(col, new FrameLayout.LayoutParams(-1, -1));
+        com.mg4.launcher.svc.PhoneClient.get(c).start(phoneListener);
+        fillSideFavs();
+        return f;
+    }
+
+    /** Preferiti del telefono (gli stessi del riquadro nella barra), due per riga. */
+    private void fillSideFavs() {
+        if (sideFavBox == null) return;
+        Context c = getContext();
+        sideFavBox.removeAllViews();
+        com.mg4.launcher.svc.PhoneClient pc = com.mg4.launcher.svc.PhoneClient.get(c);
+        boolean conn = pc.phoneConnected();
+        sidePhoneShown = conn;
+        java.util.List<String[]> favs = prefs.tileContacts();
+        int h = tp(64);
+        if (!conn || favs.isEmpty()) {
+            sideFavBox.addView(Ui.text(c, L.s(conn ? R.string.tile_hint_contacts : R.string.tile_connect_phone), 20, t.sub, Ui.REGULAR));
+            return;
+        }
+        LinearLayout row = null;
+        for (int i = 0; i < favs.size() && i < 6; i++) {
+            if (i % 2 == 0) {
+                row = Ui.row(c);
+                sideFavBox.addView(row, Ui.margins(new LayoutParams(-1, h), 0, i == 0 ? 0 : dp(10), 0, 0));
+            }
+            String[] fv = favs.get(i);
+            LinearLayout chip = Ui.row(c);
+            chip.setGravity(Gravity.CENTER_VERTICAL);
+            chip.setPadding(dp(8), 0, dp(14), 0);
+            chip.setBackground(Ui.pressable(c, t.panel, 18, t));
+            chip.setClickable(true);
+            chip.setContentDescription(fv[0]);
+            TextView ini = Ui.text(c, initials(fv[0]), ts(18), t.text, Ui.MEDIUM);
+            ini.setGravity(Gravity.CENTER);
+            ini.setBackground(Ui.round(t.chip, dp(100)));
+            chip.addView(ini, new LayoutParams(h - dp(16), h - dp(16)));
+            chip.addView(Ui.oneLine(Ui.text(c, firstName(fv[0]), ts(20), t.text, Ui.MEDIUM)),
+                    Ui.margins(Ui.lpWeight(0, -2, 1), dp(12), 0, 0, 0));
+            chip.setOnClickListener(v -> pc.call(fv[1], ok -> {
+                if (!ok) android.widget.Toast.makeText(getContext(), L.s(R.string.tile_call_failed), android.widget.Toast.LENGTH_SHORT).show();
+            }));
+            row.addView(chip, Ui.margins(Ui.lpWeight(0, -1, 1), i % 2 == 0 ? 0 : dp(10), 0, 0, 0));
+        }
+        if (row != null && row.getChildCount() == 1) row.addView(new View(c), Ui.margins(Ui.lpWeight(0, -1, 1), dp(10), 0, 0, 0));
     }
 
     /** Pulsante di ricarica: titolo piccolo + valore; tocca per cambiare. */
@@ -593,6 +786,9 @@ public final class HomeView extends LinearLayout {
 
     /** Testo di stato: solo durante ricarica o scarica (tipo · potenza · tempo rimanente), altrimenti vuoto. */
     private String chargeText(VehicleClient.State s) {
+        // 1.0.5: ricarica via cavo solo se anche l'animazione la vede (stessa decisione: VehicleClient.cablePlugged)
+        int cs = s.chargingStatus;
+        if ((cs == 1 || cs == 3 || cs == 10 || cs == 11) && !VehicleClient.cablePlugged(s)) return "";
         String kw = s.chargeKw > 0.3f ? String.format(L.locale(), " · %.1f kW", s.chargeKw) : "";
         switch (s.chargingStatus) {
             case 1: return L.s(R.string.charge_charging) + kw + remaining(s.predictMinutes);
@@ -618,6 +814,10 @@ public final class HomeView extends LinearLayout {
         boolean h24 = android.text.format.DateFormat.is24HourFormat(getContext());
         Date now = new Date();
         clockTv.setText(new SimpleDateFormat(h24 ? "HH:mm" : "h:mm", L.locale()).format(now));
+        if (sideClock != null) {
+            sideClock.setText(clockTv.getText());
+            sideDate.setText(longDate(now));
+        }
         if (dateTv != null && dateTv.getVisibility() == VISIBLE) dateTv.setText(shortDate(now));
     }
 
@@ -854,22 +1054,76 @@ public final class HomeView extends LinearLayout {
         buildNavWith(c, false);
         f.addView(navIdle, new FrameLayout.LayoutParams(-1, -1));
 
-        // guida in corso: indicazione in alto a sinistra + arrivo in basso
-        navCard = Ui.row(c);
+        // guida in corso (1.0.5, proposta di sommistica, PR #31): riquadro al centro in verticale, a sinistra del pannello,
+        // largo al massimo 500 dp × dimensione comandi; icona della manovra 76, distanza 30 sp, istruzione 26 sp, via 18 sp
+        // (tutto × dimensione comandi). Con la guida a destra e la spia di sistema resta lo spazio della spia.
+        navCard = Ui.column(c);
         navCard.setBackground(Ui.round(t.overlay, dp(18)));
         navCard.setPadding(dp(22), dp(16), dp(26), dp(16));
-        navCard.addView(Ui.icon(c, R.drawable.ic_turn, t.text, 44));
+        LinearLayout maneuverRow = Ui.row(c);
+        maneuverRow.setGravity(Gravity.CENTER_VERTICAL);
+        navManeuverIcon = Ui.icon(c, R.drawable.ic_turn, t.text, 76);
+        maneuverRow.addView(navManeuverIcon, new LayoutParams(tp(76), tp(76)));
         LinearLayout txt = Ui.column(c);
-        navCardTitle = Ui.oneLine(Ui.text(c, "", 30, t.text, Ui.MEDIUM));
-        navCardSub = Ui.oneLine(Ui.text(c, "", 18, t.sub, Ui.REGULAR));
+        navCardTitle = Ui.oneLine(Ui.text(c, "", ts(30), t.text, Ui.MEDIUM));
+        navCardSub = Ui.text(c, "", ts(26), t.text, Ui.REGULAR);
+        navCardSub.setMaxLines(2);
+        navCardSub.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        navRoad = Ui.oneLine(Ui.text(c, "", ts(18), t.sub, Ui.REGULAR));
         txt.addView(navCardTitle);
-        txt.addView(navCardSub, Ui.margins(new LayoutParams(-2, -2), 0, dp(4), 0, 0));
-        navCard.addView(txt, Ui.margins(new LayoutParams(-2, -2), dp(18), 0, 0, 0));
+        txt.addView(navCardSub, Ui.margins(new LayoutParams(-1, -2), 0, dp(4), 0, 0));
+        txt.addView(navRoad, Ui.margins(new LayoutParams(-1, -2), 0, dp(8), 0, 0));
+        maneuverRow.addView(txt, Ui.margins(Ui.lpWeight(0, -2, 1), dp(22), 0, 0, 0));
+        navCard.addView(maneuverRow, new LayoutParams(-1, -2));
+        // icona non riconosciuta: pulsante per mandare allo sviluppatore il log (solo codice e tipo di istruzione)
+        missingIconButton = Ui.text(c, L.s(R.string.nav_missing_send), ts(17), t.onAccent, Ui.MEDIUM);
+        missingIconButton.setGravity(Gravity.CENTER_VERTICAL);
+        missingIconButton.setBackground(Ui.pressable(c, t.accent, 10, t));
+        missingIconButton.setPadding(dp(16), dp(10), dp(16), dp(10));
+        missingIconButton.setMinHeight(tp(48));
+        missingIconButton.setClickable(true);
+        missingIconButton.setVisibility(GONE);
+        navCard.addView(missingIconButton, Ui.margins(new LayoutParams(-1, -2), 0, dp(16), 0, 0));
+        missingIconStatus = Ui.text(c, "", ts(14), t.sub, Ui.REGULAR);
+        missingIconStatus.setVisibility(GONE);
+        navCard.addView(missingIconStatus, Ui.margins(new LayoutParams(-1, -2), 0, dp(8), 0, 0));
         navCard.setClickable(true);
         navCard.setOnClickListener(v -> openNavigation());
-        FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START);
-        cl.setMargins(dp(20 + (rhd && sysIndicator ? SYSTEM_LIGHT_INSET : 0)), dp(20), dp(20), 0);
+        int inset = rhd && sysIndicator ? SYSTEM_LIGHT_INSET : 0;
+        FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(Math.round(dp(500) * Ui.K), -2, Gravity.CENTER_VERTICAL | Gravity.START);
+        // centro spostato in alto: sotto restano l'arrivo e Mappa/Media (con "Molto grande" il riquadro li toccava)
+        cl.setMargins(dp(20 + inset), 0, dp(20), Math.round(dp(70) * Ui.K));
         f.addView(navCard, cl);
+        // 1.0.5 (sperimentale): navigatore MG in finestra sopra tutto il pannello, solo da guardare
+        if (prefs.mapPanelWindow() && NavWindow.available(c, prefs)) {
+            NavWindow[] nw = new NavWindow[1];
+            nw[0] = new NavWindow(c, prefs, new NavWindow.Listener() {
+                @Override
+                public void refused() {
+                    post(() -> {
+                        if (nw[0].getParent() != null) ((ViewGroup) nw[0].getParent()).removeView(nw[0]);
+                        android.widget.Toast.makeText(getContext(), L.s(R.string.pip_refused), android.widget.Toast.LENGTH_LONG).show();
+                    });
+                }
+
+                @Override
+                public void openFull() {
+                    host.launchNavigator(Prefs.NAV_MG);
+                }
+            });
+            f.addView(nw[0], new FrameLayout.LayoutParams(-1, -1));
+        }
+        // pannello stretto (guida a destra, comandi grandi): il riquadro non esce dal pannello
+        f.addOnLayoutChangeListener((v, l, tp, r, b, ol, ot, or, ob) -> {
+            int w = r - l;
+            if (w <= 0 || w == or - ol) return;
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) navCard.getLayoutParams();
+            int want = Math.min(Math.round(dp(500) * Ui.K), Math.max(dp(200), w - dp(40 + inset)));
+            if (lp.width != want) {
+                lp.width = want;
+                navCard.post(() -> navCard.setLayoutParams(lp));
+            }
+        });
 
         navEta = Ui.row(c);
         navEta.setBackground(Ui.round(t.overlay, dp(16)));
@@ -993,14 +1247,41 @@ public final class HomeView extends LinearLayout {
         navIdle.setVisibility(guiding ? GONE : VISIBLE);
         navCard.setVisibility(guiding ? VISIBLE : GONE);
         navEta.setVisibility(n.navigating && !remote && n.remainSeconds > 0 ? VISIBLE : GONE);
+        // 1.0.5: icona della manovra dal codice del navigatore MG (0-39, ManeuverIcons); CarPlay/AA: freccia generica
+        int icon = remote ? R.drawable.ic_turn : ManeuverIcons.drawable(n.turnIcon);
+        navManeuverIcon.setImageResource(icon);
+        boolean missing = n.navigating && !remote && n.turnMeters >= 0 && icon == R.drawable.ic_maneuver_unknown;
+        if (missing && !missingIconSending) missingIconStatus.setText(L.f(R.string.nav_missing_code, n.turnIcon));
+        missingIconButton.setVisibility(missing ? VISIBLE : GONE);
+        missingIconStatus.setVisibility(missing ? VISIBLE : GONE);
+        missingIconButton.setEnabled(!missingIconSending);
+        missingIconButton.setOnClickListener(v -> {
+            if (missingIconSending) return;
+            missingIconSending = true;
+            missingIconButton.setEnabled(false);
+            missingIconStatus.setText(L.f(R.string.nav_missing_sending, n.turnIcon));
+            com.mg4.launcher.svc.LogUploader.reportMissingIcon(n.turnIcon, n.turnMeters, n.turnText, r -> {
+                missingIconSending = false;
+                missingIconButton.setEnabled(true);
+                missingIconStatus.setText(L.s(r == com.mg4.launcher.svc.LogUploader.ICON_SENT ? R.string.nav_missing_sent
+                        : r == com.mg4.launcher.svc.LogUploader.ICON_QUEUED ? R.string.nav_missing_queued
+                        : r == com.mg4.launcher.svc.LogUploader.ICON_RETRY ? R.string.nav_missing_retry
+                        : r == com.mg4.launcher.svc.LogUploader.ICON_NOT_CONFIGURED ? R.string.nav_missing_not_configured
+                        : R.string.nav_missing_error));
+            });
+        });
+        navRoad.setVisibility(GONE);
         if (remote) {
             navCardTitle.setText(m.tbtDistance.isEmpty() ? (m.deviceType == MediaClient.DEV_AAUTO ? "Android Auto" : "CarPlay") : m.tbtDistance);
             navCardSub.setText(m.tbtRoad.isEmpty() ? L.s(R.string.nav_phone) : m.tbtRoad);
         } else if (n.navigating) {
             if (n.turnMeters >= 0) {
                 navCardTitle.setText(km(n.turnMeters));
-                String next = !n.turnText.isEmpty() ? n.turnText : n.road;
-                navCardSub.setText(next.isEmpty() ? L.s(R.string.next_maneuver) : next);
+                navCardSub.setText(!n.turnText.isEmpty() ? n.turnText : !n.road.isEmpty() ? n.road : L.s(R.string.next_maneuver));
+                // via sotto l'istruzione (solo a schermo, mai nei log)
+                boolean road = !n.turnText.isEmpty() && !n.road.isEmpty() && !n.road.equals(n.turnText);
+                navRoad.setText(road ? n.road : "");
+                navRoad.setVisibility(road ? VISIBLE : GONE);
             } else {
                 navCardTitle.setText(n.road.isEmpty() ? L.s(R.string.navigating) : n.road);
                 navCardSub.setText(n.remainMeters > 0 ? L.f(R.string.remaining, km(n.remainMeters)) : L.s(R.string.tap_open_nav));
@@ -1011,6 +1292,12 @@ public final class HomeView extends LinearLayout {
                 navEtaMin.setText(Math.max(1, Math.round(n.remainSeconds / 60f)) + " min");
                 navEtaKm.setText(n.remainMeters > 0 ? km(n.remainMeters) : "");
             }
+        }
+        if (sideNavIdle != null) {
+            sideNavIdle.setVisibility(guiding ? GONE : VISIBLE);
+            sideNavCard.setVisibility(guiding ? VISIBLE : GONE);
+            sideNavTitle.setText(navCardTitle.getText());
+            sideNavSub.setText(navCardSub.getText());
         }
         // all'avvio di una guida mostra la mappa, a meno che l'utente non abbia scelto un'altra scheda
         if (guiding && !wasNavigating && (!userPickedTab || tab != TAB_PHONE)) selectTab(TAB_MAP, false);
@@ -1596,6 +1883,24 @@ public final class HomeView extends LinearLayout {
         }
         playIcon.setImageResource(m.playing ? R.drawable.ic_pause : R.drawable.ic_play);
         miniPlayIcon.setImageResource(m.playing ? R.drawable.ic_pause : R.drawable.ic_play);
+        if (sideMediaTitle != null) {
+            sideMediaTitle.setText(m.title.isEmpty() ? sourceLabel(m.source) : m.title);
+            sideMediaSub.setText(sourceLabel(m.source) + (m.subtitle.isEmpty() ? "" : " · " + m.subtitle));
+            sideMediaPlay.setImageResource(m.playing ? R.drawable.ic_pause : R.drawable.ic_play);
+            if (radio && m.logo != null || !radio && m.art != null) {
+                sideMediaArt.clearColorFilter();
+                sideMediaArt.setPadding(0, 0, 0, 0);
+                sideMediaArt.setScaleType(radio ? ImageView.ScaleType.FIT_CENTER : ImageView.ScaleType.CENTER_CROP);
+                sideMediaArt.setImageBitmap(radio ? m.logo : m.art);
+            } else {
+                // icona della sorgente piccola al centro, come nel pannello Media
+                int pad = dp(46);
+                sideMediaArt.setPadding(pad, pad, pad, pad);
+                sideMediaArt.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                sideMediaArt.setColorFilter(t.sub, android.graphics.PorterDuff.Mode.SRC_IN);
+                sideMediaArt.setImageResource(sourceIcon(m.source));
+            }
+        }
         miniTitle.setText(m.title);
         miniSub.setText(sourceLabel(m.source) + (m.subtitle.isEmpty() ? "" : " · " + m.subtitle));
         if (radio && m.logo != null || !radio && m.art != null) {
@@ -1645,7 +1950,10 @@ public final class HomeView extends LinearLayout {
         if (chargeAnim == null) return;
         String color = Prefs.CAR_COLORS[prefs.carColorIndex()];
         boolean plugged = VehicleClient.cablePlugged(s), done = VehicleClient.chargeDone(s);
-        boolean ready = s.ignition == 2, moving = !Float.isNaN(s.speedKmh) && Math.abs(s.speedKmh) >= 1f;
+        // 1.0.5: READY vero (getEngineState = 1). L'accensione 2 è solo "quadro acceso": non ferma niente.
+        // Si ferma con READY confermato, in movimento o con una marcia letta diversa da P; READY sconosciuto non blocca.
+        boolean ready = s.ready == 1, moving = !Float.isNaN(s.speedKmh) && Math.abs(s.speedKmh) >= 1f;
+        boolean notP = s.gearRaw >= 1 && s.gearRaw <= 4 && s.gearRaw != VehicleClient.GEAR_P;
         // il controllo dei file si rifà solo quando il pacchetto o il colore cambiano (niente disco a ogni lettura)
         if (animGen != com.mg4.launcher.svc.ChargePack.generation || !color.equals(animColor)) {
             animGen = com.mg4.launcher.svc.ChargePack.generation;
@@ -1654,6 +1962,7 @@ public final class HomeView extends LinearLayout {
         }
         boolean have = animHave;
         String why = !prefs.chargeAnim() ? "spenta nelle impostazioni" : ready ? "in READY: ferma" : moving ? "in movimento: ferma"
+                : notP ? "marcia " + s.gearRaw + " (non P): ferma"
                 : !have ? "pacchetto non disponibile" : "";
         // al massimo una volta al minuto (ensure controlla poi il limite di 12 ore tra due download)
         long nowMs = SystemClock.uptimeMillis();
@@ -1666,7 +1975,9 @@ public final class HomeView extends LinearLayout {
         String txt = (prefs.chargeAnim() ? "attiva" : "spenta") + " · pacchetto " + color + " "
                 + (have ? "presente" : com.mg4.launcher.svc.ChargePack.busy() ? "in download" : "assente") + " · "
                 + ChargeAnimView.phaseTxt + " · cavo " + (plugged ? "inserito" : "non inserito") + (done ? " · carica finita" : "")
-                + " · stato ricarica " + s.chargingStatus + " · presa " + s.plugProp + " · accensione " + s.ignition;
+                + " · stato ricarica " + s.chargingStatus + " · presa " + s.plugProp + " · accensione " + s.ignition
+                + " · ready " + (s.ready == Integer.MIN_VALUE ? "? (getEngineState non leggibile)" : s.ready + " (getEngineState)")
+                + " · marcia " + (s.gearRaw == Integer.MIN_VALUE ? "?" : String.valueOf(s.gearRaw));
         if (!txt.equals(animLog)) {
             animLog = txt;
             com.mg4.launcher.svc.Diag.put("ricarica.animazione", txt);
@@ -1966,6 +2277,14 @@ public final class HomeView extends LinearLayout {
             // 1.0.2 (issue #23): scritta "360°" grande al posto della videocamera (non si confonde più con Video USB)
             bar.addView(shortcut(c, 0, cam.label.isEmpty() ? L.s(R.string.app_camera) : cam.label, cam.pkg, cam.cls));
         if (!big) bar.addView(shortcut(c, R.drawable.ic_gear, L.s(R.string.app_settings), "com.saicmotor.hmi.systemsettings", "com.saicmotor.hmi.systemsettings.SettingsActivity"));
+        // 1.0.5: Spegni la vettura (opzione, predefinito spento): stessa conferma delle impostazioni
+        if (prefs.powerButton()) {
+            int ps = bs(64, BIG_SHORTCUT);
+            View pw = barIcon(c, R.drawable.ic_power, t.text, 0, ps, bs(30, BIG_ICON - 2), big ? 22 : 18 * Ui.K, L.s(R.string.power_off),
+                    v -> PowerOff.ask(host.overlay(), t, vehicle));
+            pw.setLayoutParams(Ui.margins(Ui.lp(ps, ps), dp(6), 0, 0, 0));
+            bar.addView(pw);
+        }
         // le app si aprono scorrendo la home verso sinistra: niente pulsante dedicato
         if (rhd) mirrorRow(bar);
         barView = bar;
@@ -2008,7 +2327,7 @@ public final class HomeView extends LinearLayout {
         boolean any = false;
         for (float f : bar) if (!Float.isNaN(f)) any = true;
         // spazio sempre riservato: senza dato la riga è invisibile ma occupa la stessa altezza
-        tpmsRow.setVisibility(!prefs.showTpms() ? GONE : any ? VISIBLE : INVISIBLE);
+        tpmsRow.setVisibility(!prefs.showTpms() || !carShown ? GONE : any ? VISIBLE : INVISIBLE);
         if (!any) return;
         String unit = tyreUnit(prefs.tyreUnit(), distUnit);
         setTpms(tpmsFront, bar[0], bar[1], unit);
@@ -2347,8 +2666,9 @@ public final class HomeView extends LinearLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (popup != null) popup.close();
-        if (tileIsPhone) {
+        if (tileIsPhone || sideFavBox != null) {
             tileIsPhone = false;
+            sideFavBox = null;
             com.mg4.launcher.svc.PhoneClient.get(getContext()).stop(phoneListener);
         }
     }
@@ -2363,6 +2683,7 @@ public final class HomeView extends LinearLayout {
     private final com.mg4.launcher.svc.PhoneClient.Listener phoneListener = () -> {
         boolean conn = com.mg4.launcher.svc.PhoneClient.get(getContext()).phoneConnected();
         if (tilePhoneShown == null || tilePhoneShown != conn) fillTile();
+        if (sidePhoneShown == null || sidePhoneShown != conn) fillSideFavs();
     };
 
     private void fillTile() {

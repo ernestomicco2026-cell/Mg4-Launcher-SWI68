@@ -514,5 +514,41 @@
     <string name="app_uninstall_q">Voulez-vous désinstaller %1$s ?</string>
     <string name="app_uninstall_done">%1$s désinstallée</string>
     <string name="app_uninstall_failed">Impossible de désinstaller %1$s</string>
+    <string name="chk_ready" formatted="false">READY lu</string>
+    <string name="chk_power" formatted="false">Extinction disponible</string>
+    <string name="power_off" formatted="false">Éteindre la voiture</string>
+    <string name="power_off_sub" formatted="false">Comme le bouton de la voiture : seulement en P, avec confirmation</string>
+    <string name="power_off_q" formatted="false">Éteindre la voiture ?</string>
+    <string name="power_off_msg" formatted="false">Si vous ne touchez à rien, c\'est annulé dans quelques secondes.</string>
+    <string name="power_off_btn" formatted="false">Éteindre</string>
+    <string name="power_off_not_p" formatted="false">Extinction impossible : passez en P</string>
+    <string name="power_off_unavailable" formatted="false">Extinction indisponible pour le moment</string>
+    <string name="power_off_failed" formatted="false">La commande d\'extinction a échoué</string>
+    <string name="set_power_btn" formatted="false">Bouton Éteindre la voiture dans la barre du bas</string>
+    <string name="set_power_btn_sub" formatted="false">Même confirmation que dans les réglages ; fonctionne seulement en P</string>
+    <string name="set_car_panel" formatted="false">Encadré voiture</string>
+    <string name="set_car_panel_sub" formatted="false">La voiture dans le panneau de gauche ; si vous la masquez, un autre encadré prend sa place</string>
+    <string name="car_panel_show" formatted="false">Afficher</string>
+    <string name="car_panel_hide" formatted="false">Masquer</string>
+    <string name="set_side_widget" formatted="false">À la place de la voiture</string>
+    <string name="set_side_widget_sub" formatted="false">Grande horloge et date, carte, médias ou favoris du téléphone (les mêmes que dans la barre)</string>
+    <string name="side_clock" formatted="false">Horloge</string>
+    <string name="nav_missing_send" formatted="false">Envoyer au développeur le journal de l\'icône manquante</string>
+    <string name="nav_missing_code">Icône manquante : code %1$d</string>
+    <string name="nav_missing_sending">Envoi de l\'icône manquante %1$d…</string>
+    <string name="nav_missing_sent" formatted="false">Journal envoyé au développeur</string>
+    <string name="nav_missing_queued" formatted="false">Journal enregistré : il partira au prochain envoi</string>
+    <string name="nav_missing_retry" formatted="false">Échec de l\'envoi : journal enregistré, nouvel essai plus tard</string>
+    <string name="nav_missing_not_configured" formatted="false">L\'envoi des journaux n\'est pas disponible dans cette version</string>
+    <string name="nav_missing_error" formatted="false">Impossible d\'envoyer le journal de l\'icône manquante</string>
+    <string name="set_map_panel" formatted="false">Contenu du panneau carte (expérimental)</string>
+    <string name="set_map_panel_sub" formatted="false">Indications comme aujourd\'hui, ou le navigateur MG dans une fenêtre à regarder : un appui l\'ouvre en plein écran</string>
+    <string name="map_panel_directions" formatted="false">Indications</string>
+    <string name="map_panel_window" formatted="false">Navigateur en fenêtre</string>
+    <string name="pip_refused" formatted="false">Le navigateur en fenêtre n\'est pas pris en charge sur cette voiture : le panneau carte redevient comme avant</string>
+    <string name="news_v105_1" formatted="false">Animation de recharge : elle démarre vraiment quand vous branchez le câble écran allumé</string>
+    <string name="news_v105_2" formatted="false">Éteindre la voiture depuis les réglages (seulement en P) et encadré voiture masquable</string>
+    <string name="news_v105_3" formatted="false">Icônes des manœuvres du navigateur (merci à sommistica) et navigateur en fenêtre dans le panneau carte (expérimental)</string>
+    <string name="news_v105_4" formatted="false">Réglages : la page reste en place même après une pause · le pack d\'animation se met à jour tout seul</string>
     <string name="news_v104_6" formatted="false">Réglages : en changeant une option, la page reste où elle était · Applis : appui long sur une appli que vous avez installée pour la désinstaller</string>
 </resources>

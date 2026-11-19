@@ -82,14 +82,27 @@ public final class VehicleClient {
     private static final int COND_BMS_AVAILABLE = 56;      // 1 = batteria (BMS) pronta a ricevere comandi
     // 1.0.2: velocità e marcia dal servizio veicolo (vehiclesettingservice eh32_eu_P: getCarSpeed / getCarGear)
     private static final int COND_SPEED = 3, COND_GEAR = 5;
-    /** 1.0.4: getVehicleIgnition (IGNITION_STATE_STS): 0 spenta, 2 READY. */
+    /**
+     * getVehicleIgnition (IGNITION_STATE): 0 spenta, 1 accessori, 2 quadro acceso (chiave ON), 3 avviamento.
+     * 2 NON vuol dire READY (1.0.5): si legge solo per il log.
+     */
     private static final int COND_IGNITION = 4;
+    /** 1.0.5: getEngineState = SENSOR_EPTRDY (0x2140157c): 1 READY, 0 non in READY, altro = sconosciuto. */
+    private static final int COND_ENGINE_STATE = 8;
+    /** Marcia letta da getCarGear: 1 P, 2 R, 3 N, 4 D (valori visti nei log). */
+    public static final int GEAR_P = 1;
     // assistenza alla guida, come l'app Impostazioni veicolo originale (sicurezza / guida)
     // assistente di guida (ACC/TJA) e pedale del freno, stesse proprietà dell'auto su tutti i firmware (0.9.5)
     private static final int SET_GET_ACC_TJA = 81, SET_SET_ACC_TJA = 82, SET_GET_PEDAL = 135, SET_SET_PEDAL = 136;
     private static final int SET_GET_LKA = 83, SET_SET_LKA = 84, SET_GET_LAST_LKA = 147, SET_GET_LKA_FAILURE = 91;
     // LKA: 0 non disponibile, 1 spento, 2 LDW, 3 LDP, 4 LKA, 5 ELK, 6-7 riservati
     private static final int SET_GET_OPD = 163, SET_SET_OPD = 164, SET_GET_OPD_INHIBIT = 165;   // One Pedal Drive: 1 acceso
+    /**
+     * 1.0.5: spegnimento della vettura, come il pulsante "Spegni" dell'app Impostazioni veicolo originale
+     * (VehiclePowerViewModel.defPowerOffClick → setPowerModeSwitch(2)). getPowerModeSwitch = 1: spegnimento possibile
+     * (l'originale abilita il pulsante solo così). Proprietà 0x2140d70f del servizio veicolo.
+     */
+    private static final int SET_GET_POWER_MODE = 172, SET_SET_POWER_MODE = 173, POWER_OFF = 2;
     private static final int COND_LDWS_CONFIG = 31;        // 1 = assistenza corsia assente (-1 = presente, come l'originale)
     private static final int COND_ONE_PEDAL_CONFIG = 41;   // 0 = One Pedal presente (-1 = assente, come l'originale)
     // sedili: spegnimento diretto (il tocco "premuto" fa il giro 0 → 3 → 2 → 1 → 0)
@@ -111,8 +124,10 @@ public final class VehicleClient {
         public int chargingStatus = -1;   // codici SAIC, vedi ChargeText
         /** 1.0.4: presa di ricarica BMS_CHRG_PLUG_CNCTNIO (0 cavo inserito, 1 no, -1 non letta). */
         public int plugProp = -1;
-        /** 1.0.4: accensione (getVehicleIgnition): 2 = READY, -1 non letta. */
+        /** Accensione (getVehicleIgnition): 0 spenta, 1 accessori, 2 quadro acceso, 3 avviamento; -1 non letta. NON è il READY. */
         public int ignition = -1;
+        /** 1.0.5: READY vero (getEngineState / SENSOR_EPTRDY): 1 READY, 0 no, altro sconosciuto; MIN_VALUE = non leggibile. */
+        public int ready = Integer.MIN_VALUE;
         public float speedKmh = Float.NaN;
         public int predictMinutes = -1;
         public float chargeKw = 0;
@@ -414,6 +429,10 @@ public final class VehicleClient {
                         s.gearRaw = Rpc.callInt(cnd2, COND, COND_GEAR);
                         try {
                             s.ignition = Rpc.callInt(cnd2, COND, COND_IGNITION);
+                        } catch (Exception ignored) {
+                        }
+                        try {
+                            s.ready = Rpc.callInt(cnd2, COND, COND_ENGINE_STATE);
                         } catch (Exception ignored) {
                         }
                         lastSpeedRaw = s.speedRaw;
@@ -903,6 +922,63 @@ public final class VehicleClient {
         });
     }
 
+    // ---- 1.0.5: spegnimento della vettura -------------------------------------------------------
+
+    /** getPowerModeSwitch (sola lettura, da un thread di lavoro): 1 = spegnimento possibile; MIN_VALUE = non leggibile. */
+    public int powerModeSwitch() {
+        try {
+            IBinder st = sub("vehiclesetting");
+            if (st == null) return Integer.MIN_VALUE;
+            return Rpc.callInt(st, SET, SET_GET_POWER_MODE);
+        } catch (Exception e) {
+            return Integer.MIN_VALUE;
+        }
+    }
+
+    /** Esito dello spegnimento: "inviato", "non in P", "non disponibile", "errore". */
+    public interface PowerOffDone {
+        void done(String result);
+    }
+
+    /**
+     * Spegne la vettura. Solo in P e ferma: marcia e velocità si RILEGGONO qui, subito prima del comando (oltre al
+     * controllo fatto prima della conferma). Log auto.spegnimento = richiesto · marcia · metodo · esito.
+     */
+    public void powerOff(PowerOffDone done) {
+        Handler main = new Handler(Looper.getMainLooper());
+        if (bg == null) {
+            Diag.put("auto.spegnimento", "richiesto · servizio non collegato · non inviato");
+            main.post(() -> done.done("errore"));
+            return;
+        }
+        bg.post(() -> {
+            String res;
+            int gear = Integer.MIN_VALUE, mode = Integer.MIN_VALUE;
+            float speed = Float.NaN;
+            try {
+                IBinder cnd = sub("vehiclecondition");
+                IBinder st = sub("vehiclesetting");
+                if (cnd == null || st == null) throw new RemoteException("servizio veicolo assente");
+                gear = Rpc.callInt(cnd, COND, COND_GEAR);
+                speed = Rpc.callFloat(cnd, COND, COND_SPEED);
+                mode = Rpc.callInt(st, SET, SET_GET_POWER_MODE);
+                if (gear != GEAR_P || Float.isNaN(speed) || Math.abs(speed) >= 1f) res = "non in P";
+                else if (mode != 1) res = "non disponibile";
+                else {
+                    Rpc.call(st, SET, SET_SET_POWER_MODE, p -> p.writeInt(POWER_OFF));
+                    res = "inviato";
+                }
+            } catch (Exception e) {
+                res = "errore";
+                Diag.error("auto.spegnimento", e.toString());
+            }
+            Diag.put("auto.spegnimento", "richiesto · marcia " + (gear == Integer.MIN_VALUE ? "?" : gear) + " · velocità " + speed
+                    + " · metodo IVehicleSettingService.setPowerModeSwitch(2) · consentito " + mode + " · esito " + res);
+            String r = res;
+            main.post(() -> done.done(r));
+        });
+    }
+
     // ---- sedili a livello (gruppo Comfort: spento → 1 → 2 → 3 → spento) ------------------------
 
     private volatile int seatTargetLeft = -1, seatTargetRight = -1;
@@ -963,17 +1039,29 @@ public final class VehicleClient {
     private volatile int plugCache = -1;
 
     /**
-     * 1.0.4 (punto F): cavo di ricarica inserito, anche prima che la colonnina cominci. Segnale della presa
-     * (BMS_CHRG_PLUG_CNCTNIO = 0) oppure uno stato di ricarica con il cavo attaccato (1-5, 7-10, 12; 11 solo con potenza).
-     * Escluso il V2L (13, 14, 15).
+     * Cavo di ricarica inserito, anche prima che la colonnina cominci: presa BMS_CHRG_PLUG_CNCTNIO = 0, oppure uno stato
+     * di ricarica con il cavo attaccato (1-5, 7-10, 12; 11 solo con potenza). Escluso il V2L (13, 14, 15).
+     * 1.0.5: se la presa dice "staccato" (1) ma lo stato di ricarica dice cavo attaccato, vale lo stato di ricarica.
+     * È la stessa decisione per l'animazione e per l'indicazione "in carica" della home.
      */
     public static boolean cablePlugged(State s) {
         int st = s.chargingStatus;
         if (st == 13 || st == 14 || st == 15) return false;
-        if (s.plugProp == 0) return true;
-        if (s.plugProp == 1) return false;   // la presa dice "staccato": vale più dello stato di ricarica
-        if (st == 11) return s.chargeKw > 0.3f;
-        return st >= 1 && st <= 5 || st >= 7 && st <= 10 || st == 12;
+        boolean byStatus = st == 11 ? s.chargeKw > 0.3f : st >= 1 && st <= 5 || st >= 7 && st <= 10 || st == 12;
+        boolean byPlug = s.plugProp == 0;
+        if (s.plugProp >= 0 && byPlug != byStatus) logContrast(s.plugProp, st);
+        else lastContrast = null;
+        return byPlug || byStatus;
+    }
+
+    private static volatile String lastContrast;
+
+    /** Log "ricarica.presa" quando presa e stato di ricarica non sono d'accordo (una volta per cambio). */
+    private static void logContrast(int plug, int st) {
+        String k = "contrasto: presa " + plug + " · stato " + st;
+        if (k.equals(lastContrast)) return;
+        lastContrast = k;
+        Diag.put("ricarica.presa", k);
     }
 
     /** 1.0.4: carica finita (2) o ferma al limite (7/8 con la batteria al limite scelto). */

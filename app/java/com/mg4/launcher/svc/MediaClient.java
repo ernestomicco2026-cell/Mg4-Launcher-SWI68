@@ -711,6 +711,7 @@ public final class MediaClient {
             Diag.error("media." + sourceName(shown), e.toString());
         }
         noteRealSource(s);
+        if (s.deviceType != 0) projectionStudy(s);
 
         Bundle t = tbt;
         if (t != null && (s.deviceType != 0)) {
@@ -725,6 +726,52 @@ public final class MediaClient {
         main.post(() -> {
             if (listener != null) listener.onMediaState(s);
         });
+    }
+
+    private String lastProjStudy;
+
+    /**
+     * 1.0.5 (issue #30, solo studio): con CarPlay/Android Auto attivo, quali sorgenti di metadati esistono. Nel log solo
+     * pacchetti e sì/no (titolo, artista, copertina), MAI i testi. Riga media.proiezione, scritta quando cambia.
+     */
+    private void projectionStudy(State s) {
+        StringBuilder sb = new StringBuilder(s.deviceType == DEV_AAUTO ? "AA" : "CarPlay");
+        try {
+            android.media.session.MediaSessionManager msm =
+                    (android.media.session.MediaSessionManager) ctx.getSystemService(Context.MEDIA_SESSION_SERVICE);
+            java.util.List<MediaController> list = msm.getActiveSessions(null);
+            sb.append(" · sessioni ").append(list.size());
+            for (MediaController mc : list) {
+                android.media.MediaMetadata md = mc.getMetadata();
+                PlaybackState ps = mc.getPlaybackState();
+                boolean ti = md != null && md.getString(android.media.MediaMetadata.METADATA_KEY_TITLE) != null;
+                boolean ar = md != null && md.getString(android.media.MediaMetadata.METADATA_KEY_ARTIST) != null;
+                boolean co = md != null && (md.getBitmap(android.media.MediaMetadata.METADATA_KEY_ALBUM_ART) != null
+                        || md.getBitmap(android.media.MediaMetadata.METADATA_KEY_ART) != null
+                        || md.getString(android.media.MediaMetadata.METADATA_KEY_ALBUM_ART_URI) != null);
+                sb.append(" | ").append(mc.getPackageName()).append(" stato ").append(ps == null ? "?" : String.valueOf(ps.getState()))
+                        .append(" titolo ").append(ti ? "sì" : "no").append(" artista ").append(ar ? "sì" : "no")
+                        .append(" copertina ").append(co ? "sì" : "no");
+            }
+        } catch (Exception e) {
+            sb.append(" · sessioni non leggibili (").append(e.getClass().getSimpleName()).append(")");
+        }
+        boolean remoteShown = s.source == SRC_CARPLAY || s.source == SRC_AAUTO;
+        sb.append(" · riquadro media del launcher: ").append(remoteShown ? "titolo " + (s.title.isEmpty() ? "no" : "sì")
+                + " artista " + (s.subtitle.isEmpty() ? "no" : "sì") + " copertina " + (s.art != null ? "sì" : "no") : "sorgente mostrata non CarPlay/AA");
+        boolean cluster;
+        try {
+            ctx.getPackageManager().getPackageInfo("com.saicmotor.hmi.clusterprojection", 0);
+            cluster = true;
+        } catch (Exception e) {
+            cluster = false;
+        }
+        sb.append(" · clusterprojection ").append(cluster ? "installato (nessuna sessione media propria se non è nell'elenco)" : "assente");
+        String txt = sb.toString();
+        if (!txt.equals(lastProjStudy)) {
+            lastProjStudy = txt;
+            Diag.put("media.proiezione", txt);
+        }
     }
 
     /** Codici sorgente del servizio media → sorgente del launcher (dall'analisi dell'originale). */

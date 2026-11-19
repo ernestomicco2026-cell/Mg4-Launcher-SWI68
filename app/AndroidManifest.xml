@@ -51,6 +51,9 @@
     <uses-permission android:name="android.permission.CLEAR_APP_USER_DATA" />
     <!-- 0.8.6-beta: disinstallazione dalle impostazioni, senza computer -->
     <uses-permission android:name="android.permission.DELETE_PACKAGES" />
+    <!-- 1.0.5 (sperimentale): navigatore in finestra su uno schermo virtuale del launcher (firma platform) -->
+    <uses-permission android:name="android.permission.INTERNAL_SYSTEM_WINDOW" />
+    <uses-permission android:name="android.permission.ACTIVITY_EMBEDDING" />
 
     <application android:networkSecurityConfig="@xml/network_security_config"
         android:label="@string/app_name"

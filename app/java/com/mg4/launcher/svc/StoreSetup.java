@@ -32,6 +32,14 @@ public final class StoreSetup {
 
     private StoreSetup() {}
 
+    public static boolean hasBundledStore(Context c) {
+        try (InputStream in = c.getAssets().open(ASSET)) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /** Versione installata dello Store (versionCode), -1 se non c'è. */
     public static long installedCode(Context c) {
         try {

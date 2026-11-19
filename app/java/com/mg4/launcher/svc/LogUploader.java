@@ -102,6 +102,60 @@ public final class LogUploader {
         if (u != null && u.bg != null) u.bg.post(u::uploadOnce);
     }
 
+    /** Esito dell'invio di un'icona mancante (testi tradotti dalla home). */
+    public static final int ICON_SENT = 0, ICON_QUEUED = 1, ICON_RETRY = 2, ICON_NOT_CONFIGURED = 3, ICON_ERROR = 4;
+
+    public interface ReportListener {
+        void complete(int result);
+    }
+
+    /**
+     * 1.0.5 (PR #31 di sommistica): segnalazione di un'icona di manovra non riconosciuta. Il rapporto ha solo codice,
+     * tipo di istruzione (categoria fissa, ManeuverReport) e distanza: niente vie né destinazioni. Si salva prima in
+     * coda, poi si prova a inviarlo.
+     */
+    public static void reportMissingIcon(int code, int meters, String text, ReportListener listener) {
+        LogUploader u = instance;
+        Handler main = new Handler(android.os.Looper.getMainLooper());
+        if (u == null || u.bg == null || !configured()) {
+            main.post(() -> listener.complete(ICON_NOT_CONFIGURED));
+            return;
+        }
+        final Date captured = new Date();
+        final String report = ManeuverReport.body(code, meters, text);
+        u.bg.post(() -> {
+            int result;
+            try {
+                if (u.notCar()) throw new Exception("non è un'auto");
+                String day = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(captured);
+                String time = new SimpleDateFormat("HH-mm-ss-SSS", Locale.ROOT).format(captured);
+                String path = FOLDER + "/" + u.installId() + "/" + day + "/icona-mancante-" + time
+                        + "-" + UUID.randomUUID().toString().substring(0, 8) + ".txt";
+                byte[] bytes = report.getBytes("UTF-8");
+                if (!u.enqueue(path, bytes)) throw new Exception("non salvato in coda");
+                result = ICON_QUEUED;
+                if (Offline.canTry()) {
+                    try {
+                        u.put(path, bytes);
+                        //noinspection ResultOfMethodCallIgnored
+                        new File(u.queueDir(), path.replace('/', '~')).delete();
+                        Offline.ok();
+                        result = ICON_SENT;
+                        u.flushQueue();
+                    } catch (Exception e) {
+                        Offline.failed("log", e);
+                        result = ICON_RETRY;
+                    }
+                }
+            } catch (Exception e) {
+                result = ICON_ERROR;
+            }
+            Diag.put("nav.iconaMancante", "codice " + code + " · " + ManeuverReport.instructionType(text) + " · esito " + result);
+            final int r = result;
+            main.post(() -> listener.complete(r));
+        });
+    }
+
     private final Runnable periodic = new Runnable() {
         @Override
         public void run() {
@@ -170,7 +224,7 @@ public final class LogUploader {
         }
     }
 
-    private void enqueue(String path, byte[] data) {
+    private boolean enqueue(String path, byte[] data) {
         File dir = queueDir();
         File[] old = dir.listFiles();
         if (old != null && old.length >= MAX_QUEUE) {
@@ -180,8 +234,10 @@ public final class LogUploader {
         }
         try (OutputStream o = new FileOutputStream(new File(dir, path.replace('/', '~')))) {
             o.write(data);
+            return true;
         } catch (Exception e) {
             Diag.error("log.coda", e.toString());
+            return false;
         }
     }
 

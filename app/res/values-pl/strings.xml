@@ -514,5 +514,41 @@
     <string name="app_uninstall_q">Czy odinstalować %1$s?</string>
     <string name="app_uninstall_done">Odinstalowano %1$s</string>
     <string name="app_uninstall_failed">Nie udało się odinstalować %1$s</string>
+    <string name="chk_ready" formatted="false">READY odczytany</string>
+    <string name="chk_power" formatted="false">Wyłączanie dostępne</string>
+    <string name="power_off" formatted="false">Wyłącz samochód</string>
+    <string name="power_off_sub" formatted="false">Jak przycisk w aucie: tylko na P, z potwierdzeniem</string>
+    <string name="power_off_q" formatted="false">Wyłączyć samochód?</string>
+    <string name="power_off_msg" formatted="false">Jeśli niczego nie dotkniesz, za kilka sekund nastąpi anulowanie.</string>
+    <string name="power_off_btn" formatted="false">Wyłącz</string>
+    <string name="power_off_not_p" formatted="false">Nie można wyłączyć: wrzuć P</string>
+    <string name="power_off_unavailable" formatted="false">Wyłączenie jest teraz niedostępne</string>
+    <string name="power_off_failed" formatted="false">Polecenie wyłączenia nie powiodło się</string>
+    <string name="set_power_btn" formatted="false">Przycisk Wyłącz samochód na dolnym pasku</string>
+    <string name="set_power_btn_sub" formatted="false">To samo potwierdzenie co w ustawieniach; działa tylko na P</string>
+    <string name="set_car_panel" formatted="false">Panel auta</string>
+    <string name="set_car_panel_sub" formatted="false">Auto w lewym panelu; jeśli je ukryjesz, w jego miejscu pojawi się inny panel</string>
+    <string name="car_panel_show" formatted="false">Pokaż</string>
+    <string name="car_panel_hide" formatted="false">Ukryj</string>
+    <string name="set_side_widget" formatted="false">Zamiast auta</string>
+    <string name="set_side_widget_sub" formatted="false">Duży zegar i data, mapa, media lub ulubione z telefonu (te same co na pasku)</string>
+    <string name="side_clock" formatted="false">Zegar</string>
+    <string name="nav_missing_send" formatted="false">Wyślij deweloperowi log brakującej ikony</string>
+    <string name="nav_missing_code">Brakująca ikona: kod %1$d</string>
+    <string name="nav_missing_sending">Wysyłanie brakującej ikony %1$d…</string>
+    <string name="nav_missing_sent" formatted="false">Log wysłany do dewelopera</string>
+    <string name="nav_missing_queued" formatted="false">Log zapisany: zostanie wysłany przy następnej wysyłce</string>
+    <string name="nav_missing_retry" formatted="false">Wysyłka nie powiodła się: log zapisany, ponowna próba później</string>
+    <string name="nav_missing_not_configured" formatted="false">Wysyłanie logów nie jest dostępne w tej wersji</string>
+    <string name="nav_missing_error" formatted="false">Nie udało się wysłać logu brakującej ikony</string>
+    <string name="set_map_panel" formatted="false">Zawartość panelu map (eksperymentalne)</string>
+    <string name="set_map_panel_sub" formatted="false">Wskazówki jak dotąd albo nawigacja MG w oknie tylko do podglądu: dotknięcie otwiera ją na pełnym ekranie</string>
+    <string name="map_panel_directions" formatted="false">Wskazówki</string>
+    <string name="map_panel_window" formatted="false">Nawigacja w oknie</string>
+    <string name="pip_refused" formatted="false">Nawigacja w oknie nie jest obsługiwana w tym aucie: panel map wraca do poprzedniego wyglądu</string>
+    <string name="news_v105_1" formatted="false">Animacja ładowania: teraz naprawdę startuje po podłączeniu kabla przy włączonym ekranie</string>
+    <string name="news_v105_2" formatted="false">Wyłączanie auta w ustawieniach (tylko na P) i ukrywany panel auta</string>
+    <string name="news_v105_3" formatted="false">Ikony manewrów nawigacji (dzięki sommistica) i nawigacja w oknie w panelu map (eksperymentalne)</string>
+    <string name="news_v105_4" formatted="false">Ustawienia: strona zostaje na miejscu nawet po przerwie · pakiet animacji aktualizuje się sam</string>
     <string name="news_v104_6" formatted="false">Ustawienia: po zmianie opcji strona zostaje w tym samym miejscu · Aplikacje: przytrzymaj zainstalowaną przez siebie aplikację, aby ją odinstalować</string>
 </resources>

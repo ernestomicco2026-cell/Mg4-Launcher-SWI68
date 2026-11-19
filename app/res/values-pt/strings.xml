@@ -514,5 +514,41 @@
     <string name="app_uninstall_q">Queres desinstalar %1$s?</string>
     <string name="app_uninstall_done">%1$s desinstalada</string>
     <string name="app_uninstall_failed">Não foi possível desinstalar %1$s</string>
+    <string name="chk_ready" formatted="false">READY lido</string>
+    <string name="chk_power" formatted="false">Desligar disponível</string>
+    <string name="power_off" formatted="false">Desligar o carro</string>
+    <string name="power_off_sub" formatted="false">Como o botão do carro: só em P, com confirmação</string>
+    <string name="power_off_q" formatted="false">Desligar o carro?</string>
+    <string name="power_off_msg" formatted="false">Se não tocares em nada, cancela daqui a alguns segundos.</string>
+    <string name="power_off_btn" formatted="false">Desligar</string>
+    <string name="power_off_not_p" formatted="false">Não é possível desligar: põe em P</string>
+    <string name="power_off_unavailable" formatted="false">Desligar não está disponível neste momento</string>
+    <string name="power_off_failed" formatted="false">O comando de desligar falhou</string>
+    <string name="set_power_btn" formatted="false">Botão Desligar o carro na barra inferior</string>
+    <string name="set_power_btn_sub" formatted="false">Mesma confirmação das definições; só funciona em P</string>
+    <string name="set_car_panel" formatted="false">Painel do carro</string>
+    <string name="set_car_panel_sub" formatted="false">O carro no painel esquerdo; se o esconderes, outro painel fica no seu lugar</string>
+    <string name="car_panel_show" formatted="false">Mostrar</string>
+    <string name="car_panel_hide" formatted="false">Esconder</string>
+    <string name="set_side_widget" formatted="false">Em vez do carro</string>
+    <string name="set_side_widget_sub" formatted="false">Relógio e data grandes, mapa, multimédia ou favoritos do telemóvel (os mesmos da barra)</string>
+    <string name="side_clock" formatted="false">Relógio</string>
+    <string name="nav_missing_send" formatted="false">Enviar ao programador o registo do ícone em falta</string>
+    <string name="nav_missing_code">Ícone em falta: código %1$d</string>
+    <string name="nav_missing_sending">A enviar o ícone em falta %1$d…</string>
+    <string name="nav_missing_sent" formatted="false">Registo enviado ao programador</string>
+    <string name="nav_missing_queued" formatted="false">Registo guardado: segue no próximo envio</string>
+    <string name="nav_missing_retry" formatted="false">Envio falhou: o registo está guardado e tenta-se mais tarde</string>
+    <string name="nav_missing_not_configured" formatted="false">O envio de registos não está disponível nesta versão</string>
+    <string name="nav_missing_error" formatted="false">Não foi possível enviar o registo do ícone em falta</string>
+    <string name="set_map_panel" formatted="false">Conteúdo do painel de mapas (experimental)</string>
+    <string name="set_map_panel_sub" formatted="false">Indicações como hoje, ou o navegador MG numa janela só de visualização: um toque abre-o em ecrã inteiro</string>
+    <string name="map_panel_directions" formatted="false">Indicações</string>
+    <string name="map_panel_window" formatted="false">Navegador em janela</string>
+    <string name="pip_refused" formatted="false">O navegador em janela não é suportado neste carro: o painel de mapas volta ao normal</string>
+    <string name="news_v105_1" formatted="false">Animação de carregamento: agora começa mesmo ao ligar o cabo com o ecrã ligado</string>
+    <string name="news_v105_2" formatted="false">Desligar o carro nas definições (só em P) e painel do carro ocultável</string>
+    <string name="news_v105_3" formatted="false">Ícones das manobras do navegador (obrigado a sommistica) e navegador em janela no painel de mapas (experimental)</string>
+    <string name="news_v105_4" formatted="false">Definições: a página fica no lugar mesmo após uma pausa · o pacote da animação atualiza-se sozinho</string>
     <string name="news_v104_6" formatted="false">Definições: ao mudar uma opção a página fica onde estava · Apps: toque longo numa app que instalaste para a desinstalar</string>
 </resources>

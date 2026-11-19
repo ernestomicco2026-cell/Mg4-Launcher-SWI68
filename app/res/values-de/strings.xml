@@ -514,5 +514,41 @@
     <string name="app_uninstall_q">Möchtest du %1$s deinstallieren?</string>
     <string name="app_uninstall_done">%1$s deinstalliert</string>
     <string name="app_uninstall_failed">%1$s konnte nicht deinstalliert werden</string>
+    <string name="chk_ready" formatted="false">READY gelesen</string>
+    <string name="chk_power" formatted="false">Ausschalten verfügbar</string>
+    <string name="power_off" formatted="false">Fahrzeug ausschalten</string>
+    <string name="power_off_sub" formatted="false">Wie die Taste im Auto: nur in P, mit Bestätigung</string>
+    <string name="power_off_q" formatted="false">Fahrzeug ausschalten?</string>
+    <string name="power_off_msg" formatted="false">Wenn du nichts berührst, wird in wenigen Sekunden abgebrochen.</string>
+    <string name="power_off_btn" formatted="false">Ausschalten</string>
+    <string name="power_off_not_p" formatted="false">Ausschalten nicht möglich: auf P schalten</string>
+    <string name="power_off_unavailable" formatted="false">Ausschalten ist gerade nicht verfügbar</string>
+    <string name="power_off_failed" formatted="false">Ausschaltbefehl fehlgeschlagen</string>
+    <string name="set_power_btn" formatted="false">Taste Fahrzeug ausschalten in der unteren Leiste</string>
+    <string name="set_power_btn_sub" formatted="false">Gleiche Bestätigung wie in den Einstellungen; nur in P</string>
+    <string name="set_car_panel" formatted="false">Fahrzeugbereich</string>
+    <string name="set_car_panel_sub" formatted="false">Das Auto im linken Bereich; wenn du es ausblendest, kommt ein anderer Bereich an seine Stelle</string>
+    <string name="car_panel_show" formatted="false">Anzeigen</string>
+    <string name="car_panel_hide" formatted="false">Ausblenden</string>
+    <string name="set_side_widget" formatted="false">Anstelle des Autos</string>
+    <string name="set_side_widget_sub" formatted="false">Große Uhr mit Datum, Karte, Medien oder Telefon-Favoriten (dieselben wie in der Leiste)</string>
+    <string name="side_clock" formatted="false">Uhr</string>
+    <string name="nav_missing_send" formatted="false">Protokoll zum fehlenden Symbol an den Entwickler senden</string>
+    <string name="nav_missing_code">Fehlendes Symbol: Code %1$d</string>
+    <string name="nav_missing_sending">Fehlendes Symbol %1$d wird gesendet…</string>
+    <string name="nav_missing_sent" formatted="false">Protokoll an den Entwickler gesendet</string>
+    <string name="nav_missing_queued" formatted="false">Protokoll gespeichert: es wird beim nächsten Senden übertragen</string>
+    <string name="nav_missing_retry" formatted="false">Senden fehlgeschlagen: Protokoll gespeichert, später neuer Versuch</string>
+    <string name="nav_missing_not_configured" formatted="false">Protokollversand ist in dieser Version nicht verfügbar</string>
+    <string name="nav_missing_error" formatted="false">Protokoll zum fehlenden Symbol konnte nicht gesendet werden</string>
+    <string name="set_map_panel" formatted="false">Inhalt des Kartenbereichs (experimentell)</string>
+    <string name="set_map_panel_sub" formatted="false">Hinweise wie bisher oder das MG-Navi in einem Fenster nur zum Ansehen: Antippen öffnet es im Vollbild</string>
+    <string name="map_panel_directions" formatted="false">Hinweise</string>
+    <string name="map_panel_window" formatted="false">Navi im Fenster</string>
+    <string name="pip_refused" formatted="false">Das Navi im Fenster wird in diesem Auto nicht unterstützt: der Kartenbereich ist wieder wie vorher</string>
+    <string name="news_v105_1" formatted="false">Lade-Animation: startet jetzt wirklich, wenn du das Kabel bei eingeschaltetem Bildschirm einsteckst</string>
+    <string name="news_v105_2" formatted="false">Fahrzeug in den Einstellungen ausschalten (nur in P) und Fahrzeugbereich ausblendbar</string>
+    <string name="news_v105_3" formatted="false">Manöver-Symbole des Navis (danke an sommistica) und Navi im Fenster im Kartenbereich (experimentell)</string>
+    <string name="news_v105_4" formatted="false">Einstellungen: die Seite bleibt auch nach einer Pause an ihrem Platz · das Animationspaket aktualisiert sich selbst</string>
     <string name="news_v104_6" formatted="false">Einstellungen: beim Ändern einer Option bleibt die Seite, wo sie war · Apps: eine selbst installierte App lange drücken, um sie zu deinstallieren</string>
 </resources>

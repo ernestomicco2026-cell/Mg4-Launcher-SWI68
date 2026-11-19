@@ -514,5 +514,41 @@
     <string name="app_uninstall_q">Do you want to uninstall %1$s?</string>
     <string name="app_uninstall_done">%1$s uninstalled</string>
     <string name="app_uninstall_failed">Could not uninstall %1$s</string>
+    <string name="chk_ready" formatted="false">READY read</string>
+    <string name="chk_power" formatted="false">Turn-off available</string>
+    <string name="power_off" formatted="false">Turn off the car</string>
+    <string name="power_off_sub" formatted="false">Like the car\'s own button: only in P, with confirmation</string>
+    <string name="power_off_q" formatted="false">Turn off the car?</string>
+    <string name="power_off_msg" formatted="false">If you touch nothing, it cancels in a few seconds.</string>
+    <string name="power_off_btn" formatted="false">Turn off</string>
+    <string name="power_off_not_p" formatted="false">Cannot turn off: shift to P</string>
+    <string name="power_off_unavailable" formatted="false">Turning off is not available right now</string>
+    <string name="power_off_failed" formatted="false">Turn-off command failed</string>
+    <string name="set_power_btn" formatted="false">Turn off the car button in the bottom bar</string>
+    <string name="set_power_btn_sub" formatted="false">Same confirmation as in the settings; works only in P</string>
+    <string name="set_car_panel" formatted="false">Car panel</string>
+    <string name="set_car_panel_sub" formatted="false">The car in the left panel; if you hide it, another panel takes its place</string>
+    <string name="car_panel_show" formatted="false">Show</string>
+    <string name="car_panel_hide" formatted="false">Hide</string>
+    <string name="set_side_widget" formatted="false">Instead of the car</string>
+    <string name="set_side_widget_sub" formatted="false">Large clock and date, map, media or phone favourites (the same as in the bar)</string>
+    <string name="side_clock" formatted="false">Clock</string>
+    <string name="nav_missing_send" formatted="false">Send the missing icon log to the developer</string>
+    <string name="nav_missing_code">Missing icon: code %1$d</string>
+    <string name="nav_missing_sending">Sending missing icon %1$d…</string>
+    <string name="nav_missing_sent" formatted="false">Log sent to the developer</string>
+    <string name="nav_missing_queued" formatted="false">Log saved: it will go with the next upload</string>
+    <string name="nav_missing_retry" formatted="false">Upload failed: the log is saved and will be retried later</string>
+    <string name="nav_missing_not_configured" formatted="false">Log upload is not available in this version</string>
+    <string name="nav_missing_error" formatted="false">Could not send the missing icon log</string>
+    <string name="set_map_panel" formatted="false">Map panel content (experimental)</string>
+    <string name="set_map_panel_sub" formatted="false">Directions as today, or the MG navigator in a view-only window: a tap opens it full screen</string>
+    <string name="map_panel_directions" formatted="false">Directions</string>
+    <string name="map_panel_window" formatted="false">Navigator in a window</string>
+    <string name="pip_refused" formatted="false">The navigator in a window is not supported on this car: the map panel goes back to normal</string>
+    <string name="news_v105_1" formatted="false">Charging animation: it now really starts when you plug in the cable with the screen on</string>
+    <string name="news_v105_2" formatted="false">Turn off the car from the settings (only in P) and the car panel can be hidden</string>
+    <string name="news_v105_3" formatted="false">Navigator manoeuvre icons (thanks to sommistica) and navigator in a window inside the map panel (experimental)</string>
+    <string name="news_v105_4" formatted="false">Settings: the page stays in place even after a pause · the animation pack updates by itself</string>
     <string name="news_v104_6" formatted="false">Settings: changing an option keeps the page where it was · Apps: long-press an app you installed to uninstall it</string>
 </resources>

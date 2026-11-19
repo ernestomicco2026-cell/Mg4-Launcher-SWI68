@@ -268,6 +268,53 @@ public final class Prefs {
     }
 
     /** Pulsante retronebbia nella barra (acceso di default; si spegne se l'auto ha già il tasto fisico). */
+    /** 1.0.5 (issue SWI132 #4): riquadro auto nel pannello sinistro (predefinito: mostrato). */
+    public boolean carPanel() {
+        return sp.getBoolean("riquadroAuto", true);
+    }
+
+    public void setCarPanel(boolean b) {
+        sp.edit().putBoolean("riquadroAuto", b).apply();
+    }
+
+    public static final String SIDE_CLOCK = "orologio", SIDE_MAP = "mappa", SIDE_MEDIA = "media", SIDE_PHONE = "telefono";
+
+    /** 1.0.5: cosa mostrare al posto dell'auto quando il riquadro auto è nascosto. */
+    public String sideWidget() {
+        return sp.getString("widgetSinistra", SIDE_CLOCK);
+    }
+
+    public void setSideWidget(String s) {
+        sp.edit().putString("widgetSinistra", s).apply();
+    }
+
+    /** 1.0.5 (sperimentale): navigatore in finestra nel pannello mappe (predefinito: spento = Indicazioni). */
+    public boolean mapPanelWindow() {
+        return sp.getBoolean("pannelloMappeFinestra", false);
+    }
+
+    public void setMapPanelWindow(boolean b) {
+        sp.edit().putBoolean("pannelloMappeFinestra", b).apply();
+    }
+
+    /** 1.0.5: Android ha rifiutato il navigatore in finestra su questa auto: l'opzione non compare più. */
+    public boolean pipRefused() {
+        return sp.getBoolean("pipRifiutata", false);
+    }
+
+    public void setPipRefused(boolean b) {
+        sp.edit().putBoolean("pipRifiutata", b).apply();
+    }
+
+    /** 1.0.5: pulsante "Spegni la vettura" nella barra in basso (predefinito: spento). */
+    public boolean powerButton() {
+        return sp.getBoolean("pulsanteSpegni", false);
+    }
+
+    public void setPowerButton(boolean b) {
+        sp.edit().putBoolean("pulsanteSpegni", b).apply();
+    }
+
     public boolean showRearFog() {
         return sp.getBoolean("mostraRetronebbia", true);
     }

@@ -53,6 +53,9 @@ public final class SettingsView extends FrameLayout {
 
         /** 1.0.4: prova dell'animazione di ricarica sulla home. */
         void testChargeAnimation();
+
+        /** 1.0.5: servizio veicolo (Spegni la vettura). */
+        com.mg4.launcher.svc.VehicleClient vehicle();
     }
 
     // 1.0.0 (punto 11): 7 sezioni nello stesso ordine su tutte le versioni - Auto, Home, Barra e pulsanti,
@@ -442,6 +445,17 @@ public final class SettingsView extends FrameLayout {
                     showSection(SEC_CAR);
                 }), true));
         col.addView(card, topFull(14));
+        // 1.0.5: Spegni la vettura (solo in P, conferma in basso)
+        LinearLayout pc = card(c);
+        TextView pb = Ui.text(c, L.s(R.string.power_off_btn), Ui.ts(20), 0xFFFFFFFF, Ui.MEDIUM);
+        pb.setGravity(Gravity.CENTER);
+        pb.setPadding(tp(28), 0, tp(28), 0);
+        pb.setBackground(Ui.pressable(c, Confirm.DANGER, 16 * Ui.K, t));
+        pb.setClickable(true);
+        pb.setOnClickListener(v -> PowerOff.ask(this, t, host.vehicle()));
+        pb.setLayoutParams(new LinearLayout.LayoutParams(-2, tp(60)));
+        pc.addView(row(c, L.s(R.string.power_off), L.s(R.string.power_off_sub), pb, true));
+        col.addView(pc, topFull(14));
 
         // anteprima dell'auto con colore e tetto scelti
         CarView car = new CarView(c);
@@ -473,6 +487,30 @@ public final class SettingsView extends FrameLayout {
     private void buildHome(Context c, LinearLayout col) {
         col.addView(label(c, L.s(R.string.set_home_card)));
         LinearLayout card = card(c);
+        // 1.0.5 (issue SWI132 #4): riquadro auto Mostra / Nascondi, e cosa mettere al suo posto
+        card.addView(row(c, L.s(R.string.set_car_panel), L.s(R.string.set_car_panel_sub),
+                choices(c, new String[]{L.s(R.string.car_panel_show), L.s(R.string.car_panel_hide)}, prefs.carPanel() ? 0 : 1, i -> {
+                    prefs.setCarPanel(i == 0);
+                    host.settingsChanged(true);
+                }), false));
+        if (!prefs.carPanel()) {
+            String[] sv = {Prefs.SIDE_CLOCK, Prefs.SIDE_MAP, Prefs.SIDE_MEDIA, Prefs.SIDE_PHONE};
+            String[] sn = {L.s(R.string.side_clock), L.s(R.string.tab_map), L.s(R.string.tab_media), L.s(R.string.tile_phone)};
+            card.addView(row(c, L.s(R.string.set_side_widget), L.s(R.string.set_side_widget_sub),
+                    choices(c, sn, Math.max(0, java.util.Arrays.asList(sv).indexOf(prefs.sideWidget())), i -> {
+                        prefs.setSideWidget(sv[i]);
+                        host.settingsChanged(true);
+                    }), false));
+        }
+        // 1.0.5 (sperimentale): contenuto del pannello mappe; non compare se il navigatore MG manca o Android ha rifiutato
+        if (NavWindow.available(c, prefs)) {
+            card.addView(row(c, L.s(R.string.set_map_panel), L.s(R.string.set_map_panel_sub),
+                    choices(c, new String[]{L.s(R.string.map_panel_directions), L.s(R.string.map_panel_window)}, prefs.mapPanelWindow() ? 1 : 0, i -> {
+                        prefs.setMapPanelWindow(i == 1);
+                        com.mg4.launcher.svc.Diag.put("pip.stato", "opzione " + (i == 1 ? "accesa" : "spenta"));
+                        host.settingsChanged(true);
+                    }), false));
+        }
         card.addView(row(c, L.s(R.string.set_show_date), L.s(R.string.set_show_date_sub),
                 toggle(c, prefs.showDate(), on -> {
                     prefs.setShowDate(on);
@@ -663,6 +701,11 @@ public final class SettingsView extends FrameLayout {
         card.addView(row(c, L.s(R.string.set_charge_buttons), L.s(R.string.set_charge_buttons_sub),
                 toggle(c, prefs.chargeButtons(), on -> {
                     prefs.setChargeButtons(on);
+                    host.settingsChanged(true);
+                }), false));
+        card.addView(row(c, L.s(R.string.set_power_btn), L.s(R.string.set_power_btn_sub),
+                toggle(c, prefs.powerButton(), on -> {
+                    prefs.setPowerButton(on);
                     host.settingsChanged(true);
                 }), false));
         // 1.0.3 (punto 7): riquadro accanto al clima: Media (come prima) / Preferiti telefono / Scorciatoie app
@@ -1189,7 +1232,8 @@ public final class SettingsView extends FrameLayout {
         col.addView(card, topFull(14));
 
         // 1.0.4 (punto D): MG4 Store. Se l'utente l'ha tolto il launcher non lo rimette da solo: si reinstalla da qui
-        if (com.mg4.launcher.svc.StoreSetup.installedCode(c) < 0) {
+        if (com.mg4.launcher.svc.StoreSetup.installedCode(c) < 0
+                && com.mg4.launcher.svc.StoreSetup.hasBundledStore(c)) {
             card = card(c);
             View stBtn = button(c, L.s(R.string.store_install), v -> {
                 android.widget.Toast.makeText(c, L.s(R.string.store_installing), android.widget.Toast.LENGTH_SHORT).show();

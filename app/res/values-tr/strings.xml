@@ -514,5 +514,41 @@
     <string name="app_uninstall_q">%1$s kaldırılsın mı?</string>
     <string name="app_uninstall_done">%1$s kaldırıldı</string>
     <string name="app_uninstall_failed">%1$s kaldırılamadı</string>
+    <string name="chk_ready" formatted="false">READY okundu</string>
+    <string name="chk_power" formatted="false">Kapatma kullanılabilir</string>
+    <string name="power_off" formatted="false">Aracı kapat</string>
+    <string name="power_off_sub" formatted="false">Aracın kendi düğmesi gibi: yalnızca P\'de, onayla</string>
+    <string name="power_off_q" formatted="false">Araç kapatılsın mı?</string>
+    <string name="power_off_msg" formatted="false">Hiçbir şeye dokunmazsanız birkaç saniye içinde iptal edilir.</string>
+    <string name="power_off_btn" formatted="false">Kapat</string>
+    <string name="power_off_not_p" formatted="false">Kapatılamıyor: P konumuna alın</string>
+    <string name="power_off_unavailable" formatted="false">Kapatma şu anda kullanılamıyor</string>
+    <string name="power_off_failed" formatted="false">Kapatma komutu başarısız</string>
+    <string name="set_power_btn" formatted="false">Alt çubukta Aracı kapat düğmesi</string>
+    <string name="set_power_btn_sub" formatted="false">Ayarlardakiyle aynı onay; yalnızca P\'de çalışır</string>
+    <string name="set_car_panel" formatted="false">Araç paneli</string>
+    <string name="set_car_panel_sub" formatted="false">Sol paneldeki araç; gizlerseniz yerine başka bir panel gelir</string>
+    <string name="car_panel_show" formatted="false">Göster</string>
+    <string name="car_panel_hide" formatted="false">Gizle</string>
+    <string name="set_side_widget" formatted="false">Araç yerine</string>
+    <string name="set_side_widget_sub" formatted="false">Büyük saat ve tarih, harita, medya veya telefon favorileri (çubuktakilerle aynı)</string>
+    <string name="side_clock" formatted="false">Saat</string>
+    <string name="nav_missing_send" formatted="false">Eksik simge günlüğünü geliştiriciye gönder</string>
+    <string name="nav_missing_code">Eksik simge: kod %1$d</string>
+    <string name="nav_missing_sending">Eksik simge %1$d gönderiliyor…</string>
+    <string name="nav_missing_sent" formatted="false">Günlük geliştiriciye gönderildi</string>
+    <string name="nav_missing_queued" formatted="false">Günlük kaydedildi: bir sonraki gönderimde gidecek</string>
+    <string name="nav_missing_retry" formatted="false">Gönderim başarısız: günlük kaydedildi, sonra tekrar denenecek</string>
+    <string name="nav_missing_not_configured" formatted="false">Bu sürümde günlük gönderimi yok</string>
+    <string name="nav_missing_error" formatted="false">Eksik simge günlüğü gönderilemedi</string>
+    <string name="set_map_panel" formatted="false">Harita paneli içeriği (deneysel)</string>
+    <string name="set_map_panel_sub" formatted="false">Bugünkü gibi yön bilgisi ya da yalnızca izlenebilen pencerede MG navigasyonu: dokununca tam ekran açılır</string>
+    <string name="map_panel_directions" formatted="false">Yön bilgisi</string>
+    <string name="map_panel_window" formatted="false">Pencerede navigasyon</string>
+    <string name="pip_refused" formatted="false">Pencerede navigasyon bu araçta desteklenmiyor: harita paneli eski haline döner</string>
+    <string name="news_v105_1" formatted="false">Şarj animasyonu: ekran açıkken kablo takılınca artık gerçekten başlıyor</string>
+    <string name="news_v105_2" formatted="false">Ayarlardan aracı kapatma (yalnızca P\'de) ve gizlenebilir araç paneli</string>
+    <string name="news_v105_3" formatted="false">Navigasyon manevra simgeleri (sommistica\'ya teşekkürler) ve harita panelinde pencerede navigasyon (deneysel)</string>
+    <string name="news_v105_4" formatted="false">Ayarlar: sayfa bir aradan sonra bile yerinde kalır · animasyon paketi kendiliğinden güncellenir</string>
     <string name="news_v104_6" formatted="false">Ayarlar: bir seçeneği değiştirince sayfa olduğu yerde kalır · Uygulamalar: yüklediğiniz bir uygulamayı kaldırmak için uzun basın</string>
 </resources>

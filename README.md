@@ -26,7 +26,7 @@
 </p>
 
 <p align="center">
-<a href="releases/MG4Launcher-1.0.4.apk"><img alt="Scarica / Download 1.0.4" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.4-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
+<a href="releases/MG4Launcher-1.0.5.apk"><img alt="Scarica / Download 1.0.5" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.5-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
 <a href="https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT"><img alt="Sostieni il progetto con PayPal · Support the project with PayPal" src="https://img.shields.io/badge/Sostieni%20%2F%20Support-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white"></a>
 </p>
 
@@ -65,6 +65,18 @@
 <sub>Dimensione comandi <b>Grande</b>: testo e pulsanti crescono insieme · <i>Control size <b>Large</b>: text and buttons grow together</i></sub></td>
 <td width="50%" valign="top"><img src="docs/home-1.0.4-molto-grande-notte.png" alt="Home con Dimensione comandi Molto grande di notte (simulazione)" width="100%"><br>
 <sub>Dimensione comandi <b>Molto grande</b>, di notte: tutte le sorgenti con la scritta · <i>Control size <b>Extra large</b>, at night: every source keeps its label</i></sub></td>
+</tr>
+<tr>
+<td width="50%" valign="top"><img src="docs/home-1.0.5-manovra.png" alt="Indicazione del navigatore con l'icona della manovra (simulazione)" width="100%"><br>
+<sub><b>Icone delle manovre</b> del navigatore MG, grazie a sommistica · <i>MG navigator <b>manoeuvre icons</b>, thanks to sommistica</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.5-spegni.png" alt="Conferma per spegnere la vettura (simulazione)" width="100%"><br>
+<sub><b>Spegni la vettura</b> dalle impostazioni, solo in P e con conferma · <i><b>Turn off the car</b> from the settings, only in P and with confirmation</i></sub></td>
+</tr>
+<tr>
+<td width="50%" valign="top"><img src="docs/home-1.0.5-senza-auto-orologio.png" alt="Riquadro auto nascosto, al suo posto orologio e data (simulazione)" width="100%"><br>
+<sub><b>Riquadro auto</b> nascosto: al suo posto orologio e data grandi · <i><b>Car panel</b> hidden: a large clock and date instead</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.5-senza-auto-media.png" alt="Riquadro auto nascosto, al suo posto il media (simulazione)" width="100%"><br>
+<sub>Oppure mappa, <b>media</b> o preferiti del telefono · <i>Or map, <b>media</b> or phone favourites</i></sub></td>
 </tr>
 <tr>
 <td width="50%" valign="top"><img src="screenshots/guida.png" alt="Gruppo Guida: corsia, One Pedal, assistente, pedale del freno" width="100%"><br>
@@ -199,7 +211,7 @@ Si installa come una normale app: non serve per forza un computer. Ci sono due m
 
 #### Metodo 1 — Da chiavetta USB (senza computer)
 
-1. Copia `MG4Launcher-1.0.4.apk` su una chiavetta USB formattata **FAT32** o **exFAT**.
+1. Copia `MG4Launcher-1.0.5.apk` su una chiavetta USB formattata **FAT32** o **exFAT**.
 2. Inserisci la chiavetta nell'auto, apri il file manager e tocca l'APK.
 3. Se Android avvisa che non può installare app da questa fonte: tocca **Impostazioni**, attiva
    **Consenti da questa fonte** per il file manager e torna indietro.
@@ -215,7 +227,7 @@ Il firmware MG può bloccare l'installazione normale delle app: l'opzione `-f` l
 
 1. Installa:
    ```bash
-   adb install -r -f MG4Launcher-1.0.4.apk
+   adb install -r -f MG4Launcher-1.0.5.apk
    ```
 2. Rendilo la home predefinita:
    ```bash
@@ -297,6 +309,16 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Versioni
+
+#### 1.0.5
+- **Animazione di ricarica**: ora parte davvero quando si attacca il cavo con lo schermo acceso (prima scambiava il
+  quadro acceso per READY).
+- **Impostazioni**: la pagina resta al suo posto anche dopo una pausa.
+- Il **pacchetto dell'animazione** si riscarica da solo quando viene aggiornato.
+- **Spegni la vettura** dalle impostazioni (solo in P).
+- **Riquadro auto** nascondibile.
+- **Icone delle manovre** del navigatore (grazie a **sommistica**).
+- **Navigatore in finestra** nel pannello mappe (sperimentale).
 
 #### 1.0.4
 - **Disinstallazione sicura** (issue #29): "Disinstalla" riaccende la home originale MG, controlla che sia davvero
@@ -827,7 +849,7 @@ It installs like a normal app, so a computer isn't required. There are two ways:
 
 #### Method 1 — From a USB stick (no computer)
 
-1. Copy `MG4Launcher-1.0.4.apk` to a USB stick formatted as **FAT32** or **exFAT**.
+1. Copy `MG4Launcher-1.0.5.apk` to a USB stick formatted as **FAT32** or **exFAT**.
 2. Plug it into the car, open the file manager and tap the APK.
 3. If Android says it cannot install apps from this source: tap **Settings**, enable
    **Allow from this source** for the file manager and go back.
@@ -843,7 +865,7 @@ The MG firmware may block normal app installs; the `-f` option allows it.
 
 1. Install it:
    ```bash
-   adb install -r -f MG4Launcher-1.0.4.apk
+   adb install -r -f MG4Launcher-1.0.5.apk
    ```
 2. Make it the default home:
    ```bash
@@ -925,6 +947,16 @@ Even just **€2** is a great help to keep developing and testing new versions i
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Changelog
+
+#### 1.0.5
+- **Charging animation**: it now really starts when the cable is plugged in with the screen on (it used to mistake
+  ignition ON for READY).
+- **Settings** keep their scroll position even after a pause.
+- The **animation pack** is downloaded again automatically when it is updated.
+- **Turn off the car** from the settings (only in P).
+- The **car panel** can be hidden.
+- Navigation **manoeuvre icons** (thanks to **sommistica**).
+- **Navigation in a window** inside the map panel (experimental).
 
 #### 1.0.4
 - **Safe uninstall** (issue #29): "Uninstall" turns the original MG home back on, checks that it is really active and

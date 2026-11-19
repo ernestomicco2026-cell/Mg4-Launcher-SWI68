@@ -469,6 +469,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     /** Novità di ogni versione (testi in tutte le lingue in strings.xml). */
     private static int[] newsFor(String ver) {
         switch (ver) {
+            case "1.0.5":
+                return new int[]{R.string.news_v105_1, R.string.news_v105_2, R.string.news_v105_3, R.string.news_v105_4};
             case "1.0.4":
                 return new int[]{R.string.news_v104_1, R.string.news_v104_2, R.string.news_v104_3, R.string.news_v104_4, R.string.news_v104_5, R.string.news_v104_6};
             case "1.0.3":
@@ -799,6 +801,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     /** Apre il navigatore scelto: MG, quello del telefono (CarPlay/Android Auto) o un'app installata. */
     @Override
     public void launchNavigator(String which) {
+        // 1.0.5: il navigatore non deve restare (o finire) nel riquadro mentre lo si apre a tutto schermo
+        com.mg4.launcher.ui.NavWindow.releaseActive("navigatore aperto a tutto schermo");
         boolean phone = media.last().deviceType != 0;
         if (Prefs.NAV_PHONE.equals(which) || (Prefs.NAV_AUTO.equals(which) && phone)) {
             if (phone) {
@@ -846,6 +850,11 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
      * animazione-<colore>.zip nella cartella principale della chiavetta USB. Si chiudono le impostazioni e la prova
      * gira sull'auto della home: aggancio → loop (3 giri) → finita → sgancio.
      */
+    @Override
+    public VehicleClient vehicle() {
+        return vehicle;
+    }
+
     @Override
     public void testChargeAnimation() {
         String color = Prefs.CAR_COLORS[prefs.carColorIndex()];

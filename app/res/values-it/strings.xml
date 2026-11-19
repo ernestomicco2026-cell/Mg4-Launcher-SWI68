@@ -514,5 +514,41 @@
     <string name="app_uninstall_q">Vuoi disinstallare %1$s?</string>
     <string name="app_uninstall_done">%1$s disinstallata</string>
     <string name="app_uninstall_failed">Non sono riuscito a disinstallare %1$s</string>
+    <string name="chk_ready" formatted="false">READY letto</string>
+    <string name="chk_power" formatted="false">Spegnimento disponibile</string>
+    <string name="power_off" formatted="false">Spegni la vettura</string>
+    <string name="power_off_sub" formatted="false">Come il pulsante dell\'auto: solo in P, con conferma</string>
+    <string name="power_off_q" formatted="false">Spegnere la vettura?</string>
+    <string name="power_off_msg" formatted="false">Se non tocchi niente, tra qualche secondo vale Annulla.</string>
+    <string name="power_off_btn" formatted="false">Spegni</string>
+    <string name="power_off_not_p" formatted="false">Spegnimento non possibile: metti in P</string>
+    <string name="power_off_unavailable" formatted="false">Spegnimento non disponibile in questo momento</string>
+    <string name="power_off_failed" formatted="false">Comando di spegnimento non riuscito</string>
+    <string name="set_power_btn" formatted="false">Pulsante Spegni la vettura nella barra in basso</string>
+    <string name="set_power_btn_sub" formatted="false">Stessa conferma delle impostazioni; funziona solo in P</string>
+    <string name="set_car_panel" formatted="false">Riquadro auto</string>
+    <string name="set_car_panel_sub" formatted="false">L\'auto nel pannello a sinistra; se la nascondi, al suo posto un altro riquadro</string>
+    <string name="car_panel_show" formatted="false">Mostra</string>
+    <string name="car_panel_hide" formatted="false">Nascondi</string>
+    <string name="set_side_widget" formatted="false">Al posto dell\'auto</string>
+    <string name="set_side_widget_sub" formatted="false">Orologio e data grandi, mappa, media o preferiti del telefono (gli stessi della barra)</string>
+    <string name="side_clock" formatted="false">Orologio</string>
+    <string name="nav_missing_send" formatted="false">Invia allo sviluppatore il log dell\'icona mancante</string>
+    <string name="nav_missing_code">Icona mancante: codice %1$d</string>
+    <string name="nav_missing_sending">Invio dell\'icona mancante %1$d…</string>
+    <string name="nav_missing_sent" formatted="false">Log inviato allo sviluppatore</string>
+    <string name="nav_missing_queued" formatted="false">Log salvato: partirà con il prossimo invio</string>
+    <string name="nav_missing_retry" formatted="false">Invio non riuscito: il log è salvato e si riprova più tardi</string>
+    <string name="nav_missing_not_configured" formatted="false">Invio dei log non disponibile in questa versione</string>
+    <string name="nav_missing_error" formatted="false">Non riesco a inviare il log dell\'icona mancante</string>
+    <string name="set_map_panel" formatted="false">Contenuto del pannello mappe (sperimentale)</string>
+    <string name="set_map_panel_sub" formatted="false">Indicazioni come oggi, oppure il navigatore MG in una finestra da guardare: un tocco lo apre a tutto schermo</string>
+    <string name="map_panel_directions" formatted="false">Indicazioni</string>
+    <string name="map_panel_window" formatted="false">Navigatore in finestra</string>
+    <string name="pip_refused" formatted="false">Il navigatore in finestra non è supportato su questa auto: il pannello mappe torna come prima</string>
+    <string name="news_v105_1" formatted="false">Animazione di ricarica: ora parte davvero quando attacchi il cavo con lo schermo acceso</string>
+    <string name="news_v105_2" formatted="false">Spegni la vettura dalle impostazioni (solo in P) e riquadro auto nascondibile</string>
+    <string name="news_v105_3" formatted="false">Icone delle manovre del navigatore (grazie a sommistica) e navigatore in finestra nel pannello mappe (sperimentale)</string>
+    <string name="news_v105_4" formatted="false">Impostazioni: la pagina resta al suo posto anche dopo una pausa · il pacchetto dell\'animazione si aggiorna da solo</string>
     <string name="news_v104_6" formatted="false">Impostazioni: cambiando un\'opzione la pagina resta dov\'era · App: pressione lunga su un\'app installata da te per disinstallarla</string>
 </resources>
