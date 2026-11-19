@@ -5,6 +5,16 @@ Uniti da tools/i18n.py a quelli di S e PL. Le voci 0.9.7/0.9.8 erano state scrit
 qui tornano nel generatore, così rigenerare non le perde."""
 
 NEW = {
+    # EN: Airflow popup opened from the fan. IT: Pannello flusso aria aperto dalla ventola.
+    'group_airflow': ('Flusso aria', 'Airflow', 'Flujo de aire', 'Luftstrom', 'Fluxo de ar', 'Flux d’air', 'Hava akışı', 'Nawiew'),
+    'airflow_fan_speed': ('Velocità ventola', 'Fan speed', 'Velocidad del ventilador', 'Gebläsestufe', 'Velocidade da ventoinha', 'Vitesse du ventilateur', 'Fan hızı', 'Prędkość wentylatora'),
+    'airflow_direction': ('Direzione aria', 'Air direction', 'Dirección del aire', 'Luftrichtung', 'Direção do ar', 'Direction de l’air', 'Hava yönü', 'Kierunek nawiewu'),
+    'airflow_windscreen': ('Parabrezza', 'Windscreen', 'Parabrisas', 'Frontscheibe', 'Para-brisas', 'Pare-brise', 'Ön cam', 'Przednia szyba'),
+    'airflow_face': ('Viso', 'Face', 'Cara', 'Oberkörper', 'Rosto', 'Visage', 'Yüz', 'Twarz'),
+    'airflow_feet': ('Piedi', 'Feet', 'Pies', 'Fußraum', 'Pés', 'Pieds', 'Ayaklar', 'Stopy'),
+    'airflow_window_clearing': ('Disappannamento', 'Window clearing', 'Desempañado', 'Scheiben freimachen', 'Desembaciamento', 'Désembuage', 'Buğu giderme', 'Odparowanie szyb'),
+    'airflow_front_clear': ('Disappanna parabrezza', 'Front demist', 'Desempañar parabrisas', 'Frontscheibe entfeuchten', 'Desembaciar para-brisas', 'Désembuage avant', 'Ön cam buğu giderme', 'Odparowanie przedniej szyby'),
+    'airflow_rear_heat': ('Lunotto termico', 'Rear window heating', 'Luneta térmica', 'Heckscheibenheizung', 'Óculo traseiro aquecido', 'Lunette arrière chauffante', 'Arka cam ısıtma', 'Ogrzewanie tylnej szyby'),
     'set_apps_size': ('DIMENSIONE APP', 'APP SIZE', 'TAMAÑO DE APPS', 'APP-GRÖSSE', 'TAMANHO DAS APPS', 'TAILLE DES APPS', 'UYGULAMA BOYUTU', 'ROZMIAR APLIKACJI'),
     'news_v097_1': ('Dimensione separata per la schermata App: si sceglie nelle impostazioni (icone e testo più grandi)', 'Separate size for the App screen: choose it in settings (larger icons and text)', 'Tamaño propio para la pantalla de apps: elígelo en ajustes (iconos y texto más grandes)', 'Eigene Größe für den App-Bildschirm: einstellbar in den Einstellungen (größere Symbole und Text)', 'Tamanho próprio para o ecrã das apps: escolhe nas definições (ícones e texto maiores)', "Taille séparée pour l'écran des applis : à régler dans les réglages (icônes et texte plus grands)", 'Uygulama ekranı için ayrı boyut: ayarlardan seçilir (daha büyük simge ve metin)', 'Osobny rozmiar ekranu aplikacji: ustawiasz go w ustawieniach (większe ikony i tekst)'),
     'news_v097_2': ('Dongle: il log registra ora se il dongle ricompare dopo il reset', 'Dongle: the log now records whether the dongle reappears after the reset', 'Dongle: el registro indica ahora si el dongle vuelve a aparecer tras el reinicio', 'Dongle: Das Protokoll zeigt jetzt, ob der Dongle nach dem Zurücksetzen wieder erscheint', 'Dongle: o registo indica agora se o dongle reaparece após a reposição', 'Dongle : le journal indique maintenant si le dongle réapparaît après la réinitialisation', "Dongle: günlük artık sıfırlamadan sonra dongle'ın tekrar görünüp görünmediğini kaydeder", 'Dongle: dziennik zapisuje teraz, czy dongle pojawia się ponownie po resecie'),

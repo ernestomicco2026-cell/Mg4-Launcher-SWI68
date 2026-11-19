@@ -58,6 +58,10 @@ public final class VehicleClient {
     private static final int AC_OPEN_POWER = 5;
     private static final int AC_CLOSE_POWER = 6;
     private static final int AC_SET_AIR_VOLUME = 15;
+    // EN: MG4 Clima SaicBackend: direction 14/58, rear heating 50/51/93.
+    // IT: MG4 Clima SaicBackend: direzione 14/58, lunotto 50/51/93.
+    private static final int AC_SET_BLOWER_MODE = 14, AC_GET_BLOWER_MODE = 58;
+    private static final int AC_OPEN_REAR_DEFROST = 50, AC_CLOSE_REAR_DEFROST = 51, AC_GET_REAR_DEFROST = 93;
     private static final int AC_SET_DRV_TEMP = 41;
     private static final int AC_GET_POWER = 53;
     private static final int AC_GET_AIR_VOLUME = 59;
@@ -146,6 +150,8 @@ public final class VehicleClient {
         public int acTemp = -1;           // °C, 17 = LO, 33 = HI
         public int hvacPower = -1;
         public int acOn = -1, autoOn = -1, defrostOn = -1;   // 1 acceso, 0 spento, -1 sconosciuto
+        /** EN: Confirmed readings; -1 unavailable. IT: Letture confermate; -1 non disponibile. */
+        public int blowerMode = -1, rearDefrostOn = -1;
         public int seatLeft = -1, seatRight = -1;          // 0..3, -1 non disponibile
         public int wheelHeat = -1;                         // 1 acceso, 0 spento, -1 non disponibile
         public float[] tireBar = {Float.NaN, Float.NaN, Float.NaN, Float.NaN};   // AS, AD, PS, PD
@@ -382,6 +388,22 @@ public final class VehicleClient {
                     s.acOn = held(AC_GET_AC, Rpc.callInt(a, AC, AC_GET_AC), now);
                     s.autoOn = held(AC_GET_AUTO, Rpc.callInt(a, AC, AC_GET_AUTO), now);
                     s.defrostOn = held(AC_GET_FRONT_DEFROST, Rpc.callInt(a, AC, AC_GET_FRONT_DEFROST), now);
+                    // EN: Optional reads must not interrupt other controls. IT: Letture opzionali isolate.
+                    try {
+                        int mode = Rpc.callInt(a, AC, AC_GET_BLOWER_MODE);
+                        s.blowerMode = mode >= 0 && mode <= 6 ? mode : -1;
+                        held(AC_GET_BLOWER_MODE, s.blowerMode, now);
+                    } catch (Exception e) {
+                        Diag.error("clima.direzione", e.toString());
+                    }
+                    try {
+                        int rear = Rpc.callInt(a, AC, AC_GET_REAR_DEFROST);
+                        s.rearDefrostOn = rear == 0 || rear == 1 ? rear : -1;
+                        held(AC_GET_REAR_DEFROST, s.rearDefrostOn, now);
+                    } catch (Exception e) {
+                        Diag.error("clima.lunotto", e.toString());
+                    }
+                    Diag.put("clima.direzione/lunotto", s.blowerMode + " / " + s.rearDefrostOn);
                     try {
                         int loop = Rpc.callInt(a, AC, AC_GET_LOOP);
                         s.loopMode = held(AC_GET_LOOP, loop >= 0 && loop <= 2 ? loop : -1, now);
@@ -1187,8 +1209,8 @@ public final class VehicleClient {
     }
 
     public void toggleFrontDefrost() {
-        if (bg == null) return;
-        boolean on = last.defrostOn == 1;
+        if (bg == null || !last.connected || (last.defrostOn != 0 && last.defrostOn != 1)) return;
+        boolean on = predicted(AC_GET_FRONT_DEFROST, last.defrostOn) == 1;
         hold(AC_GET_FRONT_DEFROST, on ? 0 : 1);
         bg.post(() -> {
             try {
@@ -1196,6 +1218,47 @@ public final class VehicleClient {
                 if (a != null) Rpc.call(a, AC, on ? AC_CLOSE_FRONT_DEFROST : AC_OPEN_FRONT_DEFROST, Rpc.NONE);
             } catch (Exception e) {
                 Diag.error("clima.sbrinamento", e.toString());
+            }
+            poll();
+        });
+    }
+
+    /** EN: Toggle one outlet using SAIC's seven modes. IT: Commuta una direzione nei sette modi SAIC. */
+    public void toggleAirDirection(int direction) {
+        if (bg == null || !last.connected || last.blowerMode < 0) return;
+        bg.post(() -> {
+            int current = predicted(AC_GET_BLOWER_MODE, last.blowerMode);
+            int next = AirflowModes.toggle(current, direction);
+            if (next == current) return;
+            try {
+                IBinder a = sub("aircondition");
+                if (a == null) return;
+                Rpc.call(a, AC, AC_SET_BLOWER_MODE, p -> p.writeInt(next));
+                // EN: Queue rapid taps correctly; display only readings. IT: Tocchi rapidi in ordine; mostra solo letture.
+                hold(AC_GET_BLOWER_MODE, next);
+                Diag.put("comando.ultimo", "clima.direzione → " + next);
+            } catch (Exception e) {
+                synchronized (holds) { holds.remove(AC_GET_BLOWER_MODE); }
+                Diag.error("clima.direzione", e.toString());
+            }
+            poll();
+        });
+    }
+
+    /** EN: Rear window electric heating, separate from front demist. IT: Lunotto elettrico, separato dal parabrezza. */
+    public void toggleRearDefrost() {
+        if (bg == null || !last.connected || last.rearDefrostOn < 0) return;
+        bg.post(() -> {
+            int current = predicted(AC_GET_REAR_DEFROST, last.rearDefrostOn);
+            try {
+                IBinder a = sub("aircondition");
+                if (a == null) return;
+                Rpc.call(a, AC, current == 1 ? AC_CLOSE_REAR_DEFROST : AC_OPEN_REAR_DEFROST, Rpc.NONE);
+                hold(AC_GET_REAR_DEFROST, current == 1 ? 0 : 1);
+                Diag.put("comando.ultimo", "clima.lunotto → " + (current == 1 ? 0 : 1));
+            } catch (Exception e) {
+                synchronized (holds) { holds.remove(AC_GET_REAR_DEFROST); }
+                Diag.error("clima.lunotto", e.toString());
             }
             poll();
         });

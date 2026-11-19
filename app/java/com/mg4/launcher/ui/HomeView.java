@@ -16,6 +16,7 @@ import com.mg4.launcher.svc.CarFeatures;
 import com.mg4.launcher.svc.MediaClient;
 import com.mg4.launcher.svc.NavClient;
 import com.mg4.launcher.svc.VehicleClient;
+import com.mg4.launcher.svc.AirflowModes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -2150,7 +2151,6 @@ public final class HomeView extends LinearLayout {
         fanBox.setClickable(true);
         fanBox.setContentDescription(L.s(R.string.climate));
         fanBox.setBackground(Ui.pressable(c, 0, 16, t));
-        // 1.0.0: app Clima (o MG4 Clima); se l'auto non ha l'app clima, il pannello clima di sistema; altrimenti spento
         boolean hvacApp = host.canLaunch("com.saicmotor.hmi.hvac", "com.saicmotor.hmi.hvac.HvacActivity");
         boolean sysPanel = !hvacApp && com.mg4.launcher.svc.SysHvacPanel.supported(c);
         com.mg4.launcher.svc.Diag.put("clima.tastoApre", hvacApp ? "app Clima (o MG4 Clima se installata)"
@@ -2817,6 +2817,12 @@ public final class HomeView extends LinearLayout {
         }
 
         @Override
+        public boolean dispatchTouchEvent(android.view.MotionEvent event) {
+            if (popup != null) popup.touched();
+            return super.dispatchTouchEvent(event);
+        }
+
+        @Override
         protected void dispatchDraw(android.graphics.Canvas cv) {
             path.reset();
             path.setFillType(android.graphics.Path.FillType.EVEN_ODD);
@@ -2844,9 +2850,11 @@ public final class HomeView extends LinearLayout {
     private final class GroupPopup {
         private static final long AUTO_CLOSE_MS = 6000;
         /** clima: caselle bianche quando accese (Clima e Guida); altrimenti arancioni (Comfort). */
-        final boolean clima, guida;
+        final boolean clima, guida, expandedClimate;
         final Dimmer catcher;
-        final LinearLayout card, tiles;
+        final LinearLayout card;
+        LinearLayout tiles;
+        android.widget.ScrollView climateScroll;
         final View arrow;
         final Runnable closer = this::close;
         final java.util.List<FrameLayout> tileViews = new java.util.ArrayList<>();
@@ -2854,6 +2862,7 @@ public final class HomeView extends LinearLayout {
         GroupPopup(int kind) {
             this.clima = kind != COMFORT;
             this.guida = kind == GUIDA;
+            this.expandedClimate = kind == CLIMA;
             Context c = getContext();
             catcher = new Dimmer(c);
             catcher.ring = clima ? t.text : HEAT;
@@ -2875,9 +2884,12 @@ public final class HomeView extends LinearLayout {
             head.addView(title, Ui.lpWeight(0, -2, 1));
             head.addView(Ui.text(c, L.s(R.string.tap_outside_close), 15, t.sub, Ui.REGULAR), Ui.margins(new LayoutParams(-2, -2), dp(40), 0, 0, 0));
             card.addView(head, new LayoutParams(-1, -2));
-            tiles = Ui.row(c);
-            card.addView(tiles, Ui.margins(new LayoutParams(-2, -2), 0, dp(24), 0, 0));
-            buildTiles(c);
+            if (expandedClimate) buildClimate(c);
+            else {
+                tiles = Ui.row(c);
+                card.addView(tiles, Ui.margins(new LayoutParams(-2, -2), 0, dp(24), 0, 0));
+                buildTiles(c);
+            }
             arrow = new View(c) {
                 final android.graphics.Paint ap = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
                 final android.graphics.Path tri = new android.graphics.Path();
@@ -2893,12 +2905,51 @@ public final class HomeView extends LinearLayout {
                     cv.drawPath(tri, ap);
                 }
             };
-            catcher.addView(card, new FrameLayout.LayoutParams(-2, -2));
+            catcher.addView(card, expandedClimate ? card.getLayoutParams() : new FrameLayout.LayoutParams(-2, -2));
             catcher.addView(arrow, new FrameLayout.LayoutParams(dp(28), dp(14)));
             card.setVisibility(INVISIBLE);
             arrow.setVisibility(INVISIBLE);
             card.addOnLayoutChangeListener((v, l, tp, r, b, ol, ot, or, ob) -> place());
             refresh(vehicle.last());
+        }
+
+        /** EN: Compact rows; scroll on smaller displays. IT: Righe compatte; scorrimento sugli schermi piccoli. */
+        private void buildClimate(Context c) {
+            int available = Math.min(getWidth(), c.getResources().getDisplayMetrics().widthPixels) - dp(40);
+            card.setLayoutParams(new FrameLayout.LayoutParams(Math.max(dp(300), Math.min(tp(660), available)), -2));
+            climateScroll = new android.widget.ScrollView(c);
+            climateScroll.setFillViewport(false);
+            LinearLayout body = Ui.column(c);
+            climateScroll.addView(body, new android.widget.ScrollView.LayoutParams(-1, -2));
+            card.addView(climateScroll, new LayoutParams(-1, -2));
+            // EN: Climate uses three rows: basic controls, outlets, then window clearing.
+            // IT: Clima usa tre righe: comandi base, direzioni, poi disappannamento.
+            tiles = Ui.row(c);
+            body.addView(tiles, Ui.margins(new LayoutParams(-1, -2), 0, dp(18), 0, 0));
+            addTile(c, "ac", null, R.drawable.clima_ac, L.s(R.string.ac_desc), v -> vehicle.toggleAc());
+            addTile(c, "auto", null, R.drawable.clima_auto, L.s(R.string.tile_auto), v -> vehicle.toggleAuto());
+            addTile(c, "recirc", null, recircRes(vehicle.last().loopMode), L.s(R.string.tile_recirc), v -> vehicle.toggleRecirc());
+            climateSection(c, body, R.string.airflow_direction);
+            tiles = Ui.row(c);
+            body.addView(tiles, new LayoutParams(-1, -2));
+            addTile(c, "airGlass", null, R.drawable.clima_aria_parabrezza, L.s(R.string.airflow_windscreen),
+                    v -> vehicle.toggleAirDirection(AirflowModes.WINDSCREEN));
+            addTile(c, "airFace", null, R.drawable.clima_aria_viso, L.s(R.string.airflow_face),
+                    v -> vehicle.toggleAirDirection(AirflowModes.FACE));
+            addTile(c, "airFeet", null, R.drawable.clima_aria_piedi, L.s(R.string.airflow_feet),
+                    v -> vehicle.toggleAirDirection(AirflowModes.FEET));
+            climateSection(c, body, R.string.airflow_window_clearing);
+            tiles = Ui.row(c);
+            body.addView(tiles, new LayoutParams(-1, -2));
+            addTile(c, "defrostF", null, R.drawable.clima_sbrinamento_anteriore, L.s(R.string.airflow_front_clear),
+                    v -> vehicle.toggleFrontDefrost());
+            addTile(c, "defrostR", null, R.drawable.clima_sbrinamento_posteriore, L.s(R.string.airflow_rear_heat),
+                    v -> vehicle.toggleRearDefrost());
+        }
+
+        private void climateSection(Context c, LinearLayout body, int text) {
+            TextView label = Ui.text(c, L.s(text).toUpperCase(L.locale()), 14, t.sub, Ui.MEDIUM);
+            body.addView(label, Ui.margins(new LayoutParams(-1, -2), 0, dp(18), 0, dp(10)));
         }
 
         private void buildTiles(Context c) {
@@ -2914,15 +2965,6 @@ public final class HomeView extends LinearLayout {
                 });
                 if (s.accTja >= 0) addTile(c, "acc", accName(s.accTja), 0, L.s(R.string.tile_acc), v -> guidaTap(false));
                 if (s.pedal >= 0) addTile(c, "pedal", null, R.drawable.ic_pedal, L.s(R.string.tile_pedal), v -> guidaTap(true));
-            } else if (clima) {
-                // 1.0.0 (punto 10): icone ufficiali MG4 Clima 1.4.0 al posto del testo
-                addTile(c, "ac", null, R.drawable.clima_ac, L.s(R.string.ac_desc), v -> vehicle.toggleAc());
-                addTile(c, "auto", null, R.drawable.clima_auto, L.s(R.string.tile_auto), v -> vehicle.toggleAuto());
-                if (s.loopMode >= 0) addTile(c, "recirc", null, recircRes(s.loopMode), L.s(R.string.tile_recirc), v -> vehicle.toggleRecirc());
-                // sbrinamento anteriore: comando verificato (vedi VehicleClient.toggleFrontDefrost); il lunotto resta
-                // sul tasto fisico, perché il comando software non è stato verificato sugli originali
-                if (s.defrostOn >= 0) addTile(c, "defrostF", null, R.drawable.clima_sbrinamento_anteriore,
-                        L.s(R.string.tile_defrost_front), v -> vehicle.toggleFrontDefrost());
             } else {
                 // 0.9.6: caselle nell'ordine fisico dei sedili (sinistro, volante, destro). Con la guida a destra il guidatore
                 // è sul sedile destro: cambiano le etichette, non i comandi (ogni casella comanda il sedile che ha davanti).
@@ -2939,6 +2981,7 @@ public final class HomeView extends LinearLayout {
         /** Casella: scritta grande o icona, nome, stato sotto (Accesa / Spento / Livello 2) e, per Comfort, le tacche. */
         private void addTile(Context c, String id, String text, int icon, String name, View.OnClickListener l) {
             int w = big ? dp(210) : tp(185), h = big ? dp(256) : tp(228);
+            if (expandedClimate) { w = tp(170); h = tp(132); }
             FrameLayout f = new FrameLayout(c);
             f.setContentDescription(name);
             f.setClickable(true);
@@ -2949,7 +2992,7 @@ public final class HomeView extends LinearLayout {
             LinearLayout col = Ui.column(c);
             col.setGravity(Gravity.CENTER_HORIZONTAL);
             View main;
-            int mh = big ? dp(66) : tp(58);
+            int mh = expandedClimate ? tp(40) : big ? dp(66) : tp(58);
             if (text != null) {
                 TextView tv = Ui.text(c, text, big ? 50 : ts(44), t.text, Ui.REGULAR);
                 tv.setGravity(Gravity.CENTER);
@@ -2962,12 +3005,13 @@ public final class HomeView extends LinearLayout {
                 main = iv;
                 col.addView(iv, new LayoutParams(mh, mh));
             }
-            TextView nm = Ui.oneLine(Ui.text(c, name, big ? 22 : ts(20), t.text, Ui.REGULAR));
+            TextView nm = Ui.text(c, name, expandedClimate ? ts(17) : big ? 22 : ts(20), t.text, Ui.REGULAR);
+            if (expandedClimate) nm.setMaxLines(2); else Ui.oneLine(nm);
             nm.setGravity(Gravity.CENTER);
-            col.addView(nm, Ui.margins(new LayoutParams(w - dp(10), -2), 0, dp(10), 0, 0));
+            col.addView(nm, Ui.margins(new LayoutParams(expandedClimate ? -1 : w - dp(10), -2), 0, dp(10), 0, 0));
             TextView st = Ui.oneLine(Ui.text(c, "", big ? 18 : ts(16), t.sub, Ui.REGULAR));
             st.setGravity(Gravity.CENTER);
-            col.addView(st, Ui.margins(new LayoutParams(w - dp(10), -2), 0, dp(4), 0, 0));
+            col.addView(st, Ui.margins(new LayoutParams(expandedClimate ? -1 : w - dp(10), -2), 0, dp(4), 0, 0));
             LinearLayout notches = Ui.row(c);
             if (!clima || id.equals("pedal")) {
                 int n = id.equals("wheel") ? 1 : 3;
@@ -2976,11 +3020,13 @@ public final class HomeView extends LinearLayout {
                     notches.addView(d, Ui.margins(new LayoutParams(big ? dp(34) : tp(30), big ? dp(7) : tp(6)), i == 0 ? 0 : dp(7), 0, 0, 0));
                 }
             }
-            col.addView(notches, Ui.margins(new LayoutParams(-2, -2), 0, dp(14), 0, 0));
-            FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER);
+            if (!expandedClimate) col.addView(notches, Ui.margins(new LayoutParams(-2, -2), 0, dp(14), 0, 0));
+            FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(expandedClimate ? -1 : -2, -2, Gravity.CENTER);
+            if (expandedClimate) col.setPadding(dp(6), 0, dp(6), 0);
             f.addView(col, flp);
             f.setTag(new Object[]{id, main, nm, st, notches});
-            tiles.addView(f, Ui.margins(new LayoutParams(w, h), tileViews.isEmpty() ? 0 : dp(20), 0, 0, 0));
+            LayoutParams tileLp = expandedClimate ? new LayoutParams(0, h, 1) : new LayoutParams(w, h);
+            tiles.addView(f, Ui.margins(tileLp, tiles.getChildCount() == 0 ? 0 : dp(expandedClimate ? 10 : 20), 0, 0, 0));
             tileViews.add(f);
         }
 
@@ -2994,6 +3040,11 @@ public final class HomeView extends LinearLayout {
                     case "auto": state = s.autoOn; break;
                     case "recirc": state = s.loopMode < 0 ? -1 : s.loopMode == 0 ? 1 : 0; break;
                     case "defrostF": state = s.defrostOn; break;
+                    case "defrostR": state = s.rearDefrostOn; break;
+                    case "airGlass": case "airFace": case "airFeet":
+                        int bit = id.equals("airGlass") ? AirflowModes.WINDSCREEN : id.equals("airFace") ? AirflowModes.FACE : AirflowModes.FEET;
+                        state = AirflowModes.mask(s.blowerMode) == 0 ? -1 : (AirflowModes.mask(s.blowerMode) & bit) != 0 ? 1 : 0;
+                        break;
                     case "lka": state = s.lka; break;
                     case "opd": state = s.opd; break;
                     case "acc": state = s.accTja < 0 ? -1 : s.accTja == 4 ? 0 : 1; break;
@@ -3004,6 +3055,7 @@ public final class HomeView extends LinearLayout {
                         state = level < 0 ? -1 : level > 0 ? 1 : 0;
                 }
                 boolean on = state == 1;
+                if (expandedClimate) v.setEnabled(s.connected && state >= 0);
                 float rad = dp(big ? 24 : 20 * Ui.K);
                 TextView nm = (TextView) tag[2], st = (TextView) tag[3];
                 String stateText = state < 0 ? "—" : (id.equals("seatL") || id.equals("seatR")) && on ? L.f(R.string.tile_level, level)
@@ -3018,6 +3070,7 @@ public final class HomeView extends LinearLayout {
                 }
                 if (state >= 0 && id.equals("pedal")) stateText = pedalName(s.pedal);
                 st.setText(stateText);
+                if (expandedClimate) v.setContentDescription(nm.getText() + ", " + stateText);
                 if (guida) {
                     // guida (LKA/OPD/ACC/pedale): grafica originale invariata, non è clima (punto 10 non la tocca)
                     v.setAlpha(state < 0 ? 0.45f : 1f);
@@ -3039,7 +3092,7 @@ public final class HomeView extends LinearLayout {
                     // Clima (ac/auto/recirc/sbrinamento) e Comfort (sedili/volante): colori ufficiali MG4 Clima 1.4.0.
                     // Clima = acceso (blu); Comfort = caldo (arancio) quando il riscaldamento è a un livello > 0.
                     // "caldo" (arancio): riscaldamenti e sbrinamento; "acceso" (blu): A/C, AUTO, ricircolo
-                    boolean heatTile = id.equals("seatL") || id.equals("seatR") || id.equals("wheel") || id.equals("defrostF");
+                    boolean heatTile = id.equals("seatL") || id.equals("seatR") || id.equals("wheel") || id.equals("defrostF") || id.equals("defrostR");
                     int cs = state < 0 ? 3 : !on ? 0 : heatTile ? 2 : 1;
                     int fg = climaFg(cs);
                     v.setAlpha(1f);
@@ -3069,6 +3122,18 @@ public final class HomeView extends LinearLayout {
             anchor.getLocationOnScreen(a);
             catcher.getLocationOnScreen(root);
             barView.getLocationOnScreen(bar);
+            if (climateScroll != null) {
+                // EN: Keep the header and controls inside the screen, even at larger sizes.
+                // IT: Titolo e comandi dentro lo schermo anche con dimensioni grandi.
+                int maxHeight = Math.max(dp(70), bar[1] - root[1] - dp(60)
+                        - card.getPaddingTop() - card.getPaddingBottom() - card.getChildAt(0).getHeight());
+                int contentHeight = climateScroll.getChildAt(0).getMeasuredHeight();
+                int height = Math.min(contentHeight, maxHeight);
+                if (climateScroll.getLayoutParams().height != height) {
+                    climateScroll.getLayoutParams().height = height;
+                    climateScroll.requestLayout();
+                }
+            }
             float ax = a[0] - root[0], ay = a[1] - root[1];
             catcher.hole.set(ax, ay, ax + anchor.getWidth(), ay + anchor.getHeight());
             float cx = ax + anchor.getWidth() / 2f;
@@ -3135,6 +3200,7 @@ public final class HomeView extends LinearLayout {
         fanLevel = next;
         localFanUntil = SystemClock.uptimeMillis() + 4000;
         fanTv.setText(fanLabel(fanLevel));
+        if (popup != null) popup.refresh(vehicle.last());
         vehicle.setFanLevel(fanLevel);
     }
 }
