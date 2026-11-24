@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowInsets;
@@ -111,9 +112,9 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(vis -> {
             // se il sistema rimostra le barre (es. dopo un popup) le rinasconde
             // 1.0.6 (issue #42): con la tendina dall'alto accesa si lascia più tempo (barra e tendina si chiudono da sole)
-            if ((vis & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) root.postDelayed(this::goFullscreen, prefs.topSwipe() ? 6000 : 2500);
+            if ((vis & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) hideBarsSoon(prefs.topSwipe() ? 6000 : 2500);
         });
-        goFullscreen();
+        hideBarsSoon(0);
         build();
         // primo avvio dopo un aggiornamento: popup "Novità" (una sola volta per versione)
         root.postDelayed(this::showNewsIfUpdated, 1500);
@@ -537,12 +538,65 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         if (d.getSystemUiVisibility() != IMMERSIVE) d.setSystemUiVisibility(IMMERSIVE);
     }
 
+    /**
+     * La finestra della chiamata SAIC (com.saicmotor.btphone) riporta le barre di sistema sopra la home.
+     * Scrivere i flag mentre la chiamata è in corso le fa lampeggiare e non le nasconde: si aspetta la fine
+     * della chiamata e si nasconde una volta sola, quando il launcher ha di nuovo il fuoco. Senza chiamata
+     * il comportamento è quello di prima (ritardo 0 = subito).
+     */
+    private static final long CALL_POLL_MS = 2000L;
+    private final android.os.Handler callBars = new android.os.Handler(android.os.Looper.getMainLooper());
+    private boolean callLogged;
+    private final Runnable hideBars = new Runnable() {
+        @Override
+        public void run() {
+            if (!inFront || isFinishing() || isDestroyed()) return;
+            if (inCall()) {
+                if (!callLogged) {
+                    callLogged = true;
+                    Diag.put("finestra.chiamata", "barre non toccate durante la chiamata");
+                }
+                callBars.postDelayed(this, CALL_POLL_MS);
+                return;
+            }
+            if (!hasWindowFocus()) {
+                callBars.postDelayed(this, CALL_POLL_MS);
+                return;
+            }
+            if (callLogged) {
+                callLogged = false;
+                Diag.put("finestra.chiamata", "chiamata finita: barre nascoste");
+            }
+            goFullscreen();
+        }
+    };
+
+    /** Nasconde le barre tra {@code delay} ms; durante una chiamata aspetta che finisca. */
+    private void hideBarsSoon(long delay) {
+        callBars.removeCallbacks(hideBars);
+        callBars.postDelayed(hideBars, inCall() ? CALL_POLL_MS : delay);
+    }
+
+    /** Chiamata in corso o squillo (la chiamata Bluetooth passa da Android Telecom). */
+    private boolean inCall() {
+        try {
+            AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+            if (am == null) return false;
+            int m = am.getMode();
+            return m == AudioManager.MODE_IN_CALL || m == AudioManager.MODE_IN_COMMUNICATION
+                    || m == AudioManager.MODE_RINGTONE;
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
     /** 1.0.0: true mentre il launcher è davanti (onResume..onPause), per sapere se Home arriva "da dentro". */
     private boolean inFront;
 
     @Override
     protected void onPause() {
         inFront = false;
+        callBars.removeCallbacks(hideBars);
         super.onPause();
     }
 
@@ -556,7 +610,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         // 1.0.3: stato del telefono riletto (riquadro "Preferiti telefono"), anche se gli avvisi del servizio non arrivano
         com.mg4.launcher.svc.PhoneClient.get(this).refresh();
         if (wrongFirmware) {
-            goFullscreen();
+            hideBarsSoon(0);
             return;
         }
         // avvio sicuro: tornati nel launcher dopo aver aperto apposta la home MG → la sua schermata si rispegne
@@ -566,7 +620,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
                     && !com.mg4.launcher.svc.HomeLock.mgDisabled(app)) com.mg4.launcher.svc.HomeLock.apply(app, "ritorno nel launcher");
         }, "mg4-homelock").start();
         askOfficina();
-        goFullscreen();
+        hideBarsSoon(0);
         // 1.0.0: se giorno/notte è cambiato mentre il launcher era dietro e l'avviso non è arrivato, si ricostruisce qui
         if (theme != null && root != null && com.mg4.launcher.ui.Theme.wouldBeDay(this, prefs) != theme.day) {
             com.mg4.launcher.svc.Diag.put("tema.ripreso", "cambio recuperato al ritorno nel launcher");
@@ -578,7 +632,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) goFullscreen();
+        if (hasFocus) hideBarsSoon(0);
     }
 
     private void build() {
@@ -633,6 +687,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
 
     @Override
     protected void onDestroy() {
+        callBars.removeCallbacks(hideBars);
         super.onDestroy();
         root.removeCallbacks(saveDiag);
         logs.stop();
