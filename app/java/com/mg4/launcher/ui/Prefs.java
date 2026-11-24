@@ -62,6 +62,17 @@ public final class Prefs {
         sp.edit().putString("theme", m).apply();
     }
 
+    /** 1.0.6 (issue #43): fonte del tema automatico. "fari_orario" (come prima) o "solo_fari" (scuro con i fari accesi). */
+    public static final String THEME_SRC_LIGHTS_TIME = "fari_orario", THEME_SRC_LIGHTS = "solo_fari", K_THEME_SRC = "temaAutoFonte";
+
+    public String themeAutoSource() {
+        return sp.getString(K_THEME_SRC, THEME_SRC_LIGHTS_TIME);
+    }
+
+    public void setThemeAutoSource(String v) {
+        sp.edit().putString(K_THEME_SRC, v).apply();
+    }
+
     // --- app installate nascoste dalla griglia ---
 
     public Set<String> hiddenApps() {
@@ -267,6 +278,33 @@ public final class Prefs {
         sp.edit().putBoolean("pulsantiRicarica", b).apply();
     }
 
+    /**
+     * 1.0.6 (issue #37): quali pulsanti mostrare nella barra di ricarica (al massimo 5, nell'ordine scelto).
+     * Predefiniti = quelli di prima: limite, corrente, avvia/ferma (o V2L), programmata, sblocca presa.
+     */
+    public static final String CB_LIMIT = "limite", CB_CURRENT = "corrente", CB_START = "avvia", CB_RESERVE = "programmata",
+            CB_UNLOCK = "presa", CB_HEAT = "riscaldamento";
+    public static final String[] CB_ALL = {CB_LIMIT, CB_CURRENT, CB_START, CB_RESERVE, CB_UNLOCK, CB_HEAT};
+    public static final int CB_MAX = 5;
+
+    public java.util.List<String> chargeBar() {
+        java.util.List<String> out = new java.util.ArrayList<>();
+        String v = sp.getString("barraRicarica", null);
+        if (v == null) {
+            for (int i = 0; i < CB_MAX; i++) out.add(CB_ALL[i]);
+            return out;
+        }
+        for (String p : v.split(",")) {
+            p = p.trim();
+            if (java.util.Arrays.asList(CB_ALL).contains(p) && !out.contains(p) && out.size() < CB_MAX) out.add(p);
+        }
+        return out;
+    }
+
+    public void setChargeBar(java.util.List<String> ids) {
+        sp.edit().putString("barraRicarica", android.text.TextUtils.join(",", ids)).apply();
+    }
+
     /** Pulsante retronebbia nella barra (acceso di default; si spegne se l'auto ha già il tasto fisico). */
     /** 1.0.5 (issue SWI132 #4): riquadro auto nel pannello sinistro (predefinito: mostrato). */
     public boolean carPanel() {
@@ -288,6 +326,24 @@ public final class Prefs {
         sp.edit().putString("widgetSinistra", s).apply();
     }
 
+    /** 1.0.6 (issue SWI69 #2): "Scorri in su per tornare" sopra le altre app (predefinito: spento). */
+    public boolean swipeBack() {
+        return sp.getBoolean("scorriPerTornare", false);
+    }
+
+    public void setSwipeBack(boolean b) {
+        sp.edit().putBoolean("scorriPerTornare", b).apply();
+    }
+
+    /** 1.0.6 (issue #42): tendina dall'alto a schermo intero (predefinito: spento). */
+    public boolean topSwipe() {
+        return sp.getBoolean("tendinaDallAlto", false);
+    }
+
+    public void setTopSwipe(boolean b) {
+        sp.edit().putBoolean("tendinaDallAlto", b).apply();
+    }
+
     /** 1.0.5 (sperimentale): navigatore in finestra nel pannello mappe (predefinito: spento = Indicazioni). */
     public boolean mapPanelWindow() {
         return sp.getBoolean("pannelloMappeFinestra", false);
@@ -298,12 +354,13 @@ public final class Prefs {
     }
 
     /** 1.0.5: Android ha rifiutato il navigatore in finestra su questa auto: l'opzione non compare più. */
-    public boolean pipRefused() {
-        return sp.getBoolean("pipRifiutata", false);
+    public boolean pipRefused(String pkg) {
+        // 1.0.6: il rifiuto vale per l'app di navigazione provata (la 1.0.5 provava solo il navigatore MG)
+        return sp.getBoolean("pipRifiutata", false) && NavWindow.NAV_PKG.equals(pkg) || sp.getBoolean("pipRifiutata:" + pkg, false);
     }
 
-    public void setPipRefused(boolean b) {
-        sp.edit().putBoolean("pipRifiutata", b).apply();
+    public void setPipRefused(String pkg) {
+        sp.edit().putBoolean("pipRifiutata:" + pkg, true).apply();
     }
 
     /** 1.0.5: pulsante "Spegni la vettura" nella barra in basso (predefinito: spento). */

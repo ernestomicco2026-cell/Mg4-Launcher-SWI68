@@ -11,6 +11,21 @@ import com.mg4.launcher.R;
 public final class ManeuverIcons {
     private ManeuverIcons() {}
 
+    /**
+     * 1.0.6: nome fisso della manovra dal CODICE (es. 18 → keep_right), preso dal nome dell'icona. Il vecchio nome del
+     * log veniva dal testo dell'istruzione, che è nella lingua del navigatore: per questo 16, 18 e 21 risultavano
+     * "unknown" anche con l'icona giusta.
+     */
+    public static String name(android.content.res.Resources r, int code) {
+        int id = drawable(code);
+        if (id == R.drawable.ic_maneuver_unknown) return "unknown";
+        try {
+            return r.getResourceEntryName(id).replace("ic_maneuver_", "");
+        } catch (Exception e) {
+            return "unknown";
+        }
+    }
+
     public static int drawable(int code) {
         switch (code) {
             case 0: return R.drawable.ic_maneuver_straight;

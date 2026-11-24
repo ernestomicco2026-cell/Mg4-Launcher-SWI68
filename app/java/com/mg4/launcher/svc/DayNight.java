@@ -88,6 +88,36 @@ public final class DayNight {
         work.postDelayed(() -> evaluate(false), CONFIRM_MS + 1000);
     }
 
+    /**
+     * 1.0.6 (issue #43): i fari sono diventati leggibili (CarService pronto) o è cambiata la fonte nelle impostazioni:
+     * si rilegge e si ridecide SUBITO, senza i 60 s di conferma, e la home si ricostruisce se il tema cambia.
+     */
+    public static void redecideNow(String why) {
+        DayNight d = instance;
+        if (d == null) return;
+        d.work.post(() -> d.redecide(why));
+    }
+
+    private synchronized void redecide(String why) {
+        boolean target;
+        try {
+            target = compute();
+        } catch (Throwable e) {
+            Diag.error("tema.stato", e.toString());
+            return;
+        }
+        pending = null;
+        Diag.put("tema.ridecisione", why + " · fonte " + source + " → " + (target ? "giorno" : "notte")
+                + (applied != null && applied == target ? " (già così)" : ""));
+        if (applied != null && applied == target) {
+            writeDiag();
+            return;
+        }
+        applyNow(target, "subito: " + why);
+        Listener l = listener;
+        if (l != null) h.post(() -> l.onThemeChange(target));
+    }
+
     /** Tema automatico da applicare adesso (alla prima chiamata si calcola subito, senza attesa). */
     public synchronized boolean isDay() {
         if (applied == null) evaluate(true);
@@ -280,6 +310,17 @@ public final class DayNight {
         // alba/tramonto) e lo SCRIVIAMO nel sistema (syncSystem). uiMode, UiModeManager e NIGHT_MODE restano nel log.
         uiStuckTxt = "";
         boolean sunNight = sun.elevation < -0.833;
+        // 1.0.6 (issue #43): "Solo fari": scuro quando i fari sono accesi, a qualunque ora; chiaro quando sono spenti.
+        // Con i fari non leggibili si usa l'orario finché il CarService non risponde (poi si ridecide subito).
+        boolean onlyLights = "solo_fari".equals(sp.getString("temaAutoFonte", "fari_orario"));
+        if (onlyLights && lights >= 0) {
+            source = "solo fari (" + lightsTxt + ")";
+            return lights != 1;
+        }
+        if (onlyLights) {
+            source = "solo fari, ma fari non leggibili: orario (alba/tramonto) finché il CarService non risponde";
+            return !sunNight;
+        }
         if (lights >= 0) {
             // con il sole alto i fari accesi sono quelli diurni o la galleria: resta giorno
             boolean night = sunNight || (lights == 1 && sun.elevation < 6);

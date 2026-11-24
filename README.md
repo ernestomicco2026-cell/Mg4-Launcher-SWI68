@@ -26,7 +26,7 @@
 </p>
 
 <p align="center">
-<a href="releases/MG4Launcher-1.0.5.apk"><img alt="Scarica / Download 1.0.5" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.5-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
+<a href="releases/MG4Launcher-1.0.6.apk"><img alt="Scarica / Download 1.0.6" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.6-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
 <a href="https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT"><img alt="Sostieni il progetto con PayPal · Support the project with PayPal" src="https://img.shields.io/badge/Sostieni%20%2F%20Support-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white"></a>
 </p>
 
@@ -65,6 +65,18 @@
 <sub>Dimensione comandi <b>Grande</b>: testo e pulsanti crescono insieme · <i>Control size <b>Large</b>: text and buttons grow together</i></sub></td>
 <td width="50%" valign="top"><img src="docs/home-1.0.4-molto-grande-notte.png" alt="Home con Dimensione comandi Molto grande di notte (simulazione)" width="100%"><br>
 <sub>Dimensione comandi <b>Molto grande</b>, di notte: tutte le sorgenti con la scritta · <i>Control size <b>Extra large</b>, at night: every source keeps its label</i></sub></td>
+</tr>
+<tr>
+<td width="50%" valign="top"><img src="docs/home-1.0.6-android-auto.png" alt="Android Auto tra le sorgenti, con titolo e artista (simulazione)" width="100%"><br>
+<sub><b>Android Auto e CarPlay</b> tra le sorgenti, con titolo e artista · <i><b>Android Auto and CarPlay</b> among the sources, with title and artist</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.6-clima.png" alt="Menu Clima con direzione dell'aria, sbrinamento e lunotto (simulazione)" width="100%"><br>
+<sub>Menu <b>Clima</b>: direzione dell'aria, sbrinamento e lunotto, grazie a sommistica · <i><b>Climate</b> menu: air direction, demist and rear window, thanks to sommistica</i></sub></td>
+</tr>
+<tr>
+<td width="50%" valign="top"><img src="docs/home-1.0.6-barra-ricarica.png" alt="Barra di ricarica con i pulsanti scelti (simulazione)" width="100%"><br>
+<sub><b>Barra di ricarica</b>: scegli tu i 5 pulsanti · <i><b>Charging bar</b>: choose your 5 buttons</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.6-simula-ricarica.png" alt="Simula ricarica (simulazione)" width="100%"><br>
+<sub><b>Simula ricarica</b>: l'animazione si prova senza cavo · <i><b>Simulate charging</b>: try the animation without a cable</i></sub></td>
 </tr>
 <tr>
 <td width="50%" valign="top"><img src="docs/home-1.0.5-manovra.png" alt="Indicazione del navigatore con l'icona della manovra (simulazione)" width="100%"><br>
@@ -211,7 +223,7 @@ Si installa come una normale app: non serve per forza un computer. Ci sono due m
 
 #### Metodo 1 — Da chiavetta USB (senza computer)
 
-1. Copia `MG4Launcher-1.0.5.apk` su una chiavetta USB formattata **FAT32** o **exFAT**.
+1. Copia `MG4Launcher-1.0.6.apk` su una chiavetta USB formattata **FAT32** o **exFAT**.
 2. Inserisci la chiavetta nell'auto, apri il file manager e tocca l'APK.
 3. Se Android avvisa che non può installare app da questa fonte: tocca **Impostazioni**, attiva
    **Consenti da questa fonte** per il file manager e torna indietro.
@@ -227,7 +239,7 @@ Il firmware MG può bloccare l'installazione normale delle app: l'opzione `-f` l
 
 1. Installa:
    ```bash
-   adb install -r -f MG4Launcher-1.0.5.apk
+   adb install -r -f MG4Launcher-1.0.6.apk
    ```
 2. Rendilo la home predefinita:
    ```bash
@@ -309,6 +321,23 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Versioni
+
+#### 1.0.6
+- **Spegni la vettura** ora funziona (solo in P, ricontrollata prima del comando).
+- **Animazione di ricarica**: pulsante **Simula ricarica**, preparazione molto più veloce e log inviato da solo alla
+  prima ricarica.
+- **Android Auto e CarPlay tra le sorgenti** quando il telefono è collegato, con titolo e artista.
+- **Testi del brano e della stazione più grandi**.
+- **Scorri in su per tornare** (facoltativo).
+- **Navigatore in finestra** con l'app di navigazione scelta.
+- **Direzione dell'aria, sbrinamento e lunotto** nel menu Clima (grazie a **sommistica**).
+- Niente più falso errore delle stazioni nel **Controllo funzioni**.
+- **Radio** più affidabile all'accensione.
+- **Android Auto, chiavetta USB e radio** di nuovo regolari all'accensione (il riavvio del dongle interviene solo con
+  un dongle vero).
+- **Tema scuro quando i fari sono accesi** (a scelta).
+- **Tendina dall'alto a schermo intero** (a scelta).
+- **Scegli i 5 pulsanti** della barra di ricarica.
 
 #### 1.0.5
 - **Animazione di ricarica**: ora parte davvero quando si attacca il cavo con lo schermo acceso (prima scambiava il
@@ -849,7 +878,7 @@ It installs like a normal app, so a computer isn't required. There are two ways:
 
 #### Method 1 — From a USB stick (no computer)
 
-1. Copy `MG4Launcher-1.0.5.apk` to a USB stick formatted as **FAT32** or **exFAT**.
+1. Copy `MG4Launcher-1.0.6.apk` to a USB stick formatted as **FAT32** or **exFAT**.
 2. Plug it into the car, open the file manager and tap the APK.
 3. If Android says it cannot install apps from this source: tap **Settings**, enable
    **Allow from this source** for the file manager and go back.
@@ -865,7 +894,7 @@ The MG firmware may block normal app installs; the `-f` option allows it.
 
 1. Install it:
    ```bash
-   adb install -r -f MG4Launcher-1.0.5.apk
+   adb install -r -f MG4Launcher-1.0.6.apk
    ```
 2. Make it the default home:
    ```bash
@@ -947,6 +976,23 @@ Even just **€2** is a great help to keep developing and testing new versions i
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Changelog
+
+#### 1.0.6
+- **Turn off the car** now works (only in P, checked again before the command).
+- **Charging animation**: **Simulate charging** button, much faster preparation and a log sent automatically on the
+  first charge.
+- **Android Auto and CarPlay among the sources** while the phone is connected, with title and artist.
+- **Bigger song and station text**.
+- **Swipe up to go back** (optional).
+- **Navigation in a window** with the chosen navigation app.
+- **Air direction, front demist and rear-window heating** in the Climate menu (thanks to **sommistica**).
+- No more false station error in the **Function check**.
+- More reliable **radio** at start-up.
+- **Android Auto, USB stick and radio** work normally again at start-up (the dongle restart only acts with a real
+  dongle).
+- **Dark theme when the headlights are on** (optional).
+- **Swipe down from the top in full screen** (optional).
+- **Choose the 5 buttons** of the charging bar.
 
 #### 1.0.5
 - **Charging animation**: it now really starts when the cable is plugged in with the screen on (it used to mistake

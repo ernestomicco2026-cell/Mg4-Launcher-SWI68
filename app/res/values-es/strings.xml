@@ -362,6 +362,15 @@
     <string name="newsh_5" formatted="false">CarPlay / Android Auto: se abre con un solo toque y tiene su icono en la barra mientras el teléfono está conectado</string>
     <string name="newsh_6" formatted="false">Ajustes: eliminado el espacio vacío entre Panel del coche y Barra inferior</string>
     <string name="newsh_7" formatted="false">Con MG4 Clima abierto, el panel de clima del sistema se cierra solo con el comando del sistema</string>
+    <string name="group_airflow" formatted="false">Flujo de aire</string>
+    <string name="airflow_fan_speed" formatted="false">Velocidad del ventilador</string>
+    <string name="airflow_direction" formatted="false">Dirección del aire</string>
+    <string name="airflow_windscreen" formatted="false">Parabrisas</string>
+    <string name="airflow_face" formatted="false">Cara</string>
+    <string name="airflow_feet" formatted="false">Pies</string>
+    <string name="airflow_window_clearing" formatted="false">Desempañado</string>
+    <string name="airflow_front_clear" formatted="false">Desempañar parabrisas</string>
+    <string name="airflow_rear_heat" formatted="false">Luneta térmica</string>
     <string name="set_apps_size" formatted="false">TAMAÑO DE APPS</string>
     <string name="news_v097_1" formatted="false">Tamaño propio para la pantalla de apps: elígelo en ajustes (iconos y texto más grandes)</string>
     <string name="news_v097_2" formatted="false">Dongle: el registro indica ahora si el dongle vuelve a aparecer tras el reinicio</string>
@@ -550,5 +559,29 @@
     <string name="news_v105_2" formatted="false">Apagar el coche desde los ajustes (solo en P) y panel del coche ocultable</string>
     <string name="news_v105_3" formatted="false">Iconos de maniobras del navegador (gracias a sommistica) y navegador en ventana en el panel de mapas (experimental)</string>
     <string name="news_v105_4" formatted="false">Ajustes: la página se queda en su sitio incluso tras una pausa · el paquete de la animación se actualiza solo</string>
+    <string name="anim_sim" formatted="false">Simular carga</string>
+    <string name="anim_sim_sub" formatted="false">Solo simula el cable (conectado 25 s, carga completa 10 s, desconectado): READY, marcha y velocidad son los reales</string>
+    <string name="anim_sim_label" formatted="false">Simulación</string>
+    <string name="anim_sim_no_car" formatted="false">Para simular la carga, muestra el panel del coche (Ajustes → Inicio)</string>
+    <string name="set_swipe_back" formatted="false">Desliza hacia arriba para volver</string>
+    <string name="set_swipe_back_sub" formatted="false">Dentro de otras apps, desliza hacia arriba desde el borde inferior para volver al launcher</string>
+    <string name="chk_batt_heat" formatted="false">Calefacción de la batería</string>
+    <string name="news_v106_1" formatted="false">Apagar el coche ya funciona (solo en P) · animación de carga: Simular carga y preparación más rápida</string>
+    <string name="news_v106_2" formatted="false">Android Auto y CarPlay entre las fuentes con título y artista · textos de canción y emisora más grandes</string>
+    <string name="news_v106_3" formatted="false">Menú Clima con dirección del aire, desempañado y luneta (gracias a sommistica) · Desliza hacia arriba para volver (opcional)</string>
     <string name="news_v104_6" formatted="false">Ajustes: al cambiar una opción la página se queda donde estaba · Apps: mantén pulsada una app que instalaste para desinstalarla</string>
+    <string name="theme_src" formatted="false">Tema automático</string>
+    <string name="theme_src_sub" formatted="false">Solo faros: oscuro cuando los faros están encendidos, a cualquier hora</string>
+    <string name="theme_src_lights_time" formatted="false">Faros y hora</string>
+    <string name="theme_src_lights" formatted="false">Solo faros</string>
+    <string name="set_top_swipe" formatted="false">Permitir deslizar desde arriba a pantalla completa</string>
+    <string name="set_top_swipe_sub" formatted="false">Al deslizar hacia abajo desde el borde superior aparece el panel con el brillo, luego se cierra solo</string>
+    <string name="set_charge_pick" formatted="false">Botones de la barra de carga</string>
+    <string name="set_charge_pick_btn" formatted="false">Elegir</string>
+    <string name="set_charge_pick_sub" formatted="false">Toca hasta 5 botones, en el orden en que quieres verlos. Solo aparecen los que el coche admite.</string>
+    <string name="set_charge_pick_wait" formatted="false">El coche aún no está conectado: no se sabe qué botones admite. Vuelve a intentarlo en breve.</string>
+    <string name="cb_heat" formatted="false">Calefacción batería</string>
+    <string name="cb_heat_title" formatted="false">Calefacción inteligente de la batería</string>
+    <string name="cb_heat_msg" formatted="false">Por ahora el launcher solo lee el estado y no envía órdenes al coche. Se cambia en Ajustes del vehículo → Gestión de carga.</string>
+    <string name="news_v106_4" formatted="false">Android Auto, memoria USB y radio vuelven a funcionar bien al arrancar · tema oscuro con los faros (opcional) · panel desde arriba a pantalla completa (opcional) · elige los 5 botones de la barra de carga</string>
 </resources>

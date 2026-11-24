@@ -47,6 +47,8 @@ public final class BootWatcher extends BroadcastReceiver {
         }
         HomeMode.checkExpiry(c);
         HomeMode.diag(c);
+        // 1.0.6 (issue #43): ripresa della sorgente a ogni accensione, anche se la home non passa dal launcher
+        if (!locked) MediaClient.powerOnFromSystem("accensione (avvio di Android)");
         if (!HomeMode.active(c)) {
             Diag.put("avvio.homeRipresa", "no (" + HomeMode.reason(c) + ")");
             return;

@@ -362,6 +362,15 @@
     <string name="newsh_5" formatted="false">CarPlay / Android Auto: si apre con un solo tocco e ha la sua icona nella barra finché il telefono è collegato</string>
     <string name="newsh_6" formatted="false">Impostazioni: tolto lo spazio vuoto tra Riquadro auto e Barra in basso</string>
     <string name="newsh_7" formatted="false">Con MG4 Clima aperto il pannello clima di sistema si chiude da solo con il comando del sistema</string>
+    <string name="group_airflow" formatted="false">Flusso aria</string>
+    <string name="airflow_fan_speed" formatted="false">Velocità ventola</string>
+    <string name="airflow_direction" formatted="false">Direzione aria</string>
+    <string name="airflow_windscreen" formatted="false">Parabrezza</string>
+    <string name="airflow_face" formatted="false">Viso</string>
+    <string name="airflow_feet" formatted="false">Piedi</string>
+    <string name="airflow_window_clearing" formatted="false">Disappannamento</string>
+    <string name="airflow_front_clear" formatted="false">Disappanna parabrezza</string>
+    <string name="airflow_rear_heat" formatted="false">Lunotto termico</string>
     <string name="set_apps_size" formatted="false">DIMENSIONE APP</string>
     <string name="news_v097_1" formatted="false">Dimensione separata per la schermata App: si sceglie nelle impostazioni (icone e testo più grandi)</string>
     <string name="news_v097_2" formatted="false">Dongle: il log registra ora se il dongle ricompare dopo il reset</string>
@@ -550,5 +559,29 @@
     <string name="news_v105_2" formatted="false">Spegni la vettura dalle impostazioni (solo in P) e riquadro auto nascondibile</string>
     <string name="news_v105_3" formatted="false">Icone delle manovre del navigatore (grazie a sommistica) e navigatore in finestra nel pannello mappe (sperimentale)</string>
     <string name="news_v105_4" formatted="false">Impostazioni: la pagina resta al suo posto anche dopo una pausa · il pacchetto dell\'animazione si aggiorna da solo</string>
+    <string name="anim_sim" formatted="false">Simula ricarica</string>
+    <string name="anim_sim_sub" formatted="false">Finge solo il cavo (inserito 25 s, carica finita 10 s, staccato): READY, marcia e velocità sono quelli veri</string>
+    <string name="anim_sim_label" formatted="false">Simulazione</string>
+    <string name="anim_sim_no_car" formatted="false">Per simulare la ricarica mostra il riquadro auto (Impostazioni → Home)</string>
+    <string name="set_swipe_back" formatted="false">Scorri in su per tornare</string>
+    <string name="set_swipe_back_sub" formatted="false">Dentro le altre app, scorri in su dal bordo basso dello schermo per tornare al launcher</string>
+    <string name="chk_batt_heat" formatted="false">Riscaldamento batteria</string>
+    <string name="news_v106_1" formatted="false">Spegni la vettura ora funziona (solo in P) · animazione di ricarica: Simula ricarica e preparazione più veloce</string>
+    <string name="news_v106_2" formatted="false">Android Auto e CarPlay tra le sorgenti con titolo e artista · testi del brano e della stazione più grandi</string>
+    <string name="news_v106_3" formatted="false">Menu Clima con direzione dell\'aria, sbrinamento e lunotto (grazie a sommistica) · Scorri in su per tornare (facoltativo)</string>
     <string name="news_v104_6" formatted="false">Impostazioni: cambiando un\'opzione la pagina resta dov\'era · App: pressione lunga su un\'app installata da te per disinstallarla</string>
+    <string name="theme_src" formatted="false">Tema automatico</string>
+    <string name="theme_src_sub" formatted="false">Solo fari: scuro quando i fari sono accesi, a qualunque ora</string>
+    <string name="theme_src_lights_time" formatted="false">Fari e orario</string>
+    <string name="theme_src_lights" formatted="false">Solo fari</string>
+    <string name="set_top_swipe" formatted="false">Consenti lo scorrimento dall\'alto a schermo intero</string>
+    <string name="set_top_swipe_sub" formatted="false">Scorrendo in giù dal bordo alto compare la tendina con la luminosità, poi si richiude da sola</string>
+    <string name="set_charge_pick" formatted="false">Pulsanti della barra di ricarica</string>
+    <string name="set_charge_pick_btn" formatted="false">Scegli</string>
+    <string name="set_charge_pick_sub" formatted="false">Tocca fino a 5 pulsanti, nell\'ordine in cui vuoi vederli. Ci sono solo quelli che l\'auto supporta.</string>
+    <string name="set_charge_pick_wait" formatted="false">L\'auto non è ancora collegata: non si sa quali pulsanti supporta. Riprova tra poco.</string>
+    <string name="cb_heat" formatted="false">Riscald. batteria</string>
+    <string name="cb_heat_title" formatted="false">Riscaldamento intelligente della batteria</string>
+    <string name="cb_heat_msg" formatted="false">Per ora il launcher legge solo lo stato e non manda comandi all\'auto. Si cambia da Impostazioni veicolo → Gestione ricarica.</string>
+    <string name="news_v106_4" formatted="false">Android Auto, chiavetta USB e radio di nuovo regolari all\'accensione · tema scuro con i fari (a scelta) · tendina dall\'alto a schermo intero (a scelta) · scegli i 5 pulsanti della barra di ricarica</string>
 </resources>

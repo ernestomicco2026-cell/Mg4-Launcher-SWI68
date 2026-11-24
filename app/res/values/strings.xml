@@ -362,6 +362,15 @@
     <string name="newsh_5" formatted="false">CarPlay / Android Auto: opens with a single tap and has its own icon in the bar while the phone is connected</string>
     <string name="newsh_6" formatted="false">Settings: removed the blank space between Car panel and Bottom bar</string>
     <string name="newsh_7" formatted="false">With MG4 Clima open, the system climate panel now closes by itself with the system\'s own command</string>
+    <string name="group_airflow" formatted="false">Airflow</string>
+    <string name="airflow_fan_speed" formatted="false">Fan speed</string>
+    <string name="airflow_direction" formatted="false">Air direction</string>
+    <string name="airflow_windscreen" formatted="false">Windscreen</string>
+    <string name="airflow_face" formatted="false">Face</string>
+    <string name="airflow_feet" formatted="false">Feet</string>
+    <string name="airflow_window_clearing" formatted="false">Window clearing</string>
+    <string name="airflow_front_clear" formatted="false">Front demist</string>
+    <string name="airflow_rear_heat" formatted="false">Rear window heating</string>
     <string name="set_apps_size" formatted="false">APP SIZE</string>
     <string name="news_v097_1" formatted="false">Separate size for the App screen: choose it in settings (larger icons and text)</string>
     <string name="news_v097_2" formatted="false">Dongle: the log now records whether the dongle reappears after the reset</string>
@@ -550,5 +559,29 @@
     <string name="news_v105_2" formatted="false">Turn off the car from the settings (only in P) and the car panel can be hidden</string>
     <string name="news_v105_3" formatted="false">Navigator manoeuvre icons (thanks to sommistica) and navigator in a window inside the map panel (experimental)</string>
     <string name="news_v105_4" formatted="false">Settings: the page stays in place even after a pause · the animation pack updates by itself</string>
+    <string name="anim_sim" formatted="false">Simulate charging</string>
+    <string name="anim_sim_sub" formatted="false">Fakes only the cable (plugged 25 s, charge complete 10 s, unplugged): READY, gear and speed are the real ones</string>
+    <string name="anim_sim_label" formatted="false">Simulation</string>
+    <string name="anim_sim_no_car" formatted="false">To simulate charging, show the car panel (Settings → Home)</string>
+    <string name="set_swipe_back" formatted="false">Swipe up to go back</string>
+    <string name="set_swipe_back_sub" formatted="false">Inside other apps, swipe up from the bottom edge of the screen to go back to the launcher</string>
+    <string name="chk_batt_heat" formatted="false">Battery heating</string>
+    <string name="news_v106_1" formatted="false">Turn off the car now works (only in P) · charging animation: Simulate charging and faster preparation</string>
+    <string name="news_v106_2" formatted="false">Android Auto and CarPlay among the sources with title and artist · bigger song and station text</string>
+    <string name="news_v106_3" formatted="false">Climate menu with air direction, demist and rear window (thanks to sommistica) · Swipe up to go back (optional)</string>
     <string name="news_v104_6" formatted="false">Settings: changing an option keeps the page where it was · Apps: long-press an app you installed to uninstall it</string>
+    <string name="theme_src" formatted="false">Automatic theme</string>
+    <string name="theme_src_sub" formatted="false">Headlights only: dark whenever the headlights are on</string>
+    <string name="theme_src_lights_time" formatted="false">Headlights and time</string>
+    <string name="theme_src_lights" formatted="false">Headlights only</string>
+    <string name="set_top_swipe" formatted="false">Allow swipe from the top in full screen</string>
+    <string name="set_top_swipe_sub" formatted="false">Swiping down from the top edge opens the panel with the brightness, then it closes by itself</string>
+    <string name="set_charge_pick" formatted="false">Charging bar buttons</string>
+    <string name="set_charge_pick_btn" formatted="false">Choose</string>
+    <string name="set_charge_pick_sub" formatted="false">Tap up to 5 buttons, in the order you want to see them. Only those the car supports are listed.</string>
+    <string name="set_charge_pick_wait" formatted="false">The car isn\'t connected yet, so it\'s not known which buttons it supports. Try again shortly.</string>
+    <string name="cb_heat" formatted="false">Battery heating</string>
+    <string name="cb_heat_title" formatted="false">Intelligent battery heating</string>
+    <string name="cb_heat_msg" formatted="false">For now the launcher only reads the status and sends no command to the car. Change it in Vehicle settings → Charge management.</string>
+    <string name="news_v106_4" formatted="false">Android Auto, USB stick and radio work normally again at start-up · dark theme with the headlights (optional) · swipe down from the top in full screen (optional) · choose the 5 charging bar buttons</string>
 </resources>

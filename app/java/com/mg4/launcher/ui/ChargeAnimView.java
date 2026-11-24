@@ -89,6 +89,16 @@ public final class ChargeAnimView extends View {
         return NAMES[st];
     }
 
+    /** 1.0.6: inizio di una simulazione di ricarica: il cavo "nuovo" parte dall'aggancio. */
+    public void startSimulation() {
+        fresh = false;
+        failedThisPlug = false;
+    }
+
+    /** 1.0.6: fotogrammi mostrati e in ritardo (più di un fotogramma) dall'inizio della fase in corso, e da quando. */
+    public static volatile int statShown, statLate;
+    public static volatile long statStart;
+
     /** Lo schermo si è riacceso (o la home è nuova): se il cavo è già inserito si parte dal loop. */
     public void markFresh() {
         fresh = true;
@@ -145,8 +155,18 @@ public final class ChargeAnimView extends View {
             writeLog();
             return;
         }
-        if (preparing) return;   // fotogrammi in preparazione: si decide quando sono pronti
-        reason = "";
+        if (preparing) {
+            // 1.0.6: il motivo vecchio (es. "in READY") non deve restare nel log mentre si preparano i fotogrammi
+            if (!"preparazione fotogrammi".equals(reason)) {
+                reason = "preparazione fotogrammi";
+                writeLog();
+            }
+            return;   // fotogrammi in preparazione: si decide quando sono pronti
+        }
+        if (!reason.isEmpty()) {
+            reason = "";
+            writeLog();   // 1.0.6: il log si riscrive anche quando il motivo diventa vuoto
+        }
         boolean wasFresh = fresh;
         fresh = false;
         switch (state) {
@@ -292,6 +312,9 @@ public final class ChargeAnimView extends View {
         final Player p = ensurePlayer();
         final int g = ++gen;
         final long t0 = SystemClock.uptimeMillis();
+        statShown = 0;
+        statLate = 0;
+        statStart = t0;
         p.h.post(new Runnable() {
             int i = 0, slot = 0;
             boolean shown;
@@ -308,6 +331,8 @@ public final class ChargeAnimView extends View {
                     return;
                 }
                 slot = (slot + 1) % p.buf.length;
+                statShown++;
+                if (SystemClock.uptimeMillis() > t0 + ticks * FRAME_MS + FRAME_MS) statLate++;
                 main.post(() -> {
                     if (g != gen) return;
                     front = b;

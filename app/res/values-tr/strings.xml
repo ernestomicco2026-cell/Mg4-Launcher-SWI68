@@ -362,6 +362,15 @@
     <string name="newsh_5" formatted="false">CarPlay / Android Auto: tek dokunuşla açılır ve telefon bağlıyken çubukta kendi simgesi olur</string>
     <string name="newsh_6" formatted="false">Ayarlar: Araç paneli ile Alt çubuk arasındaki boşluk kaldırıldı</string>
     <string name="newsh_7" formatted="false">MG4 Clima açıkken sistem klima paneli sistemin kendi komutuyla kendiliğinden kapanır</string>
+    <string name="group_airflow" formatted="false">Hava akışı</string>
+    <string name="airflow_fan_speed" formatted="false">Fan hızı</string>
+    <string name="airflow_direction" formatted="false">Hava yönü</string>
+    <string name="airflow_windscreen" formatted="false">Ön cam</string>
+    <string name="airflow_face" formatted="false">Yüz</string>
+    <string name="airflow_feet" formatted="false">Ayaklar</string>
+    <string name="airflow_window_clearing" formatted="false">Buğu giderme</string>
+    <string name="airflow_front_clear" formatted="false">Ön cam buğu giderme</string>
+    <string name="airflow_rear_heat" formatted="false">Arka cam ısıtma</string>
     <string name="set_apps_size" formatted="false">UYGULAMA BOYUTU</string>
     <string name="news_v097_1" formatted="false">Uygulama ekranı için ayrı boyut: ayarlardan seçilir (daha büyük simge ve metin)</string>
     <string name="news_v097_2" formatted="false">Dongle: günlük artık sıfırlamadan sonra dongle\'ın tekrar görünüp görünmediğini kaydeder</string>
@@ -550,5 +559,29 @@
     <string name="news_v105_2" formatted="false">Ayarlardan aracı kapatma (yalnızca P\'de) ve gizlenebilir araç paneli</string>
     <string name="news_v105_3" formatted="false">Navigasyon manevra simgeleri (sommistica\'ya teşekkürler) ve harita panelinde pencerede navigasyon (deneysel)</string>
     <string name="news_v105_4" formatted="false">Ayarlar: sayfa bir aradan sonra bile yerinde kalır · animasyon paketi kendiliğinden güncellenir</string>
+    <string name="anim_sim" formatted="false">Şarjı simüle et</string>
+    <string name="anim_sim_sub" formatted="false">Yalnızca kabloyu taklit eder (25 sn takılı, 10 sn şarj bitti, çıkarıldı): READY, vites ve hız gerçektir</string>
+    <string name="anim_sim_label" formatted="false">Simülasyon</string>
+    <string name="anim_sim_no_car" formatted="false">Şarjı simüle etmek için araç panelini gösterin (Ayarlar → Ana ekran)</string>
+    <string name="set_swipe_back" formatted="false">Geri dönmek için yukarı kaydır</string>
+    <string name="set_swipe_back_sub" formatted="false">Diğer uygulamalarda, başlatıcıya dönmek için ekranın alt kenarından yukarı kaydırın</string>
+    <string name="chk_batt_heat" formatted="false">Batarya ısıtma</string>
+    <string name="news_v106_1" formatted="false">Aracı kapatma artık çalışıyor (yalnızca P\'de) · şarj animasyonu: Şarjı simüle et ve daha hızlı hazırlık</string>
+    <string name="news_v106_2" formatted="false">Kaynaklar arasında başlık ve sanatçıyla Android Auto ve CarPlay · daha büyük şarkı ve istasyon yazıları</string>
+    <string name="news_v106_3" formatted="false">Hava yönü, buğu giderme ve arka camlı Klima menüsü (sommistica\'ya teşekkürler) · Geri dönmek için yukarı kaydır (isteğe bağlı)</string>
     <string name="news_v104_6" formatted="false">Ayarlar: bir seçeneği değiştirince sayfa olduğu yerde kalır · Uygulamalar: yüklediğiniz bir uygulamayı kaldırmak için uzun basın</string>
+    <string name="theme_src" formatted="false">Otomatik tema</string>
+    <string name="theme_src_sub" formatted="false">Yalnızca farlar: farlar açıkken her saatte koyu</string>
+    <string name="theme_src_lights_time" formatted="false">Farlar ve saat</string>
+    <string name="theme_src_lights" formatted="false">Yalnızca farlar</string>
+    <string name="set_top_swipe" formatted="false">Tam ekranda yukarıdan kaydırmaya izin ver</string>
+    <string name="set_top_swipe_sub" formatted="false">Üst kenardan aşağı kaydırınca parlaklık paneli açılır, sonra kendiliğinden kapanır</string>
+    <string name="set_charge_pick" formatted="false">Şarj çubuğu düğmeleri</string>
+    <string name="set_charge_pick_btn" formatted="false">Seç</string>
+    <string name="set_charge_pick_sub" formatted="false">Görmek istediğin sırayla en fazla 5 düğmeye dokun. Yalnızca aracın desteklediği düğmeler listelenir.</string>
+    <string name="set_charge_pick_wait" formatted="false">Araç henüz bağlı değil, hangi düğmeleri desteklediği bilinmiyor. Kısa süre sonra tekrar dene.</string>
+    <string name="cb_heat" formatted="false">Batarya ısıtma</string>
+    <string name="cb_heat_title" formatted="false">Akıllı batarya ısıtma</string>
+    <string name="cb_heat_msg" formatted="false">Launcher şimdilik yalnızca durumu okur, araca komut göndermez. Araç ayarları → Şarj yönetimi bölümünden değiştirilir.</string>
+    <string name="news_v106_4" formatted="false">Android Auto, USB bellek ve radyo açılışta yeniden normal çalışıyor · farlarla koyu tema (isteğe bağlı) · tam ekranda yukarıdan panel (isteğe bağlı) · şarj çubuğunun 5 düğmesini seç</string>
 </resources>

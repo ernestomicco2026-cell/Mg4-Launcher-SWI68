@@ -186,6 +186,8 @@ public final class BootAccessibility extends AccessibilityService {
         Diag.put("avvio.accessibilita", "attivo");
         HomeMode.checkExpiry(this);
         StartGuard.openWindow(this, "accensione");
+        // 1.0.6 (issue #43): ripresa della sorgente a ogni accensione (solo se Android è partito da poco)
+        if (SystemClock.elapsedRealtime() < 4 * 60_000L) MediaClient.powerOnFromSystem("accensione (servizio di accessibilità)");
         // la home MG potrebbe essere già in primo piano
         StartGuard.onForeground(this, StartGuard.topPackage(this));
         scheduleAutoHome("accensione");
@@ -211,7 +213,10 @@ public final class BootAccessibility extends AccessibilityService {
         if (e.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return;
         if (!started || !StartGuard.a11yConnected) return;   // firmware sbagliato o utente non ancora sbloccato
         String pkg = e.getPackageName().toString();
+        if (StartGuard.otherDisplay(pkg)) return;   // 1.0.6: proiezione sul quadro (display 1), non è "davanti"
         guardAndroidSettings(pkg);
+        SwipeBack.onForeground(this, pkg);   // 1.0.6: "Scorri in su per tornare" (opzione)
+        TopSwipe.onForeground(this, pkg);    // 1.0.6 (issue #42): tendina dall'alto a schermo intero (opzione)
         RetroReturn.onForeground(this, pkg);   // 1.0.2: prima di StartGuard, che altrimenti riaprirebbe il launcher
         StartGuard.onForeground(this, pkg);
         // il nostro launcher deve restare in primo piano 5 s: si ricontrolla senza aspettare un altro evento

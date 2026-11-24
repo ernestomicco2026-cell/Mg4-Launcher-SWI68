@@ -119,7 +119,10 @@ public final class StartGuard {
     }
 
     public static synchronized void markProcess() {
-        if (tProcess < 0) tProcess = Process.getStartElapsedRealtime();
+        if (tProcess < 0) {
+            tProcess = Process.getStartElapsedRealtime();
+            BootLog.markAt("launcher", tProcess, null);
+        }
     }
 
     public static synchronized void markA11y() {
@@ -162,7 +165,7 @@ public final class StartGuard {
 
     /** Nuova app in primo piano (evento di accessibilità o controllo periodico). */
     public static synchronized void onForeground(Context c, String pkg) {
-        if (pkg == null) return;
+        if (pkg == null || otherDisplay(pkg)) return;   // 1.0.6: le app del quadro non sono "davanti"
         long now = SystemClock.elapsedRealtime();
         if (BootWatcher.MG_HOME.equals(pkg) && tMg < 0) {
             tMg = now;
@@ -220,17 +223,73 @@ public final class StartGuard {
         oursSince = -1;
     }
 
-    /** App in primo piano adesso (REAL_GET_TASKS, concesso dalla firma platform). */
+    /** App che stanno su altri schermi (il quadro, display 1): non sono mai "davanti" sullo schermo centrale. */
+    private static final String[] OTHER_DISPLAY_PKGS = {"com.saicmotor.hmi.clusterprojection"};
+    private static java.lang.reflect.Method stackInfos;
+    private static volatile boolean stacksFailed;
+    private static volatile String topHow = "";
+
+    /**
+     * App in primo piano sullo schermo centrale (display 0). 1.0.6 (issue #43): la proiezione sul quadro
+     * (com.saicmotor.hmi.clusterprojection, display 1) risultava "davanti" e la ripresa dell'avvio si fermava.
+     * Prima scelta: getAllStackInfos (MANAGE_ACTIVITY_STACKS, firma platform), il primo stack visibile del display 0.
+     * Riserva: getRunningTasks (REAL_GET_TASKS) saltando le app note degli altri schermi.
+     */
     public static String topPackage(Context c) {
+        if (!stacksFailed) {
+            try {
+                if (stackInfos == null) {
+                    Object am = ActivityManager.class.getMethod("getService").invoke(null);
+                    stackInfos = am.getClass().getMethod("getAllStackInfos");
+                }
+                Object am = ActivityManager.class.getMethod("getService").invoke(null);
+                List<?> l = (List<?>) stackInfos.invoke(am);
+                String found = null;
+                if (l != null) {
+                    for (Object si : l) {
+                        Class<?> k = si.getClass();
+                        if (k.getField("displayId").getInt(si) != 0 || !k.getField("visible").getBoolean(si)) continue;
+                        android.content.ComponentName top = (android.content.ComponentName) k.getField("topActivity").get(si);
+                        if (top == null) continue;
+                        found = top.getPackageName();
+                        break;
+                    }
+                }
+                how("schermo centrale (stack del display 0)");
+                return found;
+            } catch (Throwable e) {
+                stacksFailed = true;
+                Throwable t = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
+                Diag.put("avvio.primoPianoMetodo", "stack non leggibili (" + t.getClass().getSimpleName() + "): uso l'elenco dei task");
+            }
+        }
         try {
             ActivityManager am = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
             @SuppressWarnings("deprecation")
-            List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
-            if (tasks == null || tasks.isEmpty() || tasks.get(0).topActivity == null) return null;
-            return tasks.get(0).topActivity.getPackageName();
+            List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(6);
+            if (tasks == null) return null;
+            for (ActivityManager.RunningTaskInfo ti : tasks) {
+                if (ti.topActivity == null) continue;
+                String p = ti.topActivity.getPackageName();
+                if (otherDisplay(p)) continue;
+                how("elenco dei task, saltate le app del quadro");
+                return p;
+            }
+            return null;
         } catch (Throwable e) {
             return null;
         }
+    }
+
+    static boolean otherDisplay(String pkg) {
+        for (String p : OTHER_DISPLAY_PKGS) if (p.equals(pkg)) return true;
+        return false;
+    }
+
+    private static void how(String h) {
+        if (h.equals(topHow)) return;
+        topHow = h;
+        Diag.put("avvio.primoPianoMetodo", h);
     }
 
     private static String s(long t) {

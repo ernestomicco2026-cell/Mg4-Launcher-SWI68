@@ -14,9 +14,9 @@ SAME_OK = re.compile(r"^(CarPlay|Android Auto|One Pedal Drive|MG4 Launcher|MG4 S
 SAME_WORD = {
     'it': {'sec_home', 'app_account', 'group_comfort'},
     'es': {'apps_title', 'app_manual', 'upd_error_code'},
-    'de': {'sec_system', 'set_updates', 'apps_title', 'app_navigator', 'btn_logo_code', 'cam360_original'},
+    'de': {'sec_system', 'set_updates', 'apps_title', 'app_navigator', 'btn_logo_code', 'cam360_original', 'anim_sim_label'},
     'pt': {'apps_title', 'app_manual'},
-    'fr': {'app_navigator', 'logos_pack_state', 'tile_acc', 'btn_logo_code'},
+    'fr': {'app_navigator', 'logos_pack_state', 'tile_acc', 'btn_logo_code', 'anim_sim_label'},
     'tr': {'app_usb_video'},
     'pl': {'sec_system'},
 }

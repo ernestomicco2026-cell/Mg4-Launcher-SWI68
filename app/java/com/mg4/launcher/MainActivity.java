@@ -110,7 +110,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         setContentView(root);
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(vis -> {
             // se il sistema rimostra le barre (es. dopo un popup) le rinasconde
-            if ((vis & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) root.postDelayed(this::goFullscreen, 2500);
+            // 1.0.6 (issue #42): con la tendina dall'alto accesa si lascia più tempo (barra e tendina si chiudono da sole)
+            if ((vis & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) root.postDelayed(this::goFullscreen, prefs.topSwipe() ? 6000 : 2500);
         });
         goFullscreen();
         build();
@@ -184,6 +185,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         com.mg4.launcher.svc.RetroReturn.setMedia(media);
         // ripresa della sorgente solo se il launcher parte con l'auto (non dopo un aggiornamento o un riavvio a metà viaggio)
         if (android.os.SystemClock.elapsedRealtime() < 4 * 60_000L) media.onPowerOn("avvio del launcher all'accensione");
+        else com.mg4.launcher.svc.MediaClient.powerOnSkipped("launcher avviato " + android.os.SystemClock.elapsedRealtime() / 60_000
+                + " min dopo l'accensione (aggiornamento o riavvio a metà viaggio)");
         // 1.0.2 (punto 1): tema automatico con catena di fonti e 60 s di conferma
         com.mg4.launcher.svc.DayNight.get(this).start(day -> {
             if (!Prefs.THEME_AUTO.equals(prefs.themeMode()) || theme == null || theme.day == day) return;
@@ -210,6 +213,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
             long off = screenOffAt < 0 ? 0 : android.os.SystemClock.elapsedRealtime() - screenOffAt;
             screenOffAt = -1;
             if (off < 2 * 60_000L) return;
+            com.mg4.launcher.svc.BootLog.powerOn("risveglio dello schermo dopo " + (off / 60_000) + " min");
             if (home != null) home.onScreenOn();
             if (media != null) media.onPowerOn("risveglio dello schermo dopo " + (off / 60_000) + " min");
             com.mg4.launcher.svc.Notices.newPowerOn();
@@ -469,6 +473,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     /** Novità di ogni versione (testi in tutte le lingue in strings.xml). */
     private static int[] newsFor(String ver) {
         switch (ver) {
+            case "1.0.6":
+                return new int[]{R.string.news_v106_1, R.string.news_v106_2, R.string.news_v106_3, R.string.news_v106_4};
             case "1.0.5":
                 return new int[]{R.string.news_v105_1, R.string.news_v105_2, R.string.news_v105_3, R.string.news_v105_4};
             case "1.0.4":
@@ -853,6 +859,15 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public VehicleClient vehicle() {
         return vehicle;
+    }
+
+    @Override
+    public void simulateCharge() {
+        if (settings != null) closeSettings();
+        if (home == null || !home.simulateCharge()) {
+            android.widget.Toast.makeText(this, L.s(R.string.anim_sim_no_car), android.widget.Toast.LENGTH_LONG).show();
+            Diag.put("ricarica.simulazione", "non avviata: riquadro auto nascosto");
+        }
     }
 
     @Override

@@ -362,6 +362,15 @@
     <string name="newsh_5" formatted="false">CarPlay / Android Auto: öffnet mit einem Tipp und hat ein eigenes Symbol in der Leiste, solange das Telefon verbunden ist</string>
     <string name="newsh_6" formatted="false">Einstellungen: Leerraum zwischen Fahrzeugbereich und unterer Leiste entfernt</string>
     <string name="newsh_7" formatted="false">Bei geöffnetem MG4 Clima schließt sich das System-Klimafeld jetzt selbst mit dem Systembefehl</string>
+    <string name="group_airflow" formatted="false">Luftstrom</string>
+    <string name="airflow_fan_speed" formatted="false">Gebläsestufe</string>
+    <string name="airflow_direction" formatted="false">Luftrichtung</string>
+    <string name="airflow_windscreen" formatted="false">Frontscheibe</string>
+    <string name="airflow_face" formatted="false">Oberkörper</string>
+    <string name="airflow_feet" formatted="false">Fußraum</string>
+    <string name="airflow_window_clearing" formatted="false">Scheiben freimachen</string>
+    <string name="airflow_front_clear" formatted="false">Frontscheibe entfeuchten</string>
+    <string name="airflow_rear_heat" formatted="false">Heckscheibenheizung</string>
     <string name="set_apps_size" formatted="false">APP-GRÖSSE</string>
     <string name="news_v097_1" formatted="false">Eigene Größe für den App-Bildschirm: einstellbar in den Einstellungen (größere Symbole und Text)</string>
     <string name="news_v097_2" formatted="false">Dongle: Das Protokoll zeigt jetzt, ob der Dongle nach dem Zurücksetzen wieder erscheint</string>
@@ -550,5 +559,29 @@
     <string name="news_v105_2" formatted="false">Fahrzeug in den Einstellungen ausschalten (nur in P) und Fahrzeugbereich ausblendbar</string>
     <string name="news_v105_3" formatted="false">Manöver-Symbole des Navis (danke an sommistica) und Navi im Fenster im Kartenbereich (experimentell)</string>
     <string name="news_v105_4" formatted="false">Einstellungen: die Seite bleibt auch nach einer Pause an ihrem Platz · das Animationspaket aktualisiert sich selbst</string>
+    <string name="anim_sim" formatted="false">Laden simulieren</string>
+    <string name="anim_sim_sub" formatted="false">Simuliert nur das Kabel (25 s eingesteckt, 10 s fertig geladen, ausgesteckt): READY, Gang und Tempo sind echt</string>
+    <string name="anim_sim_label" formatted="false">Simulation</string>
+    <string name="anim_sim_no_car" formatted="false">Zum Simulieren den Fahrzeugbereich anzeigen (Einstellungen → Startseite)</string>
+    <string name="set_swipe_back" formatted="false">Nach oben wischen zum Zurückkehren</string>
+    <string name="set_swipe_back_sub" formatted="false">In anderen Apps vom unteren Bildschirmrand nach oben wischen, um zum Launcher zurückzukehren</string>
+    <string name="chk_batt_heat" formatted="false">Batterieheizung</string>
+    <string name="news_v106_1" formatted="false">Fahrzeug ausschalten funktioniert jetzt (nur in P) · Lade-Animation: Laden simulieren und schnellere Vorbereitung</string>
+    <string name="news_v106_2" formatted="false">Android Auto und CarPlay bei den Quellen mit Titel und Interpret · größere Titel- und Sendertexte</string>
+    <string name="news_v106_3" formatted="false">Klima-Menü mit Luftrichtung, Entfeuchtung und Heckscheibe (danke an sommistica) · Nach oben wischen zum Zurückkehren (optional)</string>
     <string name="news_v104_6" formatted="false">Einstellungen: beim Ändern einer Option bleibt die Seite, wo sie war · Apps: eine selbst installierte App lange drücken, um sie zu deinstallieren</string>
+    <string name="theme_src" formatted="false">Automatisches Design</string>
+    <string name="theme_src_sub" formatted="false">Nur Scheinwerfer: dunkel, sobald das Licht an ist, zu jeder Uhrzeit</string>
+    <string name="theme_src_lights_time" formatted="false">Licht und Uhrzeit</string>
+    <string name="theme_src_lights" formatted="false">Nur Scheinwerfer</string>
+    <string name="set_top_swipe" formatted="false">Wischen von oben im Vollbild erlauben</string>
+    <string name="set_top_swipe_sub" formatted="false">Beim Wischen vom oberen Rand nach unten erscheint das Feld mit der Helligkeit und schließt sich danach von selbst</string>
+    <string name="set_charge_pick" formatted="false">Tasten der Ladeleiste</string>
+    <string name="set_charge_pick_btn" formatted="false">Auswählen</string>
+    <string name="set_charge_pick_sub" formatted="false">Tippe bis zu 5 Tasten in der gewünschten Reihenfolge an. Es erscheinen nur die, die das Auto unterstützt.</string>
+    <string name="set_charge_pick_wait" formatted="false">Das Auto ist noch nicht verbunden, daher ist unklar, welche Tasten es unterstützt. Versuche es gleich noch einmal.</string>
+    <string name="cb_heat" formatted="false">Batterieheizung</string>
+    <string name="cb_heat_title" formatted="false">Intelligente Batterieheizung</string>
+    <string name="cb_heat_msg" formatted="false">Vorerst liest der Launcher nur den Status und sendet keine Befehle an das Auto. Ändern unter Fahrzeugeinstellungen → Ladeverwaltung.</string>
+    <string name="news_v106_4" formatted="false">Android Auto, USB-Stick und Radio funktionieren beim Start wieder normal · dunkles Design mit Licht (optional) · Wischen von oben im Vollbild (optional) · wähle die 5 Tasten der Ladeleiste</string>
 </resources>

@@ -5,7 +5,6 @@ import android.media.MediaMetadataRetriever;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.List;
 
 /**
  * 1.0.4: fotogrammi delle clip di ricarica, estratti una volta sola dagli MP4 e salvati come JPEG accanto alle clip
@@ -15,12 +14,12 @@ import java.util.List;
  * fase "aggancio" bloccata, log del 15/11). Con i fotogrammi già pronti l'animazione è disegnata da una vista
  * normale, senza decoder video a schermo: niente superfici nere e gli errori si vedono nel log.
  * <p>
- * L'estrazione usa MediaMetadataRetriever (lo stesso delle miniature della galleria) a blocchi di 8 fotogrammi, in un
- * thread di lavoro. Circa 290 fotogrammi per tema, 25–30 MB in tutto per un colore. Log "ricarica.fotogrammi".
+ * 1.0.6: l'estrazione usa MediaCodec verso la memoria (YUV → JPEG); se non va, MediaMetadataRetriever un fotogramma
+ * alla volta. In un thread di lavoro. Circa 290 fotogrammi per tema, 25–30 MB in tutto per un colore. Log "ricarica.fotogrammi".
  */
 public final class ChargeFrames {
     private static final String DONE = "pronto", DIR = "fotogrammi";
-    private static final int CHUNK = 8, JPEG_Q = 88;
+    private static final int JPEG_Q = 88;
 
     private ChargeFrames() {}
 
@@ -89,6 +88,172 @@ public final class ChargeFrames {
         File d = dir(clip);
         ChargePack.deleteTree(d);
         if (!d.mkdirs() && !d.isDirectory()) return "cartella non creata";
+        long t0 = android.os.SystemClock.elapsedRealtime();
+        // 1.0.6: prima MediaCodec verso la memoria (niente Surface), YUV → JPEG con YuvImage. Il metodo "a blocchi" di
+        // MediaMetadataRetriever falliva sempre sulle auto ("No frames from retriever") ed è stato tolto.
+        String codecErr;
+        try {
+            codecErr = buildWithCodec(clip, d);
+        } catch (Throwable e) {
+            codecErr = e.getClass().getSimpleName() + (e.getMessage() == null ? "" : " " + e.getMessage());
+        }
+        if (codecErr == null) {
+            lastNote = "MediaCodec · " + lastWritten + " fotogrammi in " + (android.os.SystemClock.elapsedRealtime() - t0) / 1000 + " s · 0 ripetuti";
+            return writeDone(d, lastWritten);
+        }
+        ChargePack.deleteTree(d);
+        if (!d.mkdirs() && !d.isDirectory()) return "cartella non creata";
+        String err = buildWithRetriever(clip, d);
+        if (err == null) lastNote = lastNote + " (MediaCodec: " + codecErr + ")";
+        return err;
+    }
+
+    private static int lastWritten;
+
+    private static String writeDone(File d, int written) {
+        if (written <= 0) return "nessun fotogramma";
+        try (FileOutputStream fo = new FileOutputStream(new File(d, DONE))) {
+            fo.write(String.valueOf(written).getBytes());
+            return null;
+        } catch (Exception e) {
+            return "file pronto non scritto";
+        }
+    }
+
+    /** Decodifica con MediaCodec in memoria; null se ha scritto tutti i fotogrammi, altrimenti il motivo. */
+    private static String buildWithCodec(File clip, File d) throws Exception {
+        android.media.MediaExtractor ex = new android.media.MediaExtractor();
+        android.media.MediaCodec codec = null;
+        lastWritten = 0;
+        try {
+            ex.setDataSource(clip.getAbsolutePath());
+            int track = -1;
+            android.media.MediaFormat fmt = null;
+            for (int i = 0; i < ex.getTrackCount(); i++) {
+                android.media.MediaFormat f = ex.getTrackFormat(i);
+                String m = f.getString(android.media.MediaFormat.KEY_MIME);
+                if (m != null && m.startsWith("video/")) {
+                    track = i;
+                    fmt = f;
+                    break;
+                }
+            }
+            if (track < 0) return "nessuna traccia video";
+            ex.selectTrack(track);
+            String mime = fmt.getString(android.media.MediaFormat.KEY_MIME);
+            fmt.setInteger(android.media.MediaFormat.KEY_COLOR_FORMAT,
+                    android.media.MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Flexible);
+            codec = android.media.MediaCodec.createDecoderByType(mime);
+            codec.configure(fmt, null, null, 0);
+            codec.start();
+            android.media.MediaCodec.BufferInfo info = new android.media.MediaCodec.BufferInfo();
+            boolean inEos = false;
+            int written = 0, idle = 0;
+            byte[] nv21 = null;
+            while (true) {
+                if (!inEos) {
+                    int in = codec.dequeueInputBuffer(10_000);
+                    if (in >= 0) {
+                        java.nio.ByteBuffer buf = codec.getInputBuffer(in);
+                        int n = buf == null ? -1 : ex.readSampleData(buf, 0);
+                        if (n < 0) {
+                            codec.queueInputBuffer(in, 0, 0, 0, android.media.MediaCodec.BUFFER_FLAG_END_OF_STREAM);
+                            inEos = true;
+                        } else {
+                            codec.queueInputBuffer(in, 0, n, ex.getSampleTime(), 0);
+                            ex.advance();
+                        }
+                    }
+                }
+                int out = codec.dequeueOutputBuffer(info, 10_000);
+                if (out >= 0) {
+                    idle = 0;
+                    if (info.size > 0) {
+                        android.media.Image img = codec.getOutputImage(out);
+                        if (img == null) {
+                            codec.releaseOutputBuffer(out, false);
+                            return "getOutputImage nullo";
+                        }
+                        try {
+                            android.graphics.Rect crop = img.getCropRect();
+                            int w = crop.width() & ~1, h = crop.height() & ~1;
+                            if (nv21 == null || nv21.length != w * h * 3 / 2) nv21 = new byte[w * h * 3 / 2];
+                            toNv21(img, crop, w, h, nv21);
+                            written++;
+                            File o = new File(d, String.format(java.util.Locale.ROOT, "%04d.jpg", written));
+                            try (FileOutputStream fo = new FileOutputStream(o)) {
+                                if (!new android.graphics.YuvImage(nv21, android.graphics.ImageFormat.NV21, w, h, null)
+                                        .compressToJpeg(new android.graphics.Rect(0, 0, w, h), JPEG_Q, fo))
+                                    return "fotogramma " + written + " non salvato";
+                            }
+                        } finally {
+                            img.close();
+                        }
+                    }
+                    codec.releaseOutputBuffer(out, false);
+                    if ((info.flags & android.media.MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) break;
+                } else if (out == android.media.MediaCodec.INFO_TRY_AGAIN_LATER && inEos && ++idle > 300) {
+                    break;   // 3 s senza uscite dopo la fine dell'ingresso
+                }
+            }
+            lastWritten = written;
+            // controllo: devono esserci (quasi) tutti i fotogrammi attesi
+            int expected = -1;
+            try {
+                MediaMetadataRetriever r = new MediaMetadataRetriever();
+                r.setDataSource(clip.getAbsolutePath());
+                expected = parse(r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT));
+                r.release();
+            } catch (Throwable ignored) {
+            }
+            if (written == 0) return "nessun fotogramma decodificato";
+            if (expected > 0 && written < expected) return "decodificati " + written + " fotogrammi su " + expected;
+            return null;
+        } finally {
+            if (codec != null) {
+                try {
+                    codec.stop();
+                } catch (Throwable ignored) {
+                }
+                codec.release();
+            }
+            ex.release();
+        }
+    }
+
+    /** YUV_420_888 (qualsiasi disposizione dei piani) → NV21 w×h dal riquadro crop. */
+    private static void toNv21(android.media.Image img, android.graphics.Rect crop, int w, int h, byte[] out) {
+        android.media.Image.Plane[] pl = img.getPlanes();
+        // Y
+        java.nio.ByteBuffer yb = pl[0].getBuffer();
+        int yRow = pl[0].getRowStride(), yPix = pl[0].getPixelStride();
+        int pos = 0;
+        for (int r = 0; r < h; r++) {
+            int base = (crop.top + r) * yRow + crop.left * yPix;
+            if (yPix == 1) {
+                yb.position(base);
+                yb.get(out, pos, w);
+                pos += w;
+            } else {
+                for (int c = 0; c < w; c++) out[pos++] = yb.get(base + c * yPix);
+            }
+        }
+        // V e U alternati (NV21 = VU)
+        java.nio.ByteBuffer ub = pl[1].getBuffer(), vb = pl[2].getBuffer();
+        int uRow = pl[1].getRowStride(), uPix = pl[1].getPixelStride();
+        int vRow = pl[2].getRowStride(), vPix = pl[2].getPixelStride();
+        int cw = w / 2, chh = h / 2, ct = crop.top / 2, cl = crop.left / 2;
+        for (int r = 0; r < chh; r++) {
+            for (int c = 0; c < cw; c++) {
+                out[pos++] = vb.get((ct + r) * vRow + (cl + c) * vPix);
+                out[pos++] = ub.get((ct + r) * uRow + (cl + c) * uPix);
+            }
+        }
+    }
+
+    /** Metodo di riserva: MediaMetadataRetriever un fotogramma alla volta (per indice, poi per tempo). */
+    private static String buildWithRetriever(File clip, File d) {
+        long t0 = android.os.SystemClock.elapsedRealtime();
         MediaMetadataRetriever r = new MediaMetadataRetriever();
         try {
             r.setDataSource(clip.getAbsolutePath());
@@ -99,63 +264,38 @@ public final class ChargeFrames {
             }
             if (n <= 0) return "numero di fotogrammi sconosciuto";
             int written = 0, missing = 0;
-            String chunkErr = null;
-            boolean chunks = true;   // getFramesAtIndex: se fallisce una volta non si riprova
             File prev = null;
-            for (int i = 0; i < n; i += CHUNK) {
-                int cnt = Math.min(CHUNK, n - i);
-                List<Bitmap> list = null;
-                if (chunks) {
+            for (int idx = 0; idx < n; idx++) {
+                Bitmap b = null;
+                try {
+                    b = r.getFrameAtIndex(idx);
+                } catch (Throwable ignored) {
+                }
+                if (b == null) {
                     try {
-                        list = r.getFramesAtIndex(i, cnt);
-                    } catch (Throwable e) {
-                        chunkErr = e.getClass().getSimpleName() + (e.getMessage() == null ? "" : " " + e.getMessage());
-                    }
-                    if (list == null || list.size() != cnt) {
-                        chunks = false;
-                        if (list != null) for (Bitmap b : list) if (b != null) b.recycle();
-                        list = null;
+                        b = r.getFrameAtTime(idx * 1_000_000L / 30 + 16_000, MediaMetadataRetriever.OPTION_CLOSEST);
+                    } catch (Throwable ignored) {
                     }
                 }
-                for (int j = 0; j < cnt; j++) {
-                    int idx = i + j;
-                    Bitmap b = list != null ? list.get(j) : null;
-                    if (b == null) {   // un fotogramma alla volta: per indice, poi per tempo (a metà del fotogramma)
-                        try {
-                            b = r.getFrameAtIndex(idx);
-                        } catch (Throwable ignored) {
-                        }
-                    }
-                    if (b == null) {
-                        try {
-                            b = r.getFrameAtTime(idx * 1_000_000L / 30 + 16_000, MediaMetadataRetriever.OPTION_CLOSEST);
-                        } catch (Throwable ignored) {
-                        }
-                    }
-                    written++;
-                    File out = new File(d, String.format(java.util.Locale.ROOT, "%04d.jpg", written));
-                    if (b == null) {
-                        // fotogramma illeggibile (succede verso la fine delle clip): si ripete il precedente
-                        missing++;
-                        if (prev == null || !copy(prev, out)) return "fotogramma " + written + " non letto";
-                        continue;
-                    }
-                    try (FileOutputStream fo = new FileOutputStream(out)) {
-                        if (!b.compress(Bitmap.CompressFormat.JPEG, JPEG_Q, fo)) return "fotogramma " + written + " non salvato";
-                    } finally {
-                        b.recycle();
-                    }
-                    prev = out;
+                written++;
+                File out = new File(d, String.format(java.util.Locale.ROOT, "%04d.jpg", written));
+                if (b == null) {
+                    // fotogramma illeggibile (succede verso la fine delle clip): si ripete il precedente
+                    missing++;
+                    if (prev == null || !copy(prev, out)) return "fotogramma " + written + " non letto";
+                    continue;
                 }
+                try (FileOutputStream fo = new FileOutputStream(out)) {
+                    if (!b.compress(Bitmap.CompressFormat.JPEG, JPEG_Q, fo)) return "fotogramma " + written + " non salvato";
+                } finally {
+                    b.recycle();
+                }
+                prev = out;
             }
             if (missing * 10 > n) return missing + " fotogrammi su " + n + " non letti";
-            lastNote = (chunks ? "a blocchi" : "uno alla volta" + (chunkErr != null ? " (blocchi: " + chunkErr + ")" : ""))
-                    + (missing > 0 ? ", " + missing + " ripetuti" : "");
-            if (written <= 0) return "nessun fotogramma";
-            try (FileOutputStream fo = new FileOutputStream(new File(d, DONE))) {
-                fo.write(String.valueOf(written).getBytes());
-            }
-            return null;
+            lastNote = "uno alla volta · " + written + " fotogrammi in " + (android.os.SystemClock.elapsedRealtime() - t0) / 1000
+                    + " s · " + missing + " ripetuti";
+            return writeDone(d, written);
         } catch (Throwable e) {
             return e.getClass().getSimpleName() + (e.getMessage() == null ? "" : ": " + e.getMessage());
         } finally {

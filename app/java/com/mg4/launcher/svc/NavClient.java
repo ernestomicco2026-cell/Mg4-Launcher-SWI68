@@ -265,7 +265,9 @@ public final class NavClient {
                 s.navigating = mapNav || status > 0 || moving;
                 Diag.put("nav.segnali", "isMapNavigating " + mapNav + " · statoGuida " + status
                         + " · rim. " + s.remainMeters + " m / " + s.remainSeconds + " s");
-                Diag.put("nav.prossimaManovra", s.turnMeters + " m · icona " + s.turnIcon + " · " + ManeuverReport.instructionType(s.turnText));
+                Diag.put("nav.prossimaManovra", s.turnMeters + " m · icona " + s.turnIcon + " "
+                        + com.mg4.launcher.ui.ManeuverIcons.name(ctx.getResources(), s.turnIcon)
+                        + " · istruzione " + ManeuverReport.instructionType(s.turnText));
                 int unit = Rpc.callInt(b, GS, DIST_UNIT);
                 com.mg4.launcher.ui.Units.navUnit = unit;   // 1.0.0: serve per le miglia
                 Diag.put("nav.unitaDistanza", unit);

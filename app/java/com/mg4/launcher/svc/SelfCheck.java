@@ -100,6 +100,7 @@ public final class SelfCheck {
         l.add(new Item("animazione", R.string.chk_charge_anim));
         l.add(new Item("ready", R.string.chk_ready));
         l.add(new Item("spegnimento", R.string.chk_power));
+        l.add(new Item("riscaldamentoBatteria", R.string.chk_batt_heat));
         return l;
     }
 
@@ -263,12 +264,21 @@ public final class SelfCheck {
                         + VehicleClient.lightsDescription(), "");
                 break;
             }
+            case "riscaldamentoBatteria": {
+                // 1.0.6 (issue #37): SOLA LETTURA, nessun comando
+                int bh = v == null ? Integer.MIN_VALUE : v.batteryHeat();
+                if (bh == Integer.MIN_VALUE) set(it, ABSENT, "getDrivingBatteryHeat non leggibile (disponibile: no)", "");
+                else set(it, OK, "disponibile: sì · getDrivingBatteryHeat " + bh + (bh == 1 ? " (acceso)" : bh == 2 || bh == 0 ? " (spento)"
+                        : " (valore sconosciuto)") + " · comando setDrivingBatteryHeat 1/2 non usato", String.valueOf(bh));
+                break;
+            }
             case "spegnimento": {
-                // 1.0.5: SOLA LETTURA (getPowerModeSwitch), non spegne niente
+                // 1.0.6: SOLA LETTURA, non spegne niente: metodo del servizio veicolo presente sì/no
+                // (getPowerModeSwitch vale 0 sulle auto e non decide più niente: si scrive solo nel log)
                 int mode = v == null ? Integer.MIN_VALUE : v.powerModeSwitch();
-                if (mode == Integer.MIN_VALUE) set(it, FAIL, "getPowerModeSwitch non leggibile", "");
-                else set(it, mode == 1 ? OK : ABSENT, "getPowerModeSwitch " + mode + (mode == 1 ? " (spegnimento possibile)"
-                        : " (spegnimento non possibile adesso)") + " · marcia " + (s == null ? "?" : s.gearRaw), "");
+                if (mode == Integer.MIN_VALUE) set(it, FAIL, "metodo setPowerModeSwitch presente: no (servizio non risponde)", "");
+                else set(it, OK, "metodo setPowerModeSwitch presente: sì · getPowerModeSwitch " + mode
+                        + " · marcia " + (s == null ? "?" : s.gearRaw) + " (si spegne solo in P e ferma)", "");
                 break;
             }
             case "ready": {
@@ -333,6 +343,8 @@ public final class SelfCheck {
                 int f = ms.favorites == null ? 0 : ms.favorites.size();
                 String elenco = Diag.value("radio.elenco");
                 if (n > 0 || f > 0) set(it, OK, n + " stazioni · " + f + " preferiti · " + elenco, String.valueOf(Math.max(n, f)));
+                // 1.0.6: nel controllo automatico (Radio magari mai aperta) l'elenco vuoto è "da verificare", non un errore
+                else if (!interactive) set(it, SKIPPED, "da verificare: elenco non ancora arrivato (Radio non aperta?) · " + elenco, "0");
                 else set(it, FAIL, "nessuna stazione ricevuta (aprire la Radio e fare una ricerca) · " + elenco, "0");
                 break;
             }

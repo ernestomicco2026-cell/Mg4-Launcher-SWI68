@@ -96,12 +96,14 @@ public final class HomeLock {
         if (uninstalling(c)) return;
         if (mgDisabled(c)) {
             Diag.put("home.avvioSicuro", "attivo (home MG disattivata)");
+            BootLog.mark(c, "avvioSicuro", "già spenta");
             return;
         }
         try {
             c.getPackageManager().setComponentEnabledSetting(HomeDefault.MG,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
             Diag.put("home.avvioSicuro", "attivato: home MG disattivata (" + why + ")");
+            BootLog.mark(c, "avvioSicuro", null);
         } catch (Throwable e) {
             Diag.put("home.avvioSicuro", "non possibile: " + e);
         }

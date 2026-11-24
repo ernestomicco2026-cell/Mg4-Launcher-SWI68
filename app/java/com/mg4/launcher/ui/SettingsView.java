@@ -54,6 +54,9 @@ public final class SettingsView extends FrameLayout {
         /** 1.0.4: prova dell'animazione di ricarica sulla home. */
         void testChargeAnimation();
 
+        /** 1.0.6: simulazione dei soli segnali del cavo, con READY, marcia e velocità veri. */
+        void simulateCharge();
+
         /** 1.0.5: servizio veicolo (Spegni la vettura). */
         com.mg4.launcher.svc.VehicleClient vehicle();
     }
@@ -511,6 +514,20 @@ public final class SettingsView extends FrameLayout {
                         host.settingsChanged(true);
                     }), false));
         }
+        // 1.0.6 (issue SWI69 #2): striscia invisibile sul bordo basso sopra le altre app
+        card.addView(row(c, L.s(R.string.set_swipe_back), L.s(R.string.set_swipe_back_sub),
+                toggle(c, prefs.swipeBack(), on -> {
+                    prefs.setSwipeBack(on);
+                    com.mg4.launcher.svc.Diag.put("home.gesto", "opzione " + (on ? "accesa" : "spenta"));
+                    com.mg4.launcher.svc.SwipeBack.refresh(c);
+                }), false));
+        // 1.0.6 (issue #42): tendina dall'alto a schermo intero
+        card.addView(row(c, L.s(R.string.set_top_swipe), L.s(R.string.set_top_swipe_sub),
+                toggle(c, prefs.topSwipe(), on -> {
+                    prefs.setTopSwipe(on);
+                    com.mg4.launcher.svc.Diag.put("tendina.gesto", "opzione " + (on ? "accesa" : "spenta"));
+                    com.mg4.launcher.svc.TopSwipe.refresh(c);
+                }), false));
         card.addView(row(c, L.s(R.string.set_show_date), L.s(R.string.set_show_date_sub),
                 toggle(c, prefs.showDate(), on -> {
                     prefs.setShowDate(on);
@@ -701,8 +718,15 @@ public final class SettingsView extends FrameLayout {
         card.addView(row(c, L.s(R.string.set_charge_buttons), L.s(R.string.set_charge_buttons_sub),
                 toggle(c, prefs.chargeButtons(), on -> {
                     prefs.setChargeButtons(on);
-                    host.settingsChanged(true);
+                    host.settingsChanged(true);   // 1.0.6: ricostruisce anche questa pagina (compare la scelta dei pulsanti)
                 }), false));
+        // 1.0.6 (issue #37): quali 5 pulsanti nella barra di ricarica
+        if (prefs.chargeButtons()) {
+            TextView pickBtn = choice(c, L.s(R.string.set_charge_pick_btn), false, v -> pickChargeBar(c));
+            pickBtn.setBackground(Ui.pressable(c, t.chip, 16 * Ui.K, t));
+            pickBtn.setLayoutParams(new LinearLayout.LayoutParams(-2, tp(60)));
+            card.addView(row(c, L.s(R.string.set_charge_pick), chargeBarNames(prefs.chargeBar()), pickBtn, false));
+        }
         card.addView(row(c, L.s(R.string.set_power_btn), L.s(R.string.set_power_btn_sub),
                 toggle(c, prefs.powerButton(), on -> {
                     prefs.setPowerButton(on);
@@ -815,7 +839,6 @@ public final class SettingsView extends FrameLayout {
                     prefs.setTileApps(out);
                     prefs.setTileMode(Prefs.TILE_APPS);
                     host.settingsChanged(true);
-                    showSection(SEC_BAR);
                 });
     }
 
@@ -979,6 +1002,67 @@ public final class SettingsView extends FrameLayout {
                 });
     }
 
+    /** 1.0.6 (issue #37): nome di ogni pulsante della barra di ricarica (stesso ordine di Prefs.CB_ALL). */
+    private static String chargeBarName(String id) {
+        switch (id) {
+            case Prefs.CB_LIMIT: return L.s(R.string.cb_limit);
+            case Prefs.CB_CURRENT: return L.s(R.string.cb_current);
+            case Prefs.CB_START: return L.s(R.string.cb_charge) + " / V2L";
+            case Prefs.CB_RESERVE: return L.s(R.string.cb_reserve);
+            case Prefs.CB_UNLOCK: return L.s(R.string.cb_unlock);
+            default: return L.s(R.string.cb_heat);
+        }
+    }
+
+    private static String chargeBarNames(java.util.List<String> ids) {
+        StringBuilder sb = new StringBuilder();
+        for (String id : ids) sb.append(sb.length() == 0 ? "" : " · ").append(chargeBarName(id));
+        return sb.toString();
+    }
+
+    /**
+     * 1.0.6 (issue #37): scelta dei pulsanti (al massimo 5, nell'ordine in cui si toccano). Si possono scegliere solo
+     * quelli che l'auto supporta: limite e programmata se l'auto li legge, riscaldamento batteria se il valore si legge.
+     * Senza collegamento all'auto non si sa cosa supporta: si chiede di riprovare.
+     */
+    private void pickChargeBar(Context c) {
+        com.mg4.launcher.svc.VehicleClient v = host.vehicle();
+        com.mg4.launcher.svc.VehicleClient.State s = v == null ? null : v.last();
+        if (s == null || !s.connected) {
+            Confirm.notice(this, t, L.s(R.string.set_charge_pick), "", new String[]{L.s(R.string.set_charge_pick_wait)}, L.s(R.string.btn_ok), null);
+            return;
+        }
+        java.util.List<String> avail = new java.util.ArrayList<>();
+        StringBuilder why = new StringBuilder();
+        for (String id : Prefs.CB_ALL) {
+            boolean ok;
+            switch (id) {
+                case Prefs.CB_LIMIT: ok = s.limitSupported || Prefs.LIMIT_SHOW.equals(prefs.chargeLimitMode()); break;
+                case Prefs.CB_CURRENT: ok = s.currentLimit != 0; break;
+                case Prefs.CB_RESERVE: ok = s.reserveSupported; break;
+                case Prefs.CB_HEAT: ok = s.batteryHeat != Integer.MIN_VALUE; break;
+                default: ok = true;
+            }
+            if (ok) avail.add(id);
+            else why.append(why.length() == 0 ? "" : ", ").append(id);
+        }
+        String[] names = new String[avail.size()];
+        for (int i = 0; i < names.length; i++) names[i] = chargeBarName(avail.get(i));
+        java.util.List<Integer> preset = new java.util.ArrayList<>();
+        for (String id : prefs.chargeBar()) if (avail.contains(id)) preset.add(avail.indexOf(id));
+        com.mg4.launcher.svc.Diag.put("ricarica.barraScelta", "sceglibili: " + android.text.TextUtils.join(", ", avail)
+                + (why.length() == 0 ? "" : " · non supportati dall'auto: " + why));
+        Confirm.pickMany(this, t, L.s(R.string.set_charge_pick), L.s(R.string.set_charge_pick_sub), names, preset, Prefs.CB_MAX,
+                L.s(R.string.btn_cancel), L.s(R.string.btn_ok), idx -> {
+                    java.util.List<String> out = new java.util.ArrayList<>();
+                    for (int i : idx) out.add(avail.get(i));
+                    if (out.isEmpty()) return;   // almeno un pulsante: per toglierli tutti c'è l'interruttore sopra
+                    prefs.setChargeBar(out);
+                    com.mg4.launcher.svc.Diag.put("ricarica.barra", "scelti: " + android.text.TextUtils.join(", ", out));
+                    host.settingsChanged(true);
+                });
+    }
+
     private interface OnChoice {
         void chosen(int index);
     }
@@ -1012,6 +1096,21 @@ public final class SettingsView extends FrameLayout {
             }));
         }
         col.addView(f, topFull(14));
+        // 1.0.6 (issue #43): fonte del tema automatico: fari e orario (come prima) / solo fari
+        if (Prefs.THEME_AUTO.equals(mode)) {
+            String[] srcVals = {Prefs.THEME_SRC_LIGHTS_TIME, Prefs.THEME_SRC_LIGHTS};
+            String[] srcNames = {L.s(R.string.theme_src_lights_time), L.s(R.string.theme_src_lights)};
+            int srcSel = Prefs.THEME_SRC_LIGHTS.equals(prefs.themeAutoSource()) ? 1 : 0;
+            LinearLayout srcCard = card(c);
+            srcCard.addView(row(c, L.s(R.string.theme_src), L.s(R.string.theme_src_sub),
+                    choices(c, srcNames, srcSel, i -> {
+                        prefs.setThemeAutoSource(srcVals[i]);
+                        com.mg4.launcher.svc.Diag.put("tema.fonteScelta", srcVals[i]);
+                        com.mg4.launcher.svc.DayNight.redecideNow("fonte scelta: " + srcVals[i]);
+                        showSection(SEC_LOOK);
+                    }), true));
+            col.addView(srcCard, topFull(14));
+        }
 
         col.addView(label(c, L.s(R.string.set_apps_size)), top(28));
         int[] appNames = {R.string.ui_size_normal, R.string.ui_size_large, R.string.ui_size_xlarge};
@@ -1250,7 +1349,9 @@ public final class SettingsView extends FrameLayout {
         // 1.0.4 (punto F5): prova dell'animazione di ricarica (modalità tecnica): pacchetto scaricato oppure zip su chiavetta
         card = card(c);
         View animBtn = button(c, L.s(R.string.anim_test), v -> host.testChargeAnimation());
-        card.addView(row(c, L.s(R.string.anim_test), L.s(R.string.anim_test_sub), animBtn, true));
+        card.addView(row(c, L.s(R.string.anim_test), L.s(R.string.anim_test_sub), animBtn, false));
+        View simBtn = button(c, L.s(R.string.anim_sim), v -> host.simulateCharge());
+        card.addView(row(c, L.s(R.string.anim_sim), L.s(R.string.anim_sim_sub), simBtn, true));
         col.addView(card, topFull(14));
 
         // 1.0.3 (punto 8): Controllo funzioni, in sola lettura

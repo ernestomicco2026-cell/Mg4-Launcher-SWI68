@@ -16,6 +16,24 @@ public final class EmbedCheck {
 
     private EmbedCheck() {}
 
+    /**
+     * 1.0.6: la schermata principale dell'app si può ridimensionare? resizeMode diverso da 0 (RESIZE_MODE_UNRESIZEABLE);
+     * il navigatore MG ha 1 e nel riquadro funziona (prova della 1.0.5).
+     */
+    public static boolean resizeable(Context c, String pkg) {
+        try {
+            PackageManager pm = c.getPackageManager();
+            android.content.Intent li = pm.getLaunchIntentForPackage(pkg);
+            if (li == null || li.getComponent() == null) return false;
+            ActivityInfo a = pm.getActivityInfo(li.getComponent(), 0);
+            int resize = ActivityInfo.class.getField("resizeMode").getInt(a);
+            Diag.put("pip.appScelta", pkg + " · resize=" + resize + (resize != 0 ? " · ridimensionabile" : " · non ridimensionabile"));
+            return resize != 0;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
     public static void log(Context c) {
         new Thread(() -> {
             PackageManager pm = c.getPackageManager();

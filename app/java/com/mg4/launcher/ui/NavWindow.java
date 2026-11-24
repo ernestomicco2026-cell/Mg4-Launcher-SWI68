@@ -45,6 +45,12 @@ public final class NavWindow extends FrameLayout implements TextureView.SurfaceT
     private VirtualDisplay vd;
     private Surface surface;
     private int w, h;
+    /** App messa nel riquadro (1.0.6: anche l'app di navigazione scelta). */
+    private String pkg;
+
+    public String pkg() {
+        return pkg;
+    }
     private final Runnable pauseRelease = () -> release("launcher in pausa da più di 60 s");
     /** Riquadro attivo (al massimo uno): va chiuso prima di aprire il navigatore in altro modo. */
     private static java.lang.ref.WeakReference<NavWindow> current;
@@ -63,9 +69,22 @@ public final class NavWindow extends FrameLayout implements TextureView.SurfaceT
         });
     }
 
-    /** true se il navigatore MG è installato e la prova non è già stata rifiutata. */
+    /**
+     * 1.0.6: app da mettere nel riquadro. L'app di navigazione scelta nelle impostazioni se la sua schermata principale è
+     * ridimensionabile (resizeMode diverso da 0, come segna EmbedCheck), altrimenti il navigatore MG. Android Auto e
+     * CarPlay no. null se nessuna delle due si può usare.
+     */
+    public static String target(Context c, Prefs p) {
+        String nav = p.navApp();
+        if (!Prefs.NAV_AUTO.equals(nav) && !Prefs.NAV_MG.equals(nav) && !Prefs.NAV_PHONE.equals(nav) && !p.pipRefused(nav)
+                && !nav.startsWith("com.allgo.") && com.mg4.launcher.svc.EmbedCheck.resizeable(c, nav)) return nav;
+        if (!p.pipRefused(NAV_PKG) && c.getPackageManager().getLaunchIntentForPackage(NAV_PKG) != null) return NAV_PKG;
+        return null;
+    }
+
+    /** true se c'è un'app di navigazione da mettere nel riquadro (e la prova non è già stata rifiutata). */
     public static boolean available(Context c, Prefs p) {
-        return !p.pipRefused() && c.getPackageManager().getLaunchIntentForPackage(NAV_PKG) != null;
+        return target(c, p) != null;
     }
 
     /** Chiude il riquadro, se c'è, prima di aprire il navigatore a tutto schermo da un altro comando. */
@@ -111,23 +130,25 @@ public final class NavWindow extends FrameLayout implements TextureView.SurfaceT
                     DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC | DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY
                             | FLAG_DESTROY_CONTENT_ON_REMOVAL);
             int id = vd.getDisplay().getDisplayId();
-            Intent i = getContext().getPackageManager().getLaunchIntentForPackage(NAV_PKG);
-            if (i == null) throw new IllegalStateException("navigatore MG non installato");
+            pkg = target(getContext(), prefs);
+            Intent i = pkg == null ? null : getContext().getPackageManager().getLaunchIntentForPackage(pkg);
+            if (i == null) throw new IllegalStateException("nessuna app di navigazione da mettere nel riquadro");
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             ActivityOptions o = ActivityOptions.makeBasic();
             o.setLaunchDisplayId(id);
             getContext().startActivity(i, o.toBundle());
             current = new java.lang.ref.WeakReference<>(this);
-            Diag.put("pip.prova", "riuscita · schermo " + id + " · " + w + "×" + h + " · " + (SystemClock.uptimeMillis() - t0) + " ms");
+            Diag.put("pip.prova", "riuscita · " + pkg + " · schermo " + id + " · " + w + "×" + h + " · " + (SystemClock.uptimeMillis() - t0) + " ms");
             Diag.put("pip.stato", "navigatore nel riquadro");
             postDelayed(() -> Diag.put("pip.memoria", "launcher PSS " + pss0 / 1024 + " → " + Debug.getPss() / 1024
                     + " MB · superficie circa " + (w * h * 4 * 3) / (1024 * 1024) + " MB (3 buffer da " + w + "×" + h + ")"), 5000);
         } catch (Throwable e) {
-            Diag.put("pip.prova", "rifiutata (" + e.getClass().getSimpleName() + (e.getMessage() == null ? "" : ": " + e.getMessage())
+            Diag.put("pip.prova", "rifiutata · " + pkg + " (" + e.getClass().getSimpleName() + (e.getMessage() == null ? "" : ": " + e.getMessage())
                     + ") · " + w + "×" + h + " · " + (SystemClock.uptimeMillis() - t0) + " ms");
             release("prova rifiutata");
-            prefs.setPipRefused(true);
-            prefs.setMapPanelWindow(false);
+            if (pkg != null) prefs.setPipRefused(pkg);
+            // con l'app scelta rifiutata resta il navigatore MG; senza niente l'opzione si spegne
+            if (!available(getContext(), prefs)) prefs.setMapPanelWindow(false);
             listener.refused();
         }
     }

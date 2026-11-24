@@ -362,6 +362,15 @@
     <string name="newsh_5" formatted="false">CarPlay / Android Auto: otwiera się jednym dotknięciem i ma własną ikonę na pasku, gdy telefon jest podłączony</string>
     <string name="newsh_6" formatted="false">Ustawienia: usunięto puste miejsce między Panelem auta a Dolnym paskiem</string>
     <string name="newsh_7" formatted="false">Przy otwartym MG4 Clima systemowy panel klimatyzacji zamyka się sam poleceniem systemu</string>
+    <string name="group_airflow" formatted="false">Nawiew</string>
+    <string name="airflow_fan_speed" formatted="false">Prędkość wentylatora</string>
+    <string name="airflow_direction" formatted="false">Kierunek nawiewu</string>
+    <string name="airflow_windscreen" formatted="false">Przednia szyba</string>
+    <string name="airflow_face" formatted="false">Twarz</string>
+    <string name="airflow_feet" formatted="false">Stopy</string>
+    <string name="airflow_window_clearing" formatted="false">Odparowanie szyb</string>
+    <string name="airflow_front_clear" formatted="false">Odparowanie przedniej szyby</string>
+    <string name="airflow_rear_heat" formatted="false">Ogrzewanie tylnej szyby</string>
     <string name="set_apps_size" formatted="false">ROZMIAR APLIKACJI</string>
     <string name="news_v097_1" formatted="false">Osobny rozmiar ekranu aplikacji: ustawiasz go w ustawieniach (większe ikony i tekst)</string>
     <string name="news_v097_2" formatted="false">Dongle: dziennik zapisuje teraz, czy dongle pojawia się ponownie po resecie</string>
@@ -550,5 +559,29 @@
     <string name="news_v105_2" formatted="false">Wyłączanie auta w ustawieniach (tylko na P) i ukrywany panel auta</string>
     <string name="news_v105_3" formatted="false">Ikony manewrów nawigacji (dzięki sommistica) i nawigacja w oknie w panelu map (eksperymentalne)</string>
     <string name="news_v105_4" formatted="false">Ustawienia: strona zostaje na miejscu nawet po przerwie · pakiet animacji aktualizuje się sam</string>
+    <string name="anim_sim" formatted="false">Symuluj ładowanie</string>
+    <string name="anim_sim_sub" formatted="false">Udaje tylko kabel (podłączony 25 s, ładowanie zakończone 10 s, odłączony): READY, bieg i prędkość są prawdziwe</string>
+    <string name="anim_sim_label" formatted="false">Symulacja</string>
+    <string name="anim_sim_no_car" formatted="false">Aby zasymulować ładowanie, pokaż panel auta (Ustawienia → Ekran główny)</string>
+    <string name="set_swipe_back" formatted="false">Przesuń w górę, aby wrócić</string>
+    <string name="set_swipe_back_sub" formatted="false">W innych aplikacjach przesuń w górę od dolnej krawędzi ekranu, aby wrócić do launchera</string>
+    <string name="chk_batt_heat" formatted="false">Ogrzewanie akumulatora</string>
+    <string name="news_v106_1" formatted="false">Wyłączanie auta już działa (tylko na P) · animacja ładowania: Symuluj ładowanie i szybsze przygotowanie</string>
+    <string name="news_v106_2" formatted="false">Android Auto i CarPlay wśród źródeł z tytułem i wykonawcą · większe napisy utworu i stacji</string>
+    <string name="news_v106_3" formatted="false">Menu Klimatyzacja z kierunkiem nawiewu, odparowaniem i tylną szybą (dzięki sommistica) · Przesuń w górę, aby wrócić (opcjonalne)</string>
     <string name="news_v104_6" formatted="false">Ustawienia: po zmianie opcji strona zostaje w tym samym miejscu · Aplikacje: przytrzymaj zainstalowaną przez siebie aplikację, aby ją odinstalować</string>
+    <string name="theme_src" formatted="false">Motyw automatyczny</string>
+    <string name="theme_src_sub" formatted="false">Tylko światła: ciemny, gdy światła są włączone, o każdej porze</string>
+    <string name="theme_src_lights_time" formatted="false">Światła i pora dnia</string>
+    <string name="theme_src_lights" formatted="false">Tylko światła</string>
+    <string name="set_top_swipe" formatted="false">Zezwalaj na przesunięcie z góry na pełnym ekranie</string>
+    <string name="set_top_swipe_sub" formatted="false">Przesunięcie w dół od górnej krawędzi otwiera panel z jasnością, który potem sam się zamyka</string>
+    <string name="set_charge_pick" formatted="false">Przyciski paska ładowania</string>
+    <string name="set_charge_pick_btn" formatted="false">Wybierz</string>
+    <string name="set_charge_pick_sub" formatted="false">Dotknij do 5 przycisków w kolejności, w jakiej chcesz je widzieć. Są tylko te, które obsługuje samochód.</string>
+    <string name="set_charge_pick_wait" formatted="false">Samochód nie jest jeszcze połączony, więc nie wiadomo, które przyciski obsługuje. Spróbuj ponownie za chwilę.</string>
+    <string name="cb_heat" formatted="false">Grzanie baterii</string>
+    <string name="cb_heat_title" formatted="false">Inteligentne grzanie baterii</string>
+    <string name="cb_heat_msg" formatted="false">Na razie launcher tylko odczytuje stan i nie wysyła poleceń do samochodu. Zmienia się to w Ustawieniach pojazdu → Zarządzanie ładowaniem.</string>
+    <string name="news_v106_4" formatted="false">Android Auto, pamięć USB i radio znów działają normalnie po uruchomieniu · ciemny motyw przy włączonych światłach (opcjonalnie) · panel z góry na pełnym ekranie (opcjonalnie) · wybierz 5 przycisków paska ładowania</string>
 </resources>
