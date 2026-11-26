@@ -526,7 +526,7 @@ public final class Updater {
                 out.notices = null;   // file assente o non leggibile: nessun avviso, nessun errore mostrato
                 Diag.put("avvisi.lettura", "avvisi.json non letto (" + e.getClass().getSimpleName() + ")");
             }
-            lastRemote = new java.text.SimpleDateFormat("dd/MM HH:mm", java.util.Locale.ITALY).format(new java.util.Date());
+            lastRemote = new java.text.SimpleDateFormat("dd/MM HH:mm", java.util.Locale.US).format(new java.util.Date());
             remoteDiag(out, out.release == null ? "non riuscito: " + out.error
                     : out.release.newer ? "versione nuova " + out.release.tag : "aggiornato");
             main.post(() -> cb.done(out));

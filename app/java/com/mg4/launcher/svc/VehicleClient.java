@@ -135,6 +135,8 @@ public final class VehicleClient {
         public float speedKmh = Float.NaN;
         public int predictMinutes = -1;
         public float chargeKw = 0;
+        /** 1.0.7: tensione della batteria di trazione (getPowerBatteryVol), -1 = non letta. */
+        public float batteryVolts = -1;
         public int chargeLimit = -1;      // % (convertito dal codice SAIC)
         public int chargeLimitCode = -1;  // 1..7
         public int currentLimit = -1;     // 1..4 (6 A, 8 A, 16 A, Max), 0 = non disponibile
@@ -244,13 +246,94 @@ public final class VehicleClient {
     /** Sospende le letture (launcher non visibile) senza scollegarsi dai servizi. */
     public void pause() {
         running = false;
-        if (bg != null) bg.removeCallbacks(loop);
+        if (bg != null) {
+            bg.removeCallbacks(loop);
+            bg.removeCallbacks(powerLoop);
+        }
+    }
+
+    // ---- 1.0.7: consumo istantaneo (potenza della batteria) ------------------------------------------------------
+    /** kW smussati: positivo = consumo, negativo = recupero; NaN = non leggibile. Sul thread principale. */
+    public interface PowerListener {
+        void onPower(float kw);
+    }
+
+    private volatile PowerListener powerListener;
+    private float powerSmooth = Float.NaN;
+    private static volatile boolean powerLogged;
+    private static final long POWER_MS = 500;   // al massimo 2 volte al secondo
+
+    /**
+     * Potenza istantanea = corrente × tensione della batteria di trazione (IVehicleChargingService 7
+     * getActualChargingCurrent, 64 getPowerBatteryVol): nei log, a ricarica ferma, la corrente è positiva in consumo e
+     * negativa in recupero. Solo letture. null = ferma. Solo mentre il launcher è visibile (pause() la ferma).
+     */
+    public void setPowerListener(PowerListener l) {
+        powerListener = l;
+        restartPower();
+    }
+
+    /**
+     * Riparte da zero il giro della potenza. Tutto sul thread di sfondo: lì il giro non può essere a metà, quindi non
+     * restano mai due giri insieme (che leggerebbero 4 volte al secondo).
+     */
+    private void restartPower() {
+        Handler h = bg;
+        if (h == null) return;
+        h.post(() -> {
+            h.removeCallbacks(powerLoop);
+            powerSmooth = Float.NaN;
+            if (powerListener != null) h.post(powerLoop);
+        });
+    }
+
+    /** Toglie l'ascoltatore solo se è ancora quello dato (una home ricostruita ha già messo il suo). */
+    public void clearPowerListener(PowerListener l) {
+        if (powerListener == l) setPowerListener(null);
+    }
+
+    private final Runnable powerLoop = new Runnable() {
+        @Override
+        public void run() {
+            PowerListener l = powerListener;
+            if (l == null || !running) return;
+            float kw = Float.NaN;
+            try {
+                IBinder c = last.connected ? sub("vehiclecharging") : null;
+                if (c != null) {
+                    float a = Rpc.callFloat(c, CHG, CHG_CURRENT), v = Rpc.callFloat(c, CHG, CHG_BATTERY_VOLT);
+                    // -1 / -1 = non leggibile; tensione fuori scala = dato non valido
+                    if (v > 100 && v < 1000 && Math.abs(a) < 1000 && !(a == -1f && v == -1f)) kw = a * v / 1000f;
+                    if (!powerLogged) {
+                        powerLogged = true;
+                        Diag.put("consumo.fonte", "IVehicleChargingService 7 getActualChargingCurrent × 64 getPowerBatteryVol · "
+                                + (Float.isNaN(kw) ? "non leggibile (" + a + " A / " + v + " V)" : String.format(java.util.Locale.US, "primo valore %.1f kW", kw)));
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+            // smussatura esponenziale: la barra non balla a ogni lettura
+            if (Float.isNaN(kw)) powerSmooth = Float.NaN;
+            else powerSmooth = Float.isNaN(powerSmooth) ? kw : powerSmooth + 0.3f * (kw - powerSmooth);
+            final float out = powerSmooth;
+            main.post(() -> {
+                PowerListener cur = powerListener;
+                if (cur != null) cur.onPower(out);
+            });
+            if (bg != null) bg.postDelayed(this, POWER_MS);
+        }
+    };
+
+    /** true se la potenza della batteria si legge (per mostrare l'opzione nelle impostazioni). */
+    public static boolean powerReadable(State s) {
+        return s != null && s.connected && s.batteryVolts > 100 && s.batteryVolts < 1000;
     }
 
     public void resume() {
         if (bg == null || running) return;
         running = true;
         bg.post(loop);
+        if (powerListener != null) restartPower();
     }
 
     private final Runnable loop = new Runnable() {
@@ -261,6 +344,15 @@ public final class VehicleClient {
             bg.postDelayed(this, 2000);
         }
     };
+
+    /** 1.0.7 (diagnostica completa): servizio del hub per le sole letture; null se non raggiungibile. */
+    public IBinder subService(String name) {
+        try {
+            return sub(name);
+        } catch (Throwable e) {
+            return null;
+        }
+    }
 
     private IBinder sub(String name) throws RemoteException {
         synchronized (subs) {
@@ -302,6 +394,7 @@ public final class VehicleClient {
                     s.dischargeStatus = Rpc.callInt(c, CHG, CHG_DISCHARGE_STATUS);
                     float amps = Rpc.callFloat(c, CHG, CHG_CURRENT);
                     float volts = Rpc.callFloat(c, CHG, CHG_BATTERY_VOLT);
+                    s.batteryVolts = volts;
                     s.chargeKw = Math.abs(amps * volts) / 1000f;
                     long now = android.os.SystemClock.uptimeMillis();
                     try {
@@ -652,7 +745,7 @@ public final class VehicleClient {
         Diag.put("clima.tempInterna", "letto " + (read.length() == 0 ? "—" : read) + " · fonte "
                 + (ok ? insideSrc : "nessuna (si mostra --)") + " · valida " + (ok ? "sì" : "no: " + why)
                 + " · esterna " + (outOk ? String.valueOf(outside) : "—")
-                + (outOk && !Float.isNaN(best) ? " (differenza " + String.format(java.util.Locale.ROOT, "%.1f", best - outside) + ")" : "")
+                + (outOk && !Float.isNaN(best) ? " (differenza " + String.format(java.util.Locale.US, "%.1f", best - outside) + ")" : "")
                 + " · ambient " + (a.length() == 0 ? "—" : a) + " (è l'esterna: mai usata come interna)");
     }
 
@@ -737,7 +830,7 @@ public final class VehicleClient {
 
     public static String motionDescription() {
         return "velocità " + (Float.isNaN(lastSpeedRaw) ? "?" : String.valueOf(lastSpeedRaw)) + " · CarService "
-                + (Float.isNaN(speedKmh()) ? "?" : String.format(java.util.Locale.ROOT, "%.1f km/h", speedKmh()))
+                + (Float.isNaN(speedKmh()) ? "?" : String.format(java.util.Locale.US, "%.1f km/h", speedKmh()))
                 + " · marcia " + (lastGearRaw == Integer.MIN_VALUE ? "?" : String.valueOf(lastGearRaw))
                 + " · ferma da " + (stoppedSince < 0 ? "—" : ((android.os.SystemClock.elapsedRealtime() - stoppedSince) / 1000) + " s");
     }
@@ -789,7 +882,7 @@ public final class VehicleClient {
                 Rpc.call(c, CHG, shc, p -> p.writeInt(hour));
                 Rpc.call(c, CHG, smc, p -> p.writeInt(minute));
                 Diag.put("ricarica.ultimoComando", "ricarica.programmata " + (start ? "inizio" : "fine") + " → "
-                        + String.format(java.util.Locale.ROOT, "%02d:%02d", hour, minute) + " · inviato");
+                        + String.format(java.util.Locale.US, "%02d:%02d", hour, minute) + " · inviato");
             } catch (Exception e) {
                 Diag.error("ricarica.programmata", e.toString());
             }
@@ -1398,7 +1491,7 @@ public final class VehicleClient {
                 IBinder c = sub("vehiclecharging");
                 if (c == null) throw new RemoteException("servizio ricarica non collegato");
                 Rpc.call(c, CHG, CHG_SET_LOCK, p -> p.writeInt(2));
-                Diag.put("ricarica.sbloccaPresa", "inviato alle " + new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.ROOT).format(new java.util.Date()));
+                Diag.put("ricarica.sbloccaPresa", "inviato alle " + new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.US).format(new java.util.Date()));
             } catch (Exception e) {
                 Diag.error("ricarica.sbloccaPresa", e.toString());
             }

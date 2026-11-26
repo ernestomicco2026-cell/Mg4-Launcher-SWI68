@@ -11,3 +11,4 @@ __pycache__/
 tools/*token*
 # 1.0.4: APK di MG4 Store da includere nel launcher (non va nel repository)
 tools/*.apk
+tools/log-relay.txt

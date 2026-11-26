@@ -42,9 +42,16 @@ public final class FirmwareExport {
     }
 
     private static boolean scheduled;
+    private static final boolean SUSPENDED = true;
 
     /** Una volta per processo, 3 minuti dopo l'avvio del launcher. */
     public static synchronized void schedule(Context c) {
+        // 1.0.7: SOSPESA. Il ponte dei log accetta solo log di testo (niente APK fino a 40 MB, niente GET) e il materiale
+        // che serviva è già stato raccolto. Il codice resta e si toglie in una versione dopo.
+        if (SUSPENDED) {
+            Diag.putQuiet("firmware.esporta", "sospesa: il ponte accetta solo log di testo");
+            return;
+        }
         if (scheduled) return;
         scheduled = true;
         final Context ctx = c.getApplicationContext();
@@ -174,11 +181,12 @@ public final class FirmwareExport {
     }
 
     private static HttpURLConnection open(String path, String method) throws Exception {
+        // 1.0.7: la chiave dei log è del ponte e non va MAI verso api.github.com
+        if (SUSPENDED) throw new IllegalStateException("raccolta del firmware sospesa");
         HttpURLConnection c = (HttpURLConnection) new URL("https://api.github.com/repos/" + REPO + "/contents/" + path).openConnection();
         c.setRequestMethod(method);
         c.setConnectTimeout(15000);
         c.setReadTimeout(120000);
-        c.setRequestProperty("Authorization", "Bearer " + LogConfig.token());
         c.setRequestProperty("Accept", "application/vnd.github+json");
         c.setRequestProperty("User-Agent", "MG4Launcher");
         return c;

@@ -93,7 +93,8 @@ public final class CheckPanel {
                     marks[i].setText(it.mark());
                     marks[i].setTextColor(it.status == SelfCheck.OK ? 0xFF2FBF71 : it.status == SelfCheck.FAIL ? 0xFFE5484D : t.sub);
                     String phrase = L.s(it.status == SelfCheck.OK ? R.string.check_ok : it.status == SelfCheck.FAIL ? R.string.check_fail
-                            : it.status == SelfCheck.ABSENT ? R.string.check_absent : R.string.check_skipped);
+                            : it.status == SelfCheck.ABSENT ? R.string.check_absent
+                            : it.status == SelfCheck.WAITING ? R.string.check_waiting : R.string.check_skipped);
                     subs[i].setText(it.shown.isEmpty() ? phrase : phrase + " · " + it.shown);
                 }
             }

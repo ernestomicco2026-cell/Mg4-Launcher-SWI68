@@ -421,7 +421,7 @@ public final class LogoPacks {
                     // servizio a 32 bit: ECC (8 bit) + cifra del paese (4 bit) + numero
                     int ecc = (int) ((sid >> 24) & 0xFF);
                     char d = Character.toUpperCase(Character.forDigit((int) ((sid >> 20) & 0xF), 16));
-                    String cc = RDS_COUNTRY.get(String.format(Locale.ROOT, "%02X:%c", ecc, d));
+                    String cc = RDS_COUNTRY.get(String.format(Locale.US, "%02X:%c", ecc, d));
                     v = d + (cc == null ? "" : ":" + cc);
                 } else {
                     v = String.valueOf(Character.toUpperCase(Character.forDigit((int) ((sid >> 12) & 0xF), 16)));
@@ -561,7 +561,7 @@ public final class LogoPacks {
         for (Pack p : packs.values()) {
             if (sb.length() > 0) sb.append(", ");
             sb.append(p.cc).append(" v").append(p.version).append(' ').append(p.logos).append(" loghi ")
-                    .append(String.format(Locale.ROOT, "%.1f MB", p.size / 1048576f))
+                    .append(String.format(Locale.US, "%.1f MB", p.size / 1048576f))
                     .append(p.source.isEmpty() ? "" : " (" + p.source + ")");
         }
         Diag.put("loghi.paesi", choice() + " → " + chosen());
@@ -801,7 +801,7 @@ public final class LogoPacks {
     static String sha256(byte[] b) throws Exception {
         byte[] d = MessageDigest.getInstance("SHA-256").digest(b);
         StringBuilder sb = new StringBuilder();
-        for (byte x : d) sb.append(String.format(Locale.ROOT, "%02x", x));
+        for (byte x : d) sb.append(String.format(Locale.US, "%02x", x));
         return sb.toString();
     }
 

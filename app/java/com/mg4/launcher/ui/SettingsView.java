@@ -543,6 +543,24 @@ public final class SettingsView extends FrameLayout {
                     prefs.setSocBig(on);
                     host.settingsChanged(true);
                 }), false));
+        // 1.0.7: accanto alla batteria: batteria / consumo istantaneo / entrambi. Compare solo se l'auto dà la potenza della
+        // batteria (o se l'utente l'aveva già scelta).
+        {
+            com.mg4.launcher.svc.VehicleClient vc = host.vehicle();
+            boolean readable = vc != null && com.mg4.launcher.svc.VehicleClient.powerReadable(vc.last());
+            String cur = prefs.besideBattery();
+            if (readable || !Prefs.BESIDE_BATTERY.equals(cur)) {
+                String[] bVals = {Prefs.BESIDE_BATTERY, Prefs.BESIDE_POWER, Prefs.BESIDE_BOTH};
+                String[] bNames = {L.s(R.string.beside_battery), L.s(R.string.beside_power), L.s(R.string.beside_both)};
+                int bSel = Prefs.BESIDE_POWER.equals(cur) ? 1 : Prefs.BESIDE_BOTH.equals(cur) ? 2 : 0;
+                card.addView(row(c, L.s(R.string.set_beside), L.s(R.string.set_beside_sub),
+                        choices(c, bNames, bSel, i -> {
+                            prefs.setBesideBattery(bVals[i]);
+                            com.mg4.launcher.svc.Diag.put("consumo.opzione", bVals[i]);
+                            host.settingsChanged(true);
+                        }), false));
+            } else com.mg4.launcher.svc.Diag.putQuiet("consumo.opzione", "non mostrata: potenza della batteria non letta");
+        }
         // 1.0.0 (punto 2): unità distanza (autonomia e distanze), prima del resto della scheda
         String[] distVals = {Prefs.DIST_AUTO, Prefs.DIST_KM, Prefs.DIST_MI};
         String[] distNames = {L.s(R.string.unit_auto), "km", "mi"};
@@ -1212,7 +1230,7 @@ public final class SettingsView extends FrameLayout {
                 oc.addView(ch, Ui.margins(new LinearLayout.LayoutParams(-2, tp(60)), 0, 0, dp(10), 0));
             }
             TextView act = button(c, L.s(R.string.btn_activate), v -> {
-                String until = new java.text.SimpleDateFormat("dd/MM", java.util.Locale.ITALY)
+                String until = new java.text.SimpleDateFormat("dd/MM", java.util.Locale.US)
                         .format(new java.util.Date(System.currentTimeMillis() + officinaDays * 24L * 3600_000L));
                 Confirm.show(this, t, L.s(R.string.confirm_officina_title), L.f(R.string.confirm_officina_msg, until),
                         L.s(R.string.btn_cancel), L.s(R.string.btn_activate), () -> com.mg4.launcher.svc.HomeMode.startOfficina(app, officinaDays));
@@ -1357,7 +1375,22 @@ public final class SettingsView extends FrameLayout {
         // 1.0.3 (punto 8): Controllo funzioni, in sola lettura
         card = card(c);
         View chkBtn = button(c, L.s(R.string.check_start), v -> CheckPanel.show(this, t));
-        card.addView(row(c, L.s(R.string.check_title), L.s(R.string.check_sub), chkBtn, true));
+        card.addView(row(c, L.s(R.string.check_title), L.s(R.string.check_sub), chkBtn, false));
+        // 1.0.7: diagnostica completa (solo letture, invia il rapporto da sola)
+        View deepBtn = button(c, L.s(R.string.deep_start), v -> startDeepCheck());
+        LinearLayout deepRow = row(c, L.s(R.string.deep_title), deepStatus != null ? deepStatus : L.s(R.string.deep_sub), deepBtn, false);
+        TextView deepSub = (TextView) ((ViewGroup) deepRow.getChildAt(0)).getChildAt(1);
+        deepSub.setSingleLine(false);
+        deepSubRef = new java.lang.ref.WeakReference<>(deepSub);
+        deepButtonRef = new java.lang.ref.WeakReference<>(deepBtn);
+        if (com.mg4.launcher.svc.DeepCheck.running()) {
+            deepBtn.setEnabled(false);
+            deepBtn.setAlpha(0.5f);
+        }
+        card.addView(deepRow);
+        // 1.0.7: diagnostica automatica dopo ogni aggiornamento (accesa di serie)
+        card.addView(row(c, L.s(R.string.deep_auto), L.s(R.string.deep_auto_sub),
+                toggle(c, com.mg4.launcher.svc.DeepCheck.autoEnabled(c), on -> com.mg4.launcher.svc.DeepCheck.setAutoEnabled(c, on)), true));
         col.addView(card, topFull(14));
 
         // 0.8.6-beta: disinstallazione dall'auto (rimette la home MG e toglie il launcher)
@@ -1388,6 +1421,46 @@ public final class SettingsView extends FrameLayout {
                 () -> com.mg4.launcher.svc.SelfUninstall.run(getContext(), why -> post(() ->
                         Confirm.show(this, t, L.s(R.string.uninstall_title), L.f(R.string.uninstall_failed, why),
                                 L.s(R.string.btn_cancel), "OK", () -> { }))));
+    }
+
+    /** Riga della pagina visibile adesso: la diagnostica aggiorna sempre quella, anche se la pagina si è ricostruita. */
+    private static java.lang.ref.WeakReference<TextView> deepSubRef = new java.lang.ref.WeakReference<>(null);
+    private static java.lang.ref.WeakReference<View> deepButtonRef = new java.lang.ref.WeakReference<>(null);
+    /** Ultimo stato della diagnostica, per quando la pagina si ricostruisce mentre è in corso. */
+    private static String deepStatus;
+
+    /** 1.0.7: Diagnostica completa. Solo letture; alla fine il rapporto parte da solo (o resta in coda senza rete). */
+    private void startDeepCheck() {
+        if (com.mg4.launcher.svc.DeepCheck.running()) return;
+        deepButtonEnabled(false);
+        Context app = getContext().getApplicationContext();
+        com.mg4.launcher.svc.DeepCheck.run(app, new com.mg4.launcher.svc.DeepCheck.Listener() {
+            @Override
+            public void step(int done, int total, String name) {
+                deepStatus = L.f(R.string.deep_running, done + 1, total);
+                TextView sub = deepSubRef.get();
+                if (sub != null) sub.setText(deepStatus);
+            }
+
+            @Override
+            public void done(int result) {
+                int msg = result == LogUploader.ICON_SENT ? R.string.deep_sent
+                        : result == LogUploader.ICON_QUEUED || result == LogUploader.ICON_RETRY ? R.string.deep_queued
+                        : result == LogUploader.ICON_NOT_CONFIGURED ? R.string.deep_no_logs : R.string.deep_failed;
+                deepStatus = L.s(msg);
+                TextView sub = deepSubRef.get();
+                if (sub != null) sub.setText(deepStatus);
+                deepButtonEnabled(true);
+                android.widget.Toast.makeText(app, deepStatus, android.widget.Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private static void deepButtonEnabled(boolean on) {
+        View b = deepButtonRef.get();
+        if (b == null) return;
+        b.setEnabled(on);
+        b.setAlpha(on ? 1f : 0.5f);
     }
 
     private void saveLog() {

@@ -137,4 +137,53 @@ public final class Bars {
             }
         }
     }
+
+    /**
+     * 1.0.7: consumo istantaneo. Barra con lo zero a un quarto della larghezza: verso destra il consumo (fino a +150 kW),
+     * verso sinistra il recupero (fino a -50 kW). Colori dalla palette: consumo con text, recupero con battery.
+     */
+    public static final class Power extends View {
+        private static final float MAX_USE = 150f, MAX_REGEN = 50f, ZERO = MAX_REGEN / (MAX_REGEN + MAX_USE);
+        private final Paint track = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint use = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint regen = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint zero = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private float kw = Float.NaN;
+
+        public Power(Context c) {
+            super(c);
+        }
+
+        public void setColors(int trackColor, int useColor, int regenColor, int zeroColor) {
+            track.setColor(trackColor);
+            use.setColor(useColor);
+            regen.setColor(regenColor);
+            zero.setColor(zeroColor);
+            invalidate();
+        }
+
+        public void setKw(float v) {
+            if (Float.compare(v, kw) != 0) {
+                kw = v;
+                invalidate();
+            }
+        }
+
+        @Override
+        protected void onDraw(Canvas c) {
+            float w = getWidth(), h = getHeight(), r = h / 2f;
+            c.drawRoundRect(0, 0, w, h, r, r, track);
+            float x0 = w * ZERO;
+            if (!Float.isNaN(kw) && Math.abs(kw) >= 0.1f) {
+                if (kw > 0) {
+                    float x1 = x0 + (w - x0) * Math.min(1f, kw / MAX_USE);
+                    c.drawRoundRect(x0, 0, Math.max(x1, x0 + h), h, r, r, use);
+                } else {
+                    float x1 = x0 - x0 * Math.min(1f, -kw / MAX_REGEN);
+                    c.drawRoundRect(Math.min(x1, x0 - h), 0, x0, h, r, r, regen);
+                }
+            }
+            c.drawRect(x0 - 1, 0, x0 + 1, h, zero);
+        }
+    }
 }

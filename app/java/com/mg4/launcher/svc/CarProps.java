@@ -400,6 +400,62 @@ public final class CarProps {
         return areas.containsKey(prop);
     }
 
+    /**
+     * 1.0.7 (diagnostica completa): elenco delle proprietà del CarService con tipo, aree, accesso e valore (sola
+     * lettura). Valori solo per booleani e interi; per i decimali solo per le proprietà standard di Android (non quelle
+     * SAIC, che potrebbero contenere la posizione). Testi, vettori e byte mai letti.
+     */
+    public synchronized String dumpAll() {
+        StringBuilder sb = new StringBuilder();
+        try {
+            Object p = pm();
+            if (p == null) return "CarService non pronto\n";
+            List<?> cfgs = (List<?>) p.getClass().getMethod("getPropertyList").invoke(p);
+            sb.append(cfgs.size()).append(" proprietà\n");
+            Method gi = p.getClass().getMethod("getIntProperty", int.class, int.class);
+            Method gb = p.getClass().getMethod("getBooleanProperty", int.class, int.class);
+            Method gf = p.getClass().getMethod("getFloatProperty", int.class, int.class);
+            java.util.List<int[]> list = new java.util.ArrayList<>();
+            for (Object cfg : cfgs) {
+                int id = (Integer) cfg.getClass().getMethod("getPropertyId").invoke(cfg);
+                int[] ids = (int[]) cfg.getClass().getMethod("getAreaIds").invoke(cfg);
+                int access = -1;
+                try {
+                    access = (Integer) cfg.getClass().getMethod("getAccess").invoke(cfg);
+                } catch (Throwable ignored) {
+                }
+                list.add(new int[]{id, ids == null ? 0 : ids.length, ids != null && ids.length > 0 ? ids[0] : 0, access});
+            }
+            java.util.Collections.sort(list, (a, b) -> Integer.compare(a[0], b[0]));
+            for (int[] e : list) {
+                int id = e[0], type = id & 0x00ff0000;
+                boolean vendor = (id & 0x20000000) != 0;
+                String tn = type == 0x00100000 ? "testo" : type == 0x00200000 ? "bool" : type == 0x00400000 ? "int"
+                        : type == 0x00410000 ? "int[]" : type == 0x00500000 ? "long" : type == 0x00600000 ? "float"
+                        : type == 0x00610000 ? "float[]" : type == 0x00700000 ? "byte[]" : type == 0x00e00000 ? "misto" : "?";
+                String v;
+                try {
+                    if (type == 0x00200000) v = String.valueOf(gb.invoke(p, id, e[2]));
+                    else if (type == 0x00400000) {
+                        int iv = (Integer) gi.invoke(p, id, e[2]);
+                        // un intero SAIC molto grande potrebbe essere una coordinata (es. latitudine × 10^6): non si scrive
+                        v = vendor && Math.abs((long) iv) > 1_000_000L ? "(numero grande, non scritto)" : String.valueOf(iv);
+                    }
+                    else if (type == 0x00600000 && !vendor) v = String.valueOf(gf.invoke(p, id, e[2]));
+                    else v = "(non letta)";
+                } catch (Throwable t) {
+                    Throwable c = t instanceof java.lang.reflect.InvocationTargetException && t.getCause() != null ? t.getCause() : t;
+                    v = "errore " + c.getClass().getSimpleName();
+                }
+                sb.append(String.format(java.util.Locale.US, "0x%08x %-7s aree %d accesso %d %s = %s%n", id, tn, e[1], e[3],
+                        vendor ? "SAIC" : "std", v));
+            }
+        } catch (Throwable e) {
+            sb.append("elenco non leggibile: ").append(e).append('\n');
+        }
+        return sb.toString();
+    }
+
     private void error(String what, Throwable e) {
         Throwable c = e instanceof java.lang.reflect.InvocationTargetException && e.getCause() != null ? e.getCause() : e;
         String msg = what + ": " + c;

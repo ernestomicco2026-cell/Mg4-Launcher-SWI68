@@ -77,7 +77,7 @@ public final class RadioRepair {
 
     private static long parse(String stamp) {
         try {
-            SimpleDateFormat f = new SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.ROOT);
+            SimpleDateFormat f = new SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US);
             Calendar c = Calendar.getInstance();
             Calendar s = Calendar.getInstance();
             s.setTime(f.parse(stamp.trim()));
@@ -184,6 +184,6 @@ public final class RadioRepair {
     }
 
     private static String clock(long t) {
-        return new SimpleDateFormat("dd/MM HH:mm", Locale.ROOT).format(new java.util.Date(t));
+        return new SimpleDateFormat("dd/MM HH:mm", Locale.US).format(new java.util.Date(t));
     }
 }

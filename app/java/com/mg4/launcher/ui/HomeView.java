@@ -73,6 +73,12 @@ public final class HomeView extends LinearLayout {
     private TextView limitVal, currentVal, startLabel, startVal, unlockVal, reserveVal;
     private VehicleClient.State lastVehicle = new VehicleClient.State();
     private Bars.Progress battery;
+    /** 1.0.7: consumo istantaneo accanto alla batteria. */
+    private LinearLayout batRowView, powerRow;
+    private Bars.Power powerBar;
+    private TextView powerTv;
+    private String besideMode = Prefs.BESIDE_BATTERY;
+    private final VehicleClient.PowerListener powerListener = this::onPower;
     private CarView car;
     private ChargeAnimView chargeAnim;
 
@@ -283,6 +289,7 @@ public final class HomeView extends LinearLayout {
         p.addView(head);
 
         LinearLayout batRow = Ui.row(c);
+        batRowView = batRow;
         batRow.setGravity(Gravity.CENTER_VERTICAL);
         battery = new Bars.Progress(c);
         battery.setColors(t.track, t.battery);
@@ -290,6 +297,18 @@ public final class HomeView extends LinearLayout {
         socTv = Ui.text(c, "—", 32, t.text, Ui.MEDIUM);   // 0.8.6-beta: più grande (era 24)
         batRow.addView(socTv, Ui.margins(Ui.lp(-2, -2), dp(16), 0, 0, 0));
         p.addView(batRow, Ui.margins(new LayoutParams(-1, -2), 0, dp(10), 0, 0));
+        // 1.0.7: consumo istantaneo (opzione "Accanto alla batteria"): barra con lo zero a un quarto, kW a destra
+        powerRow = Ui.row(c);
+        powerRow.setGravity(Gravity.CENTER_VERTICAL);
+        powerBar = new Bars.Power(c);
+        powerBar.setColors(t.track, t.text, t.battery, t.sub);
+        powerRow.addView(powerBar, Ui.lpWeight(0, dp(8), 1));
+        powerTv = Ui.oneLine(Ui.text(c, "—", 32, t.text, Ui.MEDIUM));
+        powerRow.addView(powerTv, Ui.margins(Ui.lp(-2, -2), dp(16), 0, 0, 0));
+        powerRow.setVisibility(GONE);
+        p.addView(powerRow, Ui.margins(new LayoutParams(-1, -2), 0, dp(10), 0, 0));
+        besideMode = prefs.besideBattery();
+        if (!Prefs.BESIDE_BATTERY.equals(besideMode)) vehicle.setPowerListener(powerListener);
         updateClock();
 
         LinearLayout status = Ui.row(c);
@@ -684,7 +703,7 @@ public final class HomeView extends LinearLayout {
     }
 
     private static String hhmm(int h, int m) {
-        return h < 0 || m < 0 ? "—" : String.format(java.util.Locale.ROOT, "%02d:%02d", h, m);
+        return h < 0 || m < 0 ? "—" : String.format(java.util.Locale.US, "%02d:%02d", h, m);
     }
 
     private static String reserveRange(VehicleClient.State s) {
@@ -757,6 +776,21 @@ public final class HomeView extends LinearLayout {
     }
 
     private final long createdAt = System.currentTimeMillis();
+
+    /**
+     * 1.0.7: potenza smussata (kW, + consumo, - recupero, NaN non leggibile). Con "Consumo" la riga della batteria lascia
+     * il posto a quella del consumo; con "Entrambi" ci sono tutte e due. Se il dato non si legge resta la batteria.
+     */
+    private void onPower(float kw) {
+        if (powerRow == null) return;
+        boolean ok = !Float.isNaN(kw);
+        boolean both = Prefs.BESIDE_BOTH.equals(besideMode);
+        powerRow.setVisibility(ok ? VISIBLE : GONE);
+        batRowView.setVisibility(ok && !both ? GONE : VISIBLE);
+        if (!ok) return;
+        powerBar.setKw(kw);
+        powerTv.setText(L.f(R.string.power_kw, String.format(L.locale(), "%.1f", Math.abs(kw) < 0.05f ? 0f : kw)));
+    }
 
     public void onVehicle(VehicleClient.State s) {
         if (!s.connected) {
@@ -2091,7 +2125,7 @@ public final class HomeView extends LinearLayout {
         if (step < 0) return;
         long el = Math.max(1, SystemClock.uptimeMillis() - ChargeAnimView.statStart);
         int shown = ChargeAnimView.statShown;
-        String fps = shown > 0 ? String.format(java.util.Locale.ROOT, "%.1f", shown * 1000f / el) : "0";
+        String fps = shown > 0 ? String.format(java.util.Locale.US, "%.1f", shown * 1000f / el) : "0";
         if (simLog.length() > 0) simLog.append(" | ");
         simLog.append(SIM_STEPS[step]).append(": atteso ").append(SIM_EXPECT[step]).append(" → visto ")
                 .append(ChargeAnimView.name(chargeAnim.state())).append(" · motivo ").append(simWhy.isEmpty() ? "nessuno" : simWhy)
@@ -2117,7 +2151,7 @@ public final class HomeView extends LinearLayout {
 
     /** Invio automatico del log in una ricarica vera: al massimo 4 al giorno (se offline va in coda come gli altri). */
     private static void sendChargeLog(Context c, String why) {
-        String day = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.ROOT).format(new Date());
+        String day = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US).format(new Date());
         android.content.SharedPreferences sp = c.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE);
         int n = day.equals(sp.getString("ricaricaLogGiorno", "")) ? sp.getInt("ricaricaLogInvii", 0) : 0;
         if (n >= 4) {
@@ -2136,7 +2170,7 @@ public final class HomeView extends LinearLayout {
                 + ChargeAnimView.name(chargeAnim.state()) + "/" + why;
         if (!key.equals(storyKey)) {
             storyKey = key;
-            story.addLast(new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.ROOT).format(new Date())
+            story.addLast(new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.US).format(new Date())
                     + " presa " + s.plugProp + " · stato " + s.chargingStatus + " · ready " + (s.ready == Integer.MIN_VALUE ? "?" : s.ready)
                     + " · marcia " + (s.gearRaw == Integer.MIN_VALUE ? "?" : s.gearRaw) + " · vel " + (Float.isNaN(s.speedKmh) ? "?" : Math.round(s.speedKmh))
                     + " · fase " + ChargeAnimView.name(chargeAnim.state()) + " · " + (why.isEmpty() ? "-" : why));
@@ -2909,6 +2943,7 @@ public final class HomeView extends LinearLayout {
     @Override
     protected void onDetachedFromWindow() {
         removeCallbacks(simTick);
+        vehicle.clearPowerListener(powerListener);   // 1.0.7: solo se è ancora la nostra (la home nuova ha la sua)
         super.onDetachedFromWindow();
         // 1.0.6: la chiusura del riquadro (Clima/Comfort/Guida) si rimanda: togliere un'altra vista dalla radice mentre
         // Android sta staccando le viste (home ricostruita o attività chiusa) mandava in errore il launcher (NPE)

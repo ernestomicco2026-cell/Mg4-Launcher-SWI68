@@ -34,7 +34,7 @@ public final class Diag {
     private Diag() {}
 
     private static String now() {
-        return new SimpleDateFormat("HH:mm:ss", Locale.ITALY).format(new Date());
+        return new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date());
     }
 
     public static synchronized void put(String key, Object value) {
@@ -83,7 +83,7 @@ public final class Diag {
         for (Throwable t = e; t != null; t = t.getCause())
             if (t instanceof javax.net.ssl.SSLException || t instanceof java.security.cert.CertificateException) cert = true;
         if (cert && System.currentTimeMillis() < 1735689600000L)   // prima del 2025
-            sb.append(" · orologio dell'auto al ").append(new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY).format(new Date()));
+            sb.append(" · orologio dell'auto al ").append(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(new Date()));
         return sb.toString();
     }
 
@@ -102,7 +102,7 @@ public final class Diag {
         try {
             File dir = c.getExternalFilesDir(null);
             if (dir == null) return;
-            String text = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY).format(new Date()) + "\n\n" + dump();
+            String text = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US).format(new Date()) + "\n\n" + dump();
             try (FileOutputStream o = new FileOutputStream(new File(dir, "diagnostica.txt"))) {
                 o.write(text.getBytes("UTF-8"));
             }
@@ -236,7 +236,7 @@ public final class Diag {
         } catch (Exception ignored) {
         }
         sb.append("MG4 Launcher ").append(version).append('\n');
-        sb.append(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY).format(new Date())).append('\n');
+        sb.append(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US).format(new Date())).append('\n');
         sb.append("Android ").append(Build.VERSION.RELEASE).append(" (API ").append(Build.VERSION.SDK_INT).append(") · ")
                 .append(Build.MANUFACTURER).append(' ').append(Build.MODEL).append(" · ").append(Build.DISPLAY).append("\n\n");
         sb.append("===== VALORI ATTUALI =====\n").append(dump()).append('\n');
@@ -260,7 +260,7 @@ public final class Diag {
      */
     public static Saved saveLog(Context c) {
         Saved out = new Saved();
-        String stamp = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.ITALY).format(new Date());
+        String stamp = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(new Date());
         String name = "mg4-launcher-log-" + stamp + ".txt";
         String text = buildLog(c);
         byte[] data;

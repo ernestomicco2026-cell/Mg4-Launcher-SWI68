@@ -23,11 +23,17 @@ import java.util.Locale;
 import java.util.UUID;
 
 /**
- * Invio automatico dei log nel repository privato dei log su GitHub (API "contents", un file per invio):
+ * Invio automatico dei log nel repository privato dei log, un file per invio:
  *   SWI68/<codice installazione>/<aaaa-mm-gg>/<hh-mm-ss>.txt
  * All'avvio (dopo 90 s, quando i servizi dell'auto hanno risposto), ogni 30 minuti e con "Salva log".
  * Senza rete i log restano in coda (al massimo 20) e partono al primo invio riuscito.
- * Il token NON è nel codice: build.sh genera LogConfig da tools/log-token.txt (escluso da git).
+ * <p>
+ * 1.0.7: i log passano dal ponte Cloudflare (Worker "mg4-log-ponte"), che imita l'API "contents" di GitHub
+ * (PUT …/repos/…/contents/<percorso>, JSON message + content base64). Nell'app NON c'è più nessun token GitHub e
+ * la chiave del ponte serve solo per consegnare log, mai per altro. Chiave e indirizzo non sono nel codice:
+ * build.sh genera LogConfig da tools/log-token.txt e tools/log-relay.txt (esclusi da git).
+ * Esiti: 201 inviato, 422 già presente (= inviato), 401/403 chiave rifiutata (resta in coda, niente tentativi a
+ * raffica fino al prossimo invio periodico), 413 troppo grande (tolto dalla coda), altro: resta in coda.
  */
 public final class LogUploader {
     private static final String REPO = "ernestomicco2026-cell/mg4-launcher-logs";
@@ -35,6 +41,7 @@ public final class LogUploader {
     private static final long FIRST_DELAY_MS = 90_000, PERIOD_MS = 30 * 60_000;
     private static final int MAX_QUEUE = 20;
     private static final int MAX_BYTES = 400_000;
+    private static final int REPORT_MAX_BYTES = 700_000;
 
     private static volatile LogUploader instance;
     private static volatile String status = "";
@@ -50,9 +57,33 @@ public final class LogUploader {
         instance = this;
     }
 
-    /** true se questa versione è stata compilata con il token del repository dei log. */
+    /** true se questa versione è stata compilata con la chiave e l'indirizzo del ponte dei log. */
     public static boolean configured() {
-        return LogConfig.token().length() > 10;
+        return LogConfig.token().length() > 10 && LogConfig.relay().startsWith("https://");
+    }
+
+    /** Il ponte ha rifiutato la chiave (401/403): niente nuovi tentativi automatici prima di questo istante. */
+    private static volatile long keyRejectedUntil;
+
+    /** Errore HTTP del ponte, con il codice. */
+    static final class RelayError extends Exception {
+        private static final long serialVersionUID = 1L;
+        final int code;
+
+        RelayError(int code) {
+            super("HTTP " + code);
+            this.code = code;
+        }
+
+        boolean keyRejected() {
+            return code == 401 || code == 403;
+        }
+    }
+
+    /** Percorso accettato dal ponte: <CARTELLA>/<id 6-16 esadecimale>/<aaaa-mm-gg>/<nome .txt, max 80>. */
+    static boolean validPath(String path) {
+        return path.matches("(SWI68|SWI69|SWI132|SWI133|DBI68|CLIMA-[A-Z0-9]+|ENERGIA-[A-Z0-9]+|360-[A-Z0-9]+|GAMES)"
+                + "/[0-9a-f]{6,16}/[0-9]{4}-[0-9]{2}-[0-9]{2}/[A-Za-z0-9._\\-]{1,76}\\.txt");
     }
 
     public boolean enabled() {
@@ -99,7 +130,7 @@ public final class LogUploader {
     /** Invia subito un log (es. dopo "Salva log"). */
     public static void requestNow() {
         LogUploader u = instance;
-        if (u != null && u.bg != null) u.bg.post(u::uploadOnce);
+        if (u != null && u.bg != null) u.bg.post(() -> u.uploadOnce(true));
     }
 
     /** Esito dell'invio di un'icona mancante (testi tradotti dalla home). */
@@ -127,14 +158,14 @@ public final class LogUploader {
             int result;
             try {
                 if (u.notCar()) throw new Exception("non è un'auto");
-                String day = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(captured);
-                String time = new SimpleDateFormat("HH-mm-ss-SSS", Locale.ROOT).format(captured);
+                String day = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(captured);
+                String time = new SimpleDateFormat("HH-mm-ss-SSS", Locale.US).format(captured);
                 String path = FOLDER + "/" + u.installId() + "/" + day + "/icona-mancante-" + time
                         + "-" + UUID.randomUUID().toString().substring(0, 8) + ".txt";
                 byte[] bytes = report.getBytes("UTF-8");
                 if (!u.enqueue(path, bytes)) throw new Exception("non salvato in coda");
                 result = ICON_QUEUED;
-                if (Offline.canTry()) {
+                if (Offline.canTry() && u.keyOk(true)) {
                     try {
                         u.put(path, bytes);
                         //noinspection ResultOfMethodCallIgnored
@@ -143,14 +174,70 @@ public final class LogUploader {
                         result = ICON_SENT;
                         u.flushQueue();
                     } catch (Exception e) {
-                        Offline.failed("log", e);
+                        u.failed(path, e);
                         result = ICON_RETRY;
+                        if (e instanceof RelayError && ((RelayError) e).code == 413) {
+                            //noinspection ResultOfMethodCallIgnored
+                            new File(u.queueDir(), path.replace('/', '~')).delete();
+                            result = ICON_ERROR;
+                        }
                     }
                 }
             } catch (Exception e) {
                 result = ICON_ERROR;
             }
             Diag.put("nav.iconaMancante", "codice " + code + " · " + ManeuverReport.instructionType(text) + " · esito " + result);
+            final int r = result;
+            main.post(() -> listener.complete(r));
+        });
+    }
+
+    /**
+     * 1.0.7 (diagnostica completa): invia un rapporto con il suo nome ("diagnostica-…") nella cartella del giorno. Prima
+     * va in coda, poi si prova a inviarlo; senza rete parte da solo al prossimo invio. listener sul thread principale.
+     */
+    public static void sendReport(String prefix, String body, ReportListener listener) {
+        LogUploader u = instance;
+        Handler main = new Handler(android.os.Looper.getMainLooper());
+        if (u == null || u.bg == null || !configured()) {
+            main.post(() -> listener.complete(ICON_NOT_CONFIGURED));
+            return;
+        }
+        final Date captured = new Date();
+        u.bg.post(() -> {
+            int result;
+            try {
+                if (u.notCar()) throw new Exception("non è un'auto");
+                String day = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(captured);
+                String time = new SimpleDateFormat("HH-mm-ss", Locale.US).format(captured);
+                String path = FOLDER + "/" + u.installId() + "/" + day + "/" + time + "-" + prefix + ".txt";
+                byte[] bytes = body.getBytes("UTF-8");
+                // 700 kB al massimo (in Base64 resta sotto 1 MB per GitHub); si tiene l'inizio, dove c'è il rapporto
+                if (bytes.length > REPORT_MAX_BYTES) bytes = Arrays.copyOfRange(bytes, 0, REPORT_MAX_BYTES);
+                if (!u.enqueue(path, bytes)) throw new Exception("non salvato in coda");
+                result = ICON_QUEUED;
+                if (Offline.canTry() && u.keyOk(true)) {
+                    try {
+                        u.put(path, bytes);
+                        //noinspection ResultOfMethodCallIgnored
+                        new File(u.queueDir(), path.replace('/', '~')).delete();
+                        Offline.ok();
+                        result = ICON_SENT;
+                        u.flushQueue();
+                    } catch (Exception e) {
+                        u.failed(path, e);
+                        result = ICON_RETRY;
+                        if (e instanceof RelayError && ((RelayError) e).code == 413) {
+                            //noinspection ResultOfMethodCallIgnored
+                            new File(u.queueDir(), path.replace('/', '~')).delete();
+                            result = ICON_ERROR;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                result = ICON_ERROR;
+            }
+            Diag.put("diagnostica.invio", result == ICON_SENT ? "inviata" : result == ICON_QUEUED || result == ICON_RETRY ? "in coda" : "non riuscita");
             final int r = result;
             main.post(() -> listener.complete(r));
         });
@@ -163,6 +250,13 @@ public final class LogUploader {
             bg.postDelayed(this, PERIOD_MS);
         }
     };
+
+    /** 1.0.7: true se in coda c'è un file il cui nome finisce con suffix (es. "-diagnostica.txt"). */
+    static boolean reportQueued(Context c, String suffix) {
+        File[] f = new File(c.getFilesDir(), "log-coda").listFiles();
+        if (f != null) for (File x : f) if (x.getName().endsWith(suffix)) return true;
+        return false;
+    }
 
     private File queueDir() {
         File d = new File(ctx.getFilesDir(), "log-coda");
@@ -190,9 +284,13 @@ public final class LogUploader {
     }
 
     private void uploadOnce() {
+        uploadOnce(false);
+    }
+
+    private void uploadOnce(boolean manual) {
         if (!configured() || !enabled() || notCar()) return;
-        String day = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(new Date());
-        String time = new SimpleDateFormat("HH-mm-ss", Locale.ROOT).format(new Date());
+        String day = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
+        String time = new SimpleDateFormat("HH-mm-ss", Locale.US).format(new Date());
         String text = Diag.buildLog(ctx);
         byte[] data;
         try {
@@ -205,23 +303,64 @@ public final class LogUploader {
         if (!Offline.canTry()) {
             // 1.0.0: senza rete il log va in coda senza tentare (pausa comune crescente, vedi rete.offline)
             status = "offline";
-            Diag.put("log.invio", "offline: in coda");
+            Diag.put("log.invio", "via ponte · offline: in coda");
+            enqueue(path, data);
+            return;
+        }
+        if (!keyOk(manual)) {
             enqueue(path, data);
             return;
         }
         try {
-            put(path, data);
+            int code = put(path, data);
             Offline.ok();
-            String hhmm = new SimpleDateFormat("HH:mm", Locale.ROOT).format(new Date());
+            String hhmm = new SimpleDateFormat("HH:mm", Locale.US).format(new Date());
             status = "ok " + hhmm;
-            Diag.put("log.invio", "inviato alle " + hhmm + " → " + path);
+            Diag.put("log.invio", "via ponte · " + code + " · inviato alle " + hhmm + " → " + path);
             flushQueue();
         } catch (Exception e) {
-            status = "errore " + e.getMessage();
-            if (Offline.failed("log", e)) Diag.put("log.invio", "offline: in coda");
-            else Diag.put("log.invio", "non riuscito (" + Diag.netError(e) + "), in coda");
-            enqueue(path, data);
+            failed(path, e);
+            if (!(e instanceof RelayError && ((RelayError) e).code == 413)) enqueue(path, data);
         }
+    }
+
+    /**
+     * Dopo un rifiuto della chiave (401/403) niente tentativi automatici per 30 minuti: il log resta in coda. Un invio
+     * a mano ("Invia log", diagnostica) prova comunque.
+     */
+    private boolean keyOk(boolean manual) {
+        if (manual || System.currentTimeMillis() >= keyRejectedUntil) return true;
+        status = "chiave rifiutata";
+        Diag.putQuiet("log.invio", "via ponte · chiave rifiutata poco fa: in coda, nuovo tentativo più tardi");
+        return false;
+    }
+
+    /** Esito di un invio non riuscito: rete (pausa comune), chiave rifiutata, file troppo grande o altro errore. */
+    private void failed(String path, Exception e) {
+        if (e instanceof RelayError) {
+            RelayError r = (RelayError) e;
+            Offline.ok();   // il ponte ha risposto: la rete c'è
+            if (r.keyRejected()) {
+                keyRejectedUntil = System.currentTimeMillis() + PERIOD_MS;
+                status = "chiave rifiutata";
+                Diag.put("log.invio", "via ponte · " + r.code + ": chiave del ponte rifiutata, resta in coda (nuovo tentativo tra 30 min)");
+            } else if (r.code == 413) {
+                status = "troppo grande";
+                Diag.put("log.invio", "via ponte · 413: file troppo grande, tolto dalla coda → " + path);
+            } else {
+                status = "errore " + r.code;
+                Diag.put("log.invio", "via ponte · errore " + r.code + ", in coda");
+            }
+            return;
+        }
+        if (e instanceof IllegalArgumentException) {   // percorso che il ponte non accetterebbe: non è la rete
+            status = "percorso non valido";
+            Diag.put("log.invio", "via ponte · percorso non valido, non inviato → " + path);
+            return;
+        }
+        status = "errore " + e.getMessage();
+        if (Offline.failed("log", e)) Diag.put("log.invio", "via ponte · offline: in coda");
+        else Diag.put("log.invio", "via ponte · non riuscito (" + Diag.netError(e) + "), in coda");
     }
 
     private boolean enqueue(String path, byte[] data) {
@@ -246,11 +385,34 @@ public final class LogUploader {
         if (files == null) return;
         Arrays.sort(files, (a, b) -> a.getName().compareTo(b.getName()));
         for (File f : files) {
+            String path = f.getName().replace('~', '/');
+            if (!validPath(path)) {
+                // percorso che il ponte non accetterebbe mai (es. data scritta con cifre arabe dalle versioni vecchie):
+                // si sistema la data, altrimenti si toglie dalla coda
+                String fixed = fixPath(path);
+                if (fixed == null) {
+                    Diag.put("log.coda", "tolto dalla coda (percorso non valido): " + f.getName());
+                    //noinspection ResultOfMethodCallIgnored
+                    f.delete();
+                    continue;
+                }
+                path = fixed;
+            }
             try {
                 byte[] data = readAll(new FileInputStream(f));
-                put(f.getName().replace('~', '/'), data);
+                put(path, data);
                 //noinspection ResultOfMethodCallIgnored
                 f.delete();
+                DeepCheck.delivered(ctx, path);
+            } catch (RelayError e) {
+                if (e.code == 413) {
+                    failed(path, e);
+                    //noinspection ResultOfMethodCallIgnored
+                    f.delete();
+                    continue;
+                }
+                failed(path, e);
+                return;   // riprova al prossimo invio
             } catch (Exception e) {
                 Diag.error("log.coda", e.getMessage());
                 return;   // riprova al prossimo invio
@@ -258,31 +420,51 @@ public final class LogUploader {
         }
     }
 
-    /** PUT /repos/{repo}/contents/{path}: crea il file con il contenuto in base64. */
-    private void put(String path, byte[] data) throws Exception {
+    /** Cifre di qualsiasi alfabeto (arabo, persiano…) → 0-9; null se il percorso resta non valido. */
+    static String fixPath(String path) {
+        StringBuilder sb = new StringBuilder(path.length());
+        for (int i = 0; i < path.length(); i++) {
+            char ch = path.charAt(i);
+            int d = Character.digit(ch, 10);
+            sb.append(d >= 0 && (ch < '0' || ch > '9') ? (char) ('0' + d) : ch);
+        }
+        String out = sb.toString();
+        return validPath(out) ? out : null;
+    }
+
+    /**
+     * PUT <ponte>/repos/{repo}/contents/{path}: crea il file con il contenuto in base64. Restituisce 201 (o 200), oppure
+     * 422 se il file c'è già (reinvio dalla coda di un log già arrivato: vale come inviato). Altrimenti RelayError.
+     */
+    private int put(String path, byte[] data) throws Exception {
+        if (!validPath(path)) throw new IllegalArgumentException("percorso non accettato dal ponte");
         JSONObject body = new JSONObject();
         body.put("message", "log " + path);
         body.put("content", Base64.encodeToString(data, Base64.NO_WRAP));
-        HttpURLConnection c = (HttpURLConnection) new URL("https://api.github.com/repos/" + REPO + "/contents/" + path).openConnection();
-        c.setRequestMethod("PUT");
-        c.setConnectTimeout(15000);
-        c.setReadTimeout(30000);
-        c.setDoOutput(true);
-        c.setRequestProperty("Authorization", "Bearer " + LogConfig.token());
-        c.setRequestProperty("Accept", "application/vnd.github+json");
-        c.setRequestProperty("User-Agent", "MG4Launcher");
-        c.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-        try (OutputStream o = c.getOutputStream()) {
-            o.write(body.toString().getBytes("UTF-8"));
+        HttpURLConnection c = (HttpURLConnection) new URL(LogConfig.relay() + "/repos/" + REPO + "/contents/" + path).openConnection();
+        try {
+            c.setRequestMethod("PUT");
+            c.setConnectTimeout(15000);
+            c.setReadTimeout(30000);
+            c.setDoOutput(true);
+            c.setInstanceFollowRedirects(false);   // la chiave non deve seguire un rinvio verso un altro indirizzo
+            c.setRequestProperty("Authorization", "Bearer " + LogConfig.token());
+            c.setRequestProperty("Accept", "application/vnd.github+json");
+            c.setRequestProperty("User-Agent", "MG4Launcher");
+            c.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            try (OutputStream o = c.getOutputStream()) {
+                o.write(body.toString().getBytes("UTF-8"));
+            }
+            int code = c.getResponseCode();
+            if (code == 422) {
+                Diag.putQuiet("log.giàPresente", path);
+                return 422;
+            }
+            if (code != 200 && code != 201) throw new RelayError(code);
+            return code;
+        } finally {
+            c.disconnect();
         }
-        int code = c.getResponseCode();
-        c.disconnect();
-        // 422: il file esiste già (reinvio dalla coda di un log già arrivato) → considerato inviato
-        if (code == 422) {
-            Diag.put("log.giàPresente", path);
-            return;
-        }
-        if (code != 200 && code != 201) throw new Exception("HTTP " + code);
     }
 
     private static byte[] readAll(InputStream in) throws Exception {

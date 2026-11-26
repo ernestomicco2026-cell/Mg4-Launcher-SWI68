@@ -146,6 +146,18 @@ public final class Prefs {
     }
 
     /** 0.9: percentuale della batteria in grande e autonomia accanto alla barra (km e % invertiti). */
+    /** 1.0.7: cosa mostrare accanto alla batteria: "batteria" (di serie), "consumo" (istantaneo) o "entrambi". */
+    public static final String BESIDE_BATTERY = "batteria", BESIDE_POWER = "consumo", BESIDE_BOTH = "entrambi";
+
+    public String besideBattery() {
+        String v = sp.getString("accantoBatteria", BESIDE_BATTERY);
+        return BESIDE_POWER.equals(v) || BESIDE_BOTH.equals(v) ? v : BESIDE_BATTERY;
+    }
+
+    public void setBesideBattery(String v) {
+        sp.edit().putString("accantoBatteria", v).apply();
+    }
+
     public boolean socBig() {
         return sp.getBoolean("socBig", false);
     }

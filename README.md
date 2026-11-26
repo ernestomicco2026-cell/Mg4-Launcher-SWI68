@@ -26,7 +26,7 @@
 </p>
 
 <p align="center">
-<a href="releases/MG4Launcher-1.0.6.apk"><img alt="Scarica / Download 1.0.6" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.6-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
+<a href="releases/MG4Launcher-1.0.7.apk"><img alt="Scarica / Download 1.0.7" src="https://img.shields.io/badge/Scarica%20%2F%20Download-1.0.7-2ea44f?style=for-the-badge&logo=android&logoColor=white"></a>
 <a href="https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT"><img alt="Sostieni il progetto con PayPal · Support the project with PayPal" src="https://img.shields.io/badge/Sostieni%20%2F%20Support-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white"></a>
 </p>
 
@@ -65,6 +65,12 @@
 <sub>Dimensione comandi <b>Grande</b>: testo e pulsanti crescono insieme · <i>Control size <b>Large</b>: text and buttons grow together</i></sub></td>
 <td width="50%" valign="top"><img src="docs/home-1.0.4-molto-grande-notte.png" alt="Home con Dimensione comandi Molto grande di notte (simulazione)" width="100%"><br>
 <sub>Dimensione comandi <b>Molto grande</b>, di notte: tutte le sorgenti con la scritta · <i>Control size <b>Extra large</b>, at night: every source keeps its label</i></sub></td>
+</tr>
+<tr>
+<td width="50%" valign="top"><img src="docs/home-1.0.7-consumo.png" alt="Batteria e consumo istantaneo insieme (simulazione)" width="100%"><br>
+<sub>Accanto alla batteria: <b>Entrambi</b>, batteria e consumo istantaneo in kW · <i>Next to the battery: <b>Both</b>, battery and instant consumption in kW</i></sub></td>
+<td width="50%" valign="top"><img src="docs/home-1.0.7-accanto-batteria.png" alt="Impostazione Accanto alla batteria (simulazione)" width="100%"><br>
+<sub>Impostazioni › Home › <b>Accanto alla batteria</b> · <i>Settings › Home › <b>Next to the battery</b></i></sub></td>
 </tr>
 <tr>
 <td width="50%" valign="top"><img src="docs/home-1.0.6-android-auto.png" alt="Android Auto tra le sorgenti, con titolo e artista (simulazione)" width="100%"><br>
@@ -223,7 +229,7 @@ Si installa come una normale app: non serve per forza un computer. Ci sono due m
 
 #### Metodo 1 — Da chiavetta USB (senza computer)
 
-1. Copia `MG4Launcher-1.0.6.apk` su una chiavetta USB formattata **FAT32** o **exFAT**.
+1. Copia `MG4Launcher-1.0.7.apk` su una chiavetta USB formattata **FAT32** o **exFAT**.
 2. Inserisci la chiavetta nell'auto, apri il file manager e tocca l'APK.
 3. Se Android avvisa che non può installare app da questa fonte: tocca **Impostazioni**, attiva
    **Consenti da questa fonte** per il file manager e torna indietro.
@@ -239,7 +245,7 @@ Il firmware MG può bloccare l'installazione normale delle app: l'opzione `-f` l
 
 1. Installa:
    ```bash
-   adb install -r -f MG4Launcher-1.0.6.apk
+   adb install -r -f MG4Launcher-1.0.7.apk
    ```
 2. Rendilo la home predefinita:
    ```bash
@@ -270,6 +276,12 @@ ferma e solo se l'APK è firmato con la stessa chiave.
 Si può controllare anche a mano: impostazioni del launcher → **Aggiornamenti** → **Controlla aggiornamenti**.
 Se c'è una versione più nuova compare **Scarica e installa**: il launcher la installa da solo e si riavvia.
 Gli aggiornamenti si possono installare anche da computer, con lo stesso comando dell'installazione.
+
+### MG4 Store
+
+Ora c'è **MG4 Store** per scaricare e aggiornare tutte le nostre app MG4: il launcher, MG4 Clima, MG4 Games e quelle
+che arriveranno. Nel launcher si apre dall'icona **Store** oppure da Impostazioni → **Installa MG4 Store**.
+Repository: [ernestomicco2026-cell/store](https://github.com/ernestomicco2026-cell/store).
 
 ### Tornare alla home MG originale
 
@@ -321,6 +333,17 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Versioni
+
+#### 1.0.7
+- **Invio dei log più sicuro** (tramite server ponte).
+- **Diagnostica completa**: un pulsante in Impostazioni → Sistema raccoglie e invia tutto quello che serve per
+  correggere i problemi. Parte anche da sola una volta per ogni versione (a scelta, solo letture).
+- **Controllo funzioni** più preciso dopo l'accensione: aspetta rete e servizi invece di segnare errori.
+- **Barre di sistema** a posto durante le chiamate (grazie a **lukeet332**).
+- **Copertina con CarPlay**, quando il telefono la manda.
+- **Consumo istantaneo** accanto alla batteria (a scelta).
+- **Animazione di ricarica** senza riquadro attorno all'auto.
+- **Android Auto e radio** più affidabili all'accensione.
 
 #### 1.0.6
 - **Spegni la vettura** ora funziona (solo in P, ricontrollata prima del comando).
@@ -765,6 +788,20 @@ Anche solo **2 €** sono un aiuto prezioso per continuare a sviluppare e provar
 
 </details>
 
+### Cosa arriva
+
+Il percorso, passo dopo passo (senza date: conta l'ordine).
+
+1. **Questa versione**: log più sicuri, diagnostica automatica a ogni versione, Controllo funzioni più preciso dopo
+   l'accensione, barre di sistema durante le chiamate, copertina con CarPlay, consumo istantaneo.
+2. **Prossima versione**: menu rapido a scorrimento dal bordo sinistro; riscaldamento intelligente della batteria (se le
+   prove lo confermano); pulsanti LKA e One Pedal; prima prova di Android Auto e CarPlay in finestra.
+3. **Dopo**: Android Auto e CarPlay in finestra, nel riquadro mappe o in quello di destra, con doppio tocco per lo
+   schermo intero (se la prova del passo 2 riesce).
+4. **Più avanti, in studio**: mappa offline, informazioni sul quadro strumenti.
+
+Le versioni SWI69, SWI132 e SWI133 seguono la SWI68; molte idee arrivano dalle segnalazioni (issue) degli utenti: grazie!
+
 <details>
 <summary><b>Per sviluppatori: compilare, come comunica con l'auto, note</b></summary>
 
@@ -878,7 +915,7 @@ It installs like a normal app, so a computer isn't required. There are two ways:
 
 #### Method 1 — From a USB stick (no computer)
 
-1. Copy `MG4Launcher-1.0.6.apk` to a USB stick formatted as **FAT32** or **exFAT**.
+1. Copy `MG4Launcher-1.0.7.apk` to a USB stick formatted as **FAT32** or **exFAT**.
 2. Plug it into the car, open the file manager and tap the APK.
 3. If Android says it cannot install apps from this source: tap **Settings**, enable
    **Allow from this source** for the file manager and go back.
@@ -894,7 +931,7 @@ The MG firmware may block normal app installs; the `-f` option allows it.
 
 1. Install it:
    ```bash
-   adb install -r -f MG4Launcher-1.0.6.apk
+   adb install -r -f MG4Launcher-1.0.7.apk
    ```
 2. Make it the default home:
    ```bash
@@ -925,6 +962,12 @@ APK is signed with the same key.
 You can also check by hand: launcher settings → **Aggiornamenti** (Updates) → **Controlla aggiornamenti** (Check for updates).
 If a newer version exists, **Scarica e installa** (Download and install) appears: the launcher installs it and restarts.
 Updates can also be installed from a computer with the installation command.
+
+### MG4 Store
+
+**MG4 Store** is now available to download and update all our MG4 apps: the launcher, MG4 Clima, MG4 Games and the
+ones still to come. In the launcher open it from the **Store** icon or from Settings → **Installa MG4 Store** (Install
+MG4 Store). Repository: [ernestomicco2026-cell/store](https://github.com/ernestomicco2026-cell/store).
 
 ### Going back to the original MG home
 
@@ -976,6 +1019,17 @@ Even just **€2** is a great help to keep developing and testing new versions i
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ErnestoMicco?locale.x=it_IT&country.x=IT)
 
 ### Changelog
+
+#### 1.0.7
+- **Safer log upload** (through a relay server).
+- **Full diagnostics**: a button in Settings → System collects and sends everything needed to fix problems. It also
+  runs by itself once per version (optional, read-only).
+- More accurate **function check** after start-up: it waits for network and services instead of reporting errors.
+- **System bars** fixed during calls (thanks to **lukeet332**).
+- **Cover art with CarPlay**, when the phone sends it.
+- **Instant consumption** next to the battery (optional).
+- **Charging animation** without the frame around the car.
+- More reliable **Android Auto and radio** at start-up.
 
 #### 1.0.6
 - **Turn off the car** now works (only in P, checked again before the command).
@@ -1414,6 +1468,20 @@ Even just **€2** is a great help to keep developing and testing new versions i
 - App grid with installed apps added automatically; auto, night or day theme; Diagnostics.
 
 </details>
+
+### What's coming
+
+The road ahead, step by step (no dates: the order is what counts).
+
+1. **This version**: safer logs, automatic diagnostics with every version, more accurate function check after
+   start-up, system bars during calls, cover art with CarPlay, instant consumption.
+2. **Next version**: quick menu swiping in from the left edge; intelligent battery heating (if the tests confirm it);
+   LKA and One Pedal buttons; first test of Android Auto and CarPlay in a window.
+3. **After that**: Android Auto and CarPlay in a window, in the map panel or in the right one, with a double tap for full
+   screen (if the step 2 test works).
+4. **Further on, being studied**: offline map, information on the instrument cluster.
+
+The SWI69, SWI132 and SWI133 versions follow SWI68; many ideas come from users' reports (issues): thank you!
 
 <details>
 <summary><b>For developers: building, how it talks to the car, notes</b></summary>

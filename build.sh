@@ -126,33 +126,48 @@ echo "==> risorse (aapt2)"
   "$OUT/res/compiled.zip"
 
 echo "==> configurazione invio log"
-# Il token del repository privato dei log NON è nel repository: sta in tools/log-token.txt (escluso da git)
-# oppure, se il file manca, nella variabile d'ambiente MG4_LOG_TOKEN. Il token non viene mai stampato.
-# Qui diventa una classe generata in build/ (esclusa da git), offuscata con XOR (solo per non lasciarlo in chiaro nell'APK).
-python3 - "$T/log-token.txt" "$OUT/gen/com/mg4/launcher/svc/LogConfig.java" <<'PY'
-import os, random, sys
-src, dst = sys.argv[1], sys.argv[2]
-if os.path.exists(src):
-    tok, fonte = open(src).read().strip(), "tools/log-token.txt"
-else:
-    tok, fonte = os.environ.get("MG4_LOG_TOKEN", "").strip(), "variabile MG4_LOG_TOKEN"
-# solo caratteri validi
-import re
-tok = re.sub(r"[^A-Za-z0-9_]", "", tok)
-key = [random.randrange(1, 255) for _ in tok] or [0]
-enc = [ord(ch) ^ key[i] for i, ch in enumerate(tok)]
+# 1.0.7: i log passano dal ponte Cloudflare (Worker "mg4-log-ponte"), non più da api.github.com.
+# Chiave del ponte (APP_KEY): tools/log-token.txt oppure la variabile MG4_LOG_TOKEN.
+# Indirizzo del ponte: tools/log-relay.txt oppure la variabile MG4_LOG_RELAY.
+# Nessuno dei due è nel repository e nessuno dei due viene stampato. Diventano una classe generata in build/
+# (esclusa da git), offuscata con XOR solo per non lasciarli in chiaro nell'APK.
+python3 - "$T/log-token.txt" "$T/log-relay.txt" "$OUT/gen/com/mg4/launcher/svc/LogConfig.java" <<'PY'
+import os, random, re, sys
+src, rsrc, dst = sys.argv[1], sys.argv[2], sys.argv[3]
+def leggi(path, env):
+    if os.path.exists(path):
+        return open(path).read().strip(), os.path.relpath(path)
+    return os.environ.get(env, "").strip(), "variabile " + env
+tok, fonte = leggi(src, "MG4_LOG_TOKEN")
+relay, rfonte = leggi(rsrc, "MG4_LOG_RELAY")
+tok = re.sub(r"[^A-Za-z0-9_\-]", "", tok)
+relay = relay.rstrip("/")
+if relay and not re.fullmatch(r"https://[A-Za-z0-9.\-]+(/[A-Za-z0-9._\-/]*)?", relay):
+    print("    ATTENZIONE: indirizzo del ponte non valido (deve iniziare con https://): non usato.")
+    relay = ""
+if tok.startswith(("ghp_", "github_pat_", "gho_", "ghs_")):
+    print("    ERRORE: tools/log-token.txt contiene un token GitHub, non la chiave del ponte. Mai più token GitHub nell'APK.")
+    sys.exit(1)
+def enc(txt):
+    key = [random.randrange(1, 255) for _ in txt] or [0]
+    return [ord(ch) ^ key[i] for i, ch in enumerate(txt)], key[:len(txt)]
+ta, tb = enc(tok)
+ra, rb = enc(relay)
 os.makedirs(os.path.dirname(dst), exist_ok=True)
+j = lambda v: ",".join(map(str, v))
 open(dst, "w").write(
     "package com.mg4.launcher.svc;\n\n/** Generato da build.sh: non modificare, non salvare in git. */\n"
     "final class LogConfig {\n    private LogConfig() {}\n"
     "    private static final int[] A = {%s};\n    private static final int[] B = {%s};\n"
-    "    static String token() {\n        char[] c = new char[A.length];\n"
-    "        for (int i = 0; i < A.length; i++) c[i] = (char) (A[i] ^ B[i]);\n        return new String(c);\n    }\n}\n"
-    % (",".join(map(str, enc)), ",".join(map(str, key[:len(enc)]))))
-if tok:
-    print("    token: presente (da %s)" % fonte)
-else:
-    print("    ATTENZIONE: token assente (né tools/log-token.txt né MG4_LOG_TOKEN).")
+    "    private static final int[] C = {%s};\n    private static final int[] D = {%s};\n"
+    "    private static String dec(int[] x, int[] y) {\n        char[] c = new char[x.length];\n"
+    "        for (int i = 0; i < x.length; i++) c[i] = (char) (x[i] ^ y[i]);\n        return new String(c);\n    }\n"
+    "    /** Chiave del ponte dei log (APP_KEY). */\n    static String token() {\n        return dec(A, B);\n    }\n"
+    "    /** Indirizzo base del ponte dei log (https://…), senza / finale. */\n    static String relay() {\n        return dec(C, D);\n    }\n}\n"
+    % (j(ta), j(tb), j(ra), j(rb)))
+print("    chiave del ponte: " + ("presente (da %s)" % fonte if tok else "ASSENTE"))
+print("    indirizzo del ponte: " + ("presente (da %s)" % rfonte if relay else "ASSENTE"))
+if not tok or not relay:
     print("    Compilo lo stesso, ma questo APK NON invierà i log.")
 PY
 

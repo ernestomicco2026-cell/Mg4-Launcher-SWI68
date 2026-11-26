@@ -28,6 +28,11 @@ public final class BootLog {
 
     private BootLog() {}
 
+    /** 1.0.7: istante (elapsedRealtime) dell'ultima accensione: avvio di Android (0) o ultimo risveglio dello schermo. */
+    public static synchronized long powerOnAt() {
+        return t0;
+    }
+
     /** Risveglio dello schermo dopo una sospensione: nuova accensione, la cronologia riparte da zero. */
     public static synchronized void powerOn(String why) {
         t0 = SystemClock.elapsedRealtime();
@@ -45,7 +50,7 @@ public final class BootLog {
     public static synchronized void markAt(String step, long elapsed, String note) {
         if (marks.containsKey(step)) return;
         long ms = Math.max(0, elapsed - t0);
-        marks.put(step, String.format(Locale.ROOT, "%.1f s", ms / 1000f) + (note == null || note.isEmpty() ? "" : " (" + note + ")"));
+        marks.put(step, String.format(Locale.US, "%.1f s", ms / 1000f) + (note == null || note.isEmpty() ? "" : " (" + note + ")"));
         write();
     }
 

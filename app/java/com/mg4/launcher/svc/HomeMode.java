@@ -59,7 +59,7 @@ public final class HomeMode {
     }
 
     public static String officinaDate(Context c) {
-        return new SimpleDateFormat("dd/MM", Locale.ITALY).format(new Date(officinaUntil(c)));
+        return new SimpleDateFormat("dd/MM", Locale.US).format(new Date(officinaUntil(c)));
     }
 
     /** Controllo della scadenza (all'accensione e periodicamente). */
@@ -85,7 +85,7 @@ public final class HomeMode {
         boolean prev = sp(c).getBoolean(K_ENABLED, true);
         long until = System.currentTimeMillis() + days * 24L * 60 * 60 * 1000;
         sp(c).edit().putBoolean(K_PREV, prev).putBoolean(K_ENABLED, false).putLong(K_UNTIL, until).apply();
-        Diag.put("officina", "attiva fino al " + new SimpleDateFormat("dd/MM HH:mm", Locale.ITALY).format(new Date(until)));
+        Diag.put("officina", "attiva fino al " + new SimpleDateFormat("dd/MM HH:mm", Locale.US).format(new Date(until)));
         apply(c, false);
         openMg(c);
     }

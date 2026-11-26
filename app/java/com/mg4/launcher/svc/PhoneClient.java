@@ -213,7 +213,7 @@ public final class PhoneClient {
                     why = "errore " + e.getClass().getSimpleName();
                 }
             }
-            Diag.put("telefono.chiamata", why + " · " + new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.ITALY).format(new java.util.Date()));
+            Diag.put("telefono.chiamata", why + " · " + new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.US).format(new java.util.Date()));
             if (done != null) {
                 boolean res = ok;
                 main.post(() -> done.accept(res));

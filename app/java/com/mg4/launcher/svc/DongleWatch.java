@@ -222,7 +222,6 @@ public final class DongleWatch {
                     + (excl.isEmpty() ? "" : " (collegato solo " + excl + ")") + ": non faccio niente");
             return;
         }
-        String phone = phoneConnected();
         if (n == 0) {
             String excl = excluded();
             if (!excl.isEmpty()) {
@@ -250,9 +249,15 @@ public final class DongleWatch {
             bg.postDelayed(this::check, Math.max(delaySeconds(), 30) * 1000L);
             return;
         }
+        String phone = phoneConnected();   // solo prima del tentativo 2: apre il servizio telefono per qualche secondo
         if (phone != null) {
             Diag.put("dongle.esito", "dongle " + describe(d) + " collegato, nessuna sessione dopo il tentativo 1, ma c'è un telefono collegato ("
                     + phone + "): i servizi CarPlay/Android Auto non si fermano");
+            return;
+        }
+        if (sessionActive() || inCall()) {   // il controllo del telefono dura qualche secondo: si ricontrolla
+            Diag.put("dongle.esito", sessionActive() ? "sessione partita durante il controllo: niente tentativo 2" : "chiamata in corso: rimando di 15 s");
+            if (!sessionActive()) bg.postDelayed(this::check, 15_000);
             return;
         }
         setAttempts(2);
@@ -384,7 +389,7 @@ public final class DongleWatch {
     }
 
     private static String idOf(UsbDevice d) {
-        return String.format(Locale.ROOT, "%04x:%04x", d.getVendorId(), d.getProductId());
+        return String.format(Locale.US, "%04x:%04x", d.getVendorId(), d.getProductId());
     }
 
     /** VID:PID che usano anche i telefoni (Apple, modalità accessorio Android): da soli non bastano a dire "dongle". */
@@ -502,7 +507,7 @@ public final class DongleWatch {
             p = d.getProductName();
         } catch (Throwable ignored) {
         }
-        return String.format(Locale.ROOT, "%04x:%04x %s", d.getVendorId(), d.getProductId(), p == null ? "" : p).trim();
+        return String.format(Locale.US, "%04x:%04x %s", d.getVendorId(), d.getProductId(), p == null ? "" : p).trim();
     }
 
     private String lastUsb = "";
@@ -557,7 +562,7 @@ public final class DongleWatch {
     }
 
     private static String hubKey(UsbDevice d) {
-        return String.format(Locale.ROOT, "%04x:%04x@%d", d.getVendorId(), d.getProductId(), bus(d));
+        return String.format(Locale.US, "%04x:%04x@%d", d.getVendorId(), d.getProductId(), bus(d));
     }
 
     /** Dispositivi di sistema sempre collegati (root hub, modem, STM32) o hub: non sono mai "la porta media". */

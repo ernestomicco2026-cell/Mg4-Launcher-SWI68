@@ -83,6 +83,6 @@ public final class Offline {
     }
 
     private static String hhmm(long t) {
-        return new SimpleDateFormat("HH:mm", Locale.ROOT).format(new Date(t));
+        return new SimpleDateFormat("HH:mm", Locale.US).format(new Date(t));
     }
 }

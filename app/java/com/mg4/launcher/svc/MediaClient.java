@@ -374,6 +374,7 @@ public final class MediaClient {
 
     public void stop() {
         running = false;
+        if (instanceNow == this) instanceNow = null;   // 1.0.7: un'accensione dopo lo stop aspetta il prossimo client
         btGen++;
         if (bg != null) {
             bg.removeCallbacks(loop);
@@ -502,7 +503,7 @@ public final class MediaClient {
     }
 
     private static String clock() {
-        return new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.ROOT).format(new java.util.Date());
+        return new java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.US).format(new java.util.Date());
     }
 
     /** Annota l'ultima chiamata al servizio radio, con l'ora (diagnostica: quale chiamata lo fa cadere). */
@@ -630,6 +631,131 @@ public final class MediaClient {
         } catch (Throwable ignored) {
         }
         return null;
+    }
+
+    // ---- 1.0.7 (issue #30): copertina con CarPlay -----------------------------------------------------------------
+    private static final String[][] ART_KEYS = {
+            {MediaMetadata.METADATA_KEY_ALBUM_ART, "ALBUM_ART"}, {MediaMetadata.METADATA_KEY_ART, "ART"},
+            {MediaMetadata.METADATA_KEY_DISPLAY_ICON, "DISPLAY_ICON"}};
+    private static final String[][] ART_URI_KEYS = {
+            {MediaMetadata.METADATA_KEY_ALBUM_ART_URI, "ALBUM_ART_URI"}, {MediaMetadata.METADATA_KEY_ART_URI, "ART_URI"},
+            {MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI, "DISPLAY_ICON_URI"}};
+    private String artUri = "";
+    private Bitmap artFromUri;
+    private String artLog = "";
+
+    /**
+     * Copertina di CarPlay / Android Auto, solo in lettura. Si provano, in ordine: la sessione di RemoteUI (quella di
+     * sempre), poi le sessioni delle app AllGo (CarPlay e Android Auto). In ognuna: le immagini ALBUM_ART, ART e
+     * DISPLAY_ICON, l'icona della descrizione, poi gli indirizzi (…_URI, icona della descrizione) se sono locali
+     * (content://, file://, android.resource://): mai internet. L'immagine da un indirizzo si legge una volta e si
+     * ricorda finché l'indirizzo non cambia. Log media.copertina quando cambia l'esito (nomi delle chiavi e dimensioni,
+     * mai titoli).
+     */
+    private Bitmap projectionArt(MediaController main, int src) {
+        java.util.List<MediaController> list = new ArrayList<>();
+        if (main != null) list.add(main);
+        try {
+            android.media.session.MediaSessionManager msm =
+                    (android.media.session.MediaSessionManager) ctx.getSystemService(Context.MEDIA_SESSION_SERVICE);
+            for (MediaController mc : msm.getActiveSessions(null)) {
+                String p = mc.getPackageName();
+                if (p.startsWith("com.allgo.") && (main == null || !mc.getSessionToken().equals(main.getSessionToken()))) list.add(mc);
+            }
+        } catch (Throwable ignored) {
+        }
+        StringBuilder seen = new StringBuilder();
+        Bitmap found = null;
+        String how = "nessuna";
+        for (MediaController mc : list) {
+            MediaMetadata m;
+            try {
+                m = mc.getMetadata();
+            } catch (Throwable e) {
+                continue;
+            }
+            if (m == null) continue;
+            String pk = mc.getPackageName().replace("com.allgo.", "");
+            for (String[] k : ART_KEYS) {
+                Bitmap b = m.getBitmap(k[0]);
+                if (b == null) continue;
+                seen.append(' ').append(pk).append(':').append(k[1]).append(' ').append(b.getWidth()).append('×').append(b.getHeight());
+                if (found == null) {
+                    found = b;
+                    how = pk + " " + k[1];
+                }
+            }
+            android.media.MediaDescription d = m.getDescription();
+            if (d != null && d.getIconBitmap() != null) {
+                Bitmap b = d.getIconBitmap();
+                seen.append(' ').append(pk).append(":icona ").append(b.getWidth()).append('×').append(b.getHeight());
+                if (found == null) {
+                    found = b;
+                    how = pk + " icona della descrizione";
+                }
+            }
+            java.util.List<String> uris = new ArrayList<>();
+            for (String[] k : ART_URI_KEYS) {
+                String u = m.getString(k[0]);
+                if (u == null || u.isEmpty()) continue;
+                seen.append(' ').append(pk).append(':').append(k[1]).append('(').append(scheme(u)).append(')');
+                uris.add(u);
+            }
+            if (d != null && d.getIconUri() != null) {
+                seen.append(' ').append(pk).append(":iconaUri(").append(scheme(d.getIconUri().toString())).append(')');
+                uris.add(d.getIconUri().toString());
+            }
+            if (found == null) {
+                for (String u : uris) {
+                    Bitmap b = loadLocalArt(u);
+                    if (b != null) {
+                        found = b;
+                        how = pk + " indirizzo " + scheme(u);
+                        break;
+                    }
+                }
+            }
+        }
+        String log = (src == SRC_CARPLAY ? "CarPlay" : "Android Auto") + " · sessioni " + list.size() + " · chiavi:"
+                + (seen.length() == 0 ? " nessuna" : seen.toString()) + " · esito " + (found != null ? "copertina da " + how : "nessuna copertina");
+        if (!log.equals(artLog)) {
+            artLog = log;
+            Diag.put("media.copertina", log);
+        }
+        return found;
+    }
+
+    private static String scheme(String u) {
+        int i = u.indexOf(':');
+        return i > 0 && i < 20 ? u.substring(0, i) : "?";
+    }
+
+    /** Immagine da un indirizzo locale (content, file, android.resource), ridotta a 512 px; null altrimenti. */
+    private Bitmap loadLocalArt(String u) {
+        if (u.equals(artUri)) return artFromUri;
+        artUri = u;
+        artFromUri = null;
+        String sc = scheme(u);
+        if (!"content".equals(sc) && !"file".equals(sc) && !"android.resource".equals(sc)) return null;
+        try {
+            android.net.Uri uri = android.net.Uri.parse(u);
+            android.graphics.BitmapFactory.Options o = new android.graphics.BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            try (java.io.InputStream in = ctx.getContentResolver().openInputStream(uri)) {
+                android.graphics.BitmapFactory.decodeStream(in, null, o);
+            }
+            int sample = 1;
+            while (o.outWidth / (sample * 2) >= 512 && o.outHeight / (sample * 2) >= 512) sample *= 2;
+            o = new android.graphics.BitmapFactory.Options();
+            o.inSampleSize = sample;
+            try (java.io.InputStream in = ctx.getContentResolver().openInputStream(uri)) {
+                artFromUri = android.graphics.BitmapFactory.decodeStream(in, null, o);
+            }
+        } catch (Throwable e) {
+            Diag.putQuiet("media.copertinaUri", sc + ": " + e.getClass().getSimpleName());
+            artFromUri = null;
+        }
+        return artFromUri;
     }
 
     /** 1.0.6: tocco sul pulsante CarPlay/AA tra le sorgenti: play alla sessione AllGo, altrimenti il tasto del servizio. */
@@ -1004,11 +1130,7 @@ public final class MediaClient {
                         if (s.durationMs <= 0) s.durationMs = m.getLong(MediaMetadata.METADATA_KEY_DURATION);
                     }
                 }
-                if (s.art == null && c != null && c.getMetadata() != null) {
-                    android.graphics.Bitmap b = c.getMetadata().getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
-                    if (b == null) b = c.getMetadata().getBitmap(MediaMetadata.METADATA_KEY_ART);
-                    s.art = b;
-                }
+                if (s.art == null) s.art = projectionArt(c, src);
                 if (s.title.isEmpty()) s.title = src == SRC_CARPLAY ? "CarPlay" : "Android Auto";
                 if (s.subtitle.isEmpty()) s.subtitle = s.deviceName.isEmpty() ? com.mg4.launcher.L.s(com.mg4.launcher.R.string.from_phone) : s.deviceName;
                 break;

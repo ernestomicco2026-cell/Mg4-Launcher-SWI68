@@ -35,7 +35,7 @@ public final class Theme {
         boolean day = wouldBeDay(c, p);
         String mode = p.themeMode();
         if (lastDay == null || lastDay != day) {
-            lastChange = new java.text.SimpleDateFormat("dd/MM HH:mm:ss", java.util.Locale.ITALY).format(new java.util.Date());
+            lastChange = new java.text.SimpleDateFormat("dd/MM HH:mm:ss", java.util.Locale.US).format(new java.util.Date());
             lastDay = day;
         }
         com.mg4.launcher.svc.Diag.put("tema.scelta", (Prefs.THEME_DAY.equals(mode) ? "scelta Giorno" : Prefs.THEME_NIGHT.equals(mode)

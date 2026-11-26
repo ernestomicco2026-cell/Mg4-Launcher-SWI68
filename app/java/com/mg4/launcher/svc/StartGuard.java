@@ -293,7 +293,7 @@ public final class StartGuard {
     }
 
     private static String s(long t) {
-        return t < 0 ? "—" : String.format(java.util.Locale.ROOT, "%.1fs", t / 1000f);
+        return t < 0 ? "—" : String.format(java.util.Locale.US, "%.1fs", t / 1000f);
     }
 
     private static void times() {

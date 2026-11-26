@@ -20,7 +20,16 @@ import java.util.List;
  * tasti al volante (che chiede di premere un tasto).
  */
 public final class SelfCheck {
-    public static final int OK = 1, FAIL = 0, ABSENT = -1, SKIPPED = -2;
+    public static final int OK = 1, FAIL = 0, ABSENT = -1, SKIPPED = -2, WAITING = -3;
+    /**
+     * 1.0.7: prove che dipendono da rete o servizi dell'auto. Subito dopo l'accensione non sono ancora pronti: invece di
+     * ✗ la riga mostra "in attesa" e si riprova ogni 3 s fino a 120 s dall'avvio del launcher (o dal risveglio dello
+     * schermo). Solo dopo, ✗.
+     */
+    private static final java.util.Set<String> WAIT_KEYS = new java.util.HashSet<>(java.util.Arrays.asList(
+            "veicolo", "clima", "radio", "media", "bms", "carplayAA", "tempEsterna", "tempInterna", "fari", "ready",
+            "riscaldamentoBatteria", "stazioni", "aggiornamento", "avvisi"));
+    private static final long READY_WAIT_MS = 120_000, RETRY_MS = 3000;
 
     public static final class Item {
         public final String key;
@@ -37,7 +46,7 @@ public final class SelfCheck {
         }
 
         public String mark() {
-            return status == OK ? "✓" : status == FAIL ? "✗" : "—";
+            return status == OK ? "✓" : status == FAIL ? "✗" : status == WAITING ? "…" : "—";
         }
     }
 
@@ -68,6 +77,14 @@ public final class SelfCheck {
         vehicle = v;
         media = m;
         logs = l;
+    }
+
+    static VehicleClient vehicle() {
+        return vehicle;
+    }
+
+    static MediaClient media() {
+        return media;
     }
 
     public static boolean running() {
@@ -109,21 +126,45 @@ public final class SelfCheck {
      * Progress può essere null (controllo silenzioso dopo un aggiornamento).
      */
     public static void run(Context ctx, boolean interactive, Progress p) {
+        run(ctx, interactive, p, null);
+    }
+
+    /** why: da dove parte il controllo, per il log (null = dalle impostazioni / dopo l'aggiornamento). */
+    public static void run(Context ctx, boolean interactive, Progress p, String why) {
         if (running) return;
         running = true;
         Context c = ctx.getApplicationContext();
         List<Item> items = items();
         new Thread(() -> {
             try {
-                Diag.put("controllo.avvio", (interactive ? "dalle impostazioni" : "automatico dopo l'aggiornamento") + " · "
-                        + new java.text.SimpleDateFormat("dd/MM HH:mm:ss", java.util.Locale.ITALY).format(new java.util.Date()));
+                Diag.put("controllo.avvio", (why != null ? why : interactive ? "dalle impostazioni" : "automatico dopo l'aggiornamento") + " · "
+                        + new java.text.SimpleDateFormat("dd/MM HH:mm:ss", java.util.Locale.US).format(new java.util.Date()));
+                // 120 s dall'avvio del launcher o dall'ultima accensione (risveglio dello schermo), il più recente
+                long deadline = Math.max(android.os.Process.getStartElapsedRealtime(), BootLog.powerOnAt()) + READY_WAIT_MS;
                 for (Item it : items) {
-                    try {
-                        check(c, it, interactive, p);
-                    } catch (Throwable e) {
-                        it.status = FAIL;
-                        it.detail = "errore " + e.getClass().getSimpleName();
+                    long t0 = android.os.SystemClock.elapsedRealtime();
+                    boolean waited = false;
+                    while (true) {
+                        try {
+                            check(c, it, interactive, p);
+                        } catch (InterruptedException e) {
+                            throw e;
+                        } catch (Throwable e) {
+                            it.status = FAIL;
+                            it.detail = "errore " + e.getClass().getSimpleName();
+                        }
+                        boolean canWait = it.status == FAIL && WAIT_KEYS.contains(it.key)
+                                && android.os.SystemClock.elapsedRealtime() + RETRY_MS < deadline;
+                        if (!canWait) break;
+                        waited = true;
+                        String last = it.detail;
+                        set(it, WAITING, "in attesa (" + last + ")", "");
+                        if (p != null) main.post(() -> p.onItem(it));
+                        Thread.sleep(RETRY_MS);
                     }
+                    long sec = (android.os.SystemClock.elapsedRealtime() - t0) / 1000;
+                    if (waited) it.detail += it.status == FAIL ? " · ancora così dopo " + sec + " s di attesa (120 s dall'avvio)"
+                            : " · pronto dopo " + sec + " s di attesa";
                     Diag.put("controllo." + it.key, it.mark() + " " + it.detail);
                     if (p != null) main.post(() -> p.onItem(it));
                 }
@@ -136,6 +177,8 @@ public final class SelfCheck {
                 Diag.put("controllo.riepilogo", ok + " ok · " + fail + " errori · " + absent + " assenti");
                 int o = ok, f = fail, a = absent;
                 if (p != null) main.post(() -> p.onDone(items, o, f, a));
+            } catch (InterruptedException e) {
+                Diag.put("controllo.riepilogo", "interrotto");
             } finally {
                 running = false;
             }
@@ -328,7 +371,7 @@ public final class SelfCheck {
             }
             case "stazioni": {
                 if (m == null || !m.radioLinked()) {
-                    set(it, FAIL, "servizio radio non collegato", "");
+                    set(it, FAIL, "servizio radio non ancora collegato", "");   // si aspetta (WAIT_KEYS) fino a 120 s
                     break;
                 }
                 // 1.0.4 (punto C2): l'elenco può arrivare dopo l'avvio del controllo: si aspetta fino a 30 s
@@ -343,9 +386,8 @@ public final class SelfCheck {
                 int f = ms.favorites == null ? 0 : ms.favorites.size();
                 String elenco = Diag.value("radio.elenco");
                 if (n > 0 || f > 0) set(it, OK, n + " stazioni · " + f + " preferiti · " + elenco, String.valueOf(Math.max(n, f)));
-                // 1.0.6: nel controllo automatico (Radio magari mai aperta) l'elenco vuoto è "da verificare", non un errore
-                else if (!interactive) set(it, SKIPPED, "da verificare: elenco non ancora arrivato (Radio non aperta?) · " + elenco, "0");
-                else set(it, FAIL, "nessuna stazione ricevuta (aprire la Radio e fare una ricerca) · " + elenco, "0");
+                // 1.0.7: elenco vuoto = nessuna stazione salvata (o radio non ancora partita del tutto): mai ✗
+                else set(it, SKIPPED, "nessuna stazione salvata (o elenco non ancora arrivato: aprire la Radio e fare una ricerca) · " + elenco, "0");
                 break;
             }
             case "tastiVolante": {
@@ -409,12 +451,12 @@ public final class SelfCheck {
             }
             case "log": {
                 if (!LogUploader.configured()) {
-                    set(it, FAIL, "invio non configurato in questa versione", "");
+                    set(it, FAIL, "invio non configurato in questa versione (manca la chiave o l'indirizzo del ponte)", "");
                     break;
                 }
                 boolean on = logs == null || logs.enabled();
                 String st = LogUploader.status();
-                boolean bad = st != null && (st.contains("non riuscito") || st.contains("errore"));
+                boolean bad = st != null && (st.contains("non riuscito") || st.contains("errore") || st.contains("chiave") || st.contains("troppo"));
                 if (!on) set(it, ABSENT, "invio spento dall'utente", "");
                 else set(it, bad ? FAIL : OK, "stato: " + (st == null || st.isEmpty() ? "—" : st), "");
                 break;
@@ -430,7 +472,8 @@ public final class SelfCheck {
     /** latest.json e avvisi.json letti una volta per controllo (sola lettura). */
     private static synchronized String[] remote() {
         long now = android.os.SystemClock.uptimeMillis();
-        if (remoteCache == null || now - remoteAt > 30_000) {
+        boolean failed = remoteCache != null && (remoteCache[0] == null || remoteCache[1] == null);
+        if (remoteCache == null || failed || now - remoteAt > 30_000) {
             remoteCache = Updater.probeRemote();
             remoteAt = now;
         }

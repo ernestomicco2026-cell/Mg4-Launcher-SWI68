@@ -1,6 +1,6 @@
 {
-  "version": "1.0.6",
-  "apk": "releases/MG4Launcher-1.0.6.apk",
-  "size": 1231335,
-  "notes": "Spegni la vettura ora funziona (solo in P, ricontrollata prima del comando); animazione di ricarica: pulsante Simula ricarica, preparazione molto più veloce e log inviato da solo alla prima ricarica; Android Auto e CarPlay tra le sorgenti con titolo e artista; testi del brano e della stazione più grandi; Scorri in su per tornare (facoltativo); navigatore in finestra con l'app scelta; direzione dell'aria, sbrinamento e lunotto nel menu Clima (grazie a sommistica); Android Auto, chiavetta USB e radio di nuovo regolari all'accensione; tema scuro con i fari (a scelta); tendina dall'alto a schermo intero (a scelta); scegli i 5 pulsanti della barra di ricarica."
+  "version": "1.0.7",
+  "apk": "releases/MG4Launcher-1.0.7.apk",
+  "size": 1272295,
+  "notes": "Invio dei log più sicuro (tramite server ponte); diagnostica completa in Impostazioni → Sistema, che parte anche da sola una volta per ogni versione (a scelta, solo letture); controllo funzioni più preciso dopo l'accensione: aspetta rete e servizi invece di segnare errori; barre di sistema a posto durante le chiamate (grazie a lukeet332); copertina con CarPlay, quando il telefono la manda; consumo istantaneo accanto alla batteria (a scelta); animazione di ricarica senza riquadro attorno all'auto; Android Auto e radio più affidabili all'accensione."
 }

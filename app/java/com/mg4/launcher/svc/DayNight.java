@@ -181,7 +181,7 @@ public final class DayNight {
 
     private void applyNow(boolean day, String how) {
         applied = day;
-        lastChange = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.ITALY).format(new Date()) + " (" + how + ")";
+        lastChange = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US).format(new Date()) + " (" + how + ")";
         writeDiag();
         syncSystem("decisione del launcher (" + how + ")");
     }
@@ -202,7 +202,7 @@ public final class DayNight {
             String mode = sp.getString("theme", "auto");
             Boolean day = "giorno".equals(mode) ? Boolean.TRUE : "notte".equals(mode) ? Boolean.FALSE : applied;
             if (day == null) return;
-            String at = new SimpleDateFormat("HH:mm:ss", Locale.ITALY).format(new Date());
+            String at = new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date());
             try {
                 android.app.UiModeManager um = (android.app.UiModeManager) ctx.getSystemService(Context.UI_MODE_SERVICE);
                 int want = day ? android.app.UiModeManager.MODE_NIGHT_NO : android.app.UiModeManager.MODE_NIGHT_YES;
@@ -376,7 +376,7 @@ public final class DayNight {
     private String uiHistoryTxt() {
         long at = sp.getLong(K_UI_CHANGED_AT, 0);
         long onH = (sp.getLong(K_UI_ON_MS, 0) + onPending) / 3_600_000L;
-        return "ultimo cambio uiMode " + (at == 0 ? "mai visto" : new SimpleDateFormat("dd/MM HH:mm", Locale.ITALY).format(new Date(at)))
+        return "ultimo cambio uiMode " + (at == 0 ? "mai visto" : new SimpleDateFormat("dd/MM HH:mm", Locale.US).format(new Date(at)))
                 + " (" + onH + " h di accensione da allora)";
     }
 
@@ -471,7 +471,7 @@ public final class DayNight {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         long ms = c.getTimeInMillis() + Math.round(minutesUtc * 60_000);
-        return new SimpleDateFormat("HH:mm", Locale.ITALY).format(new Date(ms));
+        return new SimpleDateFormat("HH:mm", Locale.US).format(new Date(ms));
     }
 
     // ---- tema.candidati: tutti i segnali giorno/notte che si riescono a leggere -------------------

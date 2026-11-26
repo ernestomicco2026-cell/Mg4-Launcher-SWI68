@@ -307,7 +307,7 @@ public final class ChargePack {
             while ((n = in.read(buf)) > 0) md.update(buf, 0, n);
         }
         StringBuilder sb = new StringBuilder();
-        for (byte b : md.digest()) sb.append(String.format(Locale.ROOT, "%02x", b));
+        for (byte b : md.digest()) sb.append(String.format(Locale.US, "%02x", b));
         return sb.toString();
     }
 

@@ -584,4 +584,24 @@
     <string name="cb_heat_title" formatted="false">Chauffage intelligent de la batterie</string>
     <string name="cb_heat_msg" formatted="false">Pour l\'instant le launcher lit seulement l\'état et n\'envoie aucune commande à la voiture. Modifiez-le dans Réglages du véhicule → Gestion de la recharge.</string>
     <string name="news_v106_4" formatted="false">Android Auto, clé USB et radio de nouveau normaux au démarrage · thème sombre avec les phares (au choix) · volet depuis le haut en plein écran (au choix) · choisissez les 5 boutons de la barre de recharge</string>
+    <string name="deep_title" formatted="false">Diagnostic complet</string>
+    <string name="deep_sub" formatted="false">Lit tout ce qu\'il faut pour corriger les problèmes et préparer les prochaines versions, puis envoie le journal. Lecture seule, aucune commande à la voiture. Environ une minute.</string>
+    <string name="deep_start" formatted="false">Lancer</string>
+    <string name="deep_running">En cours : étape %1$d sur %2$d…</string>
+    <string name="deep_sent" formatted="false">Terminé : rapport envoyé. Merci !</string>
+    <string name="deep_queued" formatted="false">Terminé : pas de réseau pour l\'instant, le rapport partira tout seul dès qu\'il y aura internet.</string>
+    <string name="deep_no_logs" formatted="false">Terminé, mais cette version ne peut pas envoyer de journal : enregistrez-le sur une clé USB.</string>
+    <string name="deep_failed" formatted="false">Rapport non enregistré : réessayez plus tard.</string>
+    <string name="check_waiting" formatted="false">En attente</string>
+    <string name="deep_auto" formatted="false">Diagnostic automatique après chaque mise à jour</string>
+    <string name="deep_auto_sub" formatted="false">Une fois par version, voiture à l\'arrêt et avec internet. Lecture seule.</string>
+    <string name="set_beside" formatted="false">À côté de la batterie</string>
+    <string name="set_beside_sub" formatted="false">Consommation instantanée en kW : la barre va vers la gauche quand la voiture récupère de l\'énergie</string>
+    <string name="beside_battery" formatted="false">Batterie</string>
+    <string name="beside_power" formatted="false">Consommation instantanée</string>
+    <string name="beside_both" formatted="false">Les deux</string>
+    <string name="power_kw">%1$s kW</string>
+    <string name="news_v107_1" formatted="false">Envoi des journaux plus sûr (via un serveur relais) · diagnostic automatique à chaque version</string>
+    <string name="news_v107_2" formatted="false">Contrôle des fonctions plus précis après le démarrage · barres système correctes pendant les appels · pochette avec CarPlay</string>
+    <string name="news_v107_3" formatted="false">Consommation instantanée à côté de la batterie (au choix) · animation de recharge sans cadre autour de la voiture</string>
 </resources>

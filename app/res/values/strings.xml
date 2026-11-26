@@ -584,4 +584,24 @@
     <string name="cb_heat_title" formatted="false">Intelligent battery heating</string>
     <string name="cb_heat_msg" formatted="false">For now the launcher only reads the status and sends no command to the car. Change it in Vehicle settings → Charge management.</string>
     <string name="news_v106_4" formatted="false">Android Auto, USB stick and radio work normally again at start-up · dark theme with the headlights (optional) · swipe down from the top in full screen (optional) · choose the 5 charging bar buttons</string>
+    <string name="deep_title" formatted="false">Full diagnostics</string>
+    <string name="deep_sub" formatted="false">Reads everything needed to fix problems and prepare the next versions, then sends the log. Read-only, no command to the car. Takes about a minute.</string>
+    <string name="deep_start" formatted="false">Start</string>
+    <string name="deep_running">Running: step %1$d of %2$d…</string>
+    <string name="deep_sent" formatted="false">Done: report sent. Thank you!</string>
+    <string name="deep_queued" formatted="false">Done: no network right now, the report will be sent automatically when internet is back.</string>
+    <string name="deep_no_logs" formatted="false">Done, but this version can\'t send logs: save the log to a USB stick.</string>
+    <string name="deep_failed" formatted="false">Report not saved: try again later.</string>
+    <string name="check_waiting" formatted="false">Waiting</string>
+    <string name="deep_auto" formatted="false">Automatic diagnostics after each update</string>
+    <string name="deep_auto_sub" formatted="false">Once per version, with the car stopped and internet available. Read-only.</string>
+    <string name="set_beside" formatted="false">Next to the battery</string>
+    <string name="set_beside_sub" formatted="false">Instant consumption in kW: the bar goes left when the car recovers energy</string>
+    <string name="beside_battery" formatted="false">Battery</string>
+    <string name="beside_power" formatted="false">Instant consumption</string>
+    <string name="beside_both" formatted="false">Both</string>
+    <string name="power_kw">%1$s kW</string>
+    <string name="news_v107_1" formatted="false">Safer log upload (through a relay server) · automatic diagnostics with each version</string>
+    <string name="news_v107_2" formatted="false">More accurate function check after start-up · system bars fixed during calls · cover art with CarPlay</string>
+    <string name="news_v107_3" formatted="false">Instant consumption next to the battery (optional) · charging animation without the frame around the car</string>
 </resources>
