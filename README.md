@@ -1,20 +1,3 @@
-> [!WARNING]
-> 🇮🇹 **Per togliere il launcher usa sempre Impostazioni → Disinstalla del launcher**, non il menu App di Android. Se l'auto resta su "Smartphone starting", installa [MG4 Ripristino Home](releases/MG4HomeRescue-1.0.apk) da chiavetta e aprilo: riaccende la home originale.
->
-> 🇬🇧 **To remove the launcher always use Settings → Uninstall in the launcher**, not the Android Apps menu. If the car stays on "Smartphone starting", install [MG4 Ripristino Home](releases/MG4HomeRescue-1.0.apk) from a USB stick and open it: it turns the original home back on.
->
-> 🇪🇸 **Para quitar el launcher usa siempre Ajustes → Desinstalar del launcher**, no el menú Apps de Android. Si el coche se queda en "Smartphone starting", instala [MG4 Ripristino Home](releases/MG4HomeRescue-1.0.apk) desde un USB y ábrelo: vuelve a activar la pantalla de inicio original.
->
-> 🇩🇪 **Zum Entfernen des Launchers immer Einstellungen → Deinstallieren im Launcher verwenden**, nicht das App-Menü von Android. Bleibt das Auto bei „Smartphone starting“ hängen, [MG4 Ripristino Home](releases/MG4HomeRescue-1.0.apk) vom USB-Stick installieren und öffnen: Es schaltet den Original-Startbildschirm wieder ein.
->
-> 🇫🇷 **Pour supprimer le launcher, utilisez toujours Réglages → Désinstaller dans le launcher**, pas le menu Applis d'Android. Si la voiture reste sur « Smartphone starting », installez [MG4 Ripristino Home](releases/MG4HomeRescue-1.0.apk) depuis une clé USB et ouvrez-le : il réactive l'écran d'accueil d'origine.
->
-> 🇵🇱 **Aby usunąć launcher, zawsze używaj Ustawienia → Odinstaluj w launcherze**, a nie menu Aplikacje Androida. Jeśli auto zostaje na „Smartphone starting”, zainstaluj [MG4 Ripristino Home](releases/MG4HomeRescue-1.0.apk) z pendrive'a i otwórz go: włącza z powrotem oryginalny ekran główny.
->
-> 🇹🇷 **Başlatıcıyı kaldırmak için her zaman başlatıcıdaki Ayarlar → Kaldır'ı kullanın**, Android Uygulamalar menüsünü değil. Araç "Smartphone starting" ekranında kalırsa [MG4 Ripristino Home](releases/MG4HomeRescue-1.0.apk) uygulamasını USB bellekten yükleyip açın: orijinal ana ekranı yeniden etkinleştirir.
->
-> 🇵🇹 **Para remover o launcher usa sempre Definições → Desinstalar do launcher**, não o menu Apps do Android. Se o carro ficar em "Smartphone starting", instala o [MG4 Ripristino Home](releases/MG4HomeRescue-1.0.apk) a partir de uma pen USB e abre-o: volta a ligar o ecrã inicial original.
-
 # MG4 Launcher — SWI68 SAIC 1.0+
 
 <p align="center"><img src="docs/home-1.0.4-ricarica.gif" alt="Home di MG4 Launcher SWI68 SAIC 1.0+ con l'animazione di ricarica (simulazione) · MG4 Launcher SWI68 SAIC 1.0+ home with the charging animation (mock-up)" width="100%"></p>
@@ -42,6 +25,8 @@
 > Per gli altri software usa la versione dedicata · for the other software use the dedicated version:
 > **SWI69 Color Radio** → [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69) · **SWI132 (MG4 MY24)** → [Mg4-Launcher-SWI132](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI132) ·
 > **SWI133 (MG4 Luxury MY24)** → [Mg4-Launcher-SWI133](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI133).
+
+<sub>⚠️ To remove the launcher always use <b>Settings → Uninstall</b> in the launcher, not the Android Apps menu. If the car stays on "Smartphone starting", install <a href="releases/MG4HomeRescue-1.0.apk">MG4 Ripristino Home</a> from a USB stick and open it: it turns the original home back on.</sub>
 
 ---
 
@@ -126,9 +111,9 @@
 
 <sub>Simulazioni della grafica: valori, stazioni e loghi sono di esempio · Design mock-ups: values, stations and logos are examples.</sub>
 
-> 🌡️ **Nuovo: [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4)** — la schermata del clima in stile Tesla, per SWI68, SWI69, SWI132 e SWI133. Con MG4 Clima installato il tasto del clima del launcher apre direttamente quella.
+> 🛍️ **Nuovo: [MG4 Store](https://github.com/ernestomicco2026-cell/store)** — lo store delle nostre app MG4, direttamente sull'auto: launcher, [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4), MG4 Voice, MG4 Task Manager, MG4 Browser e MG4 Games si installano e si aggiornano con un tocco, senza chiavetta USB. Il launcher lo installa da solo: lo trovi nell'icona **Store**.
 >
-> 🌡️ **New: [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4)** — the Tesla-style climate screen, for SWI68, SWI69, SWI132 and SWI133. With MG4 Clima installed the launcher's climate button opens it directly.
+> 🛍️ **New: [MG4 Store](https://github.com/ernestomicco2026-cell/store)** — the store for our MG4 apps, right in the car: launcher, [MG4 Clima](https://github.com/ernestomicco2026-cell/HVAC-Clima-MG4), MG4 Voice, MG4 Task Manager, MG4 Browser and MG4 Games install and update with one tap, no USB stick needed. The launcher installs it by itself: you find it under the **Store** icon.
 
 ---
 
